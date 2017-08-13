@@ -40,3 +40,4 @@ application/logs/*
 /check_tagihan.sql
 /readme.rst
 /application/config/database.php
+/application/libraries/tcpdf/
