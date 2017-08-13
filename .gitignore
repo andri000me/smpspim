@@ -21,8 +21,14 @@ application/logs/*
 *.sublime-workspace
 *.sublime-project
 /assets/
+!/assets/scripts
+!/assets/styles
 /system/
-/files/
+/files/barcode/*
+/files/datatabase/*
+/files/pegawai/*
+/files/siswa/*
+/files/xml/*
 /updated.sql
 /AFE.xml
 /NOTE
