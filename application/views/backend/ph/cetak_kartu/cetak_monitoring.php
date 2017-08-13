@@ -39,6 +39,12 @@ $pdf->Ln();
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, 'No', 1, 0, 'C');
 $pdf->Cell(60, 5, 'Nama Siswa', 1, 0, 'C');
+
+if(in_array('Dzulhijjah', $BULAN) && in_array('Muharrom', $BULAN)) {
+    $BULAN[count($BULAN)] = $BULAN[0];
+    unset($BULAN[0]);
+}
+        
 foreach ($BULAN as $DETAIL_BULAN) {
     $pdf->Cell(33, 5, $DETAIL_BULAN, 1, 0, 'C');
 }
