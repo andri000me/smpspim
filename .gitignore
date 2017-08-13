@@ -20,3 +20,17 @@ application/logs/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
+/assets/
+/system/
+/files/
+/updated.sql
+/AFE.xml
+/NOTE
+/readme.proc
+/export_timetables.xml
+/log_db.log
+/note.html
+/tes.xml
+/check_tagihan.sql
+/readme.rst
+/application/config/database.php
