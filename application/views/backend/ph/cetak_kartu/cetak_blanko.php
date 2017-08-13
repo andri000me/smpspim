@@ -71,7 +71,7 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Ln();
     
     $pdf->Cell(33);
-    $pdf->MultiCell(0, 5, 'Setelah kami lakukan pembimbingan hafalan, maka bersama ini kami daftarkan siswa tersebut untuk dilakukan penyemaan oleh penyemak P3H sebagaiamana ketentauan yang berlaku:');
+    $pdf->MultiCell(0, 5, 'Setelah kami lakukan pembimbingan hafalan, maka bersama ini kami daftarkan siswa tersebut di atas untuk dilakukan penyemaan oleh penyemak P3H sebagaiamana ketentuan yang berlaku:');
     $pdf->Ln(1);
 
     for ($i = 0; $i <= 10; $i++) {
