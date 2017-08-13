@@ -4,13 +4,15 @@ $subtitle = "Daftar semua poin siswa";
 $id_datatables = 'datatable1';
 
 $columns = array(
-    'CAWU',
+//    'CAWU',
     'NO ABSEN',
     'NIS',
     'NAMA',
     'KELAS',
     'WALI KELAS',
     'POIN',
+    'LARI',
+    'SURAT',
     'AKSI',
 );
 
@@ -35,8 +37,8 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var id_form = '<?php echo $id_form; ?>';
     var id_table = '<?php echo $id_datatables; ?>';
     var title = '<?php echo $title; ?>';
-    var columns = '';//[{"targets": [-1],"orderable": false}];
-    var orders = '';//[[ 0, "ASC" ]];
+    var columns = [{"targets": [-1],"orderable": false}];
+    var orders = [[ 0, "ASC" ]];
     var requestExport = true;
     var functionInitComplete = function(settings, json) {
         

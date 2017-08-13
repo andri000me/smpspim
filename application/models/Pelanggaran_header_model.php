@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggaran_header_model extends CI_Model {
 
     var $table = 'komdis_siswa_header';
-    var $column = array('NAMA_CAWU','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','NAMA_PEG','POIN_KSH', 'ID_KSH');
+    var $column = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'SURAT', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("ID_KSH" => 'DESC');
 
@@ -18,18 +19,21 @@ class Pelanggaran_header_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table() {
+    private function _get_table($datatables = true) {
+        if ($datatables) {
+            $this->table = '(SELECT *, IF(NAMA_KJT IS NULL, "", NAMA_KJT) AS SURAT FROM (SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header GROUP BY SISWA_KSH) komdis_siswa_header LEFT OUTER JOIN komdis_jenis_tindakan ON JUMLAH_POIN_KSH >= POIN_KJT AND JUMLAH_POIN_KSH <= POIN_MAKS_KJT) komdis_siswa_header';
+        }
         $this->db->from($this->table);
-        $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KSH=mta.ID_TA');
-        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
-        $this->db->join('md_siswa ms', $this->table.'.SISWA_KSH=ms.ID_SISWA');
-        $this->db->join('akad_siswa as',$this->table.'.SISWA_KSH=as.SISWA_AS AND '.$this->table.'.TA_KSH=as.TA_AS');
-        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mpw','ak.WALI_KELAS=mpw.ID_PEG');
+        $this->db->join('md_tahun_ajaran mta', 'komdis_siswa_header.TA_KSH=mta.ID_TA');
+//        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
+        $this->db->join('md_siswa ms', 'komdis_siswa_header.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('akad_siswa as', 'komdis_siswa_header.SISWA_KSH=as.SISWA_AS AND komdis_siswa_header.TA_KSH=as.TA_AS');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mpw', 'ak.WALI_KELAS=mpw.ID_PEG');
         $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
-        $this->db->order_by('CAWU_KSH', 'DESC');
-        $this->db->order_by('NAMA_KELAS', 'ASC');
-        $this->db->order_by('NO_ABSEN_AS', 'ASC');
+//        $this->db->order_by('CAWU_KSH', 'DESC');
+//        $this->db->order_by('NAMA_KELAS', 'ASC');
+//        $this->db->order_by('NO_ABSEN_AS', 'ASC');
     }
 
     private function _get_datatables_query() {
@@ -101,13 +105,15 @@ class Pelanggaran_header_model extends CI_Model {
 
     public function get_full_by_id($id, $tindakan = FALSE) {
         $this->_get_table();
-        $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
+        $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.POIN_KSH>=kjt.POIN_KJT AND ' . $this->table . '.POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
         $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
-        
-        if($tindakan) $this->db->where('ID_KJT', $id);
-        else $this->db->where($this->primary_key, $id);
+
+        if ($tindakan)
+            $this->db->where('ID_KJT', $id);
+        else
+            $this->db->where($this->primary_key, $id);
 
         return $this->db->get()->result();
     }
@@ -146,7 +152,8 @@ class Pelanggaran_header_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_KSH as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_KSH as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -174,24 +181,26 @@ class Pelanggaran_header_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function get_data_perkelas($ID_KELAS, $KELAS = TRUE) {
         $where_kelas = '';
         $where_pondok = '';
-        
-        if ($KELAS) $where_kelas = 'KELAS_AS='.$ID_KELAS.' AND';
-        else $where_pondok = 'WHERE PONDOK_SISWA='.$ID_KELAS;
-        
+
+        if ($KELAS)
+            $where_kelas = 'KELAS_AS=' . $ID_KELAS . ' AND';
+        else
+            $where_pondok = 'WHERE PONDOK_SISWA=' . $ID_KELAS;
+
         $sql = "SELECT 
     NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT,
     MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) AS 'B07',
@@ -230,31 +239,30 @@ FROM
         FROM akad_siswa
         LEFT OUTER JOIN komdis_siswa ON SISWA_KS=SISWA_AS AND TA_KS=TA_AS
         LEFT OUTER JOIN komdis_jenis_pelanggaran ON PELANGGARAN_KS=ID_KJP 
-        WHERE ".$where_kelas." TA_AS=".$this->session->userdata('ID_TA_ACTIVE')." AND KONVERSI_AS=0
+        WHERE " . $where_kelas . " TA_AS=" . $this->session->userdata('ID_TA_ACTIVE') . " AND KONVERSI_AS=0
         GROUP BY SISWA_AS, BULAN 
     ) AS tabel_komdis
 LEFT OUTER JOIN md_siswa ON ID_SISWA=SISWA_AS 
-LEFT OUTER JOIN (SELECT *, SUM(LARI_KSH) AS TOTAL_LARI FROM komdis_siswa_header WHERE TA_KSH=".$this->session->userdata('ID_TA_ACTIVE')." GROUP BY SISWA_KSH) komdis_header ON TA_KSH=TA_KS AND SISWA_KS=komdis_header.SISWA_KSH
+LEFT OUTER JOIN (SELECT *, SUM(LARI_KSH) AS TOTAL_LARI FROM komdis_siswa_header WHERE TA_KSH=" . $this->session->userdata('ID_TA_ACTIVE') . " GROUP BY SISWA_KSH) komdis_header ON TA_KSH=TA_KS AND SISWA_KS=komdis_header.SISWA_KSH
 LEFT OUTER JOIN (SELECT SISWA_KSH, NAMA_KJT, ID_KJT FROM 
 (SELECT * FROM komdis_tindakan ORDER BY TINDAKAN_KT DESC) komdis
 INNER JOIN komdis_siswa_header ON ID_KSH=PELANGGARAN_HEADER_KT
 INNER JOIN komdis_jenis_tindakan ON ID_KJT=TINDAKAN_KT
 GROUP BY SISWA_KSH) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
-".$where_pondok."
+" . $where_pondok . "
 GROUP BY SISWA_AS
 ORDER BY NO_ABSEN_AS ASC
 ";
         $query = $this->db->query($sql);
-        
+
         return $query->result();
     }
-    
+
     public function get_terakhir_input() {
         $sql = 'SELECT ID_KS, CREATED_KS FROM komdis_siswa ORDER BY ID_KS DESC LIMIT 0,1';
         $query = $this->db->query($sql);
-        
+
         return $query->row()->CREATED_KS;
-        
     }
 
 }

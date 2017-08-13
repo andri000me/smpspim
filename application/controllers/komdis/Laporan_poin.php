@@ -47,13 +47,15 @@ class Laporan_poin extends CI_Controller {
             $no++;
             $aksi = '';
             $row = array();
-            $row[] = $item->NAMA_CAWU;
+//            $row[] = $item->NAMA_CAWU;
             $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_PEG;
             $row[] = $item->POIN_KSH;
+            $row[] = $item->LARI_KSH;
+            $row[] = $item->SURAT;
 
 //            foreach ($tindakan as $detail) {
 //                if($this->tindakan->sudah_ditindak($item->ID_KSH, $detail->ID_KJT) AND $item->POIN_KSH $item $detail->POIN_KJT) { 
