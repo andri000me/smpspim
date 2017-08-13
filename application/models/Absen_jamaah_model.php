@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Absen_jamaah_model extends CI_Model {
 
     var $table = 'komdis_absen_header';
-    var $column = array('NO_ABSEN_AS','NAMA_TA', 'NAMA_CAWU', 'TANGGAL_KAH', 'VALIDASI_KAH', 'ID_KAH');
+    var $column = array('NAMA_TA', 'NAMA_CAWU', 'TANGGAL_KAH', 'VALIDASI_KAH', 'ID_KAH');
     var $primary_key = "ID_KAH";
     var $order = array("ID_KAH" => 'ASC');
 

@@ -1,6 +1,6 @@
 <?php
-$title = 'Absen Jamaah';
-$subtitle = "Daftar semua absen jamaah";
+$title = 'Tambah Pelanggaran dengan Barcode';
+$subtitle = "Daftar tanggal pelanggaran";
 $id_datatables = 'datatable1';
 
 $columns = array(

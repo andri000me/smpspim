@@ -27,7 +27,7 @@ foreach ($DATA as $DETAIL) {
 
     $pdf->Ln(2);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 5, 'DAFTAR HADIR DAUROH TAHUN AJARAN ' . $TA, 0, 0, 'C');
+    $pdf->Cell(0, 5, 'DAFTAR HADIR SISWA SOROGAN KITAB KUNING TAHUN AJARAN ' . $TA, 0, 0, 'C');
     $pdf->Ln(8);
 
     // $pdf->SetFont('Arial', 'B', 9);
@@ -37,15 +37,15 @@ foreach ($DATA as $DETAIL) {
     // $pdf->Ln();
 
     $pdf->SetFont('Arial', 'B', 9);
-    $pdf->Cell(10, 4, 'Kelas');
+    $pdf->Cell(20, 4, 'Kelas');
     $pdf->Cell(40, 4, ': ' . $DETAIL['KELAS']->NAMA_KELAS);
     $pdf->Cell(20, 4, 'Wali Kelas');
-    $pdf->Cell(60, 4, ': ' . $this->cetak->nama_peg_print($DETAIL['KELAS']));
-    $pdf->Cell(20, 4, 'Pengampu :');
+    $pdf->Cell(80, 4, ': ' . $this->cetak->nama_peg_print($DETAIL['KELAS']));
+    $pdf->Cell(20, 4, 'Bulan :');
     $pdf->Ln();
 
     $pdf->SetFont('Arial', 'B', 9);
-    $pdf->Cell(5, 5, 'No', 1, 0, 'C');
+    $pdf->Cell(5, 5, 'No.', 1, 0, 'C');
     $pdf->Cell(21, 5, 'NIS', 1, 0, 'C');
     $pdf->Cell($widthNama, 5, 'Nama', 1, 0, 'C');
     for ($tanggal = 1; $tanggal <= 31; $tanggal++) {
@@ -96,6 +96,6 @@ foreach ($DATA as $DETAIL) {
     //     }
     //     $pdf->Ln();
     // }
-    // break;
+//     break;
 }
 $pdf->Output();
