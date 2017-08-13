@@ -206,4 +206,8 @@ class Cetak {
         }
     }
 
+    public function nama_peg_print_short($nama) {
+        return "Ust. ".$nama;
+    }
+
 }

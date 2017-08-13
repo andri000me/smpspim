@@ -69,7 +69,7 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Cell(0, 5, 'Ketua');
     $pdf->Ln(18);
 
-    $pdf->Cell(0, 5, $this->pengaturan->getDataKetuaKomdis()->NAMA_PEG);
+    $pdf->Cell(0, 5, $this->cetak->nama_peg_print($this->pengaturan->getDataKetuaKomdis()));
     $pdf->Ln(15);
 
     $pdf->SetFont('Arial', 'U', 10);
@@ -198,7 +198,7 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Cell(0, 5, 'Ketua');
     $pdf->Ln(18);
 
-    $pdf->Cell(0, 5, $NAMA_TANGGUNGJAWAB);
+    $pdf->Cell(0, 5, $this->cetak->nama_peg_print($this->pengaturan->getDataKetuaKomdis()));
     $pdf->Ln(15);
 
     $pdf->SetFont('Arial', 'U', 10);

@@ -71,7 +71,7 @@ $pdf->Cell(70, 5, 'Wali Kelas '.$data->NAMA_KELAS);
 $pdf->Cell(0, 5, 'Ketua');
 $pdf->Ln(18);
 
-$pdf->Cell(70, 5, $data->WALI_KELAS);
-$pdf->Cell(0, 5, $data->NAMA_TANGGUNGJAWAB);
+$pdf->Cell(70, 5, $this->cetak->nama_peg_print_short($data->WALI_KELAS));
+$pdf->Cell(0, 5, $this->cetak->nama_peg_print_short($data->NAMA_TANGGUNGJAWAB));
 
 $pdf->Output();

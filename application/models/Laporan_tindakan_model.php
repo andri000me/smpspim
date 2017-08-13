@@ -33,22 +33,22 @@ class Laporan_tindakan_model extends CI_Model {
     private function _get_table_detail() {
         $this->db->select('*, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
         $this->db->from($this->table);
-        $this->db->join('komdis_siswa_header ksh', $this->table.'.PELANGGARAN_HEADER_KT=ksh.ID_KSH');
-        $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
-        $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU');
-        $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('komdis_siswa_header ksh', $this->table.'.PELANGGARAN_HEADER_KT=ksh.ID_KSH', 'LEFT');
+        $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA', 'LEFT');
+        $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU', 'LEFT');
+        $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
         $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ', 'LEFT');
-        $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.TINGKAT_KELAS', 'LEFT');
+        $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
         $this->db->join('md_tingkat mtnow', 'asw.TINGKAT_AS=mtnow.ID_TINGK', 'LEFT');
         $this->db->join('md_departemen mdp', 'mtnow.DEPT_TINGK=mdp.ID_DEPT', 'LEFT');
         $this->db->join('md_pegawai mpk','ak.WALI_KELAS=mpk.ID_PEG', 'LEFT');
-        $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.TINDAKAN_KT=kjt.ID_KJT');
+        $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.TINDAKAN_KT=kjt.ID_KJT', 'LEFT');
 //        $this->db->join('md_user mu', $this->table.'.PENANGGUNGJAWAB_KT=mu.ID_USER');
-        $this->db->join('md_pegawai mp', $this->table.'.PENANGGUNGJAWAB_KT=mp.ID_PEG');
+        $this->db->join('md_pegawai mp', $this->table.'.PENANGGUNGJAWAB_KT=mp.ID_PEG', 'LEFT');
     }
 
     private function _get_datatables_query() {
@@ -114,8 +114,9 @@ class Laporan_tindakan_model extends CI_Model {
     public function get_by_id($id) {
         $this->_get_table_detail();
         $this->db->where($this->primary_key, $id);
-
-        return $this->db->get()->row();
+        $result = $this->db->get();
+        
+        return $result->row();
     }
 
     public function get_row($where) {
