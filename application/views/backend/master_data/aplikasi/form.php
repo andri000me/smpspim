@@ -25,7 +25,12 @@ $this->generate->generate_panel_content($title, $subtitle);
                 <div class="panel-body">
                     <?php
                     foreach ($data as $detail) {
-                        if($detail->ID_PENGATURAN == 'ketua_pu' || $detail->ID_PENGATURAN == 'ketua_p3h') 
+                        if(
+                                $detail->ID_PENGATURAN == 'ketua_p3h_banin' || 
+                                $detail->ID_PENGATURAN == 'ketua_p3h_banat' || 
+                                $detail->ID_PENGATURAN == 'ketua_pu' || 
+                                $detail->ID_PENGATURAN == 'ketua_komdis'
+                        ) 
                             $this->generate->input_select2(str_replace("_", " ", $detail->ID_PENGATURAN), array('name' => $detail->ID_PENGATURAN, 'url' => site_url('master_data/pegawai/auto_complete')), TRUE, 5, FALSE, $pegawai->get_name($detail->NAMA_PENGATURAN) == NULL ? NULL : array('id' => $detail->NAMA_PENGATURAN, 'text' => $pegawai->get_name($detail->NAMA_PENGATURAN)));
                         else
                             $this->generate->input_text(str_replace("_", " ", $detail->ID_PENGATURAN), array('name' => $detail->ID_PENGATURAN, 'id' => $detail->ID_PENGATURAN, 'value' => $detail->NAMA_PENGATURAN), TRUE, 8);
