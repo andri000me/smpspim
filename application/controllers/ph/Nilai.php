@@ -61,20 +61,20 @@ class Nilai extends CI_Controller {
             $no++;
             $row = array();
             $jumlah_lari = $this->pelanggaran_header->get_total_lari_siswa($this->session->userdata('ID_TA_ACTIVE'), $item->ID_SISWA);
-            
+
             $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $jumlah_lari;
-            
+
             $disabled = '';
             $class = '';
-            
+
             if ($jumlah_lari >= $maksimal_lari) {
                 $disabled = 'disabled';
                 $class = 'siswa-lari';
             }
-            
+
             if (!$item->AKTIF_AS) {
                 $disabled = 'disabled';
                 $class = 'siswa-keluar';
@@ -90,12 +90,12 @@ class Nilai extends CI_Controller {
                 $nilai_maks[] = intval($detail_kitab->NILAI_MAKS_BATASAN);
 
 //                $row[] = '<select class="form-control input-sm option-pegawai" id="penyemak_' . $item->ID_SISWA . '_' . $detail_kitab->ID_BATASAN . '" data-pegawai="' . ($data_nilai == NULL ? '' : $data_nilai->PENYEMAK_PHN) . '" style="width: 150px;" '.$disabled.'></select>';
-                $row[] = '<input type="number" class="form-control input-sm" id="nilai_' . $item->ID_SISWA . '_' . $detail_kitab->ID_BATASAN . '" value="' . ($data_nilai == NULL ? '' : $data_nilai->NILAI_PHN) . '" onchange="check_nilai(this)" data-nilai="' . $detail_kitab->NILAI_MAKS_BATASAN . '" style="width: 60px;" '.$disabled.'/>';
+                $row[] = '<input type="number" class="form-control input-sm" id="nilai_' . $item->ID_SISWA . '_' . $detail_kitab->ID_BATASAN . '" value="' . ($data_nilai == NULL ? '' : $data_nilai->NILAI_PHN) . '" onchange="check_nilai(this)" data-nilai="' . $detail_kitab->NILAI_MAKS_BATASAN . '" style="width: 60px;" ' . $disabled . '/>';
             }
 
-            $row[] = '<p id="nilai_total_'.$item->ID_SISWA.'">'.$item->NILAI_PNH.'</p>';
-            $row[] = '<p id="status_'.$item->ID_SISWA.'">'.$item->STATUS_PNH.'</p>';
-            $row[] = '<button type="button" class="btn btn-sm btn-primary '.$class.'" data-batasan="' . json_encode($id_batasan) . '" data-nilai="' . json_encode($nilai_maks) . '" data-siswa="' . $item->ID_SISWA . '" data-kitab="' . json_encode($id_kitab) . '" onclick="simpan_nilai(this)" '.$disabled.'><i class="fa fa-save"></i></button>';
+            $row[] = '<p id="nilai_total_' . $item->ID_SISWA . '">' . $item->NILAI_PNH . '</p>';
+            $row[] = '<p id="status_' . $item->ID_SISWA . '">' . $item->STATUS_PNH . '</p>';
+            $row[] = '<button type="button" class="btn btn-sm btn-primary ' . $class . '" data-batasan="' . json_encode($id_batasan) . '" data-nilai="' . json_encode($nilai_maks) . '" data-siswa="' . $item->ID_SISWA . '" data-kitab="' . json_encode($id_kitab) . '" onclick="simpan_nilai(this)" ' . $disabled . '><i class="fa fa-save"></i></button>';
 
             $data[] = $row;
         }
@@ -145,7 +145,7 @@ class Nilai extends CI_Controller {
         for ($i = 0; $i < count($NILAI_PHN); $i++) {
             $data['BATASAN_PHN'] = $BATASAN_PHN[$i];
             $data['NILAI_PHN'] = $NILAI_PHN[$i];
-            $data['PENYEMAK_PHN'] = 1;//$PENYEMAK_PHN[$i];
+            $data['PENYEMAK_PHN'] = 1; //$PENYEMAK_PHN[$i];
             $NILAI_PNH[$ID_KITAB[$i]][] = $NILAI_PHN[$i];
 
             $insert = $this->nilai->simpan_nilai($data);
@@ -193,7 +193,7 @@ class Nilai extends CI_Controller {
 
     private function hitung_nilai($ID_SISWA, $NILAI_MAKS_PNH, $NILAI_PHN, $ID_KITAB) {
         $NILAI_AKHIR = array();
-        
+
         $NILAI_PERKITAB = array();
         foreach ($ID_KITAB as $INDEX => $DETAIL_KITAB) {
             $NILAI_PERKITAB[$DETAIL_KITAB][] = array(
@@ -201,55 +201,57 @@ class Nilai extends CI_Controller {
                 'NILAI_MAKS' => $NILAI_MAKS_PNH[$INDEX],
             );
         }
-        
+
         $NILAI = array();
         foreach ($NILAI_PERKITAB as $ID_KITAB => $DETAIL_NILAI) {
             foreach ($DETAIL_NILAI as $DETAIL) {
-                if(isset($NILAI[$ID_KITAB])) 
+                if (isset($NILAI[$ID_KITAB]))
                     $NILAI[$ID_KITAB] += $DETAIL['NILAI'];
-                else 
+                else
                     $NILAI[$ID_KITAB] = $DETAIL['NILAI'];
             }
         }
-        
+
         $NILAI_TOTAL = 0;
         foreach ($NILAI as $DETAIL) {
             $NILAI_TOTAL += $DETAIL;
         }
-        
-        $NILAI_RATA = round($NILAI_TOTAL/count($NILAI));
+
+        $NILAI_RATA = round($NILAI_TOTAL / count($NILAI));
         $NILAI_MINIMAL = $this->pengaturan->getNilaiMinimalHafal();
-        
-        if($NILAI_RATA >= $NILAI_MINIMAL) 
+
+        if ($NILAI_RATA >= $NILAI_MINIMAL)
             $STATUS_PNH = 'HAFAL';
         else
             $STATUS_PNH = 'TIDAK HAFAL';
-        
+
         $result = $this->nilai->reset_nilai_header($ID_SISWA, $NILAI_RATA, $STATUS_PNH);
-        
+
         return array(
             'NILAI' => $NILAI_RATA,
             'STATUS' => $STATUS_PNH,
             'RESULT' => $result
         );
     }
-    
+
     public function simpan_status() {
         $this->generate->set_header_JSON();
-        
+
         $keluar = $this->input->post('keluar');
         $keluar_exp = explode(',', $keluar);
         $lari = $this->input->post('lari');
         $lari_exp = explode(',', $lari);
-        
+
         foreach ($keluar_exp as $ID_SISWA) {
-            if($ID_SISWA != '') $this->nilai->update_status($ID_SISWA, 'KELUAR');
+            if ($ID_SISWA != '')
+                $this->nilai->update_status($ID_SISWA, 'KELUAR');
         }
-        
+
         foreach ($lari_exp as $ID_SISWA) {
-            if($ID_SISWA != '') $this->nilai->update_status($ID_SISWA, 'GUGUR');
+            if ($ID_SISWA != '')
+                $this->nilai->update_status($ID_SISWA, 'GUGUR');
         }
-        
+
         $this->generate->output_JSON(array('status' => 1));
     }
 
