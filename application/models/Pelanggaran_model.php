@@ -166,5 +166,20 @@ class Pelanggaran_model extends CI_Model {
         
         return $this->db->affected_rows();
     }
+    
+    public function get_data_scanner($ID_SISWA) {
+        $this->db->from('akad_siswa asw');
+        $this->db->join('md_siswa ms','asw.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('md_tingkat mt','asw.TINGKAT_AS=mt.ID_TINGK');
+        $this->db->join('akad_kelas ak','asw.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_ruang mr','ak.RUANG_KELAS=mr.KODE_RUANG');
+        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->where('KONVERSI_AS', 0);
+        $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('NIS_SISWA', $ID_SISWA);
+        $result = $this->db->get();
+        
+        return $result->row();
+    }
 
 }

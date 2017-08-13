@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Pelanggaran extends CI_Controller {
-    
+
     var $edit_id = TRUE;
     var $primary_key = "ID_KS";
 
@@ -78,90 +79,90 @@ class Pelanggaran extends CI_Controller {
 
     public function request_form() {
         $data = $this->generate->set_header_form_JSON($this->pelanggaran);
-        
+
         $input_id = FALSE;
         $show_id = TRUE;
 
         $data_html = array(
             array(
-                'label' => 'Tanggal',                                        
+                'label' => 'Tanggal',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 2,
                 'data' => array(
                     'type' => 'datepicker',
-                    'name' => 'TANGGAL_KS',                                        
+                    'name' => 'TANGGAL_KS',
                     'value' => $data == NULL ? $this->date_format->to_view(date('Y-m-d')) : $data->TANGGAL_KS
                 )
             ),
             array(
-                'label' => 'Siswa',                                     
+                'label' => 'Siswa',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 9,
                 'data' => array(
-                    'type'  => 'autocomplete',                                  
-                    'name'  => 'SISWA_KS',                                    
-                    'multiple'  => FALSE,                                       
-                    'minimum'  => 1,                                       
+                    'type' => 'autocomplete',
+                    'name' => 'SISWA_KS',
+                    'multiple' => FALSE,
+                    'minimum' => 1,
                     'value' => $data == NULL ? "" : $data->SISWA_KS,
-                    'label' => $data == NULL ? "" : ((($data->NIS_SISWA == NULL) ? 'BELUM ADA NIS' : $data->NIS_SISWA).$data->NAMA_SISWA),
-                    'data'  => NULL,                                            
-                    'url'   => base_url('akademik/siswa/ac_siswa_kelas')                      
+                    'label' => $data == NULL ? "" : ((($data->NIS_SISWA == NULL) ? 'BELUM ADA NIS' : $data->NIS_SISWA) . $data->NAMA_SISWA),
+                    'data' => NULL,
+                    'url' => base_url('akademik/siswa/ac_siswa_kelas')
                 )
             ),
             array(
-                'label' => 'Pelanggaran',                                     
+                'label' => 'Pelanggaran',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 10,
                 'data' => array(
-                    'type'  => 'autocomplete',                                  
-                    'name'  => 'PELANGGARAN_KS',                                    
-                    'multiple'  => FALSE,                                       
-                    'minimum'  => 0,                                       
+                    'type' => 'autocomplete',
+                    'name' => 'PELANGGARAN_KS',
+                    'multiple' => FALSE,
+                    'minimum' => 0,
                     'value' => $data == NULL ? "" : $data->PELANGGARAN_KS,
                     'label' => $data == NULL ? "" : $data->NAMA_KJP,
-                    'data'  => NULL,                                            
-                    'url'   => base_url('komdis/jenis_pelanggaran/auto_complete_pelanggaran')                      
+                    'data' => NULL,
+                    'url' => base_url('komdis/jenis_pelanggaran/auto_complete_pelanggaran')
                 )
             ),
             array(
-                'label' => 'Sumber',                                     
+                'label' => 'Sumber',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 7,
                 'data' => array(
-                    'type'  => 'autocomplete',                                  
-                    'name'  => 'SUMBER_KS',                                    
-                    'multiple'  => FALSE,                                       
-                    'minimum'  => 0,                                       
+                    'type' => 'autocomplete',
+                    'name' => 'SUMBER_KS',
+                    'multiple' => FALSE,
+                    'minimum' => 0,
                     'value' => $data == NULL ? "" : $data->SUMBER_KS,
                     'label' => $data == NULL ? "" : $data->NAMA_PEG,
-                    'data'  => NULL,                                            
-                    'url'   => base_url('master_data/pegawai/auto_complete')                      
+                    'data' => NULL,
+                    'url' => base_url('master_data/pegawai/auto_complete')
                 )
             ),
             array(
-                'label' => 'Keterangan',                                        
+                'label' => 'Keterangan',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 8,
                 'data' => array(
-                    'type' => 'text',                                           
+                    'type' => 'text',
                     'name' => 'KETERANGAN_KS',
                     'value' => $data == NULL ? "" : $data->KETERANGAN_KS
                 )
             ),
         );
-        
+
         $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
     }
 
     public function ajax_add() {
         $this->generate->set_header_JSON();
         $this->generate->cek_validation_form('add');
-        
+
         $ID_TA = $this->session->userdata('ID_TA_ACTIVE');
         $ID_CAWU = $this->session->userdata('ID_CAWU_ACTIVE');
         $ID_PELANGGARAN = $this->input->post('PELANGGARAN_KS');
@@ -180,18 +181,44 @@ class Pelanggaran extends CI_Controller {
         $this->generate->cek_validation_form('delete');
 
         $id = $this->input->post("ID");
-        
+
         $affected_row = $this->pelanggaran_handler->hapus($id);
-                
+
         $this->generate->output_JSON(array("status" => $affected_row));
     }
 
     public function auto_complete() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->pelanggaran->get_all_ac($this->input->post('q'));
-        
+
         $this->generate->output_JSON($data);
+    }
+
+    public function form() {
+        $this->generate->backend_view('komdis/pelanggaran/form');
+    }
+
+    public function get_data_scanner() {
+        $this->generate->set_header_JSON();
+
+        $post = $this->input->post();
+        $data = $this->pelanggaran->get_data_scanner($post['NIS_SISWA']);
+
+        $insert = 0;
+        if ($data != NULL) {
+            $ID_TA = $this->session->userdata('ID_TA_ACTIVE');
+            $ID_CAWU = $this->session->userdata('ID_CAWU_ACTIVE');
+            $ID_PELANGGARAN = $post['PELANGGARAN_KS'];
+            $ID_SISWA = $data->ID_SISWA;
+            $TANGGAL_KS = $post['TANGGAL_KS'];
+            $SUMBER_KS = $post['SUMBER_KS'];
+            $KETERANGAN_KS = '';
+
+            $insert = $this->pelanggaran_handler->tambah($ID_TA, $ID_CAWU, $ID_SISWA, $ID_PELANGGARAN, $TANGGAL_KS, $SUMBER_KS, $KETERANGAN_KS);
+        }
+
+        $this->generate->output_JSON(array('status' => $insert, 'data' => $data));
     }
 
 }

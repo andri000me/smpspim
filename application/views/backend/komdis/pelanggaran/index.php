@@ -56,7 +56,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/pelanggaran/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
         $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Tambah <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="add_individu();" >Pelanggaran Persiswa</a></li><li><a href="<?php echo site_url('komdis/absen_jamaah'); ?>" target="_blank">Pelanggaran dengan Barcode</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Tambah <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="add_individu();" >Pelanggaran Persiswa</a></li><li><a href="<?php echo site_url('komdis/pelanggaran/form'); ?>" target="_blank">Pelanggaran dengan Barcode</a></li></ul></div>').insertAfter('.buttons-reload');
     });
     
     function add_individu() {
