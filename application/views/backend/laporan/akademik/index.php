@@ -85,6 +85,16 @@ $options = array(
                             </div>
                         </div>
                         <div class="form-group filter-lanjutan">
+                            <label class="col-sm-3 control-label">Jenis Kelamin</label>
+                            <div class="col-sm-4">
+                                <select id="jk" class="form-control">
+                                    <option value="">-- Pilih Jenis Kelamin --</option>
+                                    <option value="L">Laki-laki</option>
+                                    <option value="P">Perempuan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group filter-lanjutan">
                             <label class="col-sm-3 control-label">Kelas</label>
                             <div class="col-sm-4">
                                 <select id="kelas" class="form-control">
@@ -149,8 +159,9 @@ $this->generate->chart($id, 'Grafik Akademik', $single);
         var ta = $("#ta").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
+        var jk = $("#jk").val();
         
-        window.open("<?php echo site_url('laporan/akademik/export'); ?>?ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas);
+        window.open("<?php echo site_url('laporan/akademik/export'); ?>?ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&jk=" + jk);
     }
     
     function filter_lanjutan() {

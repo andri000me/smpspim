@@ -71,8 +71,9 @@ class Akademik extends CI_Controller {
         $ta = $this->input->get('ta');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
+        $jk = $this->input->get('jk');
 
-        echo $this->akademik->export_data($ta, $tingkat, $kelas);
+        echo $this->akademik->export_data($ta, $tingkat, $kelas, $jk);
     }
 
 }

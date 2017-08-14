@@ -99,7 +99,7 @@ class Laporan_akademik_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function export_data($ta, $tingkat, $kelas) {
+    public function export_data($ta, $tingkat, $kelas, $jk) {
         $this->load->dbutil();
 
         $this->db->select(''
@@ -228,6 +228,8 @@ class Laporan_akademik_model extends CI_Model {
             $this->db->where('TINGKAT_AS', $tingkat);
         if ($kelas != "")
             $this->db->where('KELAS_AS', $kelas);
+        if ($jk != "")
+            $this->db->where('JK_SISWA', $jk);
 
         $sql = $this->db->get();
 
