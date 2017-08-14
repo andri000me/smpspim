@@ -15,7 +15,7 @@ $columns = array(
 );
 
 $this->generate->generate_panel_content("Data " . $title, $subtitle);
-if($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
+//if($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
 $this->generate->datatables($id_datatables, $title, $columns);
 ?>
 
@@ -68,8 +68,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
     }
 </script>
 
-<?php } else { ?>
-<div class="content animate-panel">
+<?php // } else { ?>
+<!--<div class="content animate-panel">
     <div class="row">
         <div class="col-lg-12">
             <div class="hpanel hbggreen">
@@ -79,5 +79,5 @@ $this->generate->datatables($id_datatables, $title, $columns);
             </div>
         </div>
     </div>
-</div>
-<?php } ?>
+</div>-->
+<?php // } ?>
