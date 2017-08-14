@@ -82,14 +82,17 @@ function create_checkbox($label, $value, $checked = FALSE) {
                             <div class="col-md-3">
                                 <?php echo create_checkbox('TEMPAT LAHIR', 'TEMPAT_LAHIR_SISWA'); ?>
                                 <?php echo create_checkbox('TANGGAL LAHIR', 'TANGGAL_LAHIR_SISWA'); ?>
+                                <?php echo create_checkbox('NAMA PONDOK', 'NAMA_PONDOK_MPS'); ?>
                             </div>
                             <div class="col-md-3">
-                                <?php echo create_checkbox('TEMPAT LAHIR', 'TEMPAT_LAHIR_SISWA'); ?>
-                                <?php echo create_checkbox('TANGGAL LAHIR', 'TANGGAL_LAHIR_SISWA'); ?>
+                                <?php echo create_checkbox('NAMA AYAH', 'AYAH_NAMA_SISWA'); ?>
+                                <?php echo create_checkbox('NAMA IBU', 'IBU_NAMA_SISWA'); ?>
+                                <?php echo create_checkbox('ALAMAT', 'ALAMAT_SISWA'); ?>
                             </div>
                             <div class="col-md-3">
-                                <?php echo create_checkbox('TEMPAT LAHIR', 'TEMPAT_LAHIR_SISWA'); ?>
-                                <?php echo create_checkbox('TANGGAL LAHIR', 'TANGGAL_LAHIR_SISWA'); ?>
+                                <?php echo create_checkbox('KECAMATAN', 'NAMA_KEC'); ?>
+                                <?php echo create_checkbox('KABUPATEN', 'NAMA_KAB'); ?>
+                                <?php echo create_checkbox('PROVINSI', 'NAMA_PROV'); ?>
                             </div>
                         </div>
                     </div>
