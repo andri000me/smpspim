@@ -50,7 +50,7 @@ class Pelanggaran extends CI_Controller {
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->WALI_KELAS;
-            $row[] = $item->SUMBER_INFO;
+            $row[] = $item->DOMISILI_SISWA;
 //            $row[] = $item->NO_KJP;
             $row[] = $item->NAMA_KJP;
             $row[] = $item->POIN_KJP;

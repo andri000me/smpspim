@@ -11,7 +11,7 @@ $columns = array(
     'NAMA',
     'KELAS',
     'WALI KELAS',
-    'SUMBER',
+    'DOMISILI',
     'PELANGGARAN',
     'POIN',
     'AKSI',

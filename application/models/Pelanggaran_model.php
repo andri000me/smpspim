@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggaran_model extends CI_Model {
 
     var $table = 'komdis_siswa';
-    var $column = array('NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','mp.NAMA_PEG','NAMA_KJP','POIN_KJP', 'ID_KS');
+    var $column = array('NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS))','NAMA_KJP','POIN_KJP', 'ID_KS');
 //    var $column = array('NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','mp.NAMA_PEG','CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP))','POIN_KJP','KETERANGAN_KS', 'ID_KS');
     var $primary_key = "ID_KS";
     var $order = array("ID_KS" => 'DESC');
@@ -20,11 +20,14 @@ class Pelanggaran_model extends CI_Model {
     }
 
     private function _get_table($select = false) {
-        if(!$select) $this->db->select('*, CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP)) AS NO_KJP, mpw.NAMA_PEG AS WALI_KELAS, mp.NAMA_PEG AS SUMBER_INFO');
+        if(!$select) $this->db->select('*, CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP)) AS NO_KJP, mpw.NAMA_PEG AS WALI_KELAS, mp.NAMA_PEG AS SUMBER_INFO, IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS)) AS DOMISILI_SISWA');
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KS=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KS=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', $this->table.'.SISWA_KS=ms.ID_SISWA');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB');
+        $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('akad_siswa as',$this->table.'.SISWA_KS=as.SISWA_AS AND '.$this->table.'.TA_KS=as.TA_AS');
         $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_pegawai mpw','ak.WALI_KELAS=mpw.ID_PEG');
@@ -76,6 +79,7 @@ class Pelanggaran_model extends CI_Model {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;
+            $order[7] = 'DOMISILI_SISWA';
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
