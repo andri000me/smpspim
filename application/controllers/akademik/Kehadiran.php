@@ -234,6 +234,7 @@ class Kehadiran extends CI_Controller {
         elseif ($JENIS_CETAK == 4) $view = 'cetak_dauroh_inggris';
         elseif ($JENIS_CETAK == 5) $view = 'cetak_ilmu_alat';
         elseif ($JENIS_CETAK == 6) $view = 'cetak_pramuka';
+        elseif ($JENIS_CETAK == 7) $view = 'excel_daftar_nilai';
         
         $this->load->view('backend/akademik/kehadiran/'.$view, $data);
     }

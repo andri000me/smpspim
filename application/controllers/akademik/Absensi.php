@@ -63,6 +63,10 @@ class Absensi extends CI_Controller {
                     'url' => site_url('akademik/kehadiran/cetak_absen')."/' + ID_KELAS + '/2",
                     'title' => 'Cetak Buku Daftar Nilai',
                 ),
+                array(
+                    'url' => site_url('akademik/kehadiran/cetak_absen')."/' + ID_KELAS + '/7",
+                    'title' => 'Excel Buku Daftar Nilai',
+                ),
                 
             )
         );
