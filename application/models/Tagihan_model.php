@@ -121,6 +121,15 @@ class Tagihan_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_all_ta_active_dropdown($for_html = true) {
+        if ($for_html) $this->db->select("ID_TAG as id,  NAMA_TAG as text");
+        $this->_get_table();
+        $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->order_by('ID_TAG', 'DESC');
+
+        return $this->db->get()->result();
+    }
+
     public function get_all_ac($where) {
         $this->db->select("ID_TAG as id,  CONCAT(NAMA_TA, ' - ', NAMA_TAG) as text");
         $this->_get_table();

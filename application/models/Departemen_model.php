@@ -118,6 +118,14 @@ class Departemen_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_all_checkbox() {
+        $this->db->select("ID_DEPT as value, NAMA_DEPT as label");
+        $this->_get_table();
+        $this->db->order_by('URUT_DEPT', 'ASC');
+
+        return $this->db->get()->result();
+    }
+
     public function get_nominal($id) {
         $this->_get_table();
         $this->db->where($this->primary_key, $id);

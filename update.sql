@@ -1,7 +1,6 @@
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '18' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'ketua_p3h_banin';
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '19' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'ketua_p3h_banat';
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '20' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'ketua_komdis';
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '21' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'nilai_minimal_hafal';
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '22' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'maksimal_lari_hafalan';
-UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '23' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'lama_log_tersimpan';
-UPDATE `md_pengaturan` SET `NAMA_PENGATURAN` = '20' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'ketua_p3h_banin';
+DROP TABLE md_user_keuangan;
+CREATE TABLE `simapes_99`.`md_user_keuangan` ( `USER_MUK` INT(12) NOT NULL , `TAGIHAN_MUK` INT(12) NOT NULL , `DEPT_MUK` VARCHAR(10) NOT NULL , `CREATED_MUK` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , INDEX (`USER_MUK`), INDEX (`TAGIHAN_MUK`), INDEX (`DEPT_MUK`)) ENGINE = InnoDB;
+
+ALTER TABLE `md_user_keuangan` ADD FOREIGN KEY (`USER_MUK`) REFERENCES `simapes_99`.`md_user`(`ID_USER`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `md_user_keuangan` ADD FOREIGN KEY (`TAGIHAN_MUK`) REFERENCES `simapes_99`.`keu_tagihan`(`ID_TAG`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `md_user_keuangan` ADD FOREIGN KEY (`DEPT_MUK`) REFERENCES `simapes_99`.`md_departemen`(`ID_DEPT`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE `md_user_keuangan` ADD UNIQUE( `USER_MUK`, `TAGIHAN_MUK`, `DEPT_MUK`);

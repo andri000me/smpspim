@@ -181,9 +181,10 @@ class Auth {
 
             if ($result->ID_HAKAKSES == 4) {
                 $keu = $this->CI->hakakses_user->get_keuangan_user();
-
-                if (count($keu) > 0)
+                
+                if (count($keu) > 0) {
                     $data['TAGIHAN'] = json_encode($keu);
+                }
             }
 
             $this->CI->session->set_userdata($data);

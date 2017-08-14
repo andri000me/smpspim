@@ -137,7 +137,11 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
             remove_ladda();
         };
         
-        create_ajax('<?php echo site_url('master_data/user/ajax_update_keuangan'); ?>', $('#' + id_form).serialize(), success);
+        if($('#tagihan').val() === '' || $('.checkbox_simple').val() === '')  {
+            create_homer_error('Silahkan lengkapi form terlebih dahulu');
+            remove_ladda();
+        } else
+            create_ajax('<?php echo site_url('master_data/user/ajax_update_keuangan'); ?>', $('#' + id_form).serialize(), success);
     }
     
     function saving_update_status(id_form) {

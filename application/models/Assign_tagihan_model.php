@@ -44,6 +44,25 @@ class Assign_tagihan_model extends CI_Model {
             'AKTIF_AS' => 1,
             'TA_AS' => $this->session->userdata('ID_TA_ACTIVE')
         ));
+        
+        if($this->session->userdata('TAGIHAN') !== NULL) {
+            $keu = json_decode($this->session->userdata('TAGIHAN'));
+            $i = 0;
+            foreach ($keu as $detail) {
+                if($i == 0) {
+                    $this->db->group_start();
+                    $this->db->where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                } else {
+                    $this->db->or_where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                }
+                
+                if($i == (count($keu) - 1)) {
+                    $this->db->group_end();
+                }
+                
+                $i++;
+            }
+        }
     }
 
     private function _get_datatables_query() {
@@ -235,9 +254,9 @@ class Assign_tagihan_model extends CI_Model {
             foreach ($keu as $detail) {
                 if($i == 0) {
                     $this->db->group_start();
-                    $this->db->where('ID_TAG', $detail->ID_TAG);
+                    $this->db->where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
                 } else {
-                    $this->db->or_where('ID_TAG', $detail->ID_TAG);
+                    $this->db->or_where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
                 }
                 
                 if($i == (count($keu) - 1)) {

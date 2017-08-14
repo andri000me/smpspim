@@ -23,6 +23,25 @@ class Detail_tagihan_model extends CI_Model {
         $this->db->join('keu_tagihan t',$this->table.'.TAGIHAN_DT=t.ID_TAG');
         $this->db->join('md_departemen md',$this->table.'.DEPT_DT=md.ID_DEPT');
         $this->db->join('md_tahun_ajaran ta','t.TA_TAG=ta.ID_TA');
+        
+        if($this->session->userdata('TAGIHAN') !== NULL) {
+            $keu = json_decode($this->session->userdata('TAGIHAN'));
+            $i = 0;
+            foreach ($keu as $detail) {
+                if($i == 0) {
+                    $this->db->group_start();
+                    $this->db->where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
+                } else {
+                    $this->db->or_where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
+                }
+                
+                if($i == (count($keu) - 1)) {
+                    $this->db->group_end();
+                }
+                
+                $i++;
+            }
+        }
     }
 
     private function _get_datatables_query() {

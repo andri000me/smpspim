@@ -212,11 +212,32 @@ class Siswa_model extends CI_Model {
     public function get_ac_pembayaran($where) {
         $this->db->select("ID_SISWA as id, CONCAT(IF(NIS_SISWA IS NULL, 'BELUM ADA NIS' , NIS_SISWA), ' - ', NAMA_SISWA) as text");
         $this->db->from($this->table);
+        $this->db->join('akad_siswa as',$this->table.'.ID_SISWA=as.SISWA_AS');
+        $this->db->join('md_tingkat mt','as.TINGKAT_AS=mt.ID_TINGK');
         $this->db->like('CONCAT(IF(NIS_SISWA IS NULL, \'\' , NIS_SISWA)," ",NAMA_SISWA)', $where);
         $this->db->where(array(
             'STATUS_MUTASI_SISWA' => NULL,
             'STATUS_PSB_SISWA' => 1
         ));
+        
+        if($this->session->userdata('TAGIHAN') !== NULL) {
+            $keu = json_decode($this->session->userdata('TAGIHAN'));
+            $i = 0;
+            foreach ($keu as $detail) {
+                if($i == 0) {
+                    $this->db->group_start();
+                    $this->db->where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                } else {
+                    $this->db->or_where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                }
+                
+                if($i == (count($keu) - 1)) {
+                    $this->db->group_end();
+                }
+                
+                $i++;
+            }
+        }
         $this->db->order_by('NAMA_SISWA', 'ASC');
 
         return $this->db->get()->result();

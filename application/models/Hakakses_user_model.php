@@ -87,8 +87,8 @@ class Hakakses_user_model extends CI_Model{
     }
     
     public function get_keuangan_user() {
-        $this->db->select('TAGIHAN_MUK AS ID_TAG');
-        $this->db->from('md_user_keuangan');
+        $this->db->select('TAGIHAN_MUK AS ID_TAG, DEPT_MUK AS DEPT_DT');
+        $this->db->from('md_user_keuangan');    
         $this->db->where('USER_MUK', $this->session->userdata('ID_USER'));
         
         return $this->db->get()->result();

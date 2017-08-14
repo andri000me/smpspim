@@ -20,9 +20,10 @@ application/logs/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-/assets/
-!/assets/scripts
-!/assets/styles
+/assets/vendor/*
+/assets/api/*
+/assets/icons/*
+/assets/images/*
 /system/
 /files/barcode/*
 /files/datatabase/*

@@ -24,6 +24,7 @@ class User extends CI_Controller {
             'hakakses_model' => 'hakakses',
             'hakakses_user_model' => 'hakakses_user',
             'tagihan_model' => 'tagihan',
+            'departemen_model' => 'dept',
         ));
         $this->auth->validation(11);
     }
@@ -230,7 +231,7 @@ class User extends CI_Controller {
                 'keterangan' => 'Wajib diisi',
                 'length' => 7,
                 'data' => array(
-                    'type'  => 'checkbox',                                      // WAJIB, ex checkbox, radio
+                    'type'  => 'checkbox_simple',                                      // WAJIB, ex checkbox, radio
                     'name'  => 'HAKAKSES_HU[]',                                    // WAJIB
                     'data'  => $this->hakakses->get_all()                       // WAJIB
                 )
@@ -279,9 +280,22 @@ class User extends CI_Controller {
                 'keterangan' => 'Wajib diisi',
                 'length' => 7,
                 'data' => array(
-                    'type'  => 'checkbox',                                      // WAJIB, ex checkbox, radio
-                    'name'  => 'TAGIHAN[]',                                    // WAJIB
-                    'data'  => $this->tagihan->get_all_ta_active()                       // WAJIB
+                    'type'  => 'dropdown',                                      // WAJIB, ex checkbox, radio
+                    'name'  => 'TAGIHAN',                                    // WAJIB
+                    'id'  => 'tagihan',                                    // WAJIB
+                    'value_blank'  => '-- Pilih Tagihan --',
+                    'data'  => $this->tagihan->get_all_ta_active_dropdown()                       // WAJIB
+                )
+            ),
+            array(
+                'label' => 'Jenjang',                                     // WAJIB
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type'  => 'checkbox_simple',                                      // WAJIB, ex checkbox, radio
+                    'name'  => 'JENJANG[]',                                    // WAJIB
+                    'data'  => $this->dept->get_all_checkbox()                       // WAJIB
                 )
             ),
         );
@@ -369,12 +383,14 @@ class User extends CI_Controller {
         
         $ID_USER = $this->input->post('ID_USER');
         $TAGIHAN = $this->input->post('TAGIHAN');
+        $JENJANG = $this->input->post('JENJANG');
         
         $this->tagihan->delete_user($ID_USER);
-        foreach ($TAGIHAN as $value) {
+        foreach ($JENJANG as $value) {
             $this->tagihan->add_user(array(
                 'USER_MUK' => $ID_USER,
-                'TAGIHAN_MUK' => $value,
+                'TAGIHAN_MUK' => $TAGIHAN,
+                'DEPT_MUK' => $value,
             ));
         }
 
