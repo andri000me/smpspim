@@ -171,7 +171,9 @@ class Auth {
     public function registration_hakakses($ID_HAKAKSES) {
         $this->CI->load->model(array('hakakses_user_model' => 'hakakses_user', 'menu_model' => 'menu'));
         $result = $this->CI->hakakses_user->get_by_id($ID_HAKAKSES);
-
+        
+        $this->CI->session->set_userdata('ADMINISTRATOR', $this->CI->hakakses_user->cek_hakakses_user(1, $this->CI->session->userdata('ID_USER')));
+        
         if ($result) {
             $data = array(
                 'ID_HAKAKSES' => $result->ID_HAKAKSES,

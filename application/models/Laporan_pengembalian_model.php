@@ -30,7 +30,7 @@ class Laporan_pengembalian_model extends CI_Model {
         $this->db->join('md_pegawai mp','mu.PEGAWAI_USER=mp.ID_PEG');
         $this->db->where(array('JENIS_BAYAR' => 'PENGEMBALIAN'));
         
-        if($this->session->userdata('ID_HAKAKSES') > 1) {
+        if(!$this->session->userdata('ADMINISTRATOR')) {
             $this->db->where('ID_USER', $this->session->userdata('ID_USER'));
         }
     }
