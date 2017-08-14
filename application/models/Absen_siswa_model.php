@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Absen_siswa_model extends CI_Model {
 
     var $table = 'akad_siswa';
-    var $column = array('NO_ABSEN_AS','NIS_SISWA', 'NAMA_SISWA', 'ID_AS', 'ID_AS', 'ID_AS');
+    var $column = array('NO_ABSEN_AS','IF(NIS_SISWA IS NULL, "KELUAR", NIS_SISWA)', 'NAMA_SISWA', 'ID_AS', 'ID_AS', 'ID_AS');
     var $primary_key = "ID_AS";
     var $order = array("ID_AS" => 'ASC');
 
@@ -19,6 +19,7 @@ class Absen_siswa_model extends CI_Model {
     }
 
     private function _get_table($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+        $this->db->select('*, IF(NIS_SISWA IS NULL, "KELUAR", NIS_SISWA) AS NIS_SISWA_SHOW');
         $this->db->from($this->table);
         $this->db->join('md_siswa ms',$this->table.'.SISWA_AS=ms.ID_SISWA');
         $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_AS=mt.ID_TINGK');
@@ -71,6 +72,7 @@ class Absen_siswa_model extends CI_Model {
             $this->db->order_by($this->column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;
+            $order[1] = 'NIS_SISWA_SHOW';
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }

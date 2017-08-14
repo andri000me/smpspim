@@ -291,12 +291,12 @@ class Kehadiran extends CI_Controller {
             }
             
             $row[] = $item->NO_ABSEN_AS;
-            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NIS_SISWA_SHOW;
             $row[] = $item->NAMA_SISWA;
-            $row[] = $absen_lock ? '' : '<select class="form-control input-sm" style="width: 100px" '.($item->ALASAN_AKH == NULL ? '' : 'disabled="true"').'><option value="-">-</option><option value="SAKIT" '.($item->ALASAN_AKH == 'SAKIT' ? 'selected' : '').'>SAKIT</option><option value="IZIN" '.($item->ALASAN_AKH == 'IZIN' ? 'selected' : '').'>IZIN</option><option value="ALPHA" '.($item->ALASAN_AKH == 'ALPHA' ? 'selected' : '').'>ALPHA</option><option value="TERLAMBAT" '.($item->ALASAN_AKH == 'TERLAMBAT' ? 'selected' : '').'>TERLAMBAT</option></select>';
-            $row[] = $absen_lock ? '' : '<input type="text" class="form-control input-sm" style="width: 200px" value="'.$item->KETERANGAN_AKH.'" '.($item->ALASAN_AKH == NULL ? '' : 'disabled="true"').'/>';
+            $row[] = $absen_lock ? '' : '<select class="form-control input-sm" style="width: 100px" '.($item->ALASAN_AKH == NULL ? '' : 'disabled="true"').' '.(($item->NIS_SISWA_SHOW == 'KELUAR') ? 'disabled' : '').'><option value="-">-</option><option value="SAKIT" '.($item->ALASAN_AKH == 'SAKIT' ? 'selected' : '').'>SAKIT</option><option value="IZIN" '.($item->ALASAN_AKH == 'IZIN' ? 'selected' : '').'>IZIN</option><option value="ALPHA" '.($item->ALASAN_AKH == 'ALPHA' ? 'selected' : '').'>ALPHA</option><option value="TERLAMBAT" '.($item->ALASAN_AKH == 'TERLAMBAT' ? 'selected' : '').'>TERLAMBAT</option></select>';
+            $row[] = $absen_lock ? '' : '<input type="text" class="form-control input-sm" style="width: 200px" value="'.$item->KETERANGAN_AKH.'" '.($item->ALASAN_AKH == NULL ? '' : 'disabled="true"').' '.(($item->NIS_SISWA_SHOW == 'KELUAR') ? 'disabled' : '').'/>';
 
-            $row[] = $absen_lock ? '' : '<button type="button" class="btn btn-success btn-sm" onclick="simpan_absen(this)" data-siswa="'.$item->ID_SISWA.'" '.($item->ALASAN_AKH == NULL ? '' : 'style="display: none"').'><i class="fa fa-check-circle"></i></button><button type="button" class="btn btn-danger btn-sm" onclick="hapus_absen(this)" data-siswa="'.$item->ID_AKH.'" '.($item->ALASAN_AKH == NULL ? 'style="display: none"' : '').'><i class="fa fa-trash"></i></button>';
+            $row[] = $absen_lock ? '' : '<button type="button" class="btn btn-success btn-sm" onclick="simpan_absen(this)" data-siswa="'.$item->ID_SISWA.'" '.($item->ALASAN_AKH == NULL ? '' : 'style="display: none"').' '.(($item->NIS_SISWA_SHOW == 'KELUAR') ? 'disabled' : '').'><i class="fa fa-check-circle"></i></button><button type="button" class="btn btn-danger btn-sm" onclick="hapus_absen(this)" data-siswa="'.$item->ID_AKH.'" '.($item->ALASAN_AKH == NULL ? 'style="display: none"' : '').' '.(($item->NIS_SISWA_SHOW == 'KELUAR') ? 'disabled' : '').'><i class="fa fa-trash"></i></button>';
             $data[] = $row;
         }
 
