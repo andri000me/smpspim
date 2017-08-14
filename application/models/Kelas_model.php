@@ -114,6 +114,7 @@ class Kelas_model extends CI_Model {
     public function get_rows($where) {
         $this->_get_table();
         $this->db->where($where);
+        $this->db->order_by('NAMA_KELAS', 'ASC');
 
         return $this->db->get()->result();
     }

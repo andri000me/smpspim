@@ -72,6 +72,14 @@ $options = array(
                             </div>
                         </div>
                         <div class="form-group filter-lanjutan">
+                            <label class="col-sm-3 control-label">Kelas</label>
+                            <div class="col-sm-4">
+                                <select id="kelas" class="form-control">
+                                    <option value="">-- Pilih TA terlebih dahulu --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group filter-lanjutan">
                             <label class="col-sm-3 control-label">Jenjang Tingkat</label>
                             <div class="col-sm-4">
                                 <select id="tingkat" class="form-control">
@@ -91,14 +99,6 @@ $options = array(
                                     <option value="">-- Pilih Jenis Kelamin --</option>
                                     <option value="L">Laki-laki</option>
                                     <option value="P">Perempuan</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group filter-lanjutan">
-                            <label class="col-sm-3 control-label">Kelas</label>
-                            <div class="col-sm-4">
-                                <select id="kelas" class="form-control">
-                                    <option value="">-- Pilih TA terlebih dahulu --</option>
                                 </select>
                             </div>
                         </div>
