@@ -13,7 +13,7 @@ $widthNama = 48;
 $pdf = $this->fpdf;
 
 if (!isset($DATA)) {
-    echo "<h1>TIDAK ADA SISWA DIKELAS INI</h1>";
+    echo "<h1>TIDAK ADA SISWA DI KELAS INI</h1>";
     exit();
 }
 
@@ -27,7 +27,7 @@ foreach ($DATA as $DETAIL) {
 
     $pdf->Ln(2);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 5, 'DAFTAR HADIR SISWA ILMU ALAT TAHUN AJARAN ' . $TA, 0, 0, 'C');
+    $pdf->Cell(0, 5, 'DAFTAR HADIR KURSUS ILMU ALAT TAHUN AJARAN ' . $TA, 0, 0, 'C');
     $pdf->Ln(8);
 
     // $pdf->SetFont('Arial', 'B', 9);
