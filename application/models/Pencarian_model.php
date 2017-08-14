@@ -42,7 +42,6 @@ class Pencarian_model extends CI_Model {
         $this->db->join('md_golongan_darah mgd', $this->table.'.GOL_DARAH_SISWA=mgd.ID_DARAH', 'LEFT');
         $this->db->join('md_hobi mhi', $this->table.'.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
         $this->db->join('md_tempat_tinggal mtt', $this->table.'.TEMPAT_TINGGAL_SISWA=mtt.ID_TEMTING', 'LEFT');
-        $this->db->join('md_pondok_siswa mps', $this->table.'.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_ortu_hidup moha', $this->table.'.AYAH_HIDUP_SISWA=moha.ID_SO', 'LEFT');
         $this->db->join('md_jenjang_pendidikan mjpa', $this->table.'.AYAH_PENDIDIKAN_SISWA=mjpa.ID_JP', 'LEFT');
         $this->db->join('md_pekerjaan mpka', $this->table.'.AYAH_PEKERJAAN_SISWA=mpka.ID_JENPEK', 'LEFT');
