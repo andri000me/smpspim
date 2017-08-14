@@ -98,7 +98,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <div class="panel-body">
                         <?php $this->generate->input_text('Alamat', array('name' => 'ALAMAT_PEG', 'maxlength' => 250, 'value' => $mode_edit ? $data->ALAMAT_PEG : ''), TRUE, 9); ?>
                         <?php $this->generate->input_select2('Kecamatan', array('name' => 'KECAMATAN_PEG', 'url' => site_url('master_data/kecamatan/auto_complete')), TRUE, 6, TRUE, $mode_edit ? array('id' => $data->KECAMATAN_PEG, 'text' => $data->NAMA_KEC . ', ' . $data->NAMA_KAB . ', ' . $data->NAMA_PROV) : NULL); ?>
-                        <?php $this->generate->input_text('No. HP', array('name' => 'NOHP_PEG', 'maxlength' => 12, 'value' => $mode_edit ? $data->NOHP_PEG : ''), TRUE, 4); ?>
+                        <?php $this->generate->input_text('No. HP 1', array('name' => 'NOHP_PEG', 'maxlength' => 12, 'value' => $mode_edit ? $data->NOHP_PEG : ''), TRUE, 4); ?>
+                        <?php $this->generate->input_text('No. HP 2', array('name' => 'NOHP1_PEG', 'maxlength' => 12, 'value' => $mode_edit ? $data->NOHP1_PEG : ''), TRUE, 4); ?>
                         <?php $this->generate->input_text('Email', array('name' => 'EMAIL_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->EMAIL_PEG : ''), FALSE, 4); ?>
                     </div>
                 </div>
