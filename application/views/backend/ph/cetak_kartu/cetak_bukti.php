@@ -44,25 +44,24 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Ln(8);
 
     $pdf->SetFont('dejavusans', '', 10);
-    $pdf->Cell(0, 5, 'Yang bertanda tangan dibawah ini:');
+    $pdf->Cell(0, 5, 'Yang bertanda tangan di bawah ini:');
     $pdf->Ln(7);
 
     $pdf->Cell(10);
-    $pdf->Cell(23, 5, 'NIS - Nama', 0, 0, 'L');
-    $pdf->Cell(0, 5, ': ' . $DATA_SISWA->NIS_SISWA . ' - ' . $DATA_SISWA->NAMA_SISWA, 0, 0, 'L');
+    $pdf->Cell(23, 5, 'Nama', 0, 0, 'L');
+    $pdf->Cell(90, 5, ': ' . $DATA_SISWA->NAMA_SISWA, 0, 0, 'L');
+    $pdf->Cell(23, 5, 'No. Absen', 0, 0, 'L');
+    $pdf->Cell(40, 5, ': ' . $DATA_SISWA->NO_ABSEN_AS, 0, 0, 'L');
     $pdf->Ln();
 
     $pdf->Cell(10);
     $pdf->Cell(23, 5, 'Kelas', 0, 0, 'L');
-    $pdf->Cell(0, 5, ': ' . $DETAIL['KELAS'], 0, 0, 'L');
+    $pdf->Cell(90, 5, ': ' . $DETAIL['KELAS'], 0, 0, 'L');
+    $pdf->Cell(23, 5, 'NIS', 0, 0, 'L');
+    $pdf->Cell(40, 5, ': ' . $DATA_SISWA->NIS_SISWA, 0, 0, 'L');
     $pdf->Ln();
 
-    $pdf->Cell(10);
-    $pdf->Cell(23, 5, 'No. Absen', 0, 0, 'L');
-    $pdf->Cell(0, 5, ': ' . $DATA_SISWA->NO_ABSEN_AS, 0, 0, 'L');
-    $pdf->Ln(7);
-
-    $pdf->Cell(0, 5, 'telah mengajukan penyemaan hafalan dan dinyatakan hafal dengan nilai sebagaimana tercantum dibawah ini: ');
+    $pdf->Cell(0, 5, 'telah mengajukan penyemaan hafalan dan dinyatakan hafal dengan nilai sebagaimana tercantum di bawah ini: ');
     $pdf->Ln(6);
 
     $pdf->Cell(7, 10, 'No', 1, 0, 'C');
