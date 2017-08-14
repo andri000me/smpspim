@@ -44,9 +44,9 @@ foreach ($SISWA as $DETAIL) {
     // $pdf->Ln(8);
 
     if ($DATA_SISWA->FOTO_SISWA == NULL || !file_exists('files/siswa/' . $DATA_SISWA->ID_SISWA . '.png'))
-        $pdf->Image(base_url('files/no_image.jpg'), 13, 32, 28, 28);
+        $pdf->Image(base_url('files/no_image.jpg'), 13, 30, 28, 28);
     else
-        $pdf->Image(base_url('files/siswa/' . $DATA_SISWA->ID_SISWA . '.png'), 13, 32, 28, 28);
+        $pdf->Image(base_url('files/siswa/' . $DATA_SISWA->ID_SISWA . '.png'), 13, 30, 28, 28);
         
     $pdf->SetFont('Arial', '', 10);
     
