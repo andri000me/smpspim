@@ -27,7 +27,7 @@ foreach ($DATA as $DETAIL) {
 
     $pdf->Ln(2);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 5, 'DAFTAR HADIR SISWA SOROGAN KITAB KUNING TAHUN AJARAN ' . $TA, 0, 0, 'C');
+    $pdf->Cell(0, 5, 'DAFTAR HADIR SOROGAN KITAB KUNING TAHUN AJARAN ' . $TA, 0, 0, 'C');
     $pdf->Ln(8);
 
     // $pdf->SetFont('Arial', 'B', 9);
