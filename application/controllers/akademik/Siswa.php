@@ -138,14 +138,15 @@ class Siswa extends CI_Controller {
 
     public function cetak_kartu($ID_SISWA = NULL) {
         $data['siswa'] = $this->siswa->get_data_kartu($ID_SISWA);
-        
+
         $this->load->view('backend/akademik/siswa/cetak_kartu', $data);
     }
 
     public function cetak_kartu_kelas($ID_KELAS) {
-        if($ID_KELAS == 0) $ID_KELAS = NULL;
+        if ($ID_KELAS == 0)
+            $ID_KELAS = NULL;
         $data['siswa'] = $this->siswa->get_data_kartu(NULL, $ID_KELAS);
-        
+
         $this->load->view('backend/akademik/siswa/cetak_kartu', $data);
     }
 
@@ -164,10 +165,14 @@ class Siswa extends CI_Controller {
     }
 
     private function selection_form($data) {
-        if(isset($data['TANGGAL_LAHIR_SISWA'])) $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_LAHIR_SISWA']);
-        if(isset($data['AYAH_TANGGAL_LAHIR_SISWA'])) $data['AYAH_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['AYAH_TANGGAL_LAHIR_SISWA']);
-        if(isset($data['IBU_TANGGAL_LAHIR_SISWA'])) $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['IBU_TANGGAL_LAHIR_SISWA']);
-        if(isset($data['TANGGAL_IJASAH_SISWA'])) $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_IJASAH_SISWA']);
+        if (isset($data['TANGGAL_LAHIR_SISWA']))
+            $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_LAHIR_SISWA']);
+        if (isset($data['AYAH_TANGGAL_LAHIR_SISWA']))
+            $data['AYAH_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['AYAH_TANGGAL_LAHIR_SISWA']);
+        if (isset($data['IBU_TANGGAL_LAHIR_SISWA']))
+            $data['IBU_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['IBU_TANGGAL_LAHIR_SISWA']);
+        if (isset($data['TANGGAL_IJASAH_SISWA']))
+            $data['TANGGAL_IJASAH_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_IJASAH_SISWA']);
         unset($data['validasi']);
         foreach ($data as $key => $value) {
             if ($value == '')
@@ -182,12 +187,12 @@ class Siswa extends CI_Controller {
         $this->generate->cek_validation_simple('edit');
 
         $data = $this->selection_form($this->input->post());
-
+        
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );
         unset($data['ID_SISWA']);
-
+        
         $affected_row = $this->siswa->update($where, $data);
 
         $this->generate->output_JSON(array("status" => 1));

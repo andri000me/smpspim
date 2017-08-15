@@ -5,14 +5,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Date_format {
 
     public function to_store_db($data) {
-        $timestamp = strtotime($data);
-        if ($timestamp === FALSE) {
-            $tanggal_exp = explode("/", $data);
-            
-            return $tanggal_exp[2].'-'.$tanggal_exp[1].'-'.$tanggal_exp[0];
-        }
+//        $timestamp = strtotime($data);
+//        if ($timestamp === FALSE) {
+//            $tanggal_exp = explode("/", $data);
+//            
+//            return $tanggal_exp[2].'-'.$tanggal_exp[1].'-'.$tanggal_exp[0];
+//        }
 
-        return date("Y-m-d", strtotime($data));
+//        return date("Y-m-d", strtotime($data));
+        
+        return $data;
     }
 
     public function to_view($data) {
