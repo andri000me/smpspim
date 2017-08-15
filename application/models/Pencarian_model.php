@@ -22,6 +22,8 @@ class Pencarian_model extends CI_Model {
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
         $this->db->join('md_pondok_siswa mps', $this->table.'.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
+        $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'), 'LEFT');
+        $this->db->join('akad_kelas ak','asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
         $this->db->order_by('NAMA_SISWA', 'ASC');
     }
     
