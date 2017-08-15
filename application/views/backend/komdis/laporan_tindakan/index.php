@@ -41,4 +41,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
         
         $(".buttons-add").remove();
     });
+    
+    function hapus_surat() {
+        
+    }
 </script>

@@ -225,5 +225,12 @@ class Laporan_tindakan_model extends CI_Model {
 
         return $result->result();
     }
+    
+    public function hapus_surat($ID_KT) {
+        $sql = 'DELETE kt2 FROM komdis_tindakan kt1 INNER JOIN komdis_tindakan kt2 ON kt1.NOMOR_SURAT_KT=kt2.NOMOR_SURAT_KT WHERE kt1.ID_KT='.$ID_KT;
+        $result = $this->db->query($sql);
+        
+        return $result;
+    }
 
 }

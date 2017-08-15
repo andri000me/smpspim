@@ -179,6 +179,14 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak', $data);
     }
 
+    public function hapus_surat($ID_KT) {
+        $this->generate->set_header_JSON();
+        
+        $result = $this->tindakan->hapus_surat($ID_KT);
+        
+        $this->generate->output_JSON(array('status' => $result));
+    }
+    
     public function cetak_surat($ID_KT) {
         $data = array(
             'nama_panitia' => 'KOMISI DISIPLIN SISWA'
