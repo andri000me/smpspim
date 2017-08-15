@@ -100,6 +100,20 @@ class Tingkat_model extends CI_Model {
         return $this->db->get()->row()->ID_TINGK;
     }
 
+    public function get_row($where) {
+        $this->_get_table();
+        $this->db->where($where);
+
+        return $this->db->get()->row();
+    }
+
+    public function get_rows($where) {
+        $this->_get_table();
+        $this->db->where($where);
+
+        return $this->db->get()->result();
+    }
+
     public function get_tingkat_dept($dept = NULL) {
         $this->_get_table();
         

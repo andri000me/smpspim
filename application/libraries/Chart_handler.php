@@ -62,6 +62,40 @@ class Chart_handler {
         return $data_single;
     }
 
+    public function format_output_multiple($data, $data_label, $label_x, $label_y, $names) {
+        $data_pattern = array();
+        $data_colors = array();
+        
+        foreach ($data_label as $value) {
+            $data_pattern['x_label'][] = $value->x_label;
+        }
+        
+        $x_label = array_flip($data_pattern['x_label']);
+        
+        for ($j = 0; $j < count($names); $j++) {
+            $data_colors['data'.$j] = '#' . $this->CI->crypt->randomColorDark();
+            $data_pattern['data'.$j] = array_fill(0, count($x_label), 0);
+        }
+        
+        $k = 0;
+        foreach ($data as $detail) {
+            foreach ($detail as $value) {
+                $data_pattern['data'.$k][$x_label[$value->x_label]] = $value->data;
+            }
+            $k++;
+        }
+
+        $data_multiple = array(
+            'data' => $data_pattern,
+            'colors' => $data_colors,
+            'label_x' => $label_x,
+            'label_y' => $label_y,
+            'names' => $names,
+        );
+
+        return $data_multiple;
+    }
+
     public function format_output_multiple_date($data, $mulai_tanggal, $akhir_tanggal, $label_x, $label_y, $names) {
         $x_label = array();
         $data_tanggal = array();
@@ -77,6 +111,7 @@ class Chart_handler {
             $tanggal = date('Y-m-d', strtotime($tanggal .' +1 day'));
             $i++;
         }
+        
         $data_pattern['x_label'][] = $tanggal;
         $data_tanggal[$tanggal] = $i;
         
