@@ -47,8 +47,8 @@ class Mutasi extends CI_Controller {
             $row[] = $item->ALAMAT_SISWA;
             $row[] = $item->NAMA_KEC;
             $row[] = $item->NAMA_KAB;
-            $row[] = $item->DEPT_TINGK;
-            $row[] = $item->NAMA_TINGK;
+            $row[] = $item->DEPT;
+            $row[] = $item->TINGK;
             $row[] = $item->NAMA_MUTASI;
             $row[] = $item->NO_SURAT_MUTASI_SISWA;
             $row[] = $item->TANGGAL_MUTASI_SISWA;

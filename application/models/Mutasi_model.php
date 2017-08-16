@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Mutasi_model extends CI_Model {
 
     var $table = 'akad_siswa';
-    var $column = array('NIS_NIS', 'NAMA_SISWA','JK_SISWA','ALAMAT_SISWA','NAMA_KEC','NAMA_KAB', 'DEPT_TINGK','NAMA_TINGK','NAMA_MUTASI','NO_SURAT_MUTASI_SISWA','TANGGAL_MUTASI_SISWA', 'ID_SISWA', 'ID_SISWA');
+    var $column = array('NIS_NIS', 'NAMA_SISWA','JK_SISWA','ALAMAT_SISWA','NAMA_KEC','NAMA_KAB', 'IF(DEPT_TINGK IS NULL,"",DEPT_TINGK)','IF(NAMA_TINGK IS NULL, "", NAMA_TINGK)','NAMA_MUTASI','NO_SURAT_MUTASI_SISWA','TANGGAL_MUTASI_SISWA', 'ID_SISWA', 'ID_SISWA');
     var $primary_key = "ID_AS";
     var $order = array("TANGGAL_MUTASI_SISWA" => 'DESC');
 
@@ -34,16 +34,17 @@ class Mutasi_model extends CI_Model {
         ));
     }
 
-    private function _get_table_datatables() {
+    private function _get_table_datatables($select = true) {
+        if($select) $this->db->select('*, IF(NAMA_TINGK IS NULL, "", NAMA_TINGK) AS TINGK, IF(DEPT_TINGK IS NULL,"",DEPT_TINGK) AS DEPT');
         $this->db->from('md_siswa ms');
         $this->db->join('md_nis mn', 'mn.SISWA_NIS=ms.ID_SISWA');
-        $this->db->join('akad_siswa as', 'as.SISWA_AS=mn.SISWA_NIS AND as.TA_AS=mn.TA_NIS');
-        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_tingkat mt','as.TINGKAT_AS=mt.ID_TINGK');
-        $this->db->join('md_status_mutasi msmt', 'ms.STATUS_MUTASI_SISWA=msmt.ID_MUTASI');
-        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC');
-        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB');
-        $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV');
+        $this->db->join('akad_siswa as', 'as.SISWA_AS=mn.SISWA_NIS AND as.TA_AS=mn.TA_NIS', 'LEFT');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS', 'LEFT');
+        $this->db->join('md_tingkat mt','as.TINGKAT_AS=mt.ID_TINGK', 'LEFT');
+        $this->db->join('md_status_mutasi msmt', 'ms.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
+        $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
     }
 
     private function _get_datatables_query() {
@@ -86,6 +87,8 @@ class Mutasi_model extends CI_Model {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;
+            $order[6] = 'TINGK';
+            $order[7] = 'DEPT';
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
