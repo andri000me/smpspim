@@ -125,7 +125,7 @@ if (isset($data['NON-SYARIAH'])) {
                 array('align' => 'L', 'width' => 40, 'text' => $DETAIL['WALI_KELAS']),
                 array('align' => 'L', 'width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
-                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'].' '.$DETAIL->ALAMAT_MPS)),
+                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL->ALAMAT_MPS)),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
@@ -138,8 +138,8 @@ if (isset($data['NON-SYARIAH'])) {
     }
 
 // ========================================== SYARIAH ==================================
-} 
-if (isset($data['NON-SYARIAH'])) {
+}
+if (isset($data['SYARIAH'])) {
     $pdf->AddPage("P", "A4");
 //	$pdf->SetMargins(6, 0);
     $pdf->SetAutoPageBreak(true, 0);
@@ -183,7 +183,7 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->MultiCell(0, 5, 'Dan bersama ini kami lampirkan data pelanggaran dan pengakuan siswa terkait pelanggaran tersebut.');
     $pdf->Ln();
 
-    $pdf->MultiCell(0, 5, 'Adapun salah satu pelanggaran tersebut yaitu Melakukan Pelanggaran berat terhadap Syari\'ah ('.$JENIS_PELANGGARAN.').');
+    $pdf->MultiCell(0, 5, 'Adapun salah satu pelanggaran tersebut yaitu Melakukan Pelanggaran berat terhadap Syari\'ah (' . $JENIS_PELANGGARAN . ').');
     $pdf->Ln();
 
     $pdf->MultiCell(0, 5, 'Demikian surat rekomendasi ini kami buat atas perhatiannya kami haturkan banyak terima kasih.');
@@ -254,7 +254,7 @@ if (isset($data['NON-SYARIAH'])) {
                 array('align' => 'L', 'width' => 40, 'text' => $DETAIL['WALI_KELAS']),
                 array('align' => 'L', 'width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
-                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'].' '.$DETAIL->ALAMAT_MPS)),
+                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL->ALAMAT_MPS)),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
