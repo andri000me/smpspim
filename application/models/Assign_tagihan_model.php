@@ -118,7 +118,7 @@ class Assign_tagihan_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_data_kartu($ID_KELAS) {
+    public function get_data_kartu($ID_KELAS, $ID_SISWA) {
         $table = 'akad_siswa';
         $this->db->from($table);
         $this->db->join('md_siswa ms',$table.'.SISWA_AS=ms.ID_SISWA');
@@ -131,7 +131,10 @@ class Assign_tagihan_model extends CI_Model {
             'AKTIF_AS' => 1,
             'TA_AS' => $this->session->userdata('ID_TA_ACTIVE')
         ));
-        if($ID_KELAS != NULL) $this->db->where('ID_KELAS', $ID_KELAS);
+        
+        if($ID_SISWA != NULL) $this->db->where('ID_SISWA', $ID_SISWA);
+        elseif($ID_KELAS != NULL) $this->db->where('ID_KELAS', $ID_KELAS);
+        
         $query = $this->db->get();
 
         return $query->result();

@@ -69,8 +69,8 @@ class Assign_tagihan extends CI_Controller {
         $this->generate->output_JSON($output);
     }
     
-    public function cetak_kartu($ID_KELAS = NULL) {
-        $siswa = $this->assign_tagihan->get_data_kartu($ID_KELAS);
+    public function cetak_kartu($ID_KELAS = NULL, $ID_SISWA = NULL) {
+        $siswa = $this->assign_tagihan->get_data_kartu($ID_KELAS, $ID_SISWA);
         
         $data = array();
         foreach ($siswa as $detail) {

@@ -80,6 +80,7 @@ class Siswa extends CI_Controller {
                         <li><a href="javascript:void()" title="Lihat Data" onclick="view_data(\'' . $item->ID_SISWA . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Data</a></li>
                         <li><a href="javascript:void()" title="Foto Siswa" onclick="view_photo(\'' . $item->ID_SISWA . '\')"><i class="fa fa-file-photo-o "></i>&nbsp;&nbsp;Foto Siswa</a></li>
                         <li><a href="javascript:void()" title="Kartu Siswa" onclick="kartu_pelajar(\'' . $item->ID_SISWA . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Kartu Siswa</a></li>
+                        <li><a href="'. site_url('keuangan/assign_tagihan/cetak_kartu/1/'.$item->ID_SISWA).'" title="Khoirot Siswa" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Khoirot Siswa</a></li>
                         ' . $surat_keterangan_aktif . '
                     </ul>
                 </div>';
