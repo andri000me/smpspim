@@ -168,8 +168,8 @@ class Siswa_model extends CI_Model {
 
     public function get_by_id_mutasi($id) {
         $this->db->from($this->table);
-        $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0');
-        $this->db->join('md_tingkat mtnow', 'asw.TINGKAT_AS=mtnow.ID_TINGK');
+        $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0', 'LEFT');
+        $this->db->join('md_tingkat mtnow', 'asw.TINGKAT_AS=mtnow.ID_TINGK', 'LEFT');
         $this->db->where($this->primary_key, $id);
 
         return $this->db->get()->row();

@@ -77,7 +77,7 @@ class Nis_handler {
             'SISWA_NIS' => $data_siswa->ID_SISWA,
             'TA_NIS' => $this->CI->session->userdata('ID_TA_ACTIVE'),
             'SISWA_NIS' => $data_siswa->ID_SISWA,
-            'DEPT_NIS' => $data_siswa->DEPT_TINGK,
+            'DEPT_NIS' => $data_siswa->DEPT_TINGK == NULL ? substr($data_siswa->NIS_SISWA, 0, 2) : $data_siswa->DEPT_TINGK,
             'ASAL_SEKOLAH_NIS' => $data_siswa->ASAL_SEKOLAH_SISWA,
             'MASUK_JENJANG_NIS' => $data_siswa->MASUK_JENJANG_SISWA,
             'MASUK_TINGKAT_NIS' => $data_siswa->MASUK_TINGKAT_SISWA,

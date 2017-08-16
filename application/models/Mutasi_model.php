@@ -128,7 +128,8 @@ class Mutasi_model extends CI_Model {
 
     public function get_ac_siswa($where) {
         $this->db->select("ID_SISWA as id, CONCAT(NIS_SISWA,' - ',NAMA_SISWA) as text");
-        $this->_get_table();
+        $this->db->from('md_siswa');
+        $this->db->where('AKTIF_SISWA', 1);
         $this->db->like('CONCAT(NIS_SISWA," ",NAMA_SISWA)', $where);
         $this->db->order_by('NAMA_SISWA', 'ASC');
 
