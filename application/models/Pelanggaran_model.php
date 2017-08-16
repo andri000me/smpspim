@@ -123,13 +123,23 @@ class Pelanggaran_model extends CI_Model {
     }
 
     public function get_cetak_pelanggaran($where) {
-        $this->db->select('*, LEFT(CREATED_KS, 10) AS TANGGAL_INPUT');
+        $this->db->select('NAMA_KJP, TANGGAL_KS, POIN_KJP, LEFT(CREATED_KS, 10) AS TANGGAL_INPUT');
         $this->_get_table(TRUE);
         $this->db->where($where);
         $this->db->order_by('TANGGAL_INPUT', 'ASC');
         $this->db->order_by('TANGGAL_KS', 'ASC');
 
         return $this->db->get()->result();
+    }
+
+    public function get_cetak_pelanggaran_array($where) {
+        $this->db->select('NAMA_KJP, TANGGAL_KS, POIN_KJP, LEFT(CREATED_KS, 10) AS TANGGAL_INPUT');
+        $this->_get_table(TRUE);
+        $this->db->where($where);
+        $this->db->order_by('TANGGAL_INPUT', 'ASC');
+        $this->db->order_by('TANGGAL_KS', 'ASC');
+
+        return $this->db->get()->result_array();
     }
 
     public function get_all($for_html = true) {

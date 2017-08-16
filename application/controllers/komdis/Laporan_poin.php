@@ -151,14 +151,14 @@ class Laporan_poin extends CI_Controller {
                     'pelanggaran' => $pelanggaran
                 );
             }
-        } 
+        }
 
         $this->load->view('backend/komdis/laporan_poin/cetak', $data);
     }
 
     public function cetak_pertindakan($ID_KJT) {
         $data = array();
-        
+
         if ($ID_KJT != 0) {
 
             $siswa = $this->laporan_poin->get_full_by_id($ID_KJT, TRUE);
@@ -181,60 +181,82 @@ class Laporan_poin extends CI_Controller {
 
     public function hapus_surat($ID_KT) {
         $this->generate->set_header_JSON();
-        
+
         $result = $this->tindakan->hapus_surat($ID_KT);
-        
+
         $this->generate->output_JSON(array('status' => $result));
     }
-    
+
     public function cetak_surat($ID_KT) {
         $data = array(
             'nama_panitia' => 'KOMISI DISIPLIN SISWA'
         );
 
         $data_tindakan = $this->tindakan->get_by_id($ID_KT);
+        $data_tindakan = (array) $data_tindakan;
+        if ($data_tindakan['DATA_KT'] == NULL) {
+            if ($data_tindakan['KOLEKTIF_KJT']) {
+                $data['NAMA_TANGGUNGJAWAB'] = $data_tindakan['NAMA_TANGGUNGJAWAB'];
 
-        if ($data_tindakan->KOLEKTIF_KJT) {
-            $data['NAMA_TANGGUNGJAWAB'] = $data_tindakan->NAMA_TANGGUNGJAWAB;
+                $data['JENJANG'] = array();
+                $data['data'] = array();
 
-            $data['JENJANG'] = array();
-            $data['data'] = array();
+                $data_siswa = $this->tindakan->get_detail_kolektif($data_tindakan['ID_KJT'], $data_tindakan['NOMOR_SURAT_KT']);
+                if ($data_tindakan['POIN_KSH'] >= 100) {
+                    foreach ($data_siswa as $data_kolektif) {
+                        $data_syariah = $this->pelanggaran_handler->cek_pelanggaran_syariah($data_kolektif['ID_SISWA']);
 
-            if ($data_tindakan->POIN_KSH >= 100) {
-                $data_siswa = $this->tindakan->get_detail_kolektif($data_tindakan->ID_KJT, $data_tindakan->NOMOR_SURAT_KT);
-                foreach ($data_siswa as $data_kolektif) {
-                    $data_syariah = $this->pelanggaran_handler->cek_pelanggaran_syariah($data_kolektif->ID_SISWA);
+                        if ($data_syariah == NULL) {
+                            $data['JENJANG']['NON-SYARIAH'][$data_kolektif['ID_DEPT']] = $data_kolektif['NAMA_DEPT'];
+                            $data['data']['NON-SYARIAH'][$data_kolektif['ID_DEPT']][] = $data_kolektif;
+                        } else {
+                            $data['JENJANG']['SYARIAH'][$data_kolektif['ID_DEPT']] = $data_kolektif['NAMA_DEPT'];
+                            $data['JENIS_PELANGGARAN'] = $data_syariah;
 
-                    if ($data_syariah == NULL) {
-                        $data['JENJANG']['NON-SYARIAH'][$data_kolektif->ID_DEPT] = $data_kolektif->NAMA_DEPT;
-                        $data['data']['NON-SYARIAH'][$data_kolektif->ID_DEPT][] = $data_kolektif;
-                    } else {
-                        $data['JENJANG']['SYARIAH'][$data_kolektif->ID_DEPT] = $data_kolektif->NAMA_DEPT;
-                        $data['JENIS_PELANGGARAN'] = $data_syariah;
-
-                        $data['data']['SYARIAH'][$data_kolektif->ID_DEPT][] = $data_kolektif;
+                            $data['data']['SYARIAH'][$data_kolektif['ID_DEPT']][] = $data_kolektif;
+                        }
+                    }
+                } else {
+                    foreach ($data_siswa as $data_kolektif) {
+                        $data['JENJANG'][$data_kolektif['ID_DEPT']] = $data_kolektif['NAMA_DEPT'];
+                        $data['data'][$data_kolektif['ID_DEPT']][] = $data_kolektif;
                     }
                 }
-            } else {
-                $data_siswa = $this->tindakan->get_detail_kolektif($data_tindakan->ID_KJT, $data_tindakan->NOMOR_SURAT_KT);
-                foreach ($data_siswa as $data_kolektif) {
-                    $data['JENJANG'][$data_kolektif->ID_DEPT] = $data_kolektif->NAMA_DEPT;
-                    $data['data'][$data_kolektif->ID_DEPT][] = $data_kolektif;
+
+                foreach ($data_siswa as $detail) {
+                    $where = array(
+                        'TA_KS' => $detail['TA_KSH'],
+                        'SISWA_KS' => $detail['SISWA_KSH'],
+                    );
+                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_array($where);
+
+                    $data['DETAIL_PELANGGARAN'][] = array(
+                        'siswa' => $detail,
+                        'pelanggaran' => $pelanggaran
+                    );
                 }
+            } else {
+                $data['data'] = $data_tindakan;
             }
+
+            if ($data['data'] == NULL) {
+                echo '<h1>DATA SISWA TIDAK LENGKAP. PERIKSA TERLEBIH DAHULU KELAS SISWA DAN ALAMAT SISWA</h1>';
+                exit();
+            }
+
+            $data['tanggal'] = $this->date_format->to_view($data_tindakan['TANGGAL_KT']);
+            $data['nomor_surat'] = $this->pengaturan->getFormatSurat($data_tindakan['NOMOR_SURAT_KT'], $data_tindakan['URL_KJT'], $data_tindakan['TANGGAL_KT'], 'KOMDIS');
+
+            $where_update = array('NOMOR_SURAT_KT' => $data_tindakan['NOMOR_SURAT_KT']);
+            $data_update = array('DATA_KT' => json_encode($data));
+            
+            $this->tindakan->update($where_update, $data_update);
         } else {
-            $data['data'] = $data_tindakan;
+            $data = json_decode($data_tindakan['DATA_KT'], TRUE);
         }
 
-        if ($data['data'] == NULL) {
-            echo '<h1>DATA SISWA TIDAK LENGKAP. PERIKSA TERLEBIH DAHULU KELAS SISWA DAN ALAMAT SISWA</h1>';
-            exit();
-        }
 
-        $data['tanggal'] = $this->date_format->to_view($data_tindakan->TANGGAL_KT);
-        $data['nomor_surat'] = $this->pengaturan->getFormatSurat($data_tindakan->NOMOR_SURAT_KT, $data_tindakan->URL_KJT, $data_tindakan->TANGGAL_KT, 'KOMDIS');
-
-        $this->load->view('backend/komdis/laporan_poin/cetak_' . $data_tindakan->URL_KJT, $data);
+        $this->load->view('backend/komdis/laporan_poin/cetak_' . $data_tindakan['URL_KJT'], $data);
     }
 
     public function cetak_perkelas($ID_KELAS) {

@@ -196,7 +196,7 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     public function get_detail_kolektif($ID_KJT, $NOMOR_SURAT) {
-        $this->db->select('*, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
+        $this->db->select('NIS_SISWA, NAMA_SISWA,NAMA_KELAS, AYAH_NAMA_SISWA, ALAMAT_SISWA, NAMA_KEC, NAMA_KAB, PONDOK_SISWA, NAMA_PONDOK_MPS, ALAMAT_MPS, POIN_TAHUN_LALU_KSH, POIN_KSH, LARI_KSH, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS, ID_DEPT, NAMA_DEPT, TA_KSH, SISWA_KSH, NAMA_KJT');
         $this->db->from($this->table);
         $this->db->join('komdis_siswa_header ksh', $this->table.'.PELANGGARAN_HEADER_KT=ksh.ID_KSH');
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
@@ -223,7 +223,7 @@ class Laporan_tindakan_model extends CI_Model {
         
         $result = $this->db->get();
 
-        return $result->result();
+        return $result->result_array();
     }
     
     public function hapus_surat($ID_KT) {
