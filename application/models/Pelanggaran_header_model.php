@@ -106,7 +106,7 @@ class Pelanggaran_header_model extends CI_Model {
 
     public function get_full_by_id($id, $tindakan = FALSE) {
         $this->_get_table();
-        $this->db->join('komdis_jenis_tindakan kjt', 'komdis_siswa_header.POIN_KSH>=kjt.POIN_KJT AND ' . 'komdis_siswa_header.POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
+        $this->db->join('komdis_jenis_tindakan kjt', 'komdis_siswa_header.POIN_KSH>=kjt.POIN_KJT AND komdis_siswa_header.POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
         $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');

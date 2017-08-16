@@ -221,4 +221,23 @@ class Pelanggaran_catatan extends CI_Controller {
         $this->generate->output_JSON(array('status' => $insert, 'data' => $data));
     }
 
+    public function cetak_perkelas($ID_KELAS) {
+        $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
+
+        foreach ($siswa as $detail) {
+            $where = array(
+                'TA_KS' => $detail->TA_AS,
+                'SISWA_KS' => $detail->SISWA_AS,
+            );
+            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_catatan($where);
+
+            $data['data'][] = array(
+                'siswa' => $detail,
+                'pelanggaran' => $pelanggaran
+            );
+        }
+
+        $this->load->view('backend/komdis/pelanggaran_catatan/cetak', $data);
+    }
+
 }

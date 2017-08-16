@@ -35,9 +35,9 @@ class Pelanggaran_catatan_model extends CI_Model {
         $this->db->join('komdis_jenis_pelanggaran kjp', $this->table.'.PELANGGARAN_KS=kjp.ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
-        $this->db->order_by('CAWU_KS', 'DESC');
-        $this->db->order_by('NAMA_KELAS', 'ASC');
-        $this->db->order_by('NO_ABSEN_AS', 'ASC');
+//        $this->db->order_by('CAWU_KS', 'DESC');
+//        $this->db->order_by('NAMA_KELAS', 'ASC');
+//        $this->db->order_by('NO_ABSEN_AS', 'ASC');
     }
 
     private function _get_datatables_query() {
@@ -185,6 +185,39 @@ class Pelanggaran_catatan_model extends CI_Model {
         $result = $this->db->get();
         
         return $result->row();
+    }
+
+    public function get_full_by_id($ID_KELAS) {
+        $this->db->select('*, SUM(POIN_KJP) AS POIN_TOTAL');
+        $this->db->from('md_siswa ms');
+        $this->db->join('akad_siswa as', 'ms.ID_SISWA=as.SISWA_AS', 'LEFT');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS', 'LEFT');
+        $this->db->join('md_pegawai mpw', 'ak.WALI_KELAS=mpw.ID_PEG', 'LEFT');
+        $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
+        $this->db->join('komdis_siswa_catatan ksc','ksc.SISWA_KS=ms.ID_SISWA');
+        $this->db->join('komdis_jenis_pelanggaran kjp', 'ksc.PELANGGARAN_KS=kjp.ID_KJP');
+
+        $this->db->group_by('ID_SISWA');
+        
+        $this->db->where('ID_KELAS', $ID_KELAS);
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+        $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
+
+        return $this->db->get()->result();
+    }
+
+    public function get_cetak_pelanggaran_catatan($where) {
+        $this->db->select('NAMA_KJP, TANGGAL_KS, POIN_KJP, LEFT(CREATED_KS, 10) AS TANGGAL_INPUT');
+        $this->db->from('komdis_siswa_catatan');
+        $this->db->join('komdis_jenis_pelanggaran kjp', 'komdis_siswa_catatan.PELANGGARAN_KS=kjp.ID_KJP');
+        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where($where);
+        $this->db->order_by('TANGGAL_INPUT', 'ASC');
+        $this->db->order_by('TANGGAL_KS', 'ASC');
+
+        return $this->db->get()->result();
     }
 
 }

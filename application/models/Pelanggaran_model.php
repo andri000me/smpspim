@@ -35,9 +35,9 @@ class Pelanggaran_model extends CI_Model {
         $this->db->join('komdis_jenis_pelanggaran kjp', $this->table.'.PELANGGARAN_KS=kjp.ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
-        $this->db->order_by('CAWU_KS', 'DESC');
-        $this->db->order_by('NAMA_KELAS', 'ASC');
-        $this->db->order_by('NO_ABSEN_AS', 'ASC');
+//        $this->db->order_by('CAWU_KS', 'DESC');
+//        $this->db->order_by('NAMA_KELAS', 'ASC');
+//        $this->db->order_by('NO_ABSEN_AS', 'ASC');
     }
 
     private function _get_datatables_query() {
