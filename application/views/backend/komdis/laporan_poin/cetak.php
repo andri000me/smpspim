@@ -10,7 +10,7 @@
  */
 
 if (!isset($data)) {
-    echo '<h1>KESALAHAN PENGAMBILAN DATA. SILAHKAN HUBUNGI WEB MASTER.</h1>';
+    echo '<h1>TIDAK ADA DATA YANG AKAN DICETAK.</h1>';
 
     exit();
 }
@@ -56,7 +56,7 @@ foreach ($data as $detail) {
     $pdf->Cell(20, 5, 'Alamat');
     $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, $siswa->ALAMAT_SISWA . ', Kec. ' . $siswa->NAMA_KEC . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa->NAMA_KAB)), 100));
     $pdf->Cell(20, 5, 'Jumlah Poin');
-    $pdf->Cell(0, 5, ': ' . $siswa->POIN_KSH);
+    $pdf->Cell(0, 5, ': ' . $siswa->JUMLAH_POIN_KSH);
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Wali Murid');

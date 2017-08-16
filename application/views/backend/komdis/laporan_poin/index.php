@@ -30,6 +30,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var ID_KELAS = 0;
     var ID_PONDOK = 0;
     var ID_TINDAKAN = 0;
+    var TYPE_KELAS = null;
     var table;
     var url_add = '<?php echo site_url('komdis/laporan_poin/ajax_add'); ?>';
     var url_form = '<?php echo site_url('komdis/laporan_poin/request_form'); ?>';
@@ -73,15 +74,25 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         });
         
         $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" >Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li></ul></div>').insertAfter('.buttons-reload');
     });
+    
+    function set_type_kelas(TYPE) {
+        TYPE_KELAS = TYPE;
+    }
     
     function cetak_modal_kelas(){
         $("#cetak_modal_kelas").modal("hide");
         $(".js-source-states-ID_KELAS").select2('data', null);
-
-        window.open('<?php echo site_url('komdis/laporan_poin/cetak_perkelas'); ?>/' + ID_KELAS, '_blank');
         
+        if(TYPE_KELAS === 0)
+            window.open('<?php echo site_url('komdis/laporan_poin/cetak_perkelas'); ?>/' + ID_KELAS, '_blank');
+        if(TYPE_KELAS === 1)
+            window.open('<?php echo site_url('komdis/laporan_poin/cetak_ringan_perkelas'); ?>/' + ID_KELAS, '_blank');
+        else if(TYPE_KELAS === null)
+            create_homer_error("Ada kesalahan di javascript");
+        
+        TYPE_KELAS = null;
         ID_KELAS = 0;
     }
     

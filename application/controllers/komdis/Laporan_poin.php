@@ -135,7 +135,8 @@ class Laporan_poin extends CI_Controller {
     }
 
     public function cetak($ID_KSH) {
-        $siswa = $this->laporan_poin->get_full_by_id($ID_KSH);
+        $where = array('ID_KSH' => $ID_KSH);
+        $siswa = $this->laporan_poin->get_full_by_id($where);
         $data = array();
 
         if (count($siswa) == 1) {
@@ -156,12 +157,36 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak', $data);
     }
 
+    public function cetak_ringan_perkelas($ID_KELAS) {
+        $where = array('ID_KELAS' => $ID_KELAS);
+        $siswa = $this->laporan_poin->get_full_by_id($where, $select);
+        $tindakan = $this->jenis_tindakan->get_by_id(1);
+        $data = array();
+
+        foreach ($siswa as $detail) {
+            if($detail->JUMLAH_POIN_KSH > $tindakan->POIN_MAKS_KJT) continue;
+            
+            $where = array(
+                'TA_KS' => $detail->TA_KSH,
+                'SISWA_KS' => $detail->SISWA_KSH,
+            );
+            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+
+            $data['data'][] = array(
+                'siswa' => $detail,
+                'pelanggaran' => $pelanggaran
+            );
+        }
+
+        $this->load->view('backend/komdis/laporan_poin/cetak', $data);
+    }
+
     public function cetak_pertindakan($ID_KJT) {
         $data = array();
 
         if ($ID_KJT != 0) {
-
-            $siswa = $this->laporan_poin->get_full_by_id($ID_KJT, TRUE);
+            $where = array('kjt.ID_KJT' => $ID_KJT);
+            $siswa = $this->laporan_poin->get_full_by_id($where);
             foreach ($siswa as $detail) {
                 $where = array(
                     'TA_KS' => $detail->TA_KSH,
@@ -249,7 +274,7 @@ class Laporan_poin extends CI_Controller {
 
             $where_update = array('NOMOR_SURAT_KT' => $data_tindakan['NOMOR_SURAT_KT']);
             $data_update = array('DATA_KT' => json_encode($data));
-            
+
             $this->tindakan->update($where_update, $data_update);
         } else {
             $data = json_decode($data_tindakan['DATA_KT'], TRUE);
