@@ -52,6 +52,7 @@ class Auth {
                             'NAME_USER' => $result->NAME_USER,
                             'ID_PEG' => $result->ID_PEG,
                             'FULLNAME_USER' => $result->NAMA_PEG,
+                            'JK_PEG' => $result->JK_PEG,
                             'PHOTO_USER' => $result->FOTO_PEG,
                             'CREATED_USER' => $result->CREATED_USER,
                             'ID_TA_ACTIVE' => $data_ta->ID_TA,

@@ -31,6 +31,7 @@ class Pelanggaran_header_model extends CI_Model {
         $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_pegawai mpw', 'ak.WALI_KELAS=mpw.ID_PEG');
         $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
 //        $this->db->order_by('CAWU_KSH', 'DESC');
 //        $this->db->order_by('NAMA_KELAS', 'ASC');
 //        $this->db->order_by('NO_ABSEN_AS', 'ASC');

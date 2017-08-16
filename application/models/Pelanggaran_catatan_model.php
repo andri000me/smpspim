@@ -34,6 +34,7 @@ class Pelanggaran_catatan_model extends CI_Model {
         $this->db->join('md_pegawai mp', $this->table.'.SUMBER_KS=mp.ID_PEG');
         $this->db->join('komdis_jenis_pelanggaran kjp', $this->table.'.PELANGGARAN_KS=kjp.ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->order_by('CAWU_KS', 'DESC');
         $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->order_by('NO_ABSEN_AS', 'ASC');
