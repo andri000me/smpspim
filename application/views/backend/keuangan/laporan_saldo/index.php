@@ -118,7 +118,6 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
 
         $(".table-datatable2, .table-datatable1").attr('style', 'margin-top: -65px;');
         $("tfoot, .table-datatable2, .table-datatable1, .calc-saldo").hide();
-        $(".buttons-add").remove();
 
     });
 
@@ -135,6 +134,8 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
         } else {
             table1 = initialize_datatables(id_table1, '<?php echo site_url('keuangan/laporan_saldo/ajax_list1'); ?>/' + TANGGAL_MULAI + '/' + TANGGAL_AKHIR, columns, orders, functionInitComplete, functionDrawCallback1, functionAddData, requestExport);
             table2 = initialize_datatables(id_table2, '<?php echo site_url('keuangan/laporan_saldo/ajax_list2'); ?>/' + TANGGAL_MULAI + '/' + TANGGAL_AKHIR, columns, orders, functionInitComplete, functionDrawCallback2, functionAddData, requestExport);
+            
+            $(".buttons-add").remove();
 
             $(".table-datatable2, .table-datatable1").slideDown();
         }
