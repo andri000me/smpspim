@@ -50,15 +50,15 @@ $this->generate->generate_panel_content("Data " . $title, $subtitle);
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-4 col-md-offset-2"><h4 class="text-muted font-bold">Pembayaran</h4></div>
-                                    <div class="col-md-4 text-right"><h4 class="text-muted font-bold" id="nominal_pembayaran">Rp 100.000.000.000</h4></div>
+                                    <div class="col-md-4 text-right"><h4 class="text-muted font-bold" id="nominal_pembayaran"></h4></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-md-offset-2"><h4 class="text-muted font-bold">Pengembalian</h4></div>
-                                    <div class="col-md-4 text-right"><h4 class="text-muted font-bold" id="nominal_pengembalian">Rp 100.000.000.000</h4></div>
+                                    <div class="col-md-4 text-right"><h4 class="text-muted font-bold" id="nominal_pengembalian"></h4></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-md-offset-2"><h3 class="text-primary font-extra-bold">Saldo</h3></div>
-                                    <div class="col-md-4 text-right"><h3 class="text-primary font-extra-bold" id="nominal_saldo">Rp 100.000.000.000</h3></div>
+                                    <div class="col-md-4 text-right"><h3 class="text-primary font-extra-bold" id="nominal_saldo"></h3></div>
                                 </div>
                             </div>
                         </div>
@@ -76,9 +76,9 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
 <script type="text/javascript">
     var table1;
     var table2;
-    var saldo = 0;
-    var pembayaran = 0;
-    var pengembalian = 0;
+    var saldo = null;
+    var pembayaran = null;
+    var pengembalian = null;
     var id_table1 = '<?php echo $id_datatables1; ?>';
     var id_table2 = '<?php echo $id_datatables2; ?>';
     var columns = '';//[{ "width": "100px", "targets": 2 }, {"targets": [-1],"orderable": false}];
@@ -90,16 +90,24 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
     var functionDrawCallback1 = function (settings) {
         var api = this.api();
         var json = api.ajax.json();
-        pembayaran = json.nominal;
+
+        pembayaran = parseInt(json.nominal);
+
         $(".total-pembayaran").remove();
         $('<div class="text-center total-pembayaran"><h2 class="font-extra-bold">TOTAL: ' + formattedIDR(json.nominal) + '</h2></div>').insertBefore("#<?php echo $id_datatables1; ?>");
+
+        calc_saldo();
     };
     var functionDrawCallback2 = function (settings) {
         var api = this.api();
         var json = api.ajax.json();
-        pengembalian = json.nominal;
+
+        pengembalian = parseInt(json.nominal);
+
         $(".total-pengembalian").remove();
         $('<div class="text-center total-pengembalian"><h2 class="font-extra-bold">TOTAL: ' + formattedIDR(json.nominal) + '</h2></div>').insertBefore("#<?php echo $id_datatables2; ?>");
+
+        calc_saldo();
     };
     var functionAddData = function (e, dt, node, config) {
 //        create_form_input(id_form, id_modal, url_form_add, title, null);
@@ -121,9 +129,6 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
     function cari_data() {
         var TANGGAL_MULAI = $("#TANGGAL_MULAI").val();
         var TANGGAL_AKHIR = $("#TANGGAL_AKHIR").val();
-        pengembalian = 0;
-        pembayaran = 0;
-        saldo = 0;
 
         if (TANGGAL_AKHIR === '' || TANGGAL_MULAI === '') {
             create_homer_error('Tanggal tidak boleh kosong');
@@ -134,8 +139,22 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
             $(".table-datatable2, .table-datatable1").slideDown();
         }
     }
-    
+
     function calc_saldo() {
-        $(".calc-saldo").slideDown();
+        if ((pengembalian !== null) && (pembayaran !== null)) {
+            saldo = pembayaran - pengembalian;
+
+            $("#nominal_pembayaran").html(formattedIDR(pembayaran));
+            $("#nominal_pengembalian").html(formattedIDR(pengembalian));
+            $("#nominal_saldo").html(formattedIDR(saldo));
+
+            remove_splash();
+
+            $(".calc-saldo").slideDown();
+
+            pengembalian = null;
+            pembayaran = null;
+            saldo = null;
+        }
     }
 </script>

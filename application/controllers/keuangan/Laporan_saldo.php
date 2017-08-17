@@ -70,7 +70,7 @@ class Laporan_saldo extends CI_Controller {
             "recordsTotal" => $this->laporan->count_all($tanggal_mulai, $tanggal_akhir),
             "recordsFiltered" => $this->laporan->count_filtered($tanggal_mulai, $tanggal_akhir),
             "data" => $data,
-            "nominal" => $nominal
+            "nominal" => $nominal == NULL ? 0 : $nominal
         );
 
         $this->generate->output_JSON($output);
@@ -116,7 +116,7 @@ class Laporan_saldo extends CI_Controller {
             "recordsTotal" => $this->laporan_pengembalian->count_all($tanggal_mulai, $tanggal_akhir),
             "recordsFiltered" => $this->laporan_pengembalian->count_filtered($tanggal_mulai, $tanggal_akhir),
             "data" => $data,
-            "nominal" => $nominal
+            "nominal" => $nominal == NULL ? 0 : $nominal
         );
 
         $this->generate->output_JSON($output);
