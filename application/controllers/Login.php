@@ -171,5 +171,15 @@ class Login extends CI_Controller {
 
         $this->generate->backend_view('user/welcome', $data);
     }
+    
+    public function change_cawu() {
+        $this->generate->set_header_JSON();
+        
+        $cawu = $this->input->post('ID_CAWU');
+        $this->session->set_userdata('ID_CAWU_ACTIVE', $cawu);
+        $this->session->set_userdata('NAMA_CAWU_ACTIVE', 'CAWU '.$cawu);
+        
+        $this->generate->output_JSON(array("status" => 1));
+    }
 
 }
