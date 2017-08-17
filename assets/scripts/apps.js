@@ -35,6 +35,7 @@ function create_header_content() {
     tag_html += create_nav_mobile_menu();
     tag_html += create_start_nav_right();
 //    tag_html += create_nav_notication();
+    tag_html += create_nav_change_hakakses();
     tag_html += create_nav_logout();
     tag_html += create_end_nav_right();
 
@@ -143,6 +144,48 @@ function create_nav_notication() {
 
     return tag_html;
 
+}
+
+function change_hakakses_header(ID_HAKAKSES) {
+    create_splash("Mohon tunggu sebentar, sistem sedang mengatur Hak Akses Anda.");
+    var success = function(data) {
+        remove_splash();
+
+        if(data.status) //if success close modal and reload ajax table
+        {
+            create_swal_success('', data.msg);
+
+            setTimeout(function(){
+                window.location = data.link;
+            }, 1500);
+        } else {
+            create_homer_error(data.msg);
+        }
+    };
+    create_ajax(url_hakakses, 'ID_HAKAKSES=' + ID_HAKAKSES, success);
+
+    return false;
+}
+
+function create_nav_change_hakakses() {
+    var tag_html = "";
+    $.each(list_hakakses, function(index, item){
+        tag_html += '<li>' + 
+                        '<a href="#" onclick="change_hakakses_header(' + item.ID_HAKAKSES + ')">' + 
+                            '<h5 class="font-extra-bold text-primary">' + item.NAME_HAKAKSES + '</h5>' + 
+                        '</a>' + 
+                    '</li>';
+    });
+    
+    return '<li class="dropdown">' + 
+                    '<a class="dropdown-toggle" href="#" data-toggle="dropdown">' + 
+                        '<i class="pe-7s-keypad"></i>' + 
+                    '</a>' + 
+                    '<ul class="dropdown-menu hdropdown notification animated flipInX">' + 
+                            tag_html +
+                    '</ul>' + 
+                '</li>';
+    
 }
 
 function create_nav_logout() {

@@ -29,7 +29,8 @@ class Hakakses_user_model extends CI_Model{
         $this->db->where('HAKAKSES_HU<>', '1');
     }
     
-    public function get_all() {
+    public function get_all($select = false) {
+        if($select) $this->db->select('ID_HAKAKSES, COLOR_HAKAKSES, NAME_HAKAKSES');
         $this->_get_table();
         $this->db->where('USER_HU', $this->session->userdata('ID_USER'));
         

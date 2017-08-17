@@ -68,8 +68,10 @@ class Login extends CI_Controller {
         $this->auth->unregistration_hakakses();
 
         $this->load->model('hakakses_user_model', 'hakakses_user');
-        $data['data'] = $this->hakakses_user->get_all();
+        $data['data'] = $this->hakakses_user->get_all(TRUE);
         $data['count'] = $this->hakakses_user->count_all();
+        
+        $this->session->set_userdata('LIST_HAKAKSES', json_encode($data['data']));
 
         $this->load->view('layout/main/header');
         $this->load->view('backend/user/option_hakakses', $data);

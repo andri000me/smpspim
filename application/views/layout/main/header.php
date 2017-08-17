@@ -21,4 +21,6 @@
             var psb_active = "<?php echo $this->session->userdata('NAMA_PSB_ACTIVE'); ?>";
             var status_required = true;
             var ladda_clicked = null;
+            var list_hakakses = <?php echo $this->session->userdata('LIST_HAKAKSES'); ?>;
+            var url_hakakses = '<?php echo site_url('login/chooseHakAkses')?>';
         </script>
