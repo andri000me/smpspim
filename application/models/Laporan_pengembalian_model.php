@@ -18,7 +18,7 @@ class Laporan_pengembalian_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($select = TRUE) {
+    private function _get_table($select = TRUE, $tanggal_mulai = NULL, $tanggal_akhir = NULL) {
         if ($select) $this->db->select('*, IF(NIS_SISWA IS NULL, "-", NIS_SISWA) AS NIS_SISWA');
         $this->db->from($this->table);
         $this->db->join('keu_setup ds',$this->table.'.SETUP_BAYAR=ds.ID_SETUP');
@@ -33,10 +33,14 @@ class Laporan_pengembalian_model extends CI_Model {
         if(!$this->session->userdata('ADMINISTRATOR')) {
             $this->db->where('ID_USER', $this->session->userdata('ID_USER'));
         }
+
+        if ($tanggal_mulai != NULL && $tanggal_akhir != NULL) {
+            $this->db->where('CREATED_BAYAR >="' . $tanggal_mulai . '" AND CREATED_BAYAR<="' . $tanggal_akhir.'"');
+        }
     }
 
-    private function _get_datatables_query($select = TRUE) {
-        $this->_get_table($select);
+    private function _get_datatables_query($select = TRUE, $tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_table($select, $tanggal_mulai, $tanggal_akhir);
         $i = 0;
         $search_value = $_POST['search']['value'];
         $search_columns = $_POST['columns'];
@@ -79,8 +83,8 @@ class Laporan_pengembalian_model extends CI_Model {
         }
     }
 
-    function get_datatables() {
-        $this->_get_datatables_query();
+    function get_datatables($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_datatables_query(TRUE, $tanggal_mulai, $tanggal_akhir);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -88,16 +92,16 @@ class Laporan_pengembalian_model extends CI_Model {
         return $query->result();
     }
 
-    function count_filtered() {
-        $this->_get_datatables_query();
+    function count_filtered($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_datatables_query(TRUE, $tanggal_mulai, $tanggal_akhir);
         $query = $this->db->get();
 
         return $query->num_rows();
     }
 
-    function nominal_all() {
+    function nominal_all($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
         $this->db->select("SUM(NOMINAL_DT) AS TOTAL");
-        $this->_get_datatables_query(FALSE);
+        $this->_get_datatables_query(FALSE, $tanggal_mulai, $tanggal_akhir);
         $query = $this->db->get()->row();
 
         return $query->TOTAL;
@@ -125,7 +129,7 @@ class Laporan_pengembalian_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function count_all() {
+    public function count_all($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
         $this->db->from($this->table);
 
         return $this->db->count_all_results();

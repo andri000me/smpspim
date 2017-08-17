@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_keuangan_model extends CI_Model {
 
     var $table = 'keu_pembayaran';
-    var $column = array('NAMA_TA', 'NAMA_TAG','NAMA_DT', 'DEPT_DT','IF(NIS_SISWA IS NULL, "-", NIS_SISWA)','NAMA_SISWA','NOMINAL_BAYAR','KETERANGAN_BAYAR', 'NAMA_PEG','CREATED_BAYAR','ID_BAYAR');
+    var $column = array('NAMA_TA', 'NAMA_TAG', 'NAMA_DT', 'DEPT_DT', 'IF(NIS_SISWA IS NULL, "-", NIS_SISWA)', 'NAMA_SISWA', 'NOMINAL_BAYAR', 'KETERANGAN_BAYAR', 'NAMA_PEG', 'CREATED_BAYAR', 'ID_BAYAR');
     var $primary_key = "ID_BAYAR";
     var $order = array("ID_BAYAR" => 'ASC');
 
@@ -18,25 +19,30 @@ class Laporan_keuangan_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($select = TRUE) {
-        if ($select) $this->db->select('*, IF(NIS_SISWA IS NULL, "-", NIS_SISWA) AS NIS_SISWA');
+    private function _get_table($select = TRUE, $tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        if ($select)
+            $this->db->select('*, IF(NIS_SISWA IS NULL, "-", NIS_SISWA) AS NIS_SISWA');
         $this->db->from($this->table);
-        $this->db->join('keu_setup ds',$this->table.'.SETUP_BAYAR=ds.ID_SETUP');
-        $this->db->join('keu_detail dt','ds.DETAIL_SETUP=dt.ID_DT');
-        $this->db->join('keu_tagihan t','dt.TAGIHAN_DT=t.ID_TAG');
-        $this->db->join('md_tahun_ajaran ta','t.TA_TAG=ta.ID_TA');
-        $this->db->join('md_siswa ms','ds.SISWA_SETUP=ms.ID_SISWA');
-        $this->db->join('md_user mu',$this->table.'.USER_BAYAR=mu.ID_USER');
-        $this->db->join('md_pegawai mp','mu.PEGAWAI_USER=mp.ID_PEG');
+        $this->db->join('keu_setup ds', $this->table . '.SETUP_BAYAR=ds.ID_SETUP');
+        $this->db->join('keu_detail dt', 'ds.DETAIL_SETUP=dt.ID_DT');
+        $this->db->join('keu_tagihan t', 'dt.TAGIHAN_DT=t.ID_TAG');
+        $this->db->join('md_tahun_ajaran ta', 't.TA_TAG=ta.ID_TA');
+        $this->db->join('md_siswa ms', 'ds.SISWA_SETUP=ms.ID_SISWA');
+        $this->db->join('md_user mu', $this->table . '.USER_BAYAR=mu.ID_USER');
+        $this->db->join('md_pegawai mp', 'mu.PEGAWAI_USER=mp.ID_PEG');
         $this->db->where(array('JENIS_BAYAR' => 'PEMBAYARAN'));
-        
-        if(!$this->session->userdata('ADMINISTRATOR')) {
+
+        if (!$this->session->userdata('ADMINISTRATOR')) {
             $this->db->where('ID_USER', $this->session->userdata('ID_USER'));
+        }
+
+        if ($tanggal_mulai != NULL && $tanggal_akhir != NULL) {
+            $this->db->where('CREATED_BAYAR >="' . $tanggal_mulai . '" AND CREATED_BAYAR<="' . $tanggal_akhir.'"');
         }
     }
 
-    private function _get_datatables_query($select = TRUE) {
-        $this->_get_table($select);
+    private function _get_datatables_query($select = TRUE, $tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_table($select, $tanggal_mulai, $tanggal_akhir);
         $i = 0;
         $search_value = $_POST['search']['value'];
         $search_columns = $_POST['columns'];
@@ -79,8 +85,8 @@ class Laporan_keuangan_model extends CI_Model {
         }
     }
 
-    function get_datatables() {
-        $this->_get_datatables_query();
+    function get_datatables($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_datatables_query(TRUE, $tanggal_mulai, $tanggal_akhir);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -88,16 +94,16 @@ class Laporan_keuangan_model extends CI_Model {
         return $query->result();
     }
 
-    function count_filtered() {
-        $this->_get_datatables_query();
+    function count_filtered($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
+        $this->_get_datatables_query(TRUE, $tanggal_mulai, $tanggal_akhir);
         $query = $this->db->get();
 
         return $query->num_rows();
     }
 
-    function nominal_all() {
+    function nominal_all($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
         $this->db->select("SUM(NOMINAL_DT) AS TOTAL");
-        $this->_get_datatables_query(FALSE);
+        $this->_get_datatables_query(FALSE, $tanggal_mulai, $tanggal_akhir);
         $query = $this->db->get()->row();
 
         return $query->TOTAL;
@@ -111,7 +117,8 @@ class Laporan_keuangan_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_BAYAR as value, NAMA_DT as label");
+        if ($for_html)
+            $this->db->select("ID_BAYAR as value, NAMA_DT as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -125,7 +132,7 @@ class Laporan_keuangan_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function count_all() {
+    public function count_all($tanggal_mulai = NULL, $tanggal_akhir = NULL) {
         $this->db->from($this->table);
 
         return $this->db->count_all_results();
