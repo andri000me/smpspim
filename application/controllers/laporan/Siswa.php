@@ -37,7 +37,7 @@ class Siswa extends CI_Controller {
         $exp_kelompok = explode("#", $kelompok);
         $data_peg = $this->siswa->get_data($exp_kelompok[0], $keaktifan);
         
-        $data = $this->chart_handler->format_output_single($pie_donut, $data_peg, $exp_kelompok[1], $exp_kelompok[2], $exp_kelompok[3]);
+        $data = $this->chart_handler->format_output_single($pie_donut, $data_peg, $exp_kelompok[1], $exp_kelompok[2], $exp_kelompok[3], TRUE);
         
         $this->generate->output_JSON($data);
     }

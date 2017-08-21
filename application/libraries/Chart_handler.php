@@ -8,7 +8,7 @@ class Chart_handler {
         $this->CI = & get_instance();
     }
 
-    public function format_output_single($pie_donut, $data, $label_x, $label_y, $names) {
+    public function format_output_single($pie_donut, $data, $label_x, $label_y, $names, $zero_accept = FALSE) {
         if ($pie_donut) {
             $x_label = array();
             $data_json = array();
@@ -16,7 +16,7 @@ class Chart_handler {
             $data_colors = array();
             $i = 0;
             foreach ($data as $detail) {
-                if ($detail->data == 0)
+                if ($detail->data == 0 && !$zero_accept)
                     continue;
 
                 $data_json['data' . $i] = $detail->data;
@@ -36,7 +36,7 @@ class Chart_handler {
             $x_label = array();
             $data1 = array();
             foreach ($data as $detail) {
-                if ($detail->data == 0)
+                if ($detail->data == 0 && !$zero_accept)
                     continue;
 
                 $x_label[] = $detail->x_label;

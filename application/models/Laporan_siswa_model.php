@@ -67,9 +67,16 @@ class Laporan_siswa_model extends CI_Model {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "AKTIF", CONCAT("TIDAK", " ", "AKTIF")) ) AS x_label');
         elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
-        else
+        elseif ($label == 'NAMA_MUTASI') {
+            $this->db->select('COUNT(ID_SISWA) AS data, ' . $label . ' AS x_label');
+            $this->db->from('md_status_mutasi msm');
+            $this->db->join($this->table, 'STATUS_MUTASI_SISWA=ID_MUTASI', 'LEFT');
+        } else
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
-        $this->_get_table($label);
+
+        if ($label != 'NAMA_MUTASI') 
+            $this->_get_table($label);
+
         if ($keaktifan != "")
             $this->db->where('AKTIF_SISWA', $keaktifan);
 
@@ -79,8 +86,9 @@ class Laporan_siswa_model extends CI_Model {
             $this->db->group_by($label);
 
         $this->db->order_by('x_label', 'ASC');
+        $result = $this->db->get();
 
-        return $this->db->get()->result();
+        return $result->result();
     }
 
     public function export_data($keaktifan) {
@@ -191,27 +199,27 @@ class Laporan_siswa_model extends CI_Model {
                 . ',mp.NAMA_PEG AS NAMA_WALI_KELAS'
                 . '');
         $this->_get_table();
-        $this->db->join('md_hobi mhi', $this->table.'.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
-        $this->db->join('md_status_mutasi msmt', $this->table.'.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
-        $this->db->join('md_asal_santri masan', $this->table.'.STATUS_ASAL_SISWA=masan.MD_ASSAN', 'LEFT');
-        $this->db->join('md_asal_sekolah as', $this->table.'.ASAL_SEKOLAH_SISWA=as.ID_AS', 'LEFT');
+        $this->db->join('md_hobi mhi', $this->table . '.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
+        $this->db->join('md_status_mutasi msmt', $this->table . '.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
+        $this->db->join('md_asal_santri masan', $this->table . '.STATUS_ASAL_SISWA=masan.MD_ASSAN', 'LEFT');
+        $this->db->join('md_asal_sekolah as', $this->table . '.ASAL_SEKOLAH_SISWA=as.ID_AS', 'LEFT');
         $this->db->join('md_jenjang_sekolah mjsas', 'as.JENJANG_AS=mjsas.ID_JS', 'LEFT');
         $this->db->join('md_kecamatan kecas', 'as.KECAMATAN_AS=kecas.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kabas', 'kecas.KABUPATEN_KEC=kabas.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi provas', 'kabas.PROVINSI_KAB=provas.ID_PROV', 'LEFT');
-        $this->db->join('md_hubungan mhb', $this->table.'.WALI_HUBUNGAN_SISWA=mhb.ID_HUB', 'LEFT');
-        $this->db->join('md_jenjang_pendidikan mjpw', $this->table.'.WALI_PENDIDIKAN_SISWA=mjpw.ID_JP', 'LEFT');
-        $this->db->join('md_pekerjaan mpkw', $this->table.'.WALI_PEKERJAAN_SISWA=mpkw.ID_JENPEK', 'LEFT');
-        $this->db->join('md_kecamatan keco', $this->table.'.ORTU_KECAMATAN_SISWA=keco.ID_KEC', 'LEFT');
+        $this->db->join('md_hubungan mhb', $this->table . '.WALI_HUBUNGAN_SISWA=mhb.ID_HUB', 'LEFT');
+        $this->db->join('md_jenjang_pendidikan mjpw', $this->table . '.WALI_PENDIDIKAN_SISWA=mjpw.ID_JP', 'LEFT');
+        $this->db->join('md_pekerjaan mpkw', $this->table . '.WALI_PEKERJAAN_SISWA=mpkw.ID_JENPEK', 'LEFT');
+        $this->db->join('md_kecamatan keco', $this->table . '.ORTU_KECAMATAN_SISWA=keco.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kabo', 'keco.KABUPATEN_KEC=kabo.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi provo', 'kabo.PROVINSI_KAB=provo.ID_PROV', 'LEFT');
-        $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0', 'LEFT');
+        $this->db->join('akad_siswa asw', $this->table . '.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0', 'LEFT');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
-        $this->db->join('md_tahun_ajaran mta','ak.TA_KELAS=mta.ID_TA', 'LEFT');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        $this->db->join('md_tahun_ajaran mta', 'ak.TA_KELAS=mta.ID_TA', 'LEFT');
         $this->db->join('md_tingkat mtnow', 'asw.TINGKAT_AS=mtnow.ID_TINGK', 'LEFT');
         $this->db->join('md_departemen mdp', 'mtnow.DEPT_TINGK=mdp.ID_DEPT', 'LEFT');
-        
+
         if ($keaktifan != "")
             $this->db->where('AKTIF_SISWA', $keaktifan);
 
