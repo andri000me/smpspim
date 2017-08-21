@@ -10,7 +10,7 @@
  */
 
 if (!isset($data)) {
-    echo '<h1>KESALAHAN PENGAMBILAN DATA. SILAHKAN HUBUNGI WEB MASTER.</h1>';
+    echo '<h1>TIDAK ADA DATA DIKELAS INI.</h1>';
 
     exit();
 }

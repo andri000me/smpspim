@@ -223,6 +223,7 @@ class Pelanggaran_catatan extends CI_Controller {
 
     public function cetak_perkelas($ID_KELAS) {
         $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
+        $data = array();
 
         foreach ($siswa as $detail) {
             $where = array(
