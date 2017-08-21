@@ -143,10 +143,12 @@ function cetak($pdf, $data, $title) {
         $pdf->SetFont('Arial', 'B', $font + 20);
         $pdf->Cell(20, 15, $data->NO_ABSEN_AS, 0, 0, 'C');
     } else {
-        if ($data->FOTO_SISWA == NULL || !file_exists('files/siswa/' . $data->ID_SISWA . '.png'))
-            $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 20, 20, '', '');
+        if(file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg'))
+            $pdf->Image(base_url('files/siswa/' . $data->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y + 15, 20, 26.6, '', '');
+        elseif (file_exists('files/siswa/' . $data->ID_SISWA . '.png'))
+            $pdf->Image(base_url('files/siswa/' . $data->ID_SISWA . '.png'), $posisi_x, $posisi_y + 18, 20, 26.6, '', '');
         else
-            $pdf->Image(base_url('files/siswa/' . $data->ID_SISWA . '.png'), $posisi_x, $posisi_y + 18, 20, 20, '', '');
+            $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 20, 20, '', '');
     }
 
     return $pdf;

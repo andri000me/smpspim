@@ -98,6 +98,12 @@ class Mutasi extends CI_Controller {
         
         $data_siswa = $this->siswa->get_by_id($this->input->post('ID_SISWA'));
 
+        if (file_exists('files/siswa/' . $data_siswa->NIS_SISWA . '.jpg')) {
+            $data_siswa->FOTO_SISWA = $data_siswa->NIS_SISWA . '.jpg';
+        } elseif (file_exists('files/siswa/' . $data_siswa->ID_SISWA . '.png') || $data_siswa->FOTO_SISWA != NULL) {
+            $data_siswa->FOTO_SISWA = $data_siswa->ID_SISWA . '.png';
+        }
+
         $data = array(
             'siswa' => $data_siswa,
             'tingkat' => $this->tingkat->get_all_except_id($data_siswa->TINGKAT_AS)

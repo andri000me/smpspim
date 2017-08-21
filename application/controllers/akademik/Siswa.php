@@ -80,7 +80,7 @@ class Siswa extends CI_Controller {
                         <li><a href="javascript:void()" title="Lihat Data" onclick="view_data(\'' . $item->ID_SISWA . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Data</a></li>
                         <li><a href="javascript:void()" title="Foto Siswa" onclick="view_photo(\'' . $item->ID_SISWA . '\')"><i class="fa fa-file-photo-o "></i>&nbsp;&nbsp;Foto Siswa</a></li>
                         <li><a href="javascript:void()" title="Kartu Siswa" onclick="kartu_pelajar(\'' . $item->ID_SISWA . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Kartu Siswa</a></li>
-                        <li><a href="'. site_url('keuangan/assign_tagihan/cetak_kartu/1/'.$item->ID_SISWA).'" title="Khoirot Siswa" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Khoirot Siswa</a></li>
+                        <li><a href="' . site_url('keuangan/assign_tagihan/cetak_kartu/1/' . $item->ID_SISWA) . '" title="Khoirot Siswa" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Khoirot Siswa</a></li>
                         ' . $surat_keterangan_aktif . '
                     </ul>
                 </div>';
@@ -111,15 +111,19 @@ class Siswa extends CI_Controller {
 
         $data = $this->siswa->get_by_id($this->input->post('ID_SISWA'));
 
-        if ($data->FOTO_SISWA == NULL)
-            $status = FALSE;
-        else
+        $status = FALSE;
+        if (file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg')) {
             $status = TRUE;
+            $name_file_photo = $data->NIS_SISWA . '.jpg';
+        } elseif (file_exists('files/siswa/' . $data->ID_SISWA . '.png') || $data->FOTO_SISWA != NULL) {
+            $status = TRUE;
+            $name_file_photo = $data->ID_SISWA . '.png';
+        }
 
         $this->generate->output_JSON(array(
             'status' => $status,
             'data' => array(
-                'FOTO_SISWA' => $data->FOTO_SISWA,
+                'FOTO_SISWA' => $name_file_photo,
                 'NAMA_SISWA' => $data->NAMA_SISWA,
             )
         ));
@@ -188,12 +192,12 @@ class Siswa extends CI_Controller {
         $this->generate->cek_validation_simple('edit');
 
         $data = $this->selection_form($this->input->post());
-        
+
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );
         unset($data['ID_SISWA']);
-        
+
         $affected_row = $this->siswa->update($where, $data);
 
         $this->generate->output_JSON(array("status" => 1));

@@ -127,8 +127,16 @@ function list_detail_kehadiran($label, $data, $position) {
                     <div class="panel-heading">
                         Foto
                     </div>
-                    <div class="panel-body">
-                        <img src="<?php if($SISWA->FOTO_SISWA == NULL) echo base_url('files/no_image.jpg'); else echo base_url('files/siswa/'.$SISWA->FOTO_SISWA); ?>" class="img-responsive" />
+                    <div class="panel-body text-center">
+                        <img src="<?php 
+                                if (file_exists('files/siswa/' . $SISWA->NIS_SISWA . '.jpg')) {
+                                    echo base_url('files/siswa/'. $SISWA->NIS_SISWA . '.jpg');
+                                } elseif (file_exists('files/siswa/' . $SISWA->ID_SISWA . '.png') || $SISWA->FOTO_SISWA != NULL) {
+                                    echo base_url('files/siswa/'. $SISWA->ID_SISWA . '.png');
+                                } else {
+                                    echo base_url('files/no_image.jpg');
+                                }
+                                ?>" class="img-responsive" style="height: 410px" />
                     </div>
                 </div>
             </div>

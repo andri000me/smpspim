@@ -109,6 +109,13 @@ class Calon_siswa extends CI_Controller {
 
         if ($ID_SISWA !== NULL) {
             $data['data'] = $this->calon_siswa->get_by_id($ID_SISWA);
+
+            if (file_exists('files/siswa/' . $data['data']->NIS_SISWA . '.jpg')) {
+                $data['data']->FOTO_SISWA = $data['data']->NIS_SISWA . '.jpg';
+            } elseif (file_exists('files/siswa/' . $data['data']->ID_SISWA . '.png') || $data['data']->FOTO_SISWA != NULL) {
+                $data['data']->FOTO_SISWA = $data['data']->ID_SISWA . '.png';
+            }
+
             $name_view = 'form';
         } else {
             $data['data'] = NULL;
@@ -501,6 +508,12 @@ class Calon_siswa extends CI_Controller {
         $ID_SISWA = $this->input->post('ID_SISWA');
         $alumni = $this->alumni->get_by_id($ID_SISWA);
 
+        if (file_exists('files/siswa/' . $alumni->NIS_SISWA . '.jpg')) {
+            $alumni->FOTO_SISWA = $alumni->NIS_SISWA . '.jpg';
+        } elseif (file_exists('files/siswa/' . $alumni->ID_SISWA . '.png') || $alumni->FOTO_SISWA != NULL) {
+            $alumni->FOTO_SISWA = $alumni->ID_SISWA . '.png';
+        }
+
         $this->generate->output_JSON(array('siswa' => $alumni));
     }
 
@@ -511,18 +524,18 @@ class Calon_siswa extends CI_Controller {
         $data = (array) $this->alumni->get_by_id_simple($ID_SISWA);
         $data['MASUK_JENJANG_SISWA'] = $this->input->post('MASUK_JENJANG_SISWA');
         $data['MASUK_TINGKAT_SISWA'] = $this->input->post('MASUK_TINGKAT_SISWA');
-        
+
         $data = $this->cek_um($data);
 
         $data['ANGKATAN_SISWA'] = $this->pengaturan->getTahunPSBAwal();
-        
+
         // RESET PARAMETER
         $data['ALUMNI_SISWA'] = 0;
         $data['STATUS_MUTASI_SISWA'] = NULL;
         $data['TANGGAL_MUTASI_SISWA'] = NULL;
         $data['NO_SURAT_MUTASI_SISWA'] = NULL;
         $data['USER_MUTASI_SISWA'] = NULL;
-        
+
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );

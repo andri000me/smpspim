@@ -44,10 +44,13 @@
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <img src="<?php 
-                                if ($FOTO_SISWA == NULL) 
+                                if (file_exists('files/siswa/' . $NIS_SISWA . '.jpg')) {
+                                    echo base_url('files/siswa/'. $NIS_SISWA . '.jpg');
+                                } elseif (file_exists('files/siswa/' . $ID_SISWA . '.png') || $FOTO_SISWA != NULL) {
+                                    echo base_url('files/siswa/'. $ID_SISWA . '.png');
+                                } else {
                                     echo base_url('files/no_image.jpg');
-                                else 
-                                    echo base_url('files/siswa/'.$FOTO_SISWA); 
+                                }
                                     ?>" alt="Foto siswa" width="300px"/>
                             </div>
                         </div>

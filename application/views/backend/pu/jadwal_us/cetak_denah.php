@@ -107,11 +107,13 @@ foreach ($data as $detail) {
                             $pdf->SetFont('Arial', '', $size_font - 5);
                             $pdf->Cell(29, 4, $nama_siswa, 'RL', 0, 'C');
                             $pdf->SetFont('Arial', '', $size_font - 2);
-                            
-                            if($data_siswa[$x]->FOTO_SISWA == NULL)
-                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
+
+                            if (file_exists('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'))
+                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
+                            elseif (file_exists('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'))
+                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
                             else
-                                $pdf->Image(base_url('files/siswa/'.$id_siswa.'.png'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
+                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
                         } else {
                             $pdf->Cell(5);
                             $pdf->Cell(29, 4, '', 'RL', 0, 'C');

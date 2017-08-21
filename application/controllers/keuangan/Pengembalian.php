@@ -185,6 +185,12 @@ class Pengembalian extends CI_Controller {
         $this->generate->set_header_JSON();
         
         $data = $this->siswa->get_by_id($this->input->post('ID_SISWA'));
+
+        if (file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg')) {
+            $data->FOTO_SISWA = $data->NIS_SISWA . '.jpg';
+        } elseif (file_exists('files/siswa/' . $data->ID_SISWA . '.png') || $data->FOTO_SISWA != NULL) {
+            $data->FOTO_SISWA = $data->ID_SISWA . '.png';
+        }
         
         $this->generate->output_JSON($data);
     }

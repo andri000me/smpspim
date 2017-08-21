@@ -137,11 +137,13 @@ foreach ($data as $detail) {
                             
                             $pdf->Cell($width_photo + 2, 5, '', 'L', 0, 'C');
                             $pdf->Cell(88 - $width_photo - 2, 5, 'Kode: '.$this->pengaturan->getKodeUM($data_siswa[$x]), 'R', 0, 'L');
-                            
-                            if($data_siswa[$x]->FOTO_SISWA == NULL)
-                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
+
+                            if (file_exists('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'))
+                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
+                            elseif (file_exists('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'))
+                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
                             else
-                                $pdf->Image(base_url('files/siswa/'.$id_siswa.'.png'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
+                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
                         } else {
                             $pdf->Cell(3);
                             $pdf->Cell(88, 5, '', 'RL', 0, 'C');
