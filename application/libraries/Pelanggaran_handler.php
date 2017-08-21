@@ -15,7 +15,7 @@ class Pelanggaran_handler {
         ));
     }
 
-    public function tambah($ID_TA, $ID_CAWU, $ID_SISWA, $ID_PELANGGARAN, $TANGGAL_KS, $SUMBER_KS, $KETERANGAN_KS, $KEHADIRAN_KS = NULL, $ALASAN_AKH = NULL) {
+    public function tambah($ID_TA, $ID_CAWU, $ID_SISWA, $ID_PELANGGARAN, $TANGGAL_KS, $SUMBER_KS, $KETERANGAN_KS, $KEHADIRAN_KS = NULL, $ALASAN_AKH = NULL, $JENIS_AKH = NULL) {
         $data = array(
             'TA_KS' => $ID_TA,
             'CAWU_KS' => $ID_CAWU,
@@ -39,7 +39,7 @@ class Pelanggaran_handler {
                 'CAWU_KSH' => $ID_CAWU,
                 'SISWA_KSH' => $ID_SISWA,
                 'POIN_KSH' => ((($data_ksh == NULL) ? 0 : $data_ksh->POIN_KSH) + $this->CI->jenis_pelanggaran->get_poin($ID_PELANGGARAN)),
-                'LARI_KSH' => $ALASAN_AKH == 'ALPHA' ? ($jumlah_lari + 1) : $jumlah_lari,
+                'LARI_KSH' => ($ALASAN_AKH == 'ALPHA' && $JENIS_AKH == 1) ? ($jumlah_lari + 1) : $jumlah_lari,
                 'USER_KSH' => $this->CI->session->userdata('ID_USER'),
             );
 
@@ -62,12 +62,12 @@ class Pelanggaran_handler {
         return $insert;
     }
 
-    public function hapus($id, $form_kehadiran = FALSE, $ALASAN_AKH = NULL) {
+    public function hapus($id, $form_kehadiran = FALSE, $ALASAN_AKH = NULL, $JENIS_AKH = NULL) {
         if ($form_kehadiran) {
-            $data = $this->CI->pelanggaran->get_row(array('KEHADIRAN_KS' => $id));
+            $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
             $id_pelanggaran = $data->ID_KS;
         } else {
-            $data = $this->CI->pelanggaran->get_by_id($id);
+            $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('ID_KS' => $id));
             $id_pelanggaran = $id;
         }
 
@@ -77,7 +77,7 @@ class Pelanggaran_handler {
             $data_ksh = $this->CI->pelanggaran_header->get_poin_siswa($data->TA_KS, $data->CAWU_KS, $data->SISWA_KS);
             $data_update = array(
                 'POIN_KSH' => ($data_ksh->POIN_KSH - $this->CI->jenis_pelanggaran->get_poin($data->PELANGGARAN_KS)),
-                'LARI_KSH' => $ALASAN_AKH == 'ALPHA' ? ($data_ksh->LARI_KSH - 1) : $data_ksh->LARI_KSH,
+                'LARI_KSH' => ($ALASAN_AKH == 'ALPHA' && $JENIS_AKH == 1) ? ($data_ksh->LARI_KSH - 1) : $data_ksh->LARI_KSH,
                 'USER_KSH' => $this->CI->session->userdata('ID_USER'),
             );
 

@@ -108,6 +108,13 @@ class Pelanggaran_model extends CI_Model {
         return $this->db->get()->row();
     }
 
+    public function get_pelanggaran_siswa($where) {
+        $this->db->from($this->table);
+        $this->db->where($where);
+
+        return $this->db->get()->row();
+    }
+
     public function get_row($where) {
         $this->_get_table();
         $this->db->where($where);

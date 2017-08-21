@@ -10,3 +10,21 @@ UPDATE `md_pengaturan` SET `EDITABLE_PENGATURAN` = '1' WHERE `md_pengaturan`.`ID
 UPDATE `md_pengaturan` SET `EDITABLE_PENGATURAN` = '1' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'pd_tu_dan_keuangan_2';
 UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '25' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'pd_tu_dan_keuangan_1';
 UPDATE `md_pengaturan` SET `ORDER_PENGATURAN` = '26' WHERE `md_pengaturan`.`ID_PENGATURAN` = 'pd_tu_dan_keuangan_2';
+
+SELECT COUNT(ID_KS) AS JUMLAH_LARI, LARI_KSH, SISWA_KSH
+FROM komdis_siswa
+INNER JOIN komdis_siswa_header ON SISWA_KSH=SISWA_KS
+INNER JOIN akad_kehadiran ON KEHADIRAN_KS=ID_AKH
+WHERE JENIS_AKH=1 AND ALASAN_AKH='ALPHA'
+GROUP BY SISWA_KSH
+
+UPDATE komdis_siswa_header ksh
+INNER JOIN 
+(SELECT COUNT(ID_KS) AS JUMLAH_LARI, SISWA_KSH
+FROM komdis_siswa
+INNER JOIN komdis_siswa_header ON SISWA_KSH=SISWA_KS
+INNER JOIN akad_kehadiran ON KEHADIRAN_KS=ID_AKH
+WHERE JENIS_AKH=1 AND ALASAN_AKH='ALPHA'
+GROUP BY SISWA_KSH) ks ON ks.SISWA_KSH=ksh.SISWA_KSH
+SET ksh.LARI_KSH=ks.JUMLAH_LARI
+WHERE ks.SISWA_KSH=ksh.SISWA_KSH
