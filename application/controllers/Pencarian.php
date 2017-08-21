@@ -98,5 +98,11 @@ class Pencarian extends CI_Controller {
         $this->load->view('layout/main/header');
         $this->load->view('backend/pencarian/detail', $data);
     }
+    
+    public function cetak_untuk_pemotretan() {
+        $data['data'] = $this->pencarian->cetak_untuk_pemotretan();
+        
+        $this->load->view('backend/pencarian/cetak_untuk_pemotretan', $data);
+    }
 
 }

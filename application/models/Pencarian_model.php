@@ -201,4 +201,17 @@ class Pencarian_model extends CI_Model {
         
         return $this->db->get()->result();
     }
+    
+    public function cetak_untuk_pemotretan() {
+        $this->db->from('akad_siswa as');
+        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_siswa md','md.ID_SISWA=as.SISWA_AS');
+        $this->db->where('KONVERSI_AS', 0);
+        $this->db->where('AKTIF_AS', 1);
+        $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->order_by('NAMA_KELAS', 'ASC');
+        $this->db->order_by('NO_ABSEN_AS', 'ASC');
+        
+        return $this->db->get()->result();
+    }
 }
