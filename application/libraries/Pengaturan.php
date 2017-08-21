@@ -161,6 +161,22 @@ class Pengaturan {
         return $data;
     }
 
+    public function getPDTUKeuangan1() {
+        $this->CI->load->model('pegawai_model', 'pegawai');
+        
+        $data = $this->CI->pegawai->get_by_id($this->CI->data_pengaturan->get_by_id('pd_tu_dan_keuangan_1'));
+        
+        return $data;
+    }
+
+    public function getPDTUKeuangan2() {
+        $this->CI->load->model('pegawai_model', 'pegawai');
+        
+        $data = $this->CI->pegawai->get_by_id($this->CI->data_pengaturan->get_by_id('pd_tu_dan_keuangan_2'));
+        
+        return $data;
+    }
+
     public function getDataKetuaP3H($jk) {
         $this->CI->load->model('pegawai_model', 'pegawai');
         

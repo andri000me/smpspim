@@ -26,6 +26,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php
                     foreach ($data as $detail) {
                         if(
+                                $detail->ID_PENGATURAN == 'pd_tu_dan_keuangan_1' || 
+                                $detail->ID_PENGATURAN == 'pd_tu_dan_keuangan_2' || 
                                 $detail->ID_PENGATURAN == 'ketua_p3h_banin' || 
                                 $detail->ID_PENGATURAN == 'ketua_p3h_banat' || 
                                 $detail->ID_PENGATURAN == 'ketua_pu' || 

@@ -196,11 +196,11 @@ class Cetak {
         return $pdf;
     }
 
-    public function nama_peg_print($detail_guru) {
+    public function nama_peg_print($detail_guru, $with_ust = true) {
         if (is_array($detail_guru)) {
-            return 'Ust. '.($detail_guru['GELAR_AWAL_PEG'] == NULL ? '' : $detail_guru['GELAR_AWAL_PEG'].'. ').$detail_guru['NAMA_PEG'].($detail_guru['GELAR_AKHIR_PEG'] == NULL ? '' : ', '.$detail_guru['GELAR_AKHIR_PEG']);
+            return ($with_ust ? 'Ust. ' : '').($detail_guru['GELAR_AWAL_PEG'] == NULL ? '' : $detail_guru['GELAR_AWAL_PEG'].'. ').$detail_guru['NAMA_PEG'].($detail_guru['GELAR_AKHIR_PEG'] == NULL ? '' : ', '.$detail_guru['GELAR_AKHIR_PEG']);
         } elseif (is_object($detail_guru)) {
-            return 'Ust. '.($detail_guru->GELAR_AWAL_PEG == NULL ? '' : $detail_guru->GELAR_AWAL_PEG.'. ').$detail_guru->NAMA_PEG.($detail_guru->GELAR_AKHIR_PEG == NULL ? '' : ', '.$detail_guru->GELAR_AKHIR_PEG);
+            return ($with_ust ? 'Ust. ' : '').($detail_guru->GELAR_AWAL_PEG == NULL ? '' : $detail_guru->GELAR_AWAL_PEG.'. ').$detail_guru->NAMA_PEG.($detail_guru->GELAR_AKHIR_PEG == NULL ? '' : ', '.$detail_guru->GELAR_AKHIR_PEG);
         } else {
             return "";
         }
