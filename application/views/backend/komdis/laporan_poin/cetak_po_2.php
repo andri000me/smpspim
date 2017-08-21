@@ -21,7 +21,7 @@ $pdf->Ln(2);
 
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(15, 5, 'Nomor', 0, 0, 'L');
-$pdf->Cell(0, 5, ': '.$nomor_surat);
+$pdf->Cell(0, 5, ': ' . $nomor_surat);
 $pdf->Ln();
 
 $pdf->Cell(15, 5, 'Hal');
@@ -35,7 +35,7 @@ $pdf->Ln(10);
 $pdf->Cell(0, 5, 'Kepada yang terhormat,');
 $pdf->Ln(10);
 
-$pdf->Cell(0, 5, 'Bapak Direktur '.$this->pengaturan->getNamaLembaga().',');
+$pdf->Cell(0, 5, 'Bapak Direktur ' . $this->pengaturan->getNamaLembaga() . ',');
 $pdf->Ln();
 
 $pdf->Cell(0, 5, 'Di ');
@@ -60,7 +60,7 @@ $pdf->Ln();
 $pdf->Cell(0, 5, 'Wassalamu\'alaikum Warahmatullahi Wabarakatuh.');
 $pdf->Ln(20);
 
-$pdf->Cell(0, 5, $this->pengaturan->getDesa().', '.$this->date_format->to_print_text($tanggal));
+$pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ' . $this->date_format->to_print_text($tanggal));
 $pdf->Ln(8);
 
 $pdf->Cell(0, 5, 'Ketua');
@@ -94,51 +94,60 @@ $pdf->AddPage("L", "A4");
 $pdf->SetAutoPageBreak(true, 0);
 
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 5, 'Lampiran surat nomor: '.$nomor_surat);
+$pdf->Cell(0, 5, 'Lampiran surat nomor: ' . $nomor_surat);
 $pdf->Ln();
 
 foreach ($JENJANG as $ID_DEPT => $NAMA_DEPT) {
-    
+    if ($pdf->GetY() > 160) {
+        $pdf->AddPage("L", "A4");
+        $pdf->SetAutoPageBreak(true, 0);
+    }
+
     $pdf->SetFont('Arial', 'B', 11);
-    $pdf->Cell(0, 5, 'TINGKAT '.$NAMA_DEPT, 0, 0, 'C');
+    $pdf->Cell(0, 5, 'TINGKAT ' . $NAMA_DEPT, 0, 0, 'C');
     $pdf->Ln();
-    
+
     $data_header = array(
-        array('align' => 'C','width' => 10, 'text' => 'No'),
-        array('align' => 'C','width' => 35, 'text' => 'Nama'),
-        array('align' => 'C','width' => 25, 'text' => 'Kelas'),
-        array('align' => 'C','width' => 40, 'text' => 'Wali Kelas'),
-        array('align' => 'C','width' => 35, 'text' => 'Orang Tua'),
-        array('align' => 'C','width' => 42, 'text' => 'Alamat'),
-        array('align' => 'C','width' => 42, 'text' => 'Domisili'),
-        array('align' => 'C','width' => 15, 'text' => 'Poin Tahun Lalu'),
-        array('align' => 'C','width' => 15, 'text' => 'Poin Skrg'),
-        array('align' => 'C','width' => 15, 'text' => 'Lari'),
+        array('align' => 'C', 'width' => 10, 'text' => 'No'),
+        array('align' => 'C', 'width' => 35, 'text' => 'Nama'),
+        array('align' => 'C', 'width' => 25, 'text' => 'Kelas'),
+        array('align' => 'C', 'width' => 40, 'text' => 'Wali Kelas'),
+        array('align' => 'C', 'width' => 35, 'text' => 'Orang Tua'),
+        array('align' => 'C', 'width' => 42, 'text' => 'Alamat'),
+        array('align' => 'C', 'width' => 42, 'text' => 'Domisili'),
+        array('align' => 'C', 'width' => 15, 'text' => 'Poin Tahun Lalu'),
+        array('align' => 'C', 'width' => 15, 'text' => 'Poin Skrg'),
+        array('align' => 'C', 'width' => 15, 'text' => 'Lari'),
     );
-    
+
     $pdf->SetFont('Arial', 'B', 10);
     $pdf = $this->pdf_handler->wrap_row_table($pdf, $data_header);
-    
-    $pdf->SetFont('Arial', '', 10);    
+
+    $pdf->SetFont('Arial', '', 10);
     $no = 1;
     foreach ($data[$ID_DEPT] as $DETAIL) {
-        $alamat = $DETAIL['ALAMAT_SISWA'].', Kec. '.$DETAIL['NAMA_KEC'].', '. str_replace("Kabupaten", "Kab.", $DETAIL['NAMA_KAB']);
+        if ($pdf->GetY() > 160) {
+            $pdf->AddPage("L", "A4");
+            $pdf->SetAutoPageBreak(true, 0);
+        }
+
+        $alamat = $DETAIL['ALAMAT_SISWA'] . ', Kec. ' . $DETAIL['NAMA_KEC'] . ', ' . str_replace("Kabupaten", "Kab.", $DETAIL['NAMA_KAB']);
         $data_detail = array(
-            array('align' => 'C','width' => 10, 'text' => $no++),
-            array('align' => 'L','width' => 35, 'text' => $DETAIL['NAMA_SISWA']),
-            array('align' => 'L','width' => 25, 'text' => $DETAIL['NAMA_KELAS']),
-            array('align' => 'L','width' => 40, 'text' => $DETAIL['WALI_KELAS']),
-            array('align' => 'L','width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
-            array('align' => 'L','width' => 42, 'text' => $alamat),
-            array('align' => 'L','width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'].' '.$DETAIL->ALAMAT_MPS)),
-            array('align' => 'C','width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
-            array('align' => 'C','width' => 15, 'text' => $DETAIL['POIN_KSH']),
-            array('align' => 'C','width' => 15, 'text' => $DETAIL['LARI_KSH']),
+            array('align' => 'C', 'width' => 10, 'text' => $no++),
+            array('align' => 'L', 'width' => 35, 'text' => $DETAIL['NAMA_SISWA']),
+            array('align' => 'L', 'width' => 25, 'text' => $DETAIL['NAMA_KELAS']),
+            array('align' => 'L', 'width' => 40, 'text' => $DETAIL['WALI_KELAS']),
+            array('align' => 'L', 'width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
+            array('align' => 'L', 'width' => 42, 'text' => $alamat),
+            array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL->ALAMAT_MPS)),
+            array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
+            array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
+            array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
         );
 
         $pdf = $this->pdf_handler->wrap_row_table($pdf, $data_detail);
     }
-    
+
     $pdf->Ln();
 }
 

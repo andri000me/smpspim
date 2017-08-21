@@ -93,6 +93,10 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Ln();
 
     foreach ($JENJANG['NON-SYARIAH'] as $ID_DEPT => $NAMA_DEPT) {
+        if ($pdf->GetY() > 160) {
+            $pdf->AddPage("L", "A4");
+            $pdf->SetAutoPageBreak(true, 0);
+        }
 
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(0, 5, 'TINGKAT ' . $NAMA_DEPT, 0, 0, 'C');
@@ -117,6 +121,10 @@ if (isset($data['NON-SYARIAH'])) {
         $pdf->SetFont('Arial', '', 10);
         $no = 1;
         foreach ($data['NON-SYARIAH'][$ID_DEPT] as $DETAIL) {
+            if ($pdf->GetY() > 160) {
+                $pdf->AddPage("L", "A4");
+                $pdf->SetAutoPageBreak(true, 0);
+            }
             $alamat = $DETAIL['ALAMAT_SISWA'] . ', Kec. ' . $DETAIL['NAMA_KEC'] . ', ' . str_replace("Kabupaten", "Kab.", $DETAIL['NAMA_KAB']);
             $data_detail = array(
                 array('align' => 'C', 'width' => 10, 'text' => $no++),
