@@ -102,7 +102,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             if (data.status) {
                 STATUS_VALIDASI = true;
-                
+
                 $("#btn-validasi").html('<i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Validasi');
                 $("#btn-validasi").addClass('btn-danger');
                 $("#btn-validasi").removeClass('btn-success');
@@ -113,7 +113,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
                 $("#status_validasi").removeClass('text-danger');
             } else {
                 STATUS_VALIDASI = false;
-                
+
                 $("#btn-validasi").html('<i class="fa fa-check"></i>&nbsp;&nbsp;Validasi');
                 $("#btn-validasi").addClass('btn-success');
                 $("#btn-validasi").removeClass('btn-danger');
@@ -136,28 +136,38 @@ $this->generate->datatables($id_datatables, $title, $columns);
         if (TANGGAL_AKH !== '' && KELAS_FILTER !== null)
             create_ajax('<?php echo site_url('akademik/kehadiran/cek_status_validasi'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
     }
-    
+
     function validasi_kelas() {
-        create_splash('Sistem sedang memvalidasi absensi KBM');
         var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var success = function(data) {
+        var success = function (data) {
             get_status_validasi();
-            
+
             remove_splash();
         };
-        
-        create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
+        var action = function (isConfirm) {
+            if (isConfirm) {
+                create_splash('Sistem sedang memvalidasi absensi KBM');
+                create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
+            }
+        };
+
+        if (STATUS_VALIDASI) {
+            create_swal_option('Peringatan', 'Menghapus validasi mengakibatkan absensi selain KBM tidak valid. Pastikan perubahan yang dilakukan di KBM juga melihat jenis kegiatan yang lain.', action);
+        } else {
+            create_splash('Sistem sedang memvalidasi absensi KBM');
+            create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
+        }
     }
-    
+
     function validasi_semua_kelas() {
         create_splash('Sistem sedang memvalidasi absensi KBM');
         var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var success = function(data) {
+        var success = function (data) {
             get_status_validasi();
-            
+
             remove_splash();
         };
-        
+
         create_ajax('<?php echo site_url('akademik/kehadiran/validasi_semua_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH, success);
     }
 
@@ -176,12 +186,14 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
     function tetapkan_filter() {
         var TANGGAL_FILTER = $("#TANGGAL_FILTER").val();
-        
+
         if (KELAS_FILTER === null || JENIS_FILTER === null || TANGGAL_FILTER === '' || STATUS_VALIDASI === null) {
             create_homer_error("Silahkan lengkapi kolom terlebih dahulu.");
             $(".table-datatable1").slideUp();
-        } else if(STATUS_VALIDASI === false && parseInt(JENIS_FILTER) > 1) {
+        } else if (STATUS_VALIDASI === false && parseInt(JENIS_FILTER) > 1) {
             create_homer_error('Tidak dapat membuka absensi karena KBM belum divalidasi.');
+        } else if (STATUS_VALIDASI === true && parseInt(JENIS_FILTER) === 1) {
+            create_homer_error('Tidak dapat membuka absensi KBM karena telah divalidasi.');
         } else {
             $(".table-datatable1").attr('style', 'margin-top: -60px;');
 
