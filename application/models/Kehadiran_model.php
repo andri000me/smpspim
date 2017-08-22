@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Kehadiran_model extends CI_Model {
 
     var $table = 'akad_kehadiran';
-    var $column = array('NAMA_CAWU','NIS_SISWA','NAMA_SISWA','NAMA_KELAS', 'NAMA_PEG','TANGGAL_AKH','NAMA_MJK','ALASAN_AKH','KETERANGAN_AKH', 'ID_AKH');
+    var $column = array('NAMA_CAWU', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'TANGGAL_AKH', 'NAMA_MJK', 'ALASAN_AKH', 'KETERANGAN_AKH', 'ID_AKH');
     var $primary_key = "ID_AKH";
     var $order = array("ID_AKH" => 'ASC');
 
@@ -20,12 +21,12 @@ class Kehadiran_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_AKH=mcw.ID_CAWU');
-        $this->db->join('md_jenis_kehadiran mjk', $this->table.'.JENIS_AKH=mjk.ID_MJK');
-        $this->db->join('md_siswa ms', $this->table.'.SISWA_AKH=ms.ID_SISWA');
-        $this->db->join('akad_siswa as', $this->table.'.SISWA_AKH=as.SISWA_AS AND '.$this->table.'.TA_AKH=as.TA_AS AND as.KONVERSI_AS=0 AND as.AKTIF_AS=1');
-        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->join('md_catur_wulan mcw', $this->table . '.CAWU_AKH=mcw.ID_CAWU');
+        $this->db->join('md_jenis_kehadiran mjk', $this->table . '.JENIS_AKH=mjk.ID_MJK');
+        $this->db->join('md_siswa ms', $this->table . '.SISWA_AKH=ms.ID_SISWA');
+        $this->db->join('akad_siswa as', $this->table . '.SISWA_AKH=as.SISWA_AS AND ' . $this->table . '.TA_AKH=as.TA_AS AND as.KONVERSI_AS=0 AND as.AKTIF_AS=1');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
         $this->db->where('TA_AKH', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
@@ -97,7 +98,8 @@ class Kehadiran_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AKH as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AKH as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -125,22 +127,22 @@ class Kehadiran_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function get_siswa($where) {
         $this->db->select("ID_SISWA as id, CONCAT('SISWA: ',NIS_SISWA, ' - ', NAMA_SISWA, ' | KELAS: ', NAMA_KELAS) as text");
         $this->db->from('md_siswa ms');
-        $this->db->join('akad_siswa as', 'ms.ID_SISWA=as.SISWA_AS AND as.TA_AS='.$this->session->userdata('ID_TA_ACTIVE').' AND as.KONVERSI_AS=0 AND as.AKTIF_AS=1 AND as.KELAS_AS IS NOT NULL');
-        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('akad_siswa as', 'ms.ID_SISWA=as.SISWA_AS AND as.TA_AS=' . $this->session->userdata('ID_TA_ACTIVE') . ' AND as.KONVERSI_AS=0 AND as.AKTIF_AS=1 AND as.KELAS_AS IS NOT NULL');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
         $this->db->like('CONCAT(NIS_SISWA," ",NAMA_SISWA)', $where);
         $this->db->where(array(
             'STATUS_MUTASI_SISWA' => NULL,
@@ -149,6 +151,74 @@ class Kehadiran_model extends CI_Model {
         $this->db->order_by('NAMA_SISWA', 'ASC');
 
         return $this->db->get()->result();
+    }
+
+    public function absen_divalidasi($TANGGAL_AVA, $KELAS_AVA) {
+        $this->db->from('akad_validasi_absen');
+        $this->db->where(array(
+            'TANGGAL_AVA' => $TANGGAL_AVA,
+            'KELAS_AVA' => $KELAS_AVA,
+            'STATUS_AVA' => 1
+        ));
+        $result = $this->db->get();
+
+        if ($result->num_rows() > 0)
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    private function get_validasi($TANGGAL_AVA) {
+        $this->db->from('akad_validasi_absen');
+        $this->db->where(array(
+            'TANGGAL_AVA' => $TANGGAL_AVA,
+            'STATUS_AVA' => 1
+        ));
+        $result = $this->db->get();
+
+        return $result->result();
+    }
+
+    public function tambah_validasi_kelas($TANGGAL_AVA, $KELAS_AVA) {
+        if (is_array($KELAS_AVA)) {
+            $KELAS_VALIDASI = $this->get_validasi($TANGGAL_AVA);
+            $ID_KELAS_VALIDASI = array();
+
+            foreach ($KELAS_VALIDASI as $DETAIL) {
+                $ID_KELAS_VALIDASI[] = $DETAIL->KELAS_AVA;
+            }
+            
+            foreach ($KELAS_AVA as $DETAIL) {
+                if (!in_array($DETAIL->ID_KELAS, $ID_KELAS_VALIDASI)) {
+                    $data = array(
+                        'TANGGAL_AVA' => $TANGGAL_AVA,
+                        'KELAS_AVA' => $DETAIL->ID_KELAS,
+                        'STATUS_AVA' => 1,
+                        'USER_AVA' => $this->session->userdata('ID_USER')
+                    );
+
+                    $this->db->insert('akad_validasi_absen', $data);
+                }
+            }
+        } else {
+            $data = array(
+                'TANGGAL_AVA' => $TANGGAL_AVA,
+                'KELAS_AVA' => $KELAS_AVA,
+                'STATUS_AVA' => 1,
+                'USER_AVA' => $this->session->userdata('ID_USER')
+            );
+
+            $this->db->insert('akad_validasi_absen', $data);
+        }
+    }
+
+    public function hapus_validasi_kelas($TANGGAL_AVA, $KELAS_AVA) {
+        $where = array(
+            'TANGGAL_AVA' => $TANGGAL_AVA,
+            'KELAS_AVA' => $KELAS_AVA,
+        );
+
+        $this->db->delete('akad_validasi_absen', $where);
     }
 
 }
