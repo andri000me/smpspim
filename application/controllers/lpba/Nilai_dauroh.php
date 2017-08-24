@@ -43,17 +43,14 @@ class Nilai_dauroh extends CI_Controller {
             $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->JK_SISWA;
-            $row[] = $item->KETERANGAN_TINGK;
+//            $row[] = $item->KETERANGAN_TINGK;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_PEG;
-            $row[] = '<select class="form-control input-sm" style="width: 60px;" data-siswa="'.$item->ID_SISWA.'" onchange="simpan_nilai(this);" '.($item->NAIK_AS == NULL ? '' : 'disabled').'>'
-                    . '<option value="" '.($item->NILAI_LN == NULL ? "selected" : '').'>-</option>'
-                    . '<option value="م" '.($item->NILAI_LN == 'م' ? "selected" : '').'>م</option>'
-                    . '<option value="ج ج" '.($item->NILAI_LN == 'ج ج' ? "selected" : '').'>ج ج</option>'
-                    . '<option value="ج" '.($item->NILAI_LN == 'ج' ? "selected" : '').'>ج</option>'
-                    . '<option value="ر" '.($item->NILAI_LN == 'ر' ? "selected" : '').'>ر</option>'
-                    . '</select>';
-//            $row[] = '<input type="text" class="form-control input-sm" value="'.($item->NILAI_LN == NULL ? "" : $item->NILAI_LN).'" style="width: 60px;" data-siswa="'.$item->ID_SISWA.'" onchange="simpan_nilai(this);" '.($item->NAIK_AS == NULL ? '' : 'disabled').'/>';
+            $row[] = '<p id="KEHADIRAN_LN_'.$item->ID_SISWA.'">'.$item->KEHADIRAN_LN.'</p>';
+            $row[] = '<input type="text" class="form-control input-sm" value="'.($item->SYAFAWI_LN == NULL ? "" : $item->SYAFAWI_LN).'" style="width: 60px;" data-siswa="'.$item->ID_SISWA.'" data-field="SYAFAWI_LN" onchange="simpan_nilai(this);" '.($item->NAIK_AS == NULL ? '' : 'disabled').'/>';
+            $row[] = '<input type="text" class="form-control input-sm" value="'.($item->TAHRIRI_LN == NULL ? "" : $item->TAHRIRI_LN).'" style="width: 60px;" data-siswa="'.$item->ID_SISWA.'" data-field="TAHRIRI_LN" onchange="simpan_nilai(this);" '.($item->NAIK_AS == NULL ? '' : 'disabled').'/>';
+            $row[] = '<p id="TOTAL_LN_'.$item->ID_SISWA.'">'.$item->TOTAL_LN.'</p>';
+            $row[] = '<p><h4 id="TAQDIR_LN_'.$item->ID_SISWA.'">'.$item->TAQDIR_LN.'</h4></p>';
 
             $data[] = $row;
         }
@@ -72,14 +69,11 @@ class Nilai_dauroh extends CI_Controller {
         $this->generate->set_header_JSON();
         
         $SISWA_LN = $this->input->post('SISWA_LN');
+        $FIELD = $this->input->post('FIELD');
         $NILAI_LN = $this->input->post('NILAI_LN');
         
         $data = array(
-            'TA_LN' => $this->session->userdata('ID_TA_ACTIVE'),
-            'CAWU_LN' => 3,
-            'SISWA_LN' => $SISWA_LN,
-            'JENIS_LN' => $this->jenis,
-            'NILAI_LN' => $NILAI_LN,
+            $FIELD => $NILAI_LN,
             'USER_LN' => $this->session->userdata('ID_USER'),
         );
         $where = array(
@@ -88,10 +82,9 @@ class Nilai_dauroh extends CI_Controller {
             'SISWA_LN' => $SISWA_LN,
             'JENIS_LN' => $this->jenis,
         );
-        $this->nilai_dauroh->hapus_nilai($where);
-        $result = $this->nilai_dauroh->simpan_nilai($data);
+        $result = $this->nilai_dauroh->simpan_nilai($data, $where);
         
-        $this->generate->output_JSON(array('status' => $result));
+        $this->generate->output_JSON($result);
     }
 
 }

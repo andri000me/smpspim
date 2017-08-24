@@ -8,10 +8,14 @@ $columns = array(
     'NO ABSEN',
     'NAMA SISWA',
     'JK',
-    'TINGKAT',
+//    'TINGKAT',
     'NAMA KELAS',
     'WALI KELAS',
-    'NILAI',
+    'KEHADIRAN',
+    'SYAFAWI',
+    'TAQDIRI',
+    'TOTAL',
+    'TAQDIR',
 );
 
 $this->generate->generate_panel_content("Data " . $title, $subtitle);
@@ -32,22 +36,33 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var functionDrawCallback = function (settings, json) {
     };
     var functionAddData = function (e, dt, node, config) {
-        
+        hitung_absen();
     };
 
     $(document).ready(function () {
+        $("body").addClass('hide-sidebar');
+        
         table = initialize_datatables(id_table, '<?php echo site_url('lpba/nilai_dauroh/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
-        $(".buttons-add").remove();
+        $(".buttons-add").html('Hitung Kehadiran');
     });
+    
+    function hitung_absen() {
+        
+    }
     
     function simpan_nilai(that) {
         var loading_bar = '<img src="<?php echo base_url('assets/images/loading-bars.svg'); ?>" width="31px" class="loading_bar"/>';
         var SISWA_LN = $(that).data('siswa');
+        var FIELD = $(that).data('field');
         var NILAI_LN = $(that).val();
         var success = function(data){
             $(that).show();
             $(that).next().remove();
+            
+            $("#KEHADIRAN_LN_" + SISWA_LN).html(data.data.KEHADIRAN_LN);
+            $("#TOTAL_LN_" + SISWA_LN).html(data.data.TOTAL_LN);
+            $("#TAQDIR_LN_" + SISWA_LN).html(data.data.TAQDIR_LN);
             
             if(data.status) {
                 $(that).addClass('success');
@@ -63,7 +78,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         } else {
             $(loading_bar).insertAfter(that);
             $(that).hide();
-            create_ajax('<?php echo site_url('lpba/nilai_dauroh/simpan_nilai'); ?>', 'SISWA_LN=' + SISWA_LN + "&NILAI_LN=" + NILAI_LN, success);
+            create_ajax('<?php echo site_url('lpba/nilai_dauroh/simpan_nilai'); ?>', 'SISWA_LN=' + SISWA_LN + "&NILAI_LN=" + NILAI_LN + '&FIELD=' + FIELD, success);
         }
     }
 </script>

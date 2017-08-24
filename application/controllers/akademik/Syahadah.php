@@ -26,7 +26,7 @@ class Syahadah extends CI_Controller {
             'kamus_model' => 'kamus',
         ));
         $this->load->library('translasi_handler');
-        $this->auth->validation(2);
+        $this->auth->validation(array(2, 8));
     }
 
     public function index() {

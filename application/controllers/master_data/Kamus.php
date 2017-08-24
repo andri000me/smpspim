@@ -20,7 +20,7 @@ class Kamus extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('kamus_model', 'kamus');
-        $this->auth->validation(array(11, 2));
+        $this->auth->validation(array(11, 2, 8));
     }
 
     public function index() {
