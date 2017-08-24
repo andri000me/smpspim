@@ -20,7 +20,7 @@ class Tahun_ajaran extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('tahun_ajaran_model', 'tahun_ajaran');
-        $this->auth->validation(array(11, 2, 10, 5));
+        $this->auth->validation(array(11, 2, 10, 5, 8));
     }
 
     public function index() {

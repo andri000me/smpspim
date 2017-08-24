@@ -19,18 +19,18 @@ class Nilai_dauroh_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table() {
+    private function _get_table($TA = NULL) {
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
         $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
         $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
         $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
-        $this->db->join('lpba_nilai ln', 'ln.SISWA_LN=ms.ID_SISWA AND ln.CAWU_LN=3 AND ln.TA_LN=' . $this->session->userdata('ID_TA_ACTIVE') . ' AND ln.JENIS_LN="DAUROH"', 'LEFT');
+        $this->db->join('lpba_nilai ln', 'ln.SISWA_LN=ms.ID_SISWA AND ln.CAWU_LN=3 AND ln.TA_LN=' . ($TA == NULL ? $this->session->userdata('ID_TA_ACTIVE') : $TA) . ' AND ln.JENIS_LN="DAUROH"', 'LEFT');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('AKTIF_AS', 1);
 //        $this->db->where('NAIK_AS', NULL);
-        $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('TA_AS', ($TA == NULL ? $this->session->userdata('ID_TA_ACTIVE') : $TA));
     }
 
     private function _get_datatables_query() {
@@ -142,8 +142,8 @@ class Nilai_dauroh_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
-    public function get_rows($where) {
-        $this->_get_table();
+    public function get_rows($where, $TA = NULL) {
+        $this->_get_table($TA);
         $this->db->where($where);
         $this->db->order_by('NAMA_SISWA', 'ASC');
 
@@ -157,8 +157,8 @@ class Nilai_dauroh_model extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function get_rows_array($where) {
-        $this->_get_table();
+    public function get_rows_array($where, $TA = NULL) {
+        $this->_get_table($TA);
         $this->db->where($where);
 
         return $this->db->get()->result_array();
@@ -184,11 +184,11 @@ class Nilai_dauroh_model extends CI_Model {
             $status = $this->db->insert('lpba_nilai', $data_insert);
             $this->kalkulasi_nilai($where);
         }
-        
+
         $this->db->from('lpba_nilai');
         $this->db->where($where);
         $result = $this->db->get()->row();
-        
+
         return array('status' => $status, 'data' => $result);
     }
 
@@ -199,9 +199,9 @@ class Nilai_dauroh_model extends CI_Model {
             $where_text .= ($start ? '' : ' AND ') . $field . '="' . $value . '" ';
             $start = FALSE;
         }
-        
-        $this->db->query('UPDATE `lpba_nilai` SET TOTAL_LN=(SYAFAWI_LN + TAHRIRI_LN) WHERE '.$where_text.';');
-        $this->db->query('UPDATE `lpba_nilai` SET TAQDIR_LN=(SELECT NAMA_TAQDIR FROM lpba_taqdir WHERE TOTAL_LN>=NILAI_MIN_TAQDIR AND TOTAL_LN<=NILAI_MAKS_TAQDIR) WHERE '.$where_text.';');
+
+        $this->db->query('UPDATE `lpba_nilai` SET TOTAL_LN=(SYAFAWI_LN + TAHRIRI_LN) WHERE ' . $where_text . ';');
+        $this->db->query('UPDATE `lpba_nilai` SET TAQDIR_LN=(SELECT NAMA_TAQDIR FROM lpba_taqdir WHERE TOTAL_LN>=NILAI_MIN_TAQDIR AND TOTAL_LN<=NILAI_MAKS_TAQDIR) WHERE ' . $where_text . ';');
     }
 
 }
