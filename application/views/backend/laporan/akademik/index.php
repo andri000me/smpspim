@@ -139,6 +139,7 @@ $this->generate->chart($id, 'Grafik Akademik', $single);
         var ta = $("#ta").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
+        var jk = $("#jk").val();
         var pie_donut = 0;
         var success = function (data) {
             chart_<?php echo $id; ?> = create_chart(id, data, single, type, single);
@@ -147,7 +148,7 @@ $this->generate->chart($id, 'Grafik Akademik', $single);
         if((type === 'pie') || (type === 'donut')) pie_donut = 1;
         
         if(kelompok !== '')
-            create_ajax(url, "kelompok=" + kelompok + "&pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas, success);
+            create_ajax(url, "kelompok=" + kelompok + "&pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + '&jk=' + jk, success);
         else {
             $("#" + id).html(" ");
             

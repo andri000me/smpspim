@@ -69,7 +69,7 @@ class Laporan_akademik_model extends CI_Model {
         }
     }
 
-    public function get_data($label, $ta, $tingkat, $kelas) {
+    public function get_data($label, $ta, $tingkat, $kelas, $jk) {
         if ($label == NULL || $label == 'AKTIF_AS')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "AKTIF", CONCAT("TIDAK", " ", "AKTIF")) ) AS x_label');
         if ($label == 'KONVERSI_AS')
@@ -86,6 +86,8 @@ class Laporan_akademik_model extends CI_Model {
             $this->db->where('TINGKAT_AS', $tingkat);
         if ($kelas != "")
             $this->db->where('KELAS_AS', $kelas);
+        if ($jk != "")
+            $this->db->where('JK_SISWA', $jk);
         if ($label != 'KONVERSI_AS')
             $this->db->where('KONVERSI_AS', 0);
 

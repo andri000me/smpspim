@@ -43,10 +43,11 @@ class Akademik extends CI_Controller {
         $ta = $this->input->post('ta');
         $tingkat = $this->input->post('tingkat');
         $kelas = $this->input->post('kelas');
+        $jk = $this->input->post('jk');
 
         $kelompok = $this->input->post('kelompok');
         $exp_kelompok = explode("#", $kelompok);
-        $data_peg = $this->akademik->get_data($exp_kelompok[0], $ta, $tingkat, $kelas);
+        $data_peg = $this->akademik->get_data($exp_kelompok[0], $ta, $tingkat, $kelas, $jk);
 
         $data = $this->chart_handler->format_output_single($pie_donut, $data_peg, $exp_kelompok[1], $exp_kelompok[2], $exp_kelompok[3]);
 
