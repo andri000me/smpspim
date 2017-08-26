@@ -47,6 +47,9 @@
                 <a href="<?php echo site_url('pencarian'); ?>" class="pull-right" title="Klik untuk mencari data siswa" target="_blank">
                     <i class="pe-7s-search" style="font-size: 25px; margin-right: 20px"></i>
                 </a>
+                <a href="<?php echo site_url('pencarian/bel_sekolah'); ?>" class="pull-right" title="Klik untuk membuka bel sekolah" target="_blank">
+                    <i class="pe-7s-alarm" style="font-size: 25px; margin-right: 20px"></i>
+                </a>
             </div>
         </div>
         <hr>

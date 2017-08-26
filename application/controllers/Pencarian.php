@@ -11,6 +11,9 @@ class Pencarian extends CI_Controller {
             'siswa_model' => 'siswa',
             'tahun_ajaran_model' => 'ta',
             'catur_wulan_model' => 'cawu',
+            'jk_model' => 'jk',
+            'departemen_model' => 'dept',
+            'jam_pelajaran_model' => 'jam_pelajaran',
         ));
         $this->auth->validation();
     }
@@ -98,11 +101,38 @@ class Pencarian extends CI_Controller {
         $this->load->view('layout/main/header');
         $this->load->view('backend/pencarian/detail', $data);
     }
-    
+
     public function cetak_untuk_pemotretan() {
         $data['data'] = $this->pencarian->cetak_untuk_pemotretan();
-        
+
         $this->load->view('backend/pencarian/cetak_untuk_pemotretan', $data);
+    }
+
+    public function bel_sekolah() {
+        $data = array(
+            'dept' => $this->dept->get_all(false),
+            'jk' => $this->jk->get_all(false),
+        );
+        
+        $this->load->view('layout/main/header');
+        $this->load->view('backend/pencarian/bel_sekolah', $data);
+    }
+
+    public function get_alarm() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->jam_pelajaran->get_rows($this->input->post());
+        
+        $this->generate->output_JSON($data);
+    }
+
+    public function get_tanggal_jam() {
+        $this->generate->set_header_JSON();
+        
+        $jam = date('H:i:s');
+        $tanggal = $this->date_format->to_print_text(date('Y-m-d'));
+        
+        $this->generate->output_JSON(array('jam' => $jam, 'tanggal' => $tanggal));
     }
 
 }
