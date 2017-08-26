@@ -77,8 +77,8 @@ foreach ($DATA as $DETAIL) {
     $pdf->Cell(7, 4, $DETAIL->NO_ABSEN_AS, 1, 0, 'C', TRUE);
     $pdf->Cell(20, 4, $DETAIL->NIS_SISWA == NULL ? 'KELUAR' : $DETAIL->NIS_SISWA, 1, 0, 'C', TRUE);
     $pdf->Cell(40, 4, $DETAIL->NAMA_SISWA, 1, 0, 'L', TRUE);
-    $pdf->Cell(7, 4, $DETAIL->POIN_TAHUN_LALU_KSH, 1, 0, 'C', TRUE);
-    $pdf->Cell(7, 4, $DETAIL->TOTAL_LARI, 1, 0, 'C', TRUE);
+    $pdf->Cell(7, 4, ($DETAIL->POIN_TAHUN_LALU_KSH > 0 ? $DETAIL->POIN_TAHUN_LALU_KSH : ''), 1, 0, 'C', TRUE);
+    $pdf->Cell(7, 4, ($DETAIL->TOTAL_LARI > 0 ? $DETAIL->TOTAL_LARI : ''), 1, 0, 'C', TRUE);
     $pdf->Cell(20, 4, $DETAIL->NAMA_KJT, 1, 0, 'L', TRUE);
     $pdf->Cell(65 / 12, 4, $DETAIL->B07, 1, 0, 'C', TRUE);
     $pdf->Cell(65 / 12, 4, $DETAIL->B08, 1, 0, 'C', TRUE);
