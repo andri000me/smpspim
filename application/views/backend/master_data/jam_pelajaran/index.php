@@ -9,7 +9,9 @@ $columns = array(
     'JK',
     'NAMA',
     'JAM MULAI',
+    'JUMLAH BEL MULAI',
     'JAM AKHIR',
+    'JUMLAH BEL AKHIR',
     'AKSI',
 );
 

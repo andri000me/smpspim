@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Jam_pelajaran_model extends CI_Model {
 
     var $table = 'md_jam_pelajaran';
-    var $column = array('ID_MJP','NAMA_DEPT','NAMA_JK', 'NAMA_MJP', 'MULAI_MJP', 'AKHIR_MJP','ID_MJP');
+    var $column = array('ID_MJP','NAMA_DEPT','NAMA_JK', 'NAMA_MJP', 'MULAI_MJP', 'BEL_MULAI_MJP', 'AKHIR_MJP','BEL_AKHIR_MJP','ID_MJP');
     var $primary_key = "ID_MJP";
     var $order = array("ID_MJP" => 'ASC');
 

@@ -42,7 +42,9 @@ class Jam_pelajaran extends CI_Controller {
             $row[] = $item->NAMA_JK;
             $row[] = $item->NAMA_MJP;
             $row[] = $item->MULAI_MJP;
+            $row[] = $item->BEL_MULAI_MJP;
             $row[] = $item->AKHIR_MJP;
+            $row[] = $item->BEL_AKHIR_MJP;
 
             $row[] = '
                 <div class="btn-group">
@@ -156,6 +158,18 @@ class Jam_pelajaran extends CI_Controller {
                 )
             ),
             array(
+                'label' => 'Jumlah Bel Mulai',                                        
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',                                           
+                    'name' => 'BEL_MULAI_MJP',                                        
+                    "placeholder" => "",
+                    'value' => $data == NULL ? "" : $data->BEL_MULAI_MJP
+                )
+            ),
+            array(
                 'label' => 'Jam Akhir',                    
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
@@ -165,6 +179,18 @@ class Jam_pelajaran extends CI_Controller {
                     'name' => 'AKHIR_MJP',                 
 //                    $data == NULL ? '' : 'readonly' => 'true',
                     'value' => $data == NULL ? "" : $data->AKHIR_MJP
+                )
+            ),
+            array(
+                'label' => 'Jumlah Bel Akhir',                                        
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',                                           
+                    'name' => 'BEL_AKHIR_MJP',                                        
+                    "placeholder" => "",
+                    'value' => $data == NULL ? "" : $data->BEL_AKHIR_MJP
                 )
             ),
         );
@@ -182,7 +208,9 @@ class Jam_pelajaran extends CI_Controller {
             'NAMA_MJP' => 'JAM KE-'.$this->input->post('URUTAN_MJP'),
             'URUTAN_MJP' => $this->input->post('URUTAN_MJP'),
             'MULAI_MJP' => $this->input->post('MULAI_MJP'),
+            'BEL_MULAI_MJP' => $this->input->post('BEL_MULAI_MJP'),
             'AKHIR_MJP' => $this->input->post('AKHIR_MJP'),
+            'BEL_AKHIR_MJP' => $this->input->post('BEL_AKHIR_MJP'),
         );
         $insert = $this->jam_pelajaran->save($data);
 
@@ -204,7 +232,9 @@ class Jam_pelajaran extends CI_Controller {
         $data['NAMA_MJP'] = 'JAM KE-'.$this->input->post('URUTAN_MJP');
         $data['URUTAN_MJP'] = $this->input->post('URUTAN_MJP');
         $data['MULAI_MJP'] = $this->input->post('MULAI_MJP');
+        $data['BEL_MULAI_MJP'] = $this->input->post('BEL_MULAI_MJP');
         $data['AKHIR_MJP'] = $this->input->post('AKHIR_MJP');
+        $data['BEL_AKHIR_MJP'] = $this->input->post('BEL_AKHIR_MJP');
         
         $affected_row = $this->jam_pelajaran->update($where, $data);
 
