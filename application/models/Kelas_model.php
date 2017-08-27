@@ -181,7 +181,7 @@ class Kelas_model extends CI_Model {
     public function get_all($for_html = true) {
         if ($for_html) $this->db->select("ID_KELAS as value, NAMA_KELAS as label");
         $this->_get_table();
-        $this->db->order_by('ID_KELAS', 'ASC');
+        $this->db->order_by('NAMA_KELAS', 'ASC');
 
         return $this->db->get()->result();
     }

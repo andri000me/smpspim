@@ -50,9 +50,14 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var functionAddData = function (e, dt, node, config) {
         window.open('<?php echo site_url('master_data/kamus'); ?>', '_blank');
     };
+    var data_kelas = {<?php foreach ($kelas as $detail) {
+     echo '"'.$detail->NAMA_KELAS.'":"'.$detail->NAMA_KELAS.'",';
+    } ?>};
 
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('akademik/syahadah/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+        
+        dropdown_searching('NAMA-KELAS', 8, data_kelas);
         
         $(".buttons-add").html('Kamus');
     });

@@ -23,6 +23,7 @@ class Syahadah extends CI_Controller {
         $this->load->model(array(
             'syahadah_model' => 'syahadah',
             'siswa_model' => 'siswa',
+            'kelas_model' => 'kelas',
             'kamus_model' => 'kamus',
         ));
         $this->load->library('translasi_handler');
@@ -30,7 +31,11 @@ class Syahadah extends CI_Controller {
     }
 
     public function index() {
-        $this->generate->backend_view('akademik/syahadah/index');
+        $data = array(
+            'kelas' => $this->kelas->get_all(false)
+        );
+        
+        $this->generate->backend_view('akademik/syahadah/index', $data);
     }
 
     public function ajax_list() {
