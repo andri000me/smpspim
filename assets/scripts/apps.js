@@ -170,7 +170,7 @@ function change_hakakses_header(ID_HAKAKSES) {
 function create_nav_change_hakakses() {
     var tag_html = "";
     $.each(list_hakakses, function(index, item){
-        tag_html += '<li>' + 
+        tag_html += '<li style="padding: 5px">' + 
                         '<a href="#" onclick="change_hakakses_header(' + item.ID_HAKAKSES + ')">' + 
                             '<h5 class="font-extra-bold text-primary">' + item.NAME_HAKAKSES + '</h5>' + 
                         '</a>' + 
