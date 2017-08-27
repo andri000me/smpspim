@@ -101,11 +101,11 @@ class Pelanggaran_model extends CI_Model {
         return $query->num_rows();
     }
 
-    public function get_by_id($id) {
-        $this->_get_table();
+    public function get_by_id_simple($id) {
+        $this->db->from($this->table);
         $this->db->where($this->primary_key, $id);
 
-        return $this->db->get()->row();
+        return $this->db->get()->row_array();
     }
 
     public function get_pelanggaran_siswa($where) {

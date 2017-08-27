@@ -22,6 +22,7 @@ class Pelanggaran extends CI_Controller {
         parent::__construct();
         $this->load->model(array(
             'pelanggaran_model' => 'pelanggaran',
+            'pelanggaran_catatan_model' => 'pelanggaran_catatan',
             'pelanggaran_header_model' => 'pelanggaran_header',
             'pelanggaran_perpelanggaran_model' => 'pelanggaran_perpelanggaran',
             'jenis_pelanggaran_model' => 'jenis_pelanggaran'
@@ -183,7 +184,13 @@ class Pelanggaran extends CI_Controller {
 
         $id = $this->input->post("ID");
 
+        $data_delete = $this->pelanggaran->get_by_id_simple($id);
         $affected_row = $this->pelanggaran_handler->hapus($id);
+        
+        if ($affected_row) {
+            unset($data_delete['ID_KS']);
+            $affected_row = $this->pelanggaran_catatan->save($data_delete);
+        }
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }
