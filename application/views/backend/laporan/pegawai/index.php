@@ -52,8 +52,9 @@ $options = array(
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">&nbsp;</label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-9">
                                 <button type="button" class="btn btn-primary" onclick="request_chart_<?php echo $id; ?>('bar');"><i class="fa fa-pie-chart"></i>&nbsp;&nbsp;Proses Grafik</button>
+                                <button type="button" class="btn btn-info" onclick="download_csv();"><i class="fa fa-paperclip"></i>&nbsp;&nbsp;Unduh Data Grafik</button>
                                 <button type="button" class="btn btn-info" onclick="export_data();"><i class="fa fa-save"></i>&nbsp;&nbsp;Unduh Data Pegawai</button>
                             </div>
                         </div>
@@ -76,16 +77,47 @@ $this->generate->chart($id, 'Grafik Pegawai', $single);
     var chart_<?php echo $id; ?> = null;
     var panel = 'panel-' + id;
     var url = '<?php echo site_url('laporan/pegawai/get_data'); ?>';
+    
+    var data_response = null;
+    var xls_content = "data:application/vnd.ms-excel;charset=utf-8,";
 
     $(document).ready(function () {
         
     });
+
+    function download_csv() {
+        if (data_response === null) {
+            create_homer_error('Silahkan tampilkan grafik terlebih dahulu sebelum mengunduh data');
+        } else {
+            xls_content += '<table>';
+            xls_content += '<tr><td>Kelompok</td><td>Jumlah Siswa</td></tr>';
+            $.each(data_response.data.x_label, function (key, value) {
+                xls_content += '<tr><td>' + value + '</td><td>' + data_response.data.data1[key] + '<td></tr>';
+            });
+            xls_content += '</table>';
+
+            var encoded_uri = encodeURI(xls_content);
+//            window.open(encoded_uri, '_blank');
+
+            var link = document.createElement("a");
+            link.href = encoded_uri;
+            
+            link.style = "visibility:hidden";
+            link.download = "data_pegawai.xls";
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
 
     function request_chart_<?php echo $id; ?>(type) {
         var kelompok = $("#kelompok").val();
         var keaktifan = $("#keaktifan").val();
         var pie_donut = 0;
         var success = function (data) {
+            data_response = data;
+            
             chart_<?php echo $id; ?> = create_chart(id, data, single, type, single);
         };
         

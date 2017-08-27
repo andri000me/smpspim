@@ -117,6 +117,7 @@ $options = array(
                             <label class="col-sm-3 control-label">&nbsp;</label>
                             <div class="col-sm-9">
                                 <button type="button" class="btn btn-primary" onclick="request_chart_<?php echo $id; ?>('bar');"><i class="fa fa-pie-chart"></i>&nbsp;&nbsp;Proses Grafik</button>
+                                <button type="button" class="btn btn-info" onclick="download_csv();"><i class="fa fa-paperclip"></i>&nbsp;&nbsp;Unduh Data Grafik</button>
                                 <button type="button" class="btn btn-success" onclick="datatables_data();"><i class="fa fa-list"></i>&nbsp;&nbsp;Lihat Data Keuangan</button>
                                 <button type="button" class="btn btn-info" onclick="export_data();"><i class="fa fa-save"></i>&nbsp;&nbsp;Unduh Data Keuangan</button>
                             </div>
@@ -154,8 +155,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var table;
     var id_table = '<?php echo $id_datatables; ?>';
     var title = '<?php echo $title; ?>';
-    var columns = [{"targets": [-1],"orderable": false}];
-    var orders = [[ 0, "ASC" ]];
+    var columns = [{"targets": [-1], "orderable": false}];
+    var orders = [[0, "ASC"]];
     var requestExport = true;
     var functionInitComplete = function (settings, json) {
 
@@ -166,9 +167,9 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var functionAddData = function (e, dt, node, config) {
         create_homer_error("Anda tidak memiliki hak akses untuk menambah guru.");
     };
-    
+
     // =================================================================================
-    
+
     var id = '<?php echo $id; ?>';
     var single = <?php echo ($single ? 'true' : 'false'); ?>;
     var chart_<?php echo $id; ?> = null;
@@ -177,6 +178,9 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var toogle_filter = true;
     var pegawai = '';
 
+    var data_response = null;
+    var xls_content = "data:application/vnd.ms-excel;charset=utf-8,";
+
     $(document).ready(function () {
 //        $(".filter-lanjutan").hide();
 
@@ -184,7 +188,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
         $("#mulai_tanggal").datepicker().datepicker("setDate", new Date());
         $("#akhir_tanggal").datepicker().datepicker("setDate", new Date());
-        
+
         $(".table-datatable1").attr('style', 'margin-top: -55px;').hide();
 
         $(".js-source-states-input").select2({
@@ -226,6 +230,32 @@ $this->generate->datatables($id_datatables, $title, $columns);
         });
     });
 
+    function download_csv() {
+        if (data_response === null) {
+            create_homer_error('Silahkan tampilkan grafik terlebih dahulu sebelum mengunduh data');
+        } else {
+            xls_content += '<table>';
+            xls_content += '<tr><td>Tanggal</td><td>Pembayaran</td><td>Pengembalian</td><td>Saldo</td></tr>';
+            $.each(data_response.data.x_label, function (key, value) {
+                xls_content += '<tr><td>' + value + '</td><td>' + data_response.data.data0[key] + '</td><td>' + data_response.data.data1[key] + '</td><td>' + data_response.data.data2[key] + '</td></tr>';
+            });
+            xls_content += '</table>';
+
+            var encoded_uri = encodeURI(xls_content);
+//            window.open(encoded_uri, '_blank');
+
+            var link = document.createElement("a");
+            link.href = encoded_uri;
+
+            link.style = "visibility:hidden";
+            link.download = "data_keuangan.xls";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
     function request_chart_<?php echo $id; ?>(type) {
 //        var kelompok = $("#kelompok").val();
         var ta = $("#ta").val();
@@ -235,6 +265,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
         var akhir_tanggal = $("#akhir_tanggal").val();
         var pie_donut = 0;
         var success = function (data) {
+            data_response = data;
+
             chart_<?php echo $id; ?> = create_chart(id, data, single, type, single);
         };
 
@@ -245,7 +277,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
             create_homer_error("Tanggal mulai tidak boleh lebih besar dari tanggal akhir");
             return;
         }
-        
+
         $(".table-datatable1").slideUp();
 
 //        if(kelompok !== '')
@@ -319,7 +351,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         else
             $(".filter-lanjutan").slideDown();
     }
-    
+
     function clear_select2() {
         $(".js-source-states-input").select2('data', null);
         pegawai = '';
@@ -331,13 +363,14 @@ $this->generate->datatables($id_datatables, $title, $columns);
         var kelas = $("#kelas").val();
         var akhir_tanggal = $("#akhir_tanggal").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
-        
+
         var req = "?ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
-        
+
         table = initialize_datatables(id_table, '<?php echo site_url('laporan/keuangan/ajax_list'); ?>' + req, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         remove_splash();
         $(".table-datatable1").slideDown();
         $(".buttons-add").remove();
-    };
+    }
+    ;
 
 </script>
