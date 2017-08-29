@@ -30,7 +30,7 @@ class Kehadiran extends CI_Controller {
             'jenis_absensi_model' => 'jenis_absensi',
         ));
         $this->load->library('pelanggaran_handler');
-        $this->auth->validation(2);
+        $this->auth->validation(array(2, 7));
     }
 
     public function index() {
@@ -169,7 +169,7 @@ class Kehadiran extends CI_Controller {
 
     public function ajax_delete() {
         $this->generate->set_header_JSON();
-        $this->generate->cek_validation_form('delete');
+//        $this->generate->cek_validation_form('delete');
 
         $id = $this->input->post("ID");
         $data = $this->kehadiran->get_by_id($id);
@@ -342,7 +342,7 @@ class Kehadiran extends CI_Controller {
 
     public function ajax_form_delete() {
         $this->generate->set_header_JSON();
-        $this->generate->cek_validation_simple('delete');
+//        $this->generate->cek_validation_simple('delete');
 
         $id = $this->input->post("ID");
         $data = $this->kehadiran->get_by_id($id);

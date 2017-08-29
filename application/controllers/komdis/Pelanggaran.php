@@ -58,11 +58,16 @@ class Pelanggaran extends CI_Controller {
             $row[] = $item->POIN_KJP;
 //            $row[] = $item->KETERANGAN_KS;
 
-            $row[] = ($item->KEHADIRAN_KS == NULL) ? '
+            if ($item->KEHADIRAN_KS == NULL)
+                $action = 'delete_data_' . $id_datatables . '(\'' . $item->ID_KS . '\')';
+            else
+                $action = 'delete_data_kehadiran_' . $id_datatables . '(\'' . $item->KEHADIRAN_KS . '\')';
+
+            $row[] = ($item->JENIS_AKH > 1 || $item->KEHADIRAN_KS == NULL) ? '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void()" title="Hapus" onclick="delete_data_' . $id_datatables . '(\'' . $item->ID_KS . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a></li>
+                        <li><a href="javascript:void()" title="Hapus" onclick="' . $action . '"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a></li>
                     </ul>
                 </div>' : '';
 
@@ -186,7 +191,7 @@ class Pelanggaran extends CI_Controller {
 
         $data_delete = $this->pelanggaran->get_by_id_simple($id);
         $affected_row = $this->pelanggaran_handler->hapus($id);
-        
+
         if ($affected_row) {
             unset($data_delete['ID_KS']);
             $affected_row = $this->pelanggaran_catatan->save($data_delete);
@@ -250,7 +255,7 @@ class Pelanggaran extends CI_Controller {
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_PEG;
 
-            $row[] = ($item->ID_KS == NULL) ? '<button type="button" class="btn btn-info btn-sm" onclick="simpan_pelanggaran(this)" data-status="1" data-id="'.$item->ID_SISWA.'"><i class="fa fa-check-circle"></i></button>' : '<button type="button" class="btn btn-danger btn-sm" onclick="simpan_pelanggaran(this)" data-status="0" data-id="'.$item->ID_KS.'"><i class="fa fa-trash"></i></button>';
+            $row[] = ($item->ID_KS == NULL) ? '<button type="button" class="btn btn-info btn-sm" onclick="simpan_pelanggaran(this)" data-status="1" data-id="' . $item->ID_SISWA . '"><i class="fa fa-check-circle"></i></button>' : '<button type="button" class="btn btn-danger btn-sm" onclick="simpan_pelanggaran(this)" data-status="0" data-id="' . $item->ID_KS . '"><i class="fa fa-trash"></i></button>';
 
             $data[] = $row;
         }

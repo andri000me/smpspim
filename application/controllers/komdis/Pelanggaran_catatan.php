@@ -170,8 +170,19 @@ class Pelanggaran_catatan extends CI_Controller {
         $TANGGAL_KS = $this->input->post('TANGGAL_KS');
         $SUMBER_KS = $this->input->post('SUMBER_KS');
         $KETERANGAN_KS = $this->input->post('KETERANGAN_KS');
+        
+        $data = array(
+            'TA_KS' => $ID_TA,
+            'CAWU_KS' => $ID_CAWU,
+            'SISWA_KS' => $ID_SISWA,
+            'PELANGGARAN_KS' => $ID_PELANGGARAN,
+            'TANGGAL_KS' => $TANGGAL_KS,
+            'SUMBER_KS' => $SUMBER_KS,
+            'KETERANGAN_KS' => $KETERANGAN_KS,
+            'USER_KS' => $this->session->userdata('ID_USER'),
+        );
 
-        $insert = $this->pelanggaran_handler->tambah($ID_TA, $ID_CAWU, $ID_SISWA, $ID_PELANGGARAN, $TANGGAL_KS, $SUMBER_KS, $KETERANGAN_KS);
+        $insert = $this->pelanggaran->save($data);
 
         $this->generate->output_JSON(array("status" => $insert));
     }
@@ -182,7 +193,7 @@ class Pelanggaran_catatan extends CI_Controller {
 
         $id = $this->input->post("ID");
 
-        $affected_row = $this->pelanggaran_handler->hapus($id);
+        $affected_row = $this->pelanggaran->delete_by_id($id);
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }
@@ -197,28 +208,6 @@ class Pelanggaran_catatan extends CI_Controller {
 
     public function form() {
         $this->generate->backend_view('komdis/pelanggaran/form');
-    }
-
-    public function get_data_scanner() {
-        $this->generate->set_header_JSON();
-
-        $post = $this->input->post();
-        $data = $this->pelanggaran->get_data_scanner($post['NIS_SISWA']);
-
-        $insert = 0;
-        if ($data != NULL) {
-            $ID_TA = $this->session->userdata('ID_TA_ACTIVE');
-            $ID_CAWU = $this->session->userdata('ID_CAWU_ACTIVE');
-            $ID_PELANGGARAN = $post['PELANGGARAN_KS'];
-            $ID_SISWA = $data->ID_SISWA;
-            $TANGGAL_KS = $post['TANGGAL_KS'];
-            $SUMBER_KS = $post['SUMBER_KS'];
-            $KETERANGAN_KS = '';
-
-            $insert = $this->pelanggaran_handler->tambah($ID_TA, $ID_CAWU, $ID_SISWA, $ID_PELANGGARAN, $TANGGAL_KS, $SUMBER_KS, $KETERANGAN_KS);
-        }
-
-        $this->generate->output_JSON(array('status' => $insert, 'data' => $data));
     }
 
     public function cetak_perkelas($ID_KELAS) {

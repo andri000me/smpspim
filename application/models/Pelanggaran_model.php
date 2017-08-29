@@ -23,6 +23,7 @@ class Pelanggaran_model extends CI_Model {
         if(!$select) $this->db->select('*, CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP)) AS NO_KJP, mpw.NAMA_PEG AS WALI_KELAS, mp.NAMA_PEG AS SUMBER_INFO, IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS)) AS DOMISILI_SISWA');
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KS=mta.ID_TA');
+        $this->db->join('akad_kehadiran akh', $this->table.'.KEHADIRAN_KS=akh.ID_AKH', 'LEFT');
         $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KS=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', $this->table.'.SISWA_KS=ms.ID_SISWA');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC');

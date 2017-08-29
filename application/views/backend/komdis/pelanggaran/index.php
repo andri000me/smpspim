@@ -31,6 +31,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 <script type="text/javascript">
     var table;
     var url_delete = '<?php echo site_url('komdis/pelanggaran/ajax_delete'); ?>/';
+    var url_delete_kehadiran = '<?php echo site_url('akademik/kehadiran/ajax_form_delete'); ?>/';
     var url_add = '<?php echo site_url('komdis/pelanggaran/ajax_add'); ?>';
     var url_update = '<?php echo site_url('komdis/pelanggaran/ajax_update'); ?>';
     var url_form = '<?php echo site_url('komdis/pelanggaran/request_form'); ?>';
@@ -77,5 +78,9 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     
     function delete_data_<?php echo $id_datatables; ?>(id) {
         form_delete(url_delete, id, table);
+    }
+    
+    function delete_data_kehadiran_<?php echo $id_datatables; ?>(id) {
+        form_delete(url_delete_kehadiran, id, table);
     }
 </script>
