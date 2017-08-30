@@ -348,6 +348,14 @@ class Pengaturan {
         return $this->CI->data_pengaturan->update('xml_download', $value);
     }
     
+    public function getNomorPaketSP() {
+        return $this->CI->data_pengaturan->get_by_id('no_paket_sp');
+    }
+    
+    public function setNomorPaketSP($value) {
+        return $this->CI->data_pengaturan->update('no_paket_sp', $value);
+    }
+    
     public function getNomorSuratKomdis($tindakan) {
         return $this->CI->data_pengaturan->get_by_id('nomor_surat_komdis_'.$tindakan);
     }

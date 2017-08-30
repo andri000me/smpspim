@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * and open the template in the editor.
  */
 
-class Laporan_surat_segera_model extends CI_Model {
+class Laporan_peringatan_model extends CI_Model {
 
     var $table = 'komdis_siswa_header ksh';
     var $column = array('NAMA_TA', 'NAMA_CAWU','NIS_SISWA','NAMA_SISWA','ksh.POIN_KSH', 'NAMA_KJT','POIN_KJT','ID_KSH');

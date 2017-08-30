@@ -210,4 +210,8 @@ class Cetak {
         return "Ust. ".$nama;
     }
 
+    public function nama_peg_print_title($gelar_depan, $nama, $gelar_belakang) {
+        return "Ust. ".($gelar_depan == NULL ? '': $gelar_depan.'. ').$nama.($gelar_belakang == NULL ? '' : ', '.$gelar_belakang);
+    }
+
 }

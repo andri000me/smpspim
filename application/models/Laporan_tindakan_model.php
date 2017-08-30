@@ -31,7 +31,7 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     private function _get_table_detail() {
-        $this->db->select('*, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
+        $this->db->select('*, mp.GELAR_AWAL_PEG AS GELAR_AWAL_TANGGUNGJAWAB, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mp.GELAR_AKHIR_PEG AS GELAR_AKHIR_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
         $this->db->from($this->table);
         $this->db->join('komdis_siswa_header ksh', $this->table.'.PELANGGARAN_HEADER_KT=ksh.ID_KSH', 'LEFT');
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA', 'LEFT');
@@ -114,6 +114,7 @@ class Laporan_tindakan_model extends CI_Model {
     public function get_by_id($id) {
         $this->_get_table_detail();
         $this->db->where($this->primary_key, $id);
+        $this->db->order_by('NAMA_KELAS', 'ASC');
         $result = $this->db->get();
         
         return $result->row();
@@ -131,6 +132,15 @@ class Laporan_tindakan_model extends CI_Model {
         $this->db->where($where);
 
         return $this->db->get()->result();
+    }
+
+    public function get_data_tindakan_sp($id) {
+        $where = array('PAKET_SP_KT' => $id);
+        $this->_get_table_detail();
+        $this->db->where($where);
+        $this->db->order_by('NAMA_KELAS', 'ASC');
+
+        return $this->db->get()->result_array();
     }
 
     public function get_all($for_html = true) {
@@ -196,7 +206,7 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     public function get_detail_kolektif($ID_KJT, $NOMOR_SURAT) {
-        $this->db->select('ID_SISWA, NIS_SISWA, NAMA_SISWA,NAMA_KELAS, AYAH_NAMA_SISWA, ALAMAT_SISWA, NAMA_KEC, NAMA_KAB, PONDOK_SISWA, NAMA_PONDOK_MPS, ALAMAT_MPS, POIN_TAHUN_LALU_KSH, POIN_KSH, LARI_KSH, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS, ID_DEPT, NAMA_DEPT, TA_KSH, SISWA_KSH, NAMA_KJT');
+        $this->db->select('ID_SISWA, NIS_SISWA, NAMA_SISWA,NAMA_KELAS, AYAH_NAMA_SISWA, ALAMAT_SISWA, NAMA_KEC, NAMA_KAB, PONDOK_SISWA, NAMA_PONDOK_MPS, ALAMAT_MPS, POIN_TAHUN_LALU_KSH, POIN_KSH, LARI_KSH, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.GELAR_AWAL_PEG AS GELAR_AWAL_WALI_KELAS, mpk.NAMA_PEG AS WALI_KELAS, mpk.GELAR_AKHIR_PEG AS GELAR_AKHIR_WALI_KELAS, ID_DEPT, NAMA_DEPT, TA_KSH, SISWA_KSH, NAMA_KJT, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH ');
         $this->db->from($this->table);
         $this->db->join('komdis_siswa_header ksh', $this->table.'.PELANGGARAN_HEADER_KT=ksh.ID_KSH');
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
@@ -220,6 +230,7 @@ class Laporan_tindakan_model extends CI_Model {
         ));
         $this->db->order_by('ID_TINGK', 'ASC');
         $this->db->order_by('NAMA_SISWA', 'ASC');
+        $this->db->group_by('SISWA_KSH');
         
         $result = $this->db->get();
 

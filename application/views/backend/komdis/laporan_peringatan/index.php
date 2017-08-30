@@ -67,8 +67,6 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     
     function cetak_surat(ID_KJT, URL_KJT, ID_KSH, KOLEKTIF_KJT) {
         window.open('<?php echo site_url('komdis/laporan_poin/ajax_add'); ?>?TINDAKAN_KT=' + ID_KJT + '&URL_KJT=' + URL_KJT + '&PELANGGARAN_HEADER_KT=' + ID_KSH + '&KOLEKTIF_KJT=' + KOLEKTIF_KJT + '&PENANGGUNGJAWAB_KT=<?php echo $this->pengaturan->getDataKetuaKomdis()->ID_PEG; ?>', '_blank');
-        
-        reload_datatables(table);
     }
     
     

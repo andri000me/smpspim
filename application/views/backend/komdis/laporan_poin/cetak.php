@@ -66,7 +66,7 @@ foreach ($data as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Wali Kelas');
-    $pdf->Cell(100, 5, ': ' . $siswa->NAMA_PEG);
+    $pdf->Cell(100, 5, ': ' . $this->cetak->nama_peg_print($siswa));
     $pdf->Cell(20, 5, 'Jumlah Lari');
     $pdf->Cell(0, 5, ': ' . $siswa->JUMLAH_LARI_KSH);
     $pdf->Ln();
