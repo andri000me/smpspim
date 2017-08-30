@@ -59,15 +59,17 @@ class Pelanggaran extends CI_Controller {
 //            $row[] = $item->KETERANGAN_KS;
 
             if ($item->KEHADIRAN_KS == NULL)
-                $action = 'delete_data_' . $id_datatables . '(\'' . $item->ID_KS . '\')';
-            else
-                $action = 'delete_data_kehadiran_' . $id_datatables . '(\'' . $item->KEHADIRAN_KS . '\')';
+                $action = '<li><a href="javascript:void()" title="Hapus" onclick="delete_data_' . $id_datatables . '(\'' . $item->ID_KS . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a></li>';
+            else {
+                $action = '<li><a href="javascript:void()" title="Hapus" onclick="delete_poin_kehadiran_' . $id_datatables . '(\'' . $item->ID_KS . '\',\'' . $item->KEHADIRAN_KS . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Poin</a></li>';
+                $action .= '<li><a href="javascript:void()" title="Hapus" onclick="delete_data_kehadiran_' . $id_datatables . '(\'' . $item->KEHADIRAN_KS . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Absensi</a></li>';
+            }
 
             $row[] = ($item->JENIS_AKH > 1 || $item->KEHADIRAN_KS == NULL) ? '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void()" title="Hapus" onclick="' . $action . '"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a></li>
+                        '.$action.'
                     </ul>
                 </div>' : '';
 
@@ -196,6 +198,19 @@ class Pelanggaran extends CI_Controller {
             unset($data_delete['ID_KS']);
             $affected_row = $this->pelanggaran_catatan->save($data_delete);
         }
+
+        $this->generate->output_JSON(array("status" => $affected_row));
+    }
+
+    public function ajax_move_data() {
+        $this->generate->set_header_JSON();
+//        $this->generate->cek_validation_form('delete');
+
+        $id = $this->input->post("ID");
+        $data_delete = $this->pelanggaran->get_by_id_simple($id);
+
+        unset($data_delete['ID_KS']);
+        $affected_row = $this->pelanggaran_catatan->save($data_delete);
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }

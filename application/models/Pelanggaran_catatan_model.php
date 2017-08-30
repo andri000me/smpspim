@@ -171,6 +171,13 @@ class Pelanggaran_catatan_model extends CI_Model {
         
         return $this->db->affected_rows();
     }
+
+    public function get_pelanggaran_siswa($where) {
+        $this->db->from($this->table);
+        $this->db->where($where);
+
+        return $this->db->get()->row();
+    }
     
     public function get_data_scanner($ID_SISWA) {
         $this->db->from('akad_siswa asw');

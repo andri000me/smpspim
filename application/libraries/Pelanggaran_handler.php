@@ -9,6 +9,7 @@ class Pelanggaran_handler {
 
         $this->CI->load->model(array(
             'pelanggaran_model' => 'pelanggaran',
+            'pelanggaran_catatan_model' => 'pelanggaran_catatan',
             'laporan_tindakan_model' => 'tindakan',
             'pelanggaran_header_model' => 'pelanggaran_header',
             'jenis_pelanggaran_model' => 'jenis_pelanggaran'
@@ -27,7 +28,7 @@ class Pelanggaran_handler {
             'SUMBER_KS' => $SUMBER_KS,
             'USER_KS' => $this->CI->session->userdata('ID_USER'),
         );
-        
+
         $insert = $this->CI->pelanggaran->save($data);
 
         if ($insert) {
@@ -63,31 +64,41 @@ class Pelanggaran_handler {
     }
 
     public function hapus($id, $form_kehadiran = FALSE, $ALASAN_AKH = NULL, $JENIS_AKH = NULL) {
+        $catatan = FALSE;
         if ($form_kehadiran) {
             $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
+            if ($data == NULL) {
+                $data = $this->CI->pelanggaran_catatan->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
+                $catatan = TRUE;
+            }
+            
             $id_pelanggaran = $data->ID_KS;
         } else {
             $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('ID_KS' => $id));
             $id_pelanggaran = $id;
         }
 
-        $affected_row = $this->CI->pelanggaran->delete_by_id($id_pelanggaran);
+        if ($catatan) {
+            $affected_row = $this->CI->pelanggaran_catatan->delete_by_id($id_pelanggaran);
+        } else {
+            $affected_row = $this->CI->pelanggaran->delete_by_id($id_pelanggaran);
 
-        if ($affected_row) {
-            $data_ksh = $this->CI->pelanggaran_header->get_poin_siswa($data->TA_KS, $data->CAWU_KS, $data->SISWA_KS);
-            $data_update = array(
-                'POIN_KSH' => ($data_ksh->POIN_KSH - $this->CI->jenis_pelanggaran->get_poin($data->PELANGGARAN_KS)),
-                'LARI_KSH' => ($ALASAN_AKH == 'ALPHA' && $JENIS_AKH == 1) ? ($data_ksh->LARI_KSH - 1) : $data_ksh->LARI_KSH,
-                'USER_KSH' => $this->CI->session->userdata('ID_USER'),
-            );
+            if ($affected_row) {
+                $data_ksh = $this->CI->pelanggaran_header->get_poin_siswa($data->TA_KS, $data->CAWU_KS, $data->SISWA_KS);
+                $data_update = array(
+                    'POIN_KSH' => ($data_ksh->POIN_KSH - $this->CI->jenis_pelanggaran->get_poin($data->PELANGGARAN_KS)),
+                    'LARI_KSH' => ($ALASAN_AKH == 'ALPHA' && $JENIS_AKH == 1) ? ($data_ksh->LARI_KSH - 1) : $data_ksh->LARI_KSH,
+                    'USER_KSH' => $this->CI->session->userdata('ID_USER'),
+                );
 
-            $where = array(
-                'TA_KSH' => $data->TA_KS,
-                'CAWU_KSH' => $data->CAWU_KS,
-                'SISWA_KSH' => $data->SISWA_KS
-            );
+                $where = array(
+                    'TA_KSH' => $data->TA_KS,
+                    'CAWU_KSH' => $data->CAWU_KS,
+                    'SISWA_KSH' => $data->SISWA_KS
+                );
 
-            $affected_row = $this->CI->pelanggaran_header->update($where, $data_update);
+                $affected_row = $this->CI->pelanggaran_header->update($where, $data_update);
+            }
         }
 
         return $affected_row;
@@ -112,7 +123,7 @@ class Pelanggaran_handler {
 
     public function proses_poin_tahun_lalu($ID_SISWA, $TA) {
         $poin = $this->CI->pelanggaran_header->get_total_poin_siswa($TA, $ID_SISWA);
-        
+
         for ($cawu = 1; $cawu <= 3; $cawu++) {
             $data_pelanggaran = array(
                 'TA_KSH' => $TA,

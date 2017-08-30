@@ -55,14 +55,20 @@ foreach ($data as $detail) {
 
     $pdf->Cell(20, 5, 'Alamat');
     $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, $siswa->ALAMAT_SISWA . ', Kec. ' . $siswa->NAMA_KEC . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa->NAMA_KAB)), 100));
+    $pdf->Cell(20, 5, 'Surat');
+    $pdf->Cell(0, 5, ': ' . ($siswa->NAMA_KJT == NULL ? '-' : $siswa->NAMA_KJT));
+    $pdf->Ln();
+
+    $pdf->Cell(20, 5, 'Wali Santri');
+    $pdf->Cell(100, 5, ': ' . $siswa->AYAH_NAMA_SISWA);
     $pdf->Cell(20, 5, 'Jumlah Poin');
     $pdf->Cell(0, 5, ': ' . $siswa->JUMLAH_POIN_KSH);
     $pdf->Ln();
 
-    $pdf->Cell(20, 5, 'Wali Murid');
-    $pdf->Cell(100, 5, ': ' . $siswa->AYAH_NAMA_SISWA);
-    $pdf->Cell(20, 5, 'Surat');
-    $pdf->Cell(0, 5, ': ' . ($siswa->NAMA_KJT == NULL ? '-' : $siswa->NAMA_KJT));
+    $pdf->Cell(20, 5, 'Wali Kelas');
+    $pdf->Cell(100, 5, ': ' . $siswa->NAMA_PEG);
+    $pdf->Cell(20, 5, 'Jumlah Lari');
+    $pdf->Cell(0, 5, ': ' . $siswa->JUMLAH_LARI_KSH);
     $pdf->Ln();
 
     $data_header = array(

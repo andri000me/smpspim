@@ -345,16 +345,19 @@ class Kehadiran extends CI_Controller {
 //        $this->generate->cek_validation_simple('delete');
 
         $id = $this->input->post("ID");
+        $HAPUS_POIN = $this->input->post("HAPUS_POIN");
         $data = $this->kehadiran->get_by_id($id);
-
+        
         $status = TRUE;
         if ($data->ALASAN_AKH == 'ALPHA' || $data->ALASAN_AKH == 'TERLAMBAT')
             $status = $this->pelanggaran_handler->hapus($id, TRUE, $data->ALASAN_AKH, $data->JENIS_AKH);
-
-        if ($status)
+        
+        if ($status && ($HAPUS_POIN == NULL || !$HAPUS_POIN))
             $affected_row = $this->kehadiran->delete_by_id($id);
         else
             $affected_row = 0;
+        
+        if($HAPUS_POIN) $affected_row = $status;
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }
