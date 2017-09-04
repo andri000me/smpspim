@@ -25,7 +25,8 @@ class Laporan_surat_segera_model extends CI_Model {
         $this->db->join('md_siswa ms', $this->table.'.SISWA_KSH=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.POIN_KSH<=kjt.POIN_MAKS_KJT');
         $this->db->join('komdis_tindakan kt', $this->table.'.ID_KSH=kt.PELANGGARAN_HEADER_KT AND kjt.ID_KJT=kt.TINDAKAN_KT', 'LEFT');
-        $this->db->where('ID_KT', NULL);
+        $this->db->where('((ID_KT IS NULL) OR (ID_KT IS NOT NULL AND PROSES_TAKLIQ_KSH = 0 AND TINDAKAN_KT = 4) OR (ID_KT IS NOT NULL AND PROSES_MUTASI_KSH = 0 AND TINDAKAN_KT = 5))');
+        $this->db->group_by('ID_KSH');
     }
 
     private function _get_datatables_query() {
@@ -77,7 +78,7 @@ class Laporan_surat_segera_model extends CI_Model {
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
-
+        
         return $query->result();
     }
 
@@ -93,6 +94,13 @@ class Laporan_surat_segera_model extends CI_Model {
         $this->db->where($this->primary_key, $id);
 
         return $this->db->get()->row();
+    }
+
+    public function get_rows($where) {
+        $this->_get_table();
+        $this->db->where($where);
+
+        return $this->db->get()->result();
     }
 
     public function get_poin_siswa($TA_KSH, $CAWU_KSH, $SISWA_KSH) {

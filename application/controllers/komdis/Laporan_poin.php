@@ -25,7 +25,8 @@ class Laporan_poin extends CI_Controller {
             'laporan_tindakan_model' => 'tindakan',
             'departemen_model' => 'dept',
             'kelas_model' => 'kelas',
-            'pondok_siswa_model' => 'pondok_siswa'
+            'pondok_siswa_model' => 'pondok_siswa',
+            'laporan_surat_segera_model' => 'surat_segera',
         ));
         $this->load->library('pelanggaran_handler');
         $this->auth->validation(7);
@@ -112,26 +113,42 @@ class Laporan_poin extends CI_Controller {
         $nomor_paket_sp = $this->pengaturan->getNomorPaketSP();
 
         $input_kolektif = $data['KOLEKTIF_KJT'];
-        $data_kolektif = $this->tindakan->get_kolektif($data['TINDAKAN_KT']);
+        $where_surat_segera = array(
+            'ID_KJT' => $data['TINDAKAN_KT']
+        );
+        $data_kolektif = $this->surat_segera->get_rows($where_surat_segera);
 
         $data['USER_KT'] = $this->session->userdata('ID_USER');
         $data['TANGGAL_KT'] = date("Y-m-d");
         $data['PAKET_SP_KT'] = NULL;
 
+        $jenis_surat = $data['URL_KJT'];
+        
         unset($data['URL_KJT']);
         unset($data['KOLEKTIF_KJT']);
-
+        var_dump($nomor_surat);
         $start = TRUE;
         if ($input_kolektif) {
             foreach ($data_kolektif as $detail) {
-                if ($start || $data['TINDAKAN_KT'] == 1) {
+                if ($start || $data['TINDAKAN_KT'] == 1)
                     $data['NOMOR_SURAT_KT'] = $nomor_surat;
+                if ($data['TINDAKAN_KT'] == 1)
                     $data['PAKET_SP_KT'] = $nomor_paket_sp;
-                }
 
                 $data['PELANGGARAN_HEADER_KT'] = $detail->ID_KSH;
 
                 $id = $this->tindakan->save($data);
+
+                if ($id) {
+                    if ($data['TINDAKAN_KT'] == 5)
+                        $data_update = array('PROSES_MUTASI_KSH' => 1);
+                    elseif ($data['TINDAKAN_KT'] == 4)
+                        $data_update = array('PROSES_TAKLIQ_KSH' => 1);
+                    $data_where = array('ID_KSH' => $detail->ID_KSH);
+
+                    if (isset($data_update))
+                        $this->laporan_poin->update($data_where, $data_update);
+                }
 
                 $start = FALSE;
                 $nomor_surat++;
@@ -142,11 +159,12 @@ class Laporan_poin extends CI_Controller {
             $nomor_surat++;
         }
 
-        if ($data['TINDAKAN_KT'] == 1)
+        if ($data['TINDAKAN_KT'] == 1) {
             $id = $nomor_paket_sp;
-
-        $this->pengaturan->setNomorSuratKomdis($data['URL_KJT'], $nomor_surat);
-        $this->pengaturan->setNomorPaketSP($nomor_paket_sp + 1);
+            $this->pengaturan->setNomorPaketSP($nomor_paket_sp + 1);
+        }
+        
+        $this->pengaturan->setNomorSuratKomdis($jenis_surat, $nomor_surat);
 
         redirect(site_url('komdis/laporan_poin/cetak_surat/' . $id . '/' . $data['TINDAKAN_KT']));
     }

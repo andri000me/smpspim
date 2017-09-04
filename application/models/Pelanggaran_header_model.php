@@ -182,6 +182,19 @@ class Pelanggaran_header_model extends CI_Model {
 
         return $this->db->affected_rows();
     }
+    
+    public function reset_taqlik_mutasi($data_siswa) {
+        $sql_update = 'UPDATE komdis_siswa_header SET PROSES_TAKLIQ_KSH=0, PROSES_MUTASI_KSH=0 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+        $status_update = $this->db->query($sql_update);
+        
+        $sql_update_taqlik = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=4 SET PROSES_TAKLIQ_KSH=1 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+        $status_takliq = $this->db->query($sql_update_taqlik);
+        
+        $sql_update_mutasi = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=5 SET PROSES_MUTASI_KSH=1 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+        $status_mutasi = $this->db->query($sql_update_mutasi);
+        
+        return ($status_update || $status_takliq || $status_mutasi);
+    }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);

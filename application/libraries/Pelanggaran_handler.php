@@ -99,9 +99,17 @@ class Pelanggaran_handler {
 
                 $affected_row = $this->CI->pelanggaran_header->update($where, $data_update);
             }
+            
+            if ($affected_row) {
+                $affected_row = $this->CI->pelanggaran_header->reset_taqlik_mutasi($data);
+            }
         }
 
         return $affected_row;
+    }
+    
+    public function cek_tindakan_proses() {
+        
     }
 
     public function cek_pelanggaran_syariah($ID_SISWA) {
