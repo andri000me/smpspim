@@ -123,7 +123,7 @@ class Laporan_poin extends CI_Controller {
         $data['PAKET_SP_KT'] = NULL;
 
         $jenis_surat = $data['URL_KJT'];
-        
+
         unset($data['URL_KJT']);
         unset($data['KOLEKTIF_KJT']);
         var_dump($nomor_surat);
@@ -163,7 +163,7 @@ class Laporan_poin extends CI_Controller {
             $id = $nomor_paket_sp;
             $this->pengaturan->setNomorPaketSP($nomor_paket_sp + 1);
         }
-        
+
         $this->pengaturan->setNomorSuratKomdis($jenis_surat, $nomor_surat);
 
         redirect(site_url('komdis/laporan_poin/cetak_surat/' . $id . '/' . $data['TINDAKAN_KT']));
@@ -192,27 +192,55 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak', $data);
     }
 
-    public function cetak_ringan_perkelas($ID_KELAS) {
-        $where = array('ID_KELAS' => $ID_KELAS);
-        $siswa = $this->laporan_poin->get_full_by_id($where);
-        $tindakan = $this->jenis_tindakan->get_by_id(1);
+    public function cetak_ringan_perkelas() {
+        $input_kelas = $this->input->get('KELAS');
         $data = array();
 
-        foreach ($siswa as $detail) {
-            if ($detail->JUMLAH_POIN_KSH > $tindakan->POIN_MAKS_KJT)
-                continue;
+        if ($input_kelas != "") {
+            $kelas_exp = explode(',', $input_kelas);
+            foreach ($kelas_exp as $ID_KELAS) {
+                $where = array('ID_KELAS' => $ID_KELAS);
+                $siswa = $this->laporan_poin->get_full_by_id($where);
+                $tindakan = $this->jenis_tindakan->get_by_id(1);
+                
+                foreach ($siswa as $detail) {
+                    if ($detail->JUMLAH_POIN_KSH > $tindakan->POIN_MAKS_KJT)
+                        continue;
 
-            $where = array(
-                'TA_KS' => $detail->TA_KSH,
-                'SISWA_KS' => $detail->SISWA_KSH,
-            );
-            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+                    $where = array(
+                        'TA_KS' => $detail->TA_KSH,
+                        'SISWA_KS' => $detail->SISWA_KSH,
+                    );
+                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
 
-            $data['data'][] = array(
-                'siswa' => $detail,
-                'pelanggaran' => $pelanggaran
-            );
+                    $data['data'][$ID_KELAS][] = array(
+                        'siswa' => $detail,
+                        'pelanggaran' => $pelanggaran
+                    );
+                }
+            }
         }
+
+//        $where = array('ID_KELAS' => $ID_KELAS);
+//        $siswa = $this->laporan_poin->get_full_by_id($where);
+//        $tindakan = $this->jenis_tindakan->get_by_id(1);
+//        $data = array();
+//
+//        foreach ($siswa as $detail) {
+//            if ($detail->JUMLAH_POIN_KSH > $tindakan->POIN_MAKS_KJT)
+//                continue;
+//
+//            $where = array(
+//                'TA_KS' => $detail->TA_KSH,
+//                'SISWA_KS' => $detail->SISWA_KSH,
+//            );
+//            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+//
+//            $data['data'][] = array(
+//                'siswa' => $detail,
+//                'pelanggaran' => $pelanggaran
+//            );
+//        }
 
         $this->load->view('backend/komdis/laporan_poin/cetak', $data);
     }
@@ -359,13 +387,27 @@ class Laporan_poin extends CI_Controller {
     }
 
     public function cetak_perkelas($ID_KELAS) {
-        if ($ID_KELAS != 0) {
-            $data = array(
-                'KELAS' => $this->kelas->get_by_id($ID_KELAS),
-                'DATA' => $this->laporan_poin->get_data_perkelas($ID_KELAS),
-                'TANGGAL' => $this->laporan_poin->get_terakhir_input()
-            );
+        $input_kelas = $this->input->get('KELAS');
+        $data = array();
+
+        if ($input_kelas != "") {
+            $kelas_exp = explode(',', $input_kelas);
+            foreach ($kelas_exp as $ID_KELAS) {
+                $data['data'][] = array(
+                    'KELAS' => $this->kelas->get_by_id($ID_KELAS),
+                    'DATA' => $this->laporan_poin->get_data_perkelas($ID_KELAS),
+                );
+            }
+            $data['TANGGAL'] = $this->laporan_poin->get_terakhir_input();
         }
+
+//        if ($ID_KELAS != 0) {
+//            $data = array(
+//                'KELAS' => $this->kelas->get_by_id($ID_KELAS),
+//                'DATA' => $this->laporan_poin->get_data_perkelas($ID_KELAS),
+//                'TANGGAL' => $this->laporan_poin->get_terakhir_input()
+//            );
+//        }
 
         $this->load->view('backend/komdis/laporan_poin/cetak_perkelas', $data);
     }

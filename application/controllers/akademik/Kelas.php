@@ -284,4 +284,12 @@ class Kelas extends CI_Controller {
         $this->generate->output_JSON($data);
     }
 
+    public function get_all() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->kelas->get_all();
+        
+        $this->generate->output_JSON($data);
+    }
+
 }
