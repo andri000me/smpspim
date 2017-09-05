@@ -20,16 +20,16 @@ $this->generate->generate_panel_content("Data " . $title, $subtitle);
 $this->generate->datatables($id_datatables, $title, $columns);
 
 $id_modal = "modal-data";
-$title_form = "Tambah ". $title;
+$title_form = "Tambah " . $title;
 $id_form = "form-data";
 
 $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
-
 ?>
 <script type="text/javascript">
     var status_check = false;
     var status_show = false;
     var checkbox_kelas = [];
+    var checkbox_pondok = [];
     var ID_KELAS = 0;
     var ID_PONDOK = 0;
     var ID_TINDAKAN = 0;
@@ -41,110 +41,117 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var id_form = '<?php echo $id_form; ?>';
     var id_table = '<?php echo $id_datatables; ?>';
     var title = '<?php echo $title; ?>';
-    var columns = [{"targets": [-1],"orderable": false}];
-    var orders = [[ 0, "ASC" ]];
+    var columns = [{"targets": [-1], "orderable": false}];
+    var orders = [[0, "ASC"]];
     var requestExport = true;
-    var functionInitComplete = function(settings, json) {
-        
+    var functionInitComplete = function (settings, json) {
+
     };
-    var functionDrawCallback = function(settings, json) {
+    var functionDrawCallback = function (settings, json) {
 
     };
     var functionAddData = function (e, dt, node, config) {
-        
+
     };
 
     $(document).ready(function () {
-        get_data_kelas();
+        get_data_checkbox('kelas');
+        get_data_checkbox('pondok');
+        
         $(".status-show").hide();
-        
+
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/laporan_poin/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
-        
-        
-        $(".js-source-states-ID_KELAS").on("change", "", function(){
+
+
+        $(".js-source-states-ID_KELAS").on("change", "", function () {
             var data = $(this).select2("data");
 
             ID_KELAS = data.id;
         });
-        
-        $(".js-source-states-PONDOK_SISWA").on("change", "", function(){
+
+        $(".js-source-states-PONDOK_SISWA").on("change", "", function () {
             var data = $(this).select2("data");
 
             ID_PONDOK = data.id;
         });
-        
-        $(".js-source-states-TINDAKAN_SISWA").on("change", "", function(){
+
+        $(".js-source-states-TINDAKAN_SISWA").on("change", "", function () {
             var data = $(this).select2("data");
 
             ID_TINDAKAN = data.id;
         });
-        
+
         $(".buttons-add").remove();
         $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li></ul></div>').insertAfter('.buttons-reload');
     });
-    
+
     function set_type_kelas(TYPE) {
         TYPE_KELAS = TYPE;
     }
-    
-    function cetak_modal_kelas(){
+
+    function cetak_modal_kelas() {
         $("#cetak_modal_kelas").modal("hide");
         $(".js-source-states-ID_KELAS").select2('data', null);
-        
+
         if (ID_KELAS > 0) {
             checkbox_kelas = [];
             checkbox_kelas.push(ID_KELAS);
         }
-        
-        if(TYPE_KELAS === 0)
+
+        if (TYPE_KELAS === 0)
             window.open('<?php echo site_url('komdis/laporan_poin/cetak_perkelas'); ?>?KELAS=' + checkbox_kelas, '_blank');
-        if(TYPE_KELAS === 1)
+        if (TYPE_KELAS === 1)
             window.open('<?php echo site_url('komdis/laporan_poin/cetak_ringan_perkelas'); ?>?KELAS=' + checkbox_kelas, '_blank');
-        else if(TYPE_KELAS === null)
+        else if (TYPE_KELAS === null)
             create_homer_error("Ada kesalahan di javascript");
-        
+
         TYPE_KELAS = null;
         ID_KELAS = 0;
     }
-    
-    function cetak_modal_pondok(){
+
+    function cetak_modal_pondok() {
         $("#cetak_modal_pondok").modal("hide");
         $(".js-source-states-PONDOK_SISWA").select2('data', null);
 
-        window.open('<?php echo site_url('komdis/laporan_poin/cetak_perpondok'); ?>/' + ID_PONDOK, '_blank');
-        
+        if (ID_PONDOK > 0) {
+            checkbox_pondok = [];
+            checkbox_pondok.push(ID_PONDOK);
+        }
+
+        window.open('<?php echo site_url('komdis/laporan_poin/cetak_perpondok'); ?>?PONDOK=' + checkbox_pondok, '_blank');
+
         ID_PONDOK = 0;
     }
-    
-    function cetak_modal_tindakan(){
+
+    function cetak_modal_tindakan() {
         $("#cetak_modal_tindakan").modal("hide");
         $(".js-source-states-TINDAKAN_SISWA").select2('data', null);
 
         window.open('<?php echo site_url('komdis/laporan_poin/cetak_pertindakan'); ?>/' + ID_TINDAKAN, '_blank');
-        
+
         ID_TINDAKAN = 0;
     }
-    
+
     function action_save_<?php echo $id_datatables; ?>(id_form) {
         var status = $("#" + id_form).data("status");
-        
-        if(status == 'add') {
+
+        if (status == 'add') {
             url = url_add;
-            
+
             form_save(url, id_form, table);
         }
-        
+
         return false;
     }
-    
+
     function cetak(ID_KSH) {
         window.open('<?php echo site_url('komdis/laporan_poin/cetak'); ?>/' + ID_KSH, '_blank');
     }
 
-    function get_data_kelas() {
+    function get_data_checkbox(title) {
         var success = function (data) {
-            console.log(data.length);
-            var maks_perkolom = Math.round(data.length / 4) - 1;
+            var pembagi = (title === 'kelas') ? 4 : 3;
+            var maks_perkolom =  Math.round(data.length / pembagi) - 1;
             var x = 0;
             var posisi = 0;
 
@@ -152,7 +159,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                 if (x == 0)
                     posisi++;
 
-                $("#checkbox-kelas-" + posisi).append('<label> <input type="checkbox" value="' + value.value + '" class="checkbox-kelas" onchange="checkbox_changed()">&nbsp;&nbsp;' + value.label + '</label>');
+                $("#checkbox-" + title + "-" + posisi).append('<label> <input type="checkbox" value="' + value.value + '" class="checkbox-' + title + '" onchange="checkbox_changed(\'' + title + '\')">&nbsp;&nbsp;' + value.label + '</label><br>');
 
                 if (x == maks_perkolom)
                     x = 0;
@@ -160,61 +167,80 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                     x++;
             });
         };
-        create_ajax('<?php echo site_url('akademik/kelas/get_all'); ?>', '', success);
+
+        if (title === 'kelas')
+            create_ajax('<?php echo site_url('akademik/kelas/get_all'); ?>', '', success);
+        else if (title === 'pondok')
+            create_ajax('<?php echo site_url('master_data/pondok_siswa/get_all'); ?>', '', success);
     }
 
     function reset_select2() {
         $(".js-source-states-ID_KELAS").select2('data', null);
         ID_KELAS = 0;
+        $(".js-source-states-PONDOK_SISWA").select2('data', null);
+        ID_PONDOK = 0;
     }
 
-    function checkbox_changed() {
+    function checkbox_changed(title) {
         checkbox_kelas = [];
+        checkbox_pondok = [];
 
         reset_select2();
 
-        $(".checkbox-kelas").each(function (index) {
-            if ($(this).is(':checked'))
-                checkbox_kelas.push($(this).val());
+        $(".checkbox-" + title).each(function (index) {
+            if ($(this).is(':checked')) {
+                var val_checkbox = $(this).val();
+
+                if (title === 'kelas')
+                    checkbox_kelas.push(val_checkbox);
+                else if (title === 'pondok')
+                    checkbox_pondok.push(val_checkbox);
+            }
         });
     }
 
-    function toggle_click(that) {
+    function toggle_click(that, title) {
         checkbox_kelas = [];
+        checkbox_pondok = [];
 
         reset_select2();
 
         if (status_check) {
-            $(".checkbox-kelas").removeAttr('checked');
+            $(".checkbox-" + title).removeAttr('checked');
             status_check = false;
             $(that).html('Check All');
         } else {
-            $(".checkbox-kelas").prop('checked', true);
+            $(".checkbox-" + title).prop('checked', true);
             status_check = true;
             $(that).html('Uncheck All');
 
-            $(".checkbox-kelas").each(function (index) {
-                checkbox_kelas.push($(this).val());
+            $(".checkbox-" + title).each(function (index) {
+                var val_checkbox = $(this).val();
+
+                if (title === 'kelas')
+                    checkbox_kelas.push(val_checkbox);
+                else if (title === 'pondok')
+                    checkbox_pondok.push(val_checkbox);
             });
         }
     }
-    
-    function toggle_show(that) {
-        $(".checkbox-kelas").removeAttr('checked');
+
+    function toggle_show(that, title) {
+        $(".checkbox-" + title).removeAttr('checked');
         checkbox_kelas = [];
         reset_select2();
-        
-        if(status_show) {
+
+        if (status_show) {
             $(".status-show").slideUp();
-            $(that).html('Tampilkan Semua Kelas');
+            $(that).html('Tampilkan semua ' + title);
         } else {
             $(".status-show").slideDown();
-            $(that).html('Sembunyikan Semua Kelas');
+            $(that).html('Sembunyikan semua ' + title);
         }
-        
+
         status_show = !status_show;
     }
-    
+
 </script>
 
 <div class="modal fade" id="cetak_modal_kelas" tabindex="-1" role="dialog" aria-hidden="true">
@@ -231,7 +257,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                 <div class="row status-show">
                     <div class="col-md-12 text-center">
                         <hr>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="toggle_click(this)">Check All</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="toggle_click(this, 'kelas')">Check All</button>
                     </div>
                 </div>
                 <div class="row status-show">
@@ -242,7 +268,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info btn-sm pull-left" onclick="toggle_show(this)">Tampilkan Semua Kelas</button>
+                <button type="button" class="btn btn-info btn-sm pull-left" onclick="toggle_show(this, 'kelas')">Tampilkan semua kelas</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary" onclick="cetak_modal_kelas();" >Cetak</button>
             </div>
@@ -261,8 +287,20 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                 <form class="form-horizontal">
                     <?php $this->generate->input_select2('Pondok', array('name' => 'PONDOK_SISWA', 'url' => site_url('master_data/pondok_siswa/auto_complete')), FALSE, 8, FALSE, NULL); ?>
                 </form>
+                <div class="row status-show">
+                    <div class="col-md-12 text-center">
+                        <hr>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="toggle_click(this, 'pondok')">Check All</button>
+                    </div>
+                </div>
+                <div class="row status-show">
+                    <div class="col-md-4"  id="checkbox-pondok-1"></div>
+                    <div class="col-md-4"  id="checkbox-pondok-2"></div>
+                    <div class="col-md-4"  id="checkbox-pondok-3"></div>
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm pull-left" onclick="toggle_show(this, 'pondok')">Tampilkan semua pondok</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary" onclick="cetak_modal_pondok();" >Cetak</button>
             </div>

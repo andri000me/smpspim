@@ -202,7 +202,7 @@ class Laporan_poin extends CI_Controller {
                 $where = array('ID_KELAS' => $ID_KELAS);
                 $siswa = $this->laporan_poin->get_full_by_id($where);
                 $tindakan = $this->jenis_tindakan->get_by_id(1);
-                
+
                 foreach ($siswa as $detail) {
                     if ($detail->JUMLAH_POIN_KSH > $tindakan->POIN_MAKS_KJT)
                         continue;
@@ -412,14 +412,28 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_perkelas', $data);
     }
 
-    public function cetak_perpondok($ID_PONDOK) {
-        if ($ID_PONDOK != 0) {
-            $data = array(
-                'PONDOK' => $this->pondok_siswa->get_by_id($ID_PONDOK),
-                'DATA' => $this->laporan_poin->get_data_perkelas($ID_PONDOK, FALSE),
-                'TANGGAL' => $this->laporan_poin->get_terakhir_input()
-            );
+    public function cetak_perpondok() {
+        $input_pondok = $this->input->get('PONDOK');
+        $data = array();
+
+        if ($input_pondok != "") {
+            $pondok_exp = explode(',', $input_pondok);
+            foreach ($pondok_exp as $ID_PONDOK) {
+                $data['data'][] = array(
+                    'PONDOK' => $this->pondok_siswa->get_by_id($ID_PONDOK),
+                    'DATA' => $this->laporan_poin->get_data_perkelas($ID_PONDOK, FALSE),
+                );
+            }
+            $data['TANGGAL'] = $this->laporan_poin->get_terakhir_input();
         }
+
+//        if ($ID_PONDOK != 0) {
+//            $data = array(
+//                'PONDOK' => $this->pondok_siswa->get_by_id($ID_PONDOK),
+//                'DATA' => $this->laporan_poin->get_data_perkelas($ID_PONDOK, FALSE),
+//                'TANGGAL' => $this->laporan_poin->get_terakhir_input()
+//            );
+//        }
 
         $this->load->view('backend/komdis/laporan_poin/cetak_perpondok', $data);
     }

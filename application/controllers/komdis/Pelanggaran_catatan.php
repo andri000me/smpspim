@@ -170,7 +170,7 @@ class Pelanggaran_catatan extends CI_Controller {
         $TANGGAL_KS = $this->input->post('TANGGAL_KS');
         $SUMBER_KS = $this->input->post('SUMBER_KS');
         $KETERANGAN_KS = $this->input->post('KETERANGAN_KS');
-        
+
         $data = array(
             'TA_KS' => $ID_TA,
             'CAWU_KS' => $ID_CAWU,
@@ -210,22 +210,45 @@ class Pelanggaran_catatan extends CI_Controller {
         $this->generate->backend_view('komdis/pelanggaran/form');
     }
 
-    public function cetak_perkelas($ID_KELAS) {
-        $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
+    public function cetak_perkelas() {
+        $input_kelas = $this->input->get('KELAS');
         $data = array();
 
-        foreach ($siswa as $detail) {
-            $where = array(
-                'TA_KS' => $detail->TA_AS,
-                'SISWA_KS' => $detail->SISWA_AS,
-            );
-            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_catatan($where);
+        if ($input_kelas != "") {
+            $kelas_exp = explode(',', $input_kelas);
+            foreach ($kelas_exp as $ID_KELAS) {
+                $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
+                
+                foreach ($siswa as $detail) {
+                    $where = array(
+                        'TA_KS' => $detail->TA_AS,
+                        'SISWA_KS' => $detail->SISWA_AS,
+                    );
+                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_catatan($where);
 
-            $data['data'][] = array(
-                'siswa' => $detail,
-                'pelanggaran' => $pelanggaran
-            );
+                    $data['data'][$ID_KELAS][] = array(
+                        'siswa' => $detail,
+                        'pelanggaran' => $pelanggaran
+                    );
+                }
+            }
         }
+
+//        $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
+//        $data = array();
+//
+//        foreach ($siswa as $detail) {
+//            $where = array(
+//                'TA_KS' => $detail->TA_AS,
+//                'SISWA_KS' => $detail->SISWA_AS,
+//            );
+//            $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_catatan($where);
+//
+//            $data['data'][] = array(
+//                'siswa' => $detail,
+//                'pelanggaran' => $pelanggaran
+//            );
+//        }
 
         $this->load->view('backend/komdis/pelanggaran_catatan/cetak', $data);
     }
