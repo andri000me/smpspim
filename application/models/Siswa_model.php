@@ -226,9 +226,9 @@ class Siswa_model extends CI_Model {
             foreach ($keu as $detail) {
                 if($i == 0) {
                     $this->db->group_start();
-                    $this->db->where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                    $this->db->where('(DEPT_TINGK="'.$detail->DEPT_DT.'" AND JK_SISWA="'.$detail->JK_MUK.'")');
                 } else {
-                    $this->db->or_where('DEPT_TINGK="'.$detail->DEPT_DT.'"');
+                    $this->db->or_where('(DEPT_TINGK="'.$detail->DEPT_DT.'" AND JK_SISWA="'.$detail->JK_MUK.'")');
                 }
                 
                 if($i == (count($keu) - 1)) {
