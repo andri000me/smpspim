@@ -27,7 +27,7 @@ class Mutasi_handler {
     }
 
     public function proses($ID_AS, $ID_SISWA, $STATUS_MUTASI) {
-        $this->cek_tagihan($ID_SISWA);
+//        $this->cek_tagihan($ID_SISWA);
         
         if($this->update_status_masterdata($ID_SISWA, $STATUS_MUTASI)) {
             $insert = $this->update_status_akademik($ID_AS);
