@@ -50,6 +50,9 @@
                 <a href="<?php echo site_url('pencarian/bel_sekolah'); ?>" class="pull-right" title="Klik untuk membuka bel sekolah" target="_blank">
                     <i class="pe-7s-alarm" style="font-size: 25px; margin-right: 20px"></i>
                 </a>
+                <a href="<?php echo site_url('pencarian/panel_siswa'); ?>" class="pull-right" title="Klik untuk membuka panel siswa" target="_blank">
+                    <i class="pe-7s-users" style="font-size: 25px; margin-right: 20px"></i>
+                </a>
             </div>
         </div>
         <hr>

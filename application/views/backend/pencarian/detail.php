@@ -519,6 +519,113 @@ function list_detail_kehadiran($label, $data, $position) {
                                             <div class="panel-tools">
                                                 <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                                             </div>
+                                            KEDISIPLINAN
+                                        </div>
+                                        <div class="panel-body">
+                                            <?php 
+                                            if(count($DETAIL['POIN_DETAIL']) > 0) { ?>
+                                            <div class="row" onmouseover="highlight_row(this);" onmouseout="remove_highlight(this);">
+                                                <div class="col-md-4">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary">TOTAL POIN</h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-2 text-right border-right">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $DETAIL['POIN_HEADER']->JUMLAH_POIN_KSH; ?></h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary">TOTAL LARI</h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-2 text-right">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $DETAIL['POIN_HEADER']->JUMLAH_LARI_KSH; ?></h3>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="list-item">
+                                                        <small>TANGGAL PELANGGARAN</small>
+                                                    </div>  
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="list-item">
+                                                        <small>NAMA PELANGGARAN</small>
+                                                    </div>  
+                                                </div>
+                                                <div class="col-md-1 text-right">
+                                                    <div class="list-item">
+                                                        <small>POIN</small>
+                                                    </div>  
+                                                </div>
+                                            </div>
+                                            <?php 
+                                            foreach ($DETAIL['POIN_DETAIL'] as $POIN_DETAIL) { ?>
+                                            <div class="row" onmouseover="highlight_row(this);" onmouseout="remove_highlight(this);">
+                                                <div class="col-md-2">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $this->date_format->to_print($POIN_DETAIL->TANGGAL_KS); ?></h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $POIN_DETAIL->NAMA_KJP; ?></h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-1 text-right">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $POIN_DETAIL->POIN_KJP; ?></h3>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                            <?php if(count($DETAIL['TINDAKAN']) > 0) { ?>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="list-item">
+                                                        <small>TANGGAL TINDAKAN</small>
+                                                    </div>  
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="list-item">
+                                                        <small>NAMA TINDAKAN</small>
+                                                    </div>  
+                                                </div>
+                                            </div>
+                                            <?php 
+                                            foreach ($DETAIL['TINDAKAN'] as $TINDAKAN) { ?>
+                                            <div class="row" onmouseover="highlight_row(this);" onmouseout="remove_highlight(this);">
+                                                <div class="col-md-2">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $this->date_format->to_print($TINDAKAN->TANGGAL_KT); ?></h3>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="list-item">
+                                                        <h3 class="font-extra-bold text-primary"><?php echo $TINDAKAN->NAMA_KJT; ?></h3>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                            <?php } ?>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="hpanel hviolet">
+                                        <div class="panel-heading hbuilt">
+                                            <div class="panel-tools">
+                                                <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                                            </div>
                                             KEUANGAN
                                         </div>
                                         <div class="panel-body">

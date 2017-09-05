@@ -23,6 +23,20 @@ class Pencarian extends CI_Controller {
         $this->load->view('backend/pencarian/index');
     }
 
+    public function panel_siswa() {
+        $this->load->view('layout/main/header');
+        $this->load->view('backend/pencarian/panel_siswa');
+    }
+
+    public function get_data_panel() {
+        $this->generate->set_header_JSON();
+
+        $NIS_SISWA = $this->input->post('NIS');
+        $ID_SISWA = $this->pencarian->get_id_siswa(trim($NIS_SISWA));
+        
+        $this->generate->output_JSON(array('url' => ($ID_SISWA == NULL ? NULL : site_url('pencarian/detail/'.$ID_SISWA))));
+    }
+    
     public function cari() {
         $this->generate->set_header_JSON();
 
@@ -60,6 +74,9 @@ class Pencarian extends CI_Controller {
         foreach ($data_ta as $detail_ta) {
             $data_akad_siswa = $this->pencarian->get_akad_siswa($ID_SISWA, $detail_ta->ID_TA);
             $data_keuangan = $this->pencarian->get_keuangan($ID_SISWA, $detail_ta->ID_TA);
+            $data_poin_header = $this->pencarian->get_poin_header($ID_SISWA, $detail_ta->ID_TA);
+            $get_poin_detail = $this->pencarian->get_poin_detail($ID_SISWA, $detail_ta->ID_TA);
+            $get_tindakan = $this->pencarian->get_tindakan($ID_SISWA, $detail_ta->ID_TA);
             $NIS = $this->pencarian->get_nis($ID_SISWA, $detail_ta->ID_TA);
             if ($NIS == NULL)
                 $NIS = $data['SISWA']->NIS_SISWA;
@@ -93,7 +110,10 @@ class Pencarian extends CI_Controller {
                     'AKADEMIK' => $data_akad_siswa,
                     'NILAI' => $data_nilai,
                     'KEHADIRAN' => $data_kehadiran,
-                    'POIN' => $data_poin
+                    'POIN' => $data_poin,
+                    'POIN_HEADER' => $data_poin_header,
+                    'POIN_DETAIL' => $get_poin_detail,
+                    'TINDAKAN' => $get_tindakan,
                 );
             }
         }

@@ -60,12 +60,12 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-10" style="padding-top: 20px;">
+                            <div class="col-md-9" style="padding-top: 20px;">
                                 <p><em>Jam dan tanggal diambil dari server. Pastikan pengaturan jam dan tanggal diserver benar.</em></p>
                             </div>
-                            <div class="col-md-2">
-                                <i onclick="alarm_ringing()" class="pe-7s-alarm" style="font-size: 25px;margin-top: 7px;cursor: pointer;"></i>
-                                <h4 id="tanggal" class="pull-right"></h4>
+                            <div class="col-md-3">
+                                <h4 id="tanggal" class="pull-right" style="margin-left: 20px;"></h4>
+                                <i onclick="alarm_ringing()" class="pe-7s-alarm pull-right" style="font-size: 25px;margin-top: 7px;cursor: pointer;"></i>
                             </div>
                         </div>
                     </div>
