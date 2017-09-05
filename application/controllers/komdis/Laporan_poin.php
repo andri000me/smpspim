@@ -189,7 +189,7 @@ class Laporan_poin extends CI_Controller {
             }
         }
 
-        $this->load->view('backend/komdis/laporan_poin/cetak', $data);
+        $this->load->view('backend/komdis/laporan_poin/cetak_persiswa', $data);
     }
 
     public function cetak_ringan_perkelas() {
