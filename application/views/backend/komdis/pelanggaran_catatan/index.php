@@ -61,7 +61,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/pelanggaran_catatan/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
-        $(".buttons-add, .buttons-print").remove();
+        $(".buttons-print").remove();
         $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Tambah <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="add_individu();" >Pelanggaran Persiswa</a></li><!--<li><a href="<?php echo site_url('komdis/pelanggaran_catatan/form'); ?>" target="_blank">Pelanggaran dengan Barcode</a></li>--></ul></div><a class="dt-button buttons-cetak buttons-html5 btn btn-sm btn-default" data-toggle="modal" data-target="#cetak_modal_kelas" tabindex="0" href="#" ><span>Cetak Perkelas</span></a>').insertAfter('.buttons-reload');
         
         $(".js-source-states-ID_KELAS").on("change", "", function(){
