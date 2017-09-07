@@ -28,6 +28,7 @@ class Laporan_surat_segera_model extends CI_Model {
         $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.POIN_KSH<=kjt.POIN_MAKS_KJT');
         $this->db->join('komdis_tindakan kt', $this->table.'.ID_KSH=kt.PELANGGARAN_HEADER_KT AND kjt.ID_KJT=kt.TINDAKAN_KT', 'LEFT');
         $this->db->where('((ID_KT IS NULL) OR (ID_KT IS NOT NULL AND PROSES_TAKLIQ_KSH = 0 AND TINDAKAN_KT = 4) OR (ID_KT IS NOT NULL AND PROSES_MUTASI_KSH = 0 AND TINDAKAN_KT = 5))');
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->group_by('ID_KSH');
     }
 
