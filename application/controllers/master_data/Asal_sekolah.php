@@ -21,7 +21,7 @@ class Asal_sekolah extends CI_Controller {
             'asal_sekolah_model' => 'asal_sekolah',
             'jenjang_sekolah_model' => 'jenjang',
         ));
-        $this->auth->validation(array(3, 11));
+        $this->auth->validation(array(3, 11, 2));
     }
 
     public function index() {

@@ -56,9 +56,10 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                             <a class="closebox"><i class="fa fa-times"></i></a>
                         </div>
-                        IJASAH ASAL SEKOLAH
+                        ASAL SEKOLAH
                     </div>
                     <div class="panel-body">
+                        <?php $this->generate->input_select2('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'url' => site_url('akademik/siswa/ac_asal_sekolah')), TRUE, 8, TRUE, $mode_edit ? array('id' => $data->ASAL_SEKOLAH_SISWA, 'text' => $data->NAMA_AS) : array('id' => '1', 'text' => 'Belum sekolah'), '<div class="col-sm-1"><a href="' . site_url('master_data/asal_sekolah') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
                         <?php $this->generate->input_text('No. Ijasah', array('name' => 'NO_IJASAH_SISWA', 'maxlength' => 40, 'value' => $mode_edit ? $data->NO_IJASAH_SISWA : ''), FALSE, 3); ?>
                         <?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
                     </div>
@@ -96,7 +97,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                         DATA AYAH
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'AYAH_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->AYAH_NIK_SISWA : '', 'id' => 'AYAH_NIK_SISWA', 'onchange' => 'return check_data(\'AYAH_NIK_SISWA\');'), FALSE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'AYAH_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->AYAH_NIK_SISWA : '', 'id' => 'AYAH_NIK_SISWA'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama', array('name' => 'AYAH_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->AYAH_NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_select2('Status Hidup', array('name' => 'AYAH_HIDUP_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_hidup')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AYAH_HIDUP_SISWA, 'text' => $data->NAMA_SO_AYAH) : NULL); ?>
                         <?php $this->generate->input_text('Tempat Lahir', array('name' => 'AYAH_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->AYAH_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
@@ -118,7 +119,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                         DATA IBU
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'IBU_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->IBU_NIK_SISWA : '', 'id' => 'IBU_NIK_SISWA', 'onchange' => 'return check_data(\'IBU_NIK_SISWA\');'), FALSE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'IBU_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->IBU_NIK_SISWA : '', 'id' => 'IBU_NIK_SISWA'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama', array('name' => 'IBU_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->IBU_NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_select2('Status Hidup', array('name' => 'IBU_HIDUP_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_hidup')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->IBU_HIDUP_SISWA, 'text' => $data->NAMA_SO_IBU) : NULL); ?>
                         <?php $this->generate->input_text('Tempat Lahir', array('name' => 'IBU_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->IBU_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
