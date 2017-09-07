@@ -48,7 +48,7 @@ $pdf->Ln(15);
 $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
 $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'Sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf c yang berbunyi: "Pemanggilan wali siswa jika akumulasi skor pelanggaran antara 41 hingga 60 poin", maka dengan ini kami dari  Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan pemanggilan orang tua/wali dari siswa-siswa berikut ini:');
+$pdf->MultiCell(0, 5, 'Sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf c yang berbunyi: "Pemanggilan wali siswa jika akumulasi skor pelanggaran antara '.$POIN_MIN.' hingga '.$POIN_MAKS.' poin", maka dengan ini kami dari  Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan pemanggilan orang tua/wali dari siswa-siswa berikut ini:');
 $pdf->Ln();
 
 $pdf->MultiCell(0, 5, 'Adapun data-data pelanggaran siswa sebagaimana terlampir.');
@@ -89,7 +89,7 @@ $pdf->Ln();
 $pdf->Cell(5);
 $pdf->Cell(0, 5, '4. Pertinggal');
 $pdf->Ln();
-
+$pdf->Output();
 $pdf->AddPage("L", "A4");
 $pdf->SetAutoPageBreak(true, 0);
 

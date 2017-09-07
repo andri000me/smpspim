@@ -40,11 +40,13 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 
     };
     var functionAddData = function (e, dt, node, config) {
-        create_form_input(id_form, id_modal, url_form, title, null);
+//        create_form_input(id_form, id_modal, url_form, title, null);
     };
 
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('master_data/hari/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+        
+        $(".buttons-add").remove();
     });
     
     function action_save_<?php echo $id_datatables; ?>(id_form) {

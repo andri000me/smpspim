@@ -48,7 +48,7 @@ $pdf->Ln(15);
 $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
 $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai 80 poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menanda tangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
+$pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai '.$POIN_MIN.' poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menanda tangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
 $pdf->Ln();
 
 $pdf->MultiCell(0, 5, 'Selanjutnya, kami merekomendasikan agar orang tua / wali dari anak tersebut diberi pemberitahuan.');

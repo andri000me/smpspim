@@ -47,7 +47,7 @@ class Laporan_tindakan extends CI_Controller {
             $row[] = $item->NAMA_PEG;
             $row[] = $item->TANGGAL_KT;
 
-            $row[] = '<!--<a href="#" title="Mengambalikan data ke laporan surat segera" onclick="hapus_surat('.$item->ID_KT.');"><button type="button" class="btn btn-success btn-sm"><i class="fa fa-remove"></i></button></a>--><a href="'. site_url('komdis/laporan_poin/cetak_surat/'.$item->ID_KT).'" target="_blank"><button type="button" class="btn btn-success btn-sm"><i class="fa fa-print"></i>&nbsp;&nbsp;'.$item->NAMA_KJT.'</button></a>';
+            $row[] = '<!--<a href="#" title="Mengambalikan data ke laporan surat segera" onclick="hapus_surat('.$item->ID_KT.');"><button type="button" class="btn btn-success btn-sm"><i class="fa fa-remove"></i></button></a>--><a href="'. site_url('komdis/laporan_poin/cetak_surat/'.($item->ID_KJT > 1 ? $item->ID_KT : $item->PAKET_SP_KT).'/'.$item->ID_KJT).'" target="_blank"><button type="button" class="btn btn-success btn-sm"><i class="fa fa-print"></i>&nbsp;&nbsp;'.$item->NAMA_KJT.'</button></a>';
             
             $data[] = $row;
         }

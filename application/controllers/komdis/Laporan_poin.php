@@ -277,8 +277,12 @@ class Laporan_poin extends CI_Controller {
     }
 
     public function cetak_surat($ID_KT, $TINDAKAN_KT) {
+        $data_jenis_tindakan = $this->jenis_tindakan->get_by_id($TINDAKAN_KT);
+        
         $data = array(
-            'nama_panitia' => 'KOMISI DISIPLIN SISWA'
+            'nama_panitia' => 'KOMISI DISIPLIN SISWA',
+            'POIN_MIN' => $data_jenis_tindakan->POIN_KJT,
+            'POIN_MAKS' => $data_jenis_tindakan->POIN_MAKS_KJT,
         );
 
         if ($TINDAKAN_KT == 1) {
@@ -436,6 +440,15 @@ class Laporan_poin extends CI_Controller {
 //        }
 
         $this->load->view('backend/komdis/laporan_poin/cetak_perpondok', $data);
+    }
+    
+    public function xls_rangking_kelas() {
+        $data = array(
+            'kelas' => $this->laporan_poin->get_group_kelas(),
+            'kode' => $this->laporan_poin->get_group_pelanggaran_kelas()
+        );
+        
+        $this->load->view('backend/komdis/laporan_poin/xls_rangking_kelas', $data);
     }
 
 }

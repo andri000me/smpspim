@@ -51,7 +51,7 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
     $pdf->Ln(10);
 
-    $pdf->MultiCell(0, 5, 'Dengan ini kami dari Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan siswa terlampir untuk mendapatkan Sanksi dan Pembinaan berupa PENCABUTAN HAK SEBAGAI SISWA SECARA TETAP karena pelanggaran yang telah dilakukan siswa tersebut sampai pada hari ini Kamis 21 Nopember 2013 telah memiliki akumulasi poin 100. Hal ini sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 poin d Bab III Peraturan Pelengkap yang berbunyi : "Dicabut seluruh haknya sebagai siswa secara tetap, jika akumulasi skor pelanggaran telah mencapai 100 poin".');
+    $pdf->MultiCell(0, 5, 'Dengan ini kami dari Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan siswa terlampir untuk mendapatkan Sanksi dan Pembinaan berupa PENCABUTAN HAK SEBAGAI SISWA SECARA TETAP karena pelanggaran yang telah dilakukan siswa tersebut sampai pada hari ini Kamis 21 Nopember 2013 telah memiliki akumulasi poin '.$POIN_MIN.'. Hal ini sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 poin d Bab III Peraturan Pelengkap yang berbunyi : "Dicabut seluruh haknya sebagai siswa secara tetap, jika akumulasi skor pelanggaran telah mencapai 100 poin".');
     $pdf->Ln();
 
     $pdf->MultiCell(0, 5, 'Adapun data-data pelanggaran siswa sebagaimana terlampir.');

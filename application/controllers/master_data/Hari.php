@@ -78,6 +78,7 @@ class Hari extends CI_Controller {
                 'data' => array(
                     'type' => 'text',
                     'name' => 'NAMA_HARI',
+                    'readonly' => true,
                     "placeholder" => " ",
                     'value' => $data == NULL ? "" : $data->NAMA_HARI
                 )
