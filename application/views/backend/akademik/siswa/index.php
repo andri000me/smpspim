@@ -190,4 +190,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
     function update_data(id) {
         window.open('<?php echo site_url('akademik/siswa/form'); ?>/' + id, '_blank');
     }
+    
+    function update_data_popup(id) {
+        create_window('<?php echo site_url('akademik/siswa/form'); ?>/', id + '/1');
+    }
 </script>

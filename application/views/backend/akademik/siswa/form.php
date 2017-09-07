@@ -178,7 +178,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="checkbox checkbox-success">
-                                    <input type="checkbox" name="validasi" id="validasi">
+                                    <input type="checkbox" name="validasi" id="validasi" <?php if($pop_up) { ?>checked="true"<?php } ?>>
                                     <label> Saya menyetujui bahwa data yang saya masukan adalah benar. Jika tidak, saya bersedia menerima sanki sesuai dengan perundang-undangan yang berlaku</label>
                                 </div>
                             </div>
@@ -195,6 +195,10 @@ $this->generate->generate_panel_content($title, $subtitle);
 <script type="text/javascript">
     
     $(function () {
+        <?php if($pop_up) { ?>
+        $('body').addClass('hide-sidebar');
+        <?php } ?>
+        
         $("#UPLOAD_FOTO_SISWA").change(function(){
             $('#from_upload').val(1);
         });
@@ -224,8 +228,12 @@ $this->generate->generate_panel_content($title, $subtitle);
 
     function reaload_page() {
         setTimeout(function () {
+            <?php if($pop_up) { ?>
+            window.close();
+            <?php } else { ?>
             window.location.reload();
-        }, 1500);
+            <?php } ?>
+        }, <?php if($pop_up) { ?>500<?php } else { ?>1500<?php } ?>);
     }
 
     function check_data(name) {

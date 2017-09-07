@@ -78,6 +78,7 @@ class Siswa extends CI_Controller {
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:void()" title="Ubah Data" onclick="update_data(\'' . $item->ID_SISWA . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Data</a></li>
+                        <li><a href="javascript:void()" title="Ubah Data Popup" onclick="update_data_popup(\'' . $item->ID_SISWA . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Data Popup</a></li>
                         <li><a href="javascript:void()" title="Lihat Data" onclick="view_data(\'' . $item->ID_SISWA . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Data</a></li>
                         <li><a href="javascript:void()" title="Foto Siswa" onclick="view_photo(\'' . $item->ID_SISWA . '\')"><i class="fa fa-file-photo-o "></i>&nbsp;&nbsp;Foto Siswa</a></li>
                         <li><a href="javascript:void()" title="Kartu Siswa" onclick="kartu_pelajar(\'' . $item->ID_SISWA . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Kartu Siswa</a></li>
@@ -164,8 +165,9 @@ class Siswa extends CI_Controller {
         $this->generate->output_JSON($data);
     }
 
-    public function form($ID_SISWA) {
+    public function form($ID_SISWA, $POP_UP = 0) {
         $data['data'] = $this->siswa->get_by_id($ID_SISWA);
+        $data['pop_up'] = $POP_UP;
 
         $this->generate->backend_view('akademik/siswa/form', $data);
     }
