@@ -24,7 +24,9 @@ $this->generate->generate_panel_content($title, $subtitle);
                         INFORMASI PRIBADI
                     </div>
                     <div class="panel-body">
+                        <?php $this->generate->input_text('Nomor KK', array('name' => 'KK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->KK_SISWA : '', 'value' => $mode_edit ? $data->KK_SISWA : ''), FALSE, 4); ?>
                         <?php $this->generate->input_text('NIK', array('name' => 'NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIK_SISWA : '', 'value' => $mode_edit ? $data->NIK_SISWA : '', 'id' => 'NIK_SISWA', 'onchange' => 'return check_data(\'NIK_SISWA\');'), TRUE, 4); ?>
+                        <?php $this->generate->input_text('NISN', array('name' => 'NISN_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NISN_SISWA : '', 'value' => $mode_edit ? $data->NISN_SISWA : '', 'id' => 'NISN_SISWA', 'onchange' => 'return check_data(\'NISN_SISWA\');'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama Lengkap', array('name' => 'NAMA_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_text('Nama Panggilan', array('name' => 'PANGGILAN_SISWA', 'maxlength' => 50, 'value' => $mode_edit ? $data->PANGGILAN_SISWA : ''), FALSE, 4); ?>
                         <?php $this->generate->input_select2('Jenis Kelamin', array('name' => 'JK_SISWA', 'url' => site_url('akademik/siswa/ac_jk')), TRUE, 3, FALSE, $mode_edit ? array('id' => $data->JK_SISWA, 'text' => $data->NAMA_JK) : NULL); ?>
@@ -236,7 +238,7 @@ $this->generate->generate_panel_content($title, $subtitle);
             } else {
                 tag.addClass('error');
                 tag.parent().prev('control-label').addClass('text-danger');
-                create_homer_error('NIK sudah digunakan. Periksa kembali masukan Anda.');
+                create_homer_error('Data sudah digunakan. Periksa kembali masukan Anda.');
             }
         };
         

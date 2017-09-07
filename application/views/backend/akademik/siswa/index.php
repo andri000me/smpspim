@@ -14,6 +14,7 @@ $columns = array(
     'KECAMATAN',
     'KABUPATEN',
     'PROVINSI',
+    'KELAS',
     'AKSI',
 );
 
@@ -65,6 +66,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
     };
 
     $(document).ready(function () {
+        $("body").addClass('hide-sidebar');
+        
         table = initialize_datatables(id_table, '<?php echo site_url('akademik/siswa/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
         $(".buttons-print, .buttons-copy").remove();

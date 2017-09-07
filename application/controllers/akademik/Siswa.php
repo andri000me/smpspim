@@ -66,6 +66,7 @@ class Siswa extends CI_Controller {
             $row[] = $item->NAMA_KEC;
             $row[] = $item->NAMA_KAB;
             $row[] = $item->NAMA_PROV;
+            $row[] = $item->NAMA_KELAS_SHOW;
 
             if ($item->KELAS_AS == NULL)
                 $surat_keterangan_aktif = '';
