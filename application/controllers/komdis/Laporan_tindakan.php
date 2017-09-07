@@ -40,9 +40,9 @@ class Laporan_tindakan extends CI_Controller {
             $no++;
             $aksi = '';
             $row = array();
-            $row[] = $item->NAMA_TA;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
+            $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_KJT;
             $row[] = $item->NAMA_PEG;
             $row[] = $item->TANGGAL_KT;

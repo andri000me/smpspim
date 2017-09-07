@@ -40,10 +40,10 @@ class Laporan_surat_segera extends CI_Controller {
             $no++;
             $aksi = '';
             $row = array();
-            $row[] = $item->NAMA_TA;
             $row[] = $item->NAMA_CAWU;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
+            $row[] = $item->NAMA_KELAS;
             $row[] = $item->POIN_KSH;
             $row[] = $item->NAMA_KJT;
             $row[] = $item->POIN_KJT;

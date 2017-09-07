@@ -4,9 +4,9 @@ $subtitle = "Daftar semua tindakan";
 $id_datatables = 'datatable1';
 
 $columns = array(
-    'TA',
     'NIS',
     'NAMA',
+    'KELAS',
     'TINDAKAN',
     'PENANGGUNGJAWAB',
     'TANGGAL',

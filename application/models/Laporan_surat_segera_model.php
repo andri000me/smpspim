@@ -23,6 +23,8 @@ class Laporan_surat_segera_model extends CI_Model {
         $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KSH=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', $this->table.'.SISWA_KSH=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
+        $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
+        $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.POIN_KSH<=kjt.POIN_MAKS_KJT');
         $this->db->join('komdis_tindakan kt', $this->table.'.ID_KSH=kt.PELANGGARAN_HEADER_KT AND kjt.ID_KJT=kt.TINDAKAN_KT', 'LEFT');
         $this->db->where('((ID_KT IS NULL) OR (ID_KT IS NOT NULL AND PROSES_TAKLIQ_KSH = 0 AND TINDAKAN_KT = 4) OR (ID_KT IS NOT NULL AND PROSES_MUTASI_KSH = 0 AND TINDAKAN_KT = 5))');

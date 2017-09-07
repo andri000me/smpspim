@@ -4,10 +4,10 @@ $subtitle = "Daftar semua surat yang harus segera dicetak";
 $id_datatables = 'datatable1';
 
 $columns = array(
-    'TA',
     'CAWU',
     'NIS',
     'NAMA',
+    'KELAS',
     'POIN SISWA',
     'TINDAKAN',
     'POIN MINIMAL',
