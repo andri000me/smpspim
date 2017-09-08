@@ -1,6 +1,6 @@
 <?php
-$title = 'Surat Segera';
-$subtitle = "Daftar semua surat yang harus segera dicetak";
+$title = 'Laporan Lari';
+$subtitle = "Daftar semua lari siswa";
 $id_datatables = 'datatable1';
 
 $columns = array(
@@ -11,6 +11,8 @@ $columns = array(
     'WALI KELAS',
     'JUMLAH POIN',
     'JUMLAH LARI',
+    'AKSI',
+    'AKSI',
 );
 
 $this->generate->generate_panel_content("Data " . $title, $subtitle);
@@ -50,7 +52,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/laporan_lari/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
         $(".buttons-add").remove();
-        $('<a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" class="btn btn-primary btn-default btn-sm">Cetak Perkelas</a>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas">Cetak Perkelas</a></li><li><a href="#" onclick="cetak_siswa_multi()">Lari Persiswa</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('').insertAfter('.buttons-reload');
     });
 
     function cetak_modal_kelas() {
@@ -65,6 +68,29 @@ $this->generate->datatables($id_datatables, $title, $columns);
         window.open('<?php echo site_url('komdis/laporan_lari/cetak_perkelas'); ?>?KELAS=' + checkbox_kelas, '_blank');
 
         ID_KELAS = 0;
+    }
+
+    function check_cetak_siswa(that) {
+        checkbox_siswa = [];
+        $(".checkbox").each(function (index) {
+            if ($(this).is(':checked')) {
+                checkbox_siswa.push($(this).val());
+            }
+        });
+    }
+
+    function cetak_siswa_multi() {
+        if (checkbox_siswa.length > 0)
+            window.open('<?php echo site_url('komdis/laporan_poin/cetak_siswa_multi'); ?>?ID_KSH=' + checkbox_siswa, '_blank');
+        else
+            create_homer_error('Silahkan pilih siswa terlebih dahulu');
+
+        checkbox_siswa = [];
+        reload_datatables(table);
+    }
+
+    function cetak(ID_KSH) {
+        window.open('<?php echo site_url('komdis/laporan_poin/cetak'); ?>/' + ID_KSH, '_blank');
     }
 
     function get_data_kelas() {

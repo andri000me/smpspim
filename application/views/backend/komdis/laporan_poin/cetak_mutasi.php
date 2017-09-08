@@ -133,7 +133,7 @@ if (isset($data['NON-SYARIAH'])) {
                 array('align' => 'L', 'width' => 40, 'text' => $DETAIL['WALI_KELAS']),
                 array('align' => 'L', 'width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
-                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL->ALAMAT_MPS)),
+                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL['ALAMAT_MPS'])),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
@@ -262,7 +262,7 @@ if (isset($data['SYARIAH'])) {
                 array('align' => 'L', 'width' => 40, 'text' => $DETAIL['WALI_KELAS']),
                 array('align' => 'L', 'width' => 35, 'text' => $DETAIL['AYAH_NAMA_SISWA']),
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
-                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL->ALAMAT_MPS)),
+                array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL['ALAMAT_MPS'])),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
@@ -306,7 +306,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Domisili');
-    $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa->ALAMAT_MPS, 100));
+    $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa['ALAMAT_MPS'], 100));
     $pdf->Cell(20, 5, 'Kelas');
     $pdf->Cell(0, 5, ': ' . $siswa['NAMA_KELAS']);
     $pdf->Ln();
@@ -487,7 +487,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Domisili');
-    $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa->ALAMAT_MPS, 100));
+    $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa['ALAMAT_MPS'], 100));
     $pdf->Cell(20, 5, 'Kelas');
     $pdf->Cell(0, 5, ': ' . $siswa['NAMA_KELAS']);
     $pdf->Ln();

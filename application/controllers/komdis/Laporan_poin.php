@@ -29,7 +29,7 @@ class Laporan_poin extends CI_Controller {
             'laporan_surat_segera_model' => 'surat_segera',
         ));
         $this->load->library('pelanggaran_handler');
-        $this->auth->validation(7);
+        $this->auth->validation(array(2, 7));
     }
 
     public function index() {
@@ -196,7 +196,7 @@ class Laporan_poin extends CI_Controller {
     public function cetak_siswa_multi() {
         $ID_KSH = $this->input->get('ID_KSH');
         $data = array();
-        
+
         if ($ID_KSH != "") {
             $ID_KSH_exp = explode(',', $ID_KSH);
             foreach ($ID_KSH_exp as $ID) {
@@ -337,6 +337,17 @@ class Laporan_poin extends CI_Controller {
                         'GELAR_AWAL_TANGGUNGJAWAB' => $detail['GELAR_AWAL_TANGGUNGJAWAB'],
                         'GELAR_AKHIR_TANGGUNGJAWAB' => $detail['GELAR_AKHIR_TANGGUNGJAWAB'],
                         'tanggal' => $this->date_format->to_view($detail['TANGGAL_KT'])
+                    );
+
+                    $where = array(
+                        'TA_KS' => $detail['TA_KSH'],
+                        'SISWA_KS' => $detail['SISWA_KSH'],
+                    );
+                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran_array($where);
+
+                    $data_array['DETAIL_PELANGGARAN'] = array(
+                        'siswa' => $detail,
+                        'pelanggaran' => $pelanggaran
                     );
 
                     $where_update = array('NOMOR_SURAT_KT' => $detail['NOMOR_SURAT_KT']);

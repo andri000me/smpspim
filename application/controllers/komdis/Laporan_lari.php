@@ -20,7 +20,7 @@ class Laporan_lari extends CI_Controller {
         $this->load->model(array(
             'Laporan_lari_model' => 'laporan_lari',
         ));
-        $this->auth->validation(7);
+        $this->auth->validation(2);
     }
 
     public function index() {
@@ -45,6 +45,9 @@ class Laporan_lari extends CI_Controller {
             $row[] = $item->NAMA_PEG;
             $row[] = $item->JUMLAH_POIN_KSH;
             $row[] = $item->JUMLAH_LARI_KSH;
+            
+            $row[] = '<input type="checkbox" class="checkbox" onchange="check_cetak_siswa(this)" value="' . $item->ID_KSH . '">';
+            $row[] = '<button type="button" class="btn btn-primary btn-sm" onclick="cetak(' . $item->ID_KSH . ');"><i class="fa fa-print"></i></button>&nbsp;';
 
             $data[] = $row;
         }

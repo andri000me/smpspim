@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_lari_model extends CI_Model {
 
     var $table = 'komdis_siswa_header';
-    var $column = array('NIS_SISWA', 'NO_ABSEN_AS', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'ID_KSH');
+    var $column = array('NIS_SISWA', 'NO_ABSEN_AS', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'ID_KSH', 'ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("POIN_KSH" => 'DESC');
 
