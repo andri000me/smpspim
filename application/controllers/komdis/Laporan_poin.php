@@ -60,6 +60,7 @@ class Laporan_poin extends CI_Controller {
 
 //            foreach ($tindakan as $detail) {
 //                if($this->tindakan->sudah_ditindak($item->ID_KSH, $detail->ID_KJT) AND $item->POIN_KSH $item $detail->POIN_KJT) { 
+            $row[] = '<input type="checkbox" class="checkbox" onchange="check_cetak_siswa(this)" value="' . $item->ID_KSH . '">';
             $row[] = '<button type="button" class="btn btn-primary btn-sm" onclick="cetak(' . $item->ID_KSH . ');"><i class="fa fa-print"></i></button>&nbsp;';
 //                }
 //            }
@@ -192,6 +193,36 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_persiswa', $data);
     }
 
+    public function cetak_siswa_multi() {
+        $ID_KSH = $this->input->get('ID_KSH');
+        $data = array();
+        
+        if ($ID_KSH != "") {
+            $ID_KSH_exp = explode(',', $ID_KSH);
+            foreach ($ID_KSH_exp as $ID) {
+                $where = array('ID_KSH' => $ID);
+                $siswa = $this->laporan_poin->get_full_by_id($where);
+
+                if (count($siswa) == 1) {
+                    foreach ($siswa as $detail) {
+                        $where = array(
+                            'TA_KS' => $detail->TA_KSH,
+                            'SISWA_KS' => $detail->SISWA_KSH,
+                        );
+                        $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+
+                        $data['siswa'][$ID_KSH][] = array(
+                            'siswa' => $detail,
+                            'pelanggaran' => $pelanggaran
+                        );
+                    }
+                }
+            }
+        }
+
+        $this->load->view('backend/komdis/laporan_poin/cetak_persiswa_multi', $data);
+    }
+
     public function cetak_ringan_perkelas() {
         $input_kelas = $this->input->get('KELAS');
         $data = array();
@@ -278,7 +309,7 @@ class Laporan_poin extends CI_Controller {
 
     public function cetak_surat($ID_KT, $TINDAKAN_KT) {
         $data_jenis_tindakan = $this->jenis_tindakan->get_by_id($TINDAKAN_KT);
-        
+
         $data = array(
             'nama_panitia' => 'KOMISI DISIPLIN SISWA',
             'POIN_MIN' => $data_jenis_tindakan->POIN_KJT,
@@ -441,13 +472,13 @@ class Laporan_poin extends CI_Controller {
 
         $this->load->view('backend/komdis/laporan_poin/cetak_perpondok', $data);
     }
-    
+
     public function xls_rangking_kelas() {
         $data = array(
             'kelas' => $this->laporan_poin->get_group_kelas(),
             'kode' => $this->laporan_poin->get_group_pelanggaran_kelas()
         );
-        
+
         $this->load->view('backend/komdis/laporan_poin/xls_rangking_kelas', $data);
     }
 

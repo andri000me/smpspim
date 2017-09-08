@@ -14,6 +14,7 @@ $columns = array(
     'LARI',
     'SURAT',
     'AKSI',
+    'AKSI',
 );
 
 $this->generate->generate_panel_content("Data " . $title, $subtitle);
@@ -30,6 +31,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var status_show = false;
     var checkbox_kelas = [];
     var checkbox_pondok = [];
+    var checkbox_siswa = [];
     var ID_KELAS = 0;
     var ID_PONDOK = 0;
     var ID_TINDAKAN = 0;
@@ -82,11 +84,27 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         });
 
         $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_siswa_multi()">Pelanggaran Persiswa</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li></ul></div>').insertAfter('.buttons-reload');
     });
 
     function set_type_kelas(TYPE) {
         TYPE_KELAS = TYPE;
+    }
+    
+    function check_cetak_siswa(that) {
+        checkbox_siswa = [];
+        $(".checkbox").each(function(index){
+            if ($(this).is(':checked')) {
+                checkbox_siswa.push($(this).val());
+            }
+        });
+    }
+
+    function cetak_siswa_multi() {
+        window.open('<?php echo site_url('komdis/laporan_poin/cetak_siswa_multi'); ?>?ID_KSH=' + checkbox_siswa, '_blank');
+        
+        checkbox_siswa = [];
+        reload_datatables(table);
     }
 
     function cetak_modal_kelas() {

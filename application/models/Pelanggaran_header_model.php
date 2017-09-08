@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggaran_header_model extends CI_Model {
 
     var $table = 'komdis_siswa_header';
-    var $column = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'SURAT', 'ID_KSH');
+    var $column = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'SURAT', 'ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("ID_KSH" => 'DESC');
 
