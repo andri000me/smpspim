@@ -68,6 +68,7 @@ foreach ($data as $detail) {
     $jumlah_po_1 = 0;
     $jumlah_po_2 = 0;
     $jumlah_takliq = 0;
+    $jumlah_mutasi = 0;
     foreach ($DATA as $DETAIL) {
         if ($DETAIL->ID_KJT == 1)
             $jumlah_sp++;
@@ -77,6 +78,8 @@ foreach ($data as $detail) {
             $jumlah_po_2++;
         elseif ($DETAIL->ID_KJT == 4)
             $jumlah_takliq++;
+        elseif ($DETAIL->ID_KJT == 5)
+            $jumlah_mutasi++;
 
         if ($DETAIL->AKTIF_AS)
             $pdf->setFillColor(255, 255, 255);
@@ -133,6 +136,10 @@ foreach ($data as $detail) {
 
     $pdf->Cell(5);
     $pdf->Cell(0, 4, 'Jumlah Ta\'liq: ' . $jumlah_takliq);
+    $pdf->Ln();
+    
+    $pdf->Cell(5);
+    $pdf->Cell(0, 4, 'Jumlah Luar Batas: ' . $jumlah_mutasi);
     $pdf->Ln();
 }
 

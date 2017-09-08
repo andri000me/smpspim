@@ -59,7 +59,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     $(document).ready(function () {
         get_data_checkbox('kelas');
         get_data_checkbox('pondok');
-        
+
         $(".status-show").hide();
 
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/laporan_poin/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
@@ -90,10 +90,10 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     function set_type_kelas(TYPE) {
         TYPE_KELAS = TYPE;
     }
-    
+
     function check_cetak_siswa(that) {
         checkbox_siswa = [];
-        $(".checkbox").each(function(index){
+        $(".checkbox").each(function (index) {
             if ($(this).is(':checked')) {
                 checkbox_siswa.push($(this).val());
             }
@@ -101,8 +101,11 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     }
 
     function cetak_siswa_multi() {
-        window.open('<?php echo site_url('komdis/laporan_poin/cetak_siswa_multi'); ?>?ID_KSH=' + checkbox_siswa, '_blank');
-        
+        if (checkbox_siswa.length > 0)
+            window.open('<?php echo site_url('komdis/laporan_poin/cetak_siswa_multi'); ?>?ID_KSH=' + checkbox_siswa, '_blank');
+        else
+            create_homer_error('Silahkan pilih siswa terlebih dahulu');
+
         checkbox_siswa = [];
         reload_datatables(table);
     }
@@ -169,7 +172,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     function get_data_checkbox(title) {
         var success = function (data) {
             var pembagi = (title === 'kelas') ? 4 : 3;
-            var maks_perkolom =  Math.round(data.length / pembagi) - 1;
+            var maks_perkolom = Math.round(data.length / pembagi) - 1;
             var x = 0;
             var posisi = 0;
 
