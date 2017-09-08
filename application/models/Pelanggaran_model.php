@@ -199,7 +199,7 @@ class Pelanggaran_model extends CI_Model {
         $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
-        $this->db->where('NIS_SISWA', $ID_SISWA);
+        $this->db->where('NIS_SISWA', trim($ID_SISWA));
         $result = $this->db->get();
         
         return $result->row();

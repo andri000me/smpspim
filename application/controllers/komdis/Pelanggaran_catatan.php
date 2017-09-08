@@ -23,7 +23,8 @@ class Pelanggaran_catatan extends CI_Controller {
         $this->load->model(array(
             'pelanggaran_catatan_model' => 'pelanggaran',
             'pelanggaran_header_model' => 'pelanggaran_header',
-            'jenis_pelanggaran_model' => 'jenis_pelanggaran'
+            'jenis_pelanggaran_model' => 'jenis_pelanggaran',
+            'pelanggaran_catatan_perpelanggaran_model' => 'pelanggaran_perpelanggaran',
         ));
         $this->load->library('pelanggaran_handler');
         $this->auth->validation(7);
@@ -161,7 +162,7 @@ class Pelanggaran_catatan extends CI_Controller {
 
     public function ajax_add() {
         $this->generate->set_header_JSON();
-        $this->generate->cek_validation_form('add');
+//        $this->generate->cek_validation_form('add');
 
         $ID_TA = $this->session->userdata('ID_TA_ACTIVE');
         $ID_CAWU = $this->session->userdata('ID_CAWU_ACTIVE');
@@ -189,7 +190,7 @@ class Pelanggaran_catatan extends CI_Controller {
 
     public function ajax_delete() {
         $this->generate->set_header_JSON();
-        $this->generate->cek_validation_form('delete');
+//        $this->generate->cek_validation_form('delete');
 
         $id = $this->input->post("ID");
 
@@ -207,7 +208,7 @@ class Pelanggaran_catatan extends CI_Controller {
     }
 
     public function form() {
-        $this->generate->backend_view('komdis/pelanggaran/form');
+        $this->generate->backend_view('komdis/pelanggaran_catatan/form');
     }
 
     public function cetak_perkelas() {
@@ -218,7 +219,7 @@ class Pelanggaran_catatan extends CI_Controller {
             $kelas_exp = explode(',', $input_kelas);
             foreach ($kelas_exp as $ID_KELAS) {
                 $siswa = $this->pelanggaran->get_full_by_id($ID_KELAS);
-                
+
                 foreach ($siswa as $detail) {
                     $where = array(
                         'TA_KS' => $detail->TA_AS,
@@ -252,5 +253,75 @@ class Pelanggaran_catatan extends CI_Controller {
 
         $this->load->view('backend/komdis/pelanggaran_catatan/cetak', $data);
     }
+
+    public function get_data_scanner() {
+        $this->generate->set_header_JSON();
+
+        $post = $this->input->post();
+        $data = $this->pelanggaran->get_data_scanner($post['NIS_SISWA']);
+
+        $insert = 0;
+        if ($data != NULL) {
+            $ID_TA = $this->session->userdata('ID_TA_ACTIVE');
+            $ID_CAWU = $this->session->userdata('ID_CAWU_ACTIVE');
+            $ID_PELANGGARAN = $post['PELANGGARAN_KS'];
+            $ID_SISWA = $data->ID_SISWA;
+            $TANGGAL_KS = $post['TANGGAL_KS'];
+            $SUMBER_KS = $post['SUMBER_KS'];
+            $KETERANGAN_KS = '';
+
+            $data_insert = array(
+                'TA_KS' => $ID_TA,
+                'CAWU_KS' => $ID_CAWU,
+                'SISWA_KS' => $ID_SISWA,
+                'PELANGGARAN_KS' => $ID_PELANGGARAN,
+                'TANGGAL_KS' => $TANGGAL_KS,
+                'SUMBER_KS' => $SUMBER_KS,
+                'KETERANGAN_KS' => $KETERANGAN_KS,
+                'USER_KS' => $this->session->userdata('ID_USER'),
+            );
+
+            $insert = $this->pelanggaran->save($data_insert);
+        }
+
+        $this->generate->output_JSON(array('status' => $insert, 'data' => $data));
+    }
+
+    public function form_perpelanggaran() {
+        $this->generate->backend_view('komdis/pelanggaran_catatan/form_perpelanggaran');
+    }
+
+    public function ajax_list_perpelanggaran($TANGGAL_PELANGGARAN, $PELANGGARAN_KS) {
+        $this->generate->set_header_JSON();
+
+        $id_datatables = 'datatable1';
+        $list = $this->pelanggaran_perpelanggaran->get_datatables($TANGGAL_PELANGGARAN, $PELANGGARAN_KS);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $item->NO_ABSEN_AS;
+            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NAMA_SISWA;
+            $row[] = $item->AYAH_NAMA_SISWA;
+            $row[] = $item->NAMA_KELAS;
+            $row[] = $item->NAMA_PEG;
+
+            $row[] = ($item->ID_KS == NULL) ? '<button type="button" class="btn btn-info btn-sm" onclick="simpan_pelanggaran(this)" data-status="1" data-id="' . $item->ID_SISWA . '"><i class="fa fa-check-circle"></i></button>' : '<button type="button" class="btn btn-danger btn-sm" onclick="simpan_pelanggaran(this)" data-status="0" data-id="' . $item->ID_KS . '"><i class="fa fa-trash"></i></button>';
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->pelanggaran_perpelanggaran->count_all($TANGGAL_PELANGGARAN, $PELANGGARAN_KS),
+            "recordsFiltered" => $this->pelanggaran_perpelanggaran->count_filtered($TANGGAL_PELANGGARAN, $PELANGGARAN_KS),
+            "data" => $data,
+        );
+
+        $this->generate->output_JSON($output);
+    }
+
 
 }

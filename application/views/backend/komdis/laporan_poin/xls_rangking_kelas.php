@@ -1,117 +1,96 @@
 <?php
-$data_kode = array();
 
-header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=rekap_akumulasi_pelanggaran_" . date('Y-m-d_H-i-s') . ".xls");
-?>
-<table>
-    <h3>DATA REKAP AKUMULASI PELANGGARAN SEMUA KELAS</h3>
-    <thead>
-        <tr>
-            <th rowspan="3">NO</th>
-            <th rowspan="3">KELAS</th>
-            <th colspan="<?php echo count($kode) * 2; ?>">KODE PELANGGARAN</th>
-            <th colspan="2">TOTAL</th>
-        </tr>
-        <tr>
-            <?php
-            foreach ($kode as $detail) {
-                $data_kode[] = $detail->KODE_KJP;
-                ?>
-                <th colspan="2"><?php echo $detail->KODE_KJP; ?></th>
-            <?php }
-            ?>
-            <th rowspan="2">JUMLAH SISWA</th>
-            <th rowspan="2">JUMLAH POIN</th>
-        </tr>
-        <tr>
-            <?php
-            for ($i = 0; $i < count($kode); $i++) {
-                ?>
-                <th>JUMLAH SISWA</th>
-                <th>JUMLAH POIN</th>
-            <?php }
-            ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $no = 1;
-        $temp_kelas = NULL;
-        $data_kode_flip = array_flip($data_kode);
-        $temp_position = 0;
-        $total_jumlah_siswa = 0;
-        $total_jumlah_poin = 0;
-
-        function cetak_pelanggaran($detail, $temp_position, $data_kode_flip) {
-            for ($i = $temp_position; $i < $data_kode_flip[$detail->KODE_KJP]; $i++) {
-                echo '<td></td>';
-                echo '<td></td>';
-            }
-//                echo '<td>' . $data_kode_flip[$detail->KODE_KJP] . '</td>';
-//                echo '<td>' . $detail->KODE_KJP . '</td>';
-
-            echo '<td>' . $detail->JUMLAH_PELANGGAR . '</td>';
-            echo '<td>' . $detail->JUMLAH_POIN . '</td>';
-
-            return $data_kode_flip[$detail->KODE_KJP] + 1;
+    function next_char($char, $count) {
+        for ($i = 0; $i < $count; $i++) {
+            ++$char;
         }
 
-        foreach ($kelas as $detail) {
-            if ($temp_kelas == $detail->ID_KELAS) {
-                $temp_position = cetak_pelanggaran($detail, $temp_position, $data_kode_flip);
-            } else {
-                if ($temp_kelas != NULL) {
-                    for ($i = $temp_position; $i < count($data_kode_flip); $i++) {
-                        echo '<td></td>';
-                        echo '<td></td>';
-                    }
-                    echo '<td>' . $total_jumlah_siswa . '</td>';
-                    echo '<td>' . $total_jumlah_poin . '</td>';
+        return $char;
+    }
 
-                    echo '</tr>';
-                } else {
-                    echo '<tr>';
-                }
 
-                echo '<td>' . $no++ . '</td>';
-                echo '<td>' . $detail->NAMA_KELAS . '</td>';
+$jumlah_kode_pelanggaran = count($kode);
 
-                $temp_position = 0;
-                $total_jumlah_siswa = 0;
-                $total_jumlah_poin = 0;
-                $temp_position = cetak_pelanggaran($detail, $temp_position, $data_kode_flip);
-                $temp_kelas = $detail->ID_KELAS;
-            }
+//exit();
 
-            $total_jumlah_siswa += $detail->JUMLAH_PELANGGAR;
-            $total_jumlah_poin += $detail->JUMLAH_POIN;
-        }
+$this->load->library('PHPExcel/PHPExcel');
 
-        for ($i = $temp_position; $i < count($data_kode_flip); $i++) {
-            echo '<td></td>';
-            echo '<td></td>';
-        }
-        echo '<td>' . $total_jumlah_siswa . '</td>';
-        echo '<td>' . $total_jumlah_poin . '</td>';
+$objPHPExcel = new PHPExcel();
 
-        echo '</tr>';
-        ?>
-        <tr>
-            <td>##############################################################################################################</td>
-        </tr>
-        <tr>
-            <td>KETERANGAN KODE PELANGGARAN:</td>
-        </tr>
-        <?php
-        foreach ($kode as $detail) {
-            $data_kode[] = $detail->KODE_KJP;
-            ?>
-        <tr>
-            <td><?php echo $detail->KODE_KJP; ?></td>
-            <td><?php echo $detail->NAMA_KJP; ?></td>
-        </tr>
-    <?php }
-    ?>
-    </tbody>
-</table>
+$objPHPExcel->getProperties()->setCreator("Rohmad Eko Wahyudi")
+        ->setTitle("SIMAPES - KOMDIS");
+
+
+// ====================================================================================================================================
+
+$objPHPExcel->setActiveSheetIndex(0);
+$objPHPExcel->getActiveSheet()->setCellValue('A1', 'DATA JUMLAH SISWA DAN POIN PELANGGARAN');
+$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(14);
+$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+
+$last_column_kode_pelanggaran = $this->cetak->next_char('C', $jumlah_kode_pelanggaran * 2);
+$objPHPExcel->getActiveSheet()->setCellValue('A3', 'No');
+$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Kelas');
+$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Kode Pelanggaran');
+$objPHPExcel->getActiveSheet()->setCellValue($last_column_kode_pelanggaran . '3', 'Total');
+$objPHPExcel->getActiveSheet()->mergeCells('C3:' . $this->cetak->next_char('C', ($jumlah_kode_pelanggaran * 2) - 1) . '3');
+$objPHPExcel->getActiveSheet()->mergeCells('A3:A5');
+$objPHPExcel->getActiveSheet()->mergeCells('B3:B5');
+$objPHPExcel->getActiveSheet()->mergeCells($last_column_kode_pelanggaran . '3:' . $this->cetak->next_char('C', ($jumlah_kode_pelanggaran * 2) + 1) . '5');
+$objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getFont()->setBold(true);
+
+$objPHPExcel->getActiveSheet()->mergeCells($last_column_kode_pelanggaran . '3:' . $last_column_kode_pelanggaran . '4');
+
+$temp_column = 'B';
+foreach ($kode as $detail) {
+    $objPHPExcel->getActiveSheet()->setCellValue(($this->cetak->next_char($temp_column, 1)) . '4', $detail->KODE_KJP);
+    $objPHPExcel->getActiveSheet()->mergeCells(($this->cetak->next_char($temp_column, 1)) . '4:' . ($this->cetak->next_char($temp_column, 2)) . '4');
+    $temp_column = ($this->cetak->next_char($temp_column, 2));
+}
+
+$objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(15);
+
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+
+$objPHPExcel->getActiveSheet()->setTitle('Data pelanggaran');
+
+// ====================================================================================================================================
+
+$objPHPExcel->createSheet();
+
+$objPHPExcel->setActiveSheetIndex(1);
+
+$objPHPExcel->getActiveSheet()->setCellValue('A1', 'DATA JENIS PELANGGARAN');
+$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(14);
+$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+
+$row = 3;
+foreach ($kode as $detail) {
+    $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $detail->KODE_KJP);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $detail->NAMA_KJP);
+    $row++;
+}
+
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+
+$objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(15);
+$objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+
+$objPHPExcel->getActiveSheet()->setTitle('Jenis Pelanggaran');
+
+// ====================================================================================================================================
+
+$objPHPExcel->setActiveSheetIndex(0);
+
+// ====================================================================================================================================
+
+header('Content-Type: application/vnd.ms-excel');
+header('Content-Disposition: attachment;filename="statistik_1.xls"');
+
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+$objWriter->save('php://output');
