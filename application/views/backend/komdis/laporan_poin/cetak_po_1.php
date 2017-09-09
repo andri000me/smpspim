@@ -89,7 +89,7 @@ $pdf->Ln();
 $pdf->Cell(5);
 $pdf->Cell(0, 5, '4. Pertinggal');
 $pdf->Ln();
-$pdf->Output();
+
 $pdf->AddPage("L", "A4");
 $pdf->SetAutoPageBreak(true, 0);
 

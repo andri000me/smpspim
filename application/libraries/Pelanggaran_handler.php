@@ -72,8 +72,7 @@ class Pelanggaran_handler {
                 $catatan = TRUE;
             }
 
-            if ($data == NULL)
-                return TRUE;
+            if ($data == NULL) 
 
             $id_pelanggaran = $data->ID_KS;
         } else {
@@ -109,10 +108,6 @@ class Pelanggaran_handler {
         }
 
         return $affected_row;
-    }
-
-    public function cek_tindakan_proses() {
-        
     }
 
     public function cek_pelanggaran_syariah($ID_SISWA) {
