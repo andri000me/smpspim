@@ -26,6 +26,9 @@ class Laporan_lari_model extends CI_Model {
         $this->db->join('akad_siswa as', 'as.SISWA_AS=ms.ID_SISWA AND as.TA_AS=' . $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB');
+        $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.JUMLAH_POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.JUMLAH_POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('JUMLAH_LARI_KSH > ', 2);
         $this->db->where('CETAK_LARI_KSH', 0);
