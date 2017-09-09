@@ -11,9 +11,27 @@
 
 $pdf = $this->fpdf;
 
+$temp_kelas = NULL;
 foreach ($data as $detail) {
     $siswa = $detail['siswa'];
     $pelanggaran = $detail['pelanggaran'];
+
+    if ($temp_kelas != $siswa->ID_KELAS) {
+        if ($temp_kelas != NULL) {
+            $pdf->AddPage("P", "A4");
+
+            for ($i = 0; $i < 300; $i++) {
+                $pdf->Line(0, $i, 250, $i);
+            }
+
+            $pdf->SetY(100);
+            $pdf->SetFont('Arial', 'B', 40);
+            $pdf->Cell(0, 5, 'DIVIDER', 0, 0, 'C');
+            $pdf->Ln();
+        }
+
+        $temp_kelas = $siswa->ID_KELAS;
+    }
 
     $pdf->AddPage("P", "A4");
 //	$pdf->SetMargins(6, 0);

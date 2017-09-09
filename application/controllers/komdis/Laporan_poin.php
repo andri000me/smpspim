@@ -281,7 +281,8 @@ class Laporan_poin extends CI_Controller {
 
         if ($ID_KJT != 0) {
             $where = array('kjt.ID_KJT' => $ID_KJT);
-            $siswa = $this->laporan_poin->get_full_by_id($where);
+            $order_by = 'NAMA_KELAS';
+            $siswa = $this->laporan_poin->get_full_by_id($where, $order_by);
             foreach ($siswa as $detail) {
                 $where = array(
                     'TA_KS' => $detail->TA_KSH,
@@ -296,7 +297,7 @@ class Laporan_poin extends CI_Controller {
             }
         }
 
-        $this->load->view('backend/komdis/laporan_poin/cetak', $data);
+        $this->load->view('backend/komdis/laporan_poin/cetak_pertindakan', $data);
     }
 
     public function hapus_surat($ID_KT) {
