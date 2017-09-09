@@ -103,7 +103,7 @@ class Asal_sekolah_model extends CI_Model {
     public function get_all_ac($where) {
         $this->db->select("ID_AS as id, CONCAT(NAMA_JS, ' - ',NAMA_AS, ', Kecamatan ',NAMA_KEC, ', ',NAMA_KAB, ', ',NAMA_PROV) as text");
         $this->_get_table();
-        $this->db->like('NAMA_AS', $where);
+        if($where != 'null') $this->db->like('NAMA_AS', $where);
         $result = $this->db->get();
 
         return $result->result();

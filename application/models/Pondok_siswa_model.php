@@ -99,7 +99,7 @@ class Pondok_siswa_model extends CI_Model {
     public function get_all_ac($where) {
         $this->db->select("ID_MPS as id, NAMA_PONDOK_MPS as text");
         $this->_get_table();
-        $this->db->like('NAMA_PONDOK_MPS', $where);
+        if($where != 'null') $this->db->like('NAMA_PONDOK_MPS', $where);
 
         return $this->db->get()->result();
     }

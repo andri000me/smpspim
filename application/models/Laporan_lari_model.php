@@ -28,6 +28,7 @@ class Laporan_lari_model extends CI_Model {
         $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('JUMLAH_LARI_KSH > ', 2);
+        $this->db->where('CETAK_LARI_KSH', 0);
     }
 
     private function _get_datatables_query() {
@@ -100,6 +101,7 @@ class Laporan_lari_model extends CI_Model {
     public function get_data_cetak($where) {
         $this->_get_table();
         $this->db->where($where);
+        $this->db->where('CETAK_LARI_KSH', 0);
         $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->order_by('NO_ABSEN_AS', 'ASC');
 

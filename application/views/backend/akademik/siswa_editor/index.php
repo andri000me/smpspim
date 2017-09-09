@@ -97,6 +97,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
         get_jk();
         get_wilayah();
+        get_pondok();
+        get_asal_sekolah();
     });
 
     function open_editor(ID_SISWA) {
@@ -105,6 +107,10 @@ $this->generate->datatables($id_datatables, $title, $columns);
             var nama_kec_wilayah = null;
             var nama_kab_wilayah = null;
             var nama_prov_wilayah = null;
+            var id_pondok = null;
+            var nama_pondok = null;
+            var id_asal_sekolah = null;
+            var nama_asal_sekolah = null;
             $.each(data, function (index, item) {
                 if (index === 'KECAMATAN_SISWA') {
                     id_wilayah = item;
@@ -114,12 +120,26 @@ $this->generate->datatables($id_datatables, $title, $columns);
                     nama_kab_wilayah = item;
                 } else if (index === 'NAMA_PROV') {
                     nama_prov_wilayah = item;
+                } else if ((index === 'PONDOK_SISWA') && (index !== null)) {
+                    id_pondok = item;
+                } else if ((index === 'NAMA_PONDOK_MPS') && (index !== null)) {
+                    nama_pondok = item;
+                } else if ((index === 'ASAL_SEKOLAH_SISWA') && (index !== null)) {
+                    id_asal_sekolah = item;
+                } else if ((index === 'NAMA_AS') && (index !== null)) {
+                    nama_asal_sekolah = item;
                 } else {
                     $("#" + index).val(item);
                 }
             });
 
             $("#KECAMATAN_SISWA").select2("data", {id: id_wilayah, text: nama_kec_wilayah + ' - ' + nama_kab_wilayah + ' - ' + nama_prov_wilayah});
+            
+            if(id_pondok !== null) $("#PONDOK_SISWA").select2("data", {id: id_pondok, text: nama_pondok});
+            else $("#PONDOK_SISWA").select2("data", null);
+            
+            if(id_asal_sekolah !== null) $("#ASAL_SEKOLAH_SISWA").select2("data", {id: id_asal_sekolah, text: nama_asal_sekolah});
+            else $("#ASAL_SEKOLAH_SISWA").select2("data", null);
 
             create_editor();
         };
@@ -142,11 +162,33 @@ $this->generate->datatables($id_datatables, $title, $columns);
         var success = function (data) {
             $("#KECAMATAN_SISWA").select2({
                 data: data,
-                minimumInputLength: 3
+                minimumInputLength: 1
             });
         };
 
         create_ajax('<?php echo site_url('akademik/siswa_editor/get_wilayah'); ?>', '', success);
+    }
+
+    function get_pondok() {
+        var success = function (data) {
+            $("#PONDOK_SISWA").select2({
+                data: data,
+                minimumInputLength: 2
+            });
+        };
+
+        create_ajax('<?php echo site_url('master_data/pondok_siswa/auto_complete'); ?>', 'q=' + null, success);
+    }
+
+    function get_asal_sekolah() {
+        var success = function (data) {
+            $("#ASAL_SEKOLAH_SISWA").select2({
+                data: data,
+                minimumInputLength: 2
+            });
+        };
+
+        create_ajax('<?php echo site_url('master_data/asal_sekolah/auto_complete'); ?>', 'q=' + null, success);
     }
 
     function create_form() {
@@ -182,6 +224,8 @@ $this->generate->input_dropdown('JK', 'JK_SISWA', NULL, TRUE, 4);
         $("#detail_siswa").append('<?php $this->generate->input_text('Kecamatan', array('name' => 'KECAMATAN_SISWA', 'id' => 'KECAMATAN_SISWA', 'maxlength' => 100, 'value' => ''), TRUE, 8); ?>');
         $("#detail_siswa").append('<?php $this->generate->input_text('Nama Ayah', array('name' => 'AYAH_NAMA_SISWA', 'id' => 'AYAH_NAMA_SISWA', 'maxlength' => 200, 'value' => ''), TRUE, 5); ?>');
         $("#detail_siswa").append('<?php $this->generate->input_text('Nama Ibu', array('name' => 'IBU_NAMA_SISWA', 'id' => 'IBU_NAMA_SISWA', 'maxlength' => 200, 'value' => ''), TRUE, 5); ?>');
+        $("#detail_siswa").append('<?php $this->generate->input_text('Pondok', array('name' => 'PONDOK_SISWA', 'id' => 'PONDOK_SISWA', 'maxlength' => 100, 'value' => ''), TRUE, 8); ?>');
+        $("#detail_siswa").append('<?php $this->generate->input_text('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'id' => 'ASAL_SEKOLAH_SISWA', 'maxlength' => 100, 'value' => ''), FALSE, 8); ?>');
         $("#detail_siswa").append('<button class="btn btn-info pull-right" type="submit"><i class="fa fa-save"></i>&nbsp;&nbsp;Simpan</button>');
         $(".control-label").addClass('col-sm-3').removeClass('col-sm-2');
         $(".help-block").remove();

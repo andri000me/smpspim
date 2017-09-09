@@ -18,7 +18,8 @@ class Laporan_lari extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(array(
-            'Laporan_lari_model' => 'laporan_lari',
+            'laporan_lari_model' => 'laporan_lari',
+            'pelanggaran_model' => 'pelanggaran',
         ));
         $this->auth->validation(2);
     }
@@ -77,6 +78,28 @@ class Laporan_lari extends CI_Controller {
             $where .= ') AND (JUMLAH_LARI_KSH > 2)';
             
             $data['data'] = $this->laporan_lari->get_data_cetak($where);
+            
+            foreach ($data['data'] as $key => $detail) {
+//                $where_ksh = array(
+//                    'TA_KSH' => $detail->TA_KSH,
+//                    'SISWA_KSH' => $detail->SISWA_KSH,
+//                );
+//                $data_ksh = array(
+//                    'CETAK_LARI_KSH' => 1
+//                );
+//                $this->laporan_lari->update($where_ksh, $data_ksh);
+                
+                $where = array(
+                    'TA_KS' => $detail->TA_KSH,
+                    'SISWA_KS' => $detail->SISWA_KSH,
+                );
+                $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+                var_dump($detail);
+                $data['data'][$key]['DETAIL'] = array(
+                    'siswa' => $detail,
+                    'pelanggaran' => $pelanggaran
+                );
+            }
         }
 
         $this->load->view('backend/komdis/laporan_lari/cetak_perkelas_multi', $data);
