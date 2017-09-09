@@ -71,7 +71,10 @@ class Pelanggaran_handler {
                 $data = $this->CI->pelanggaran_catatan->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
                 $catatan = TRUE;
             }
-            
+
+            if ($data == NULL)
+                return TRUE;
+
             $id_pelanggaran = $data->ID_KS;
         } else {
             $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('ID_KS' => $id));
@@ -99,7 +102,7 @@ class Pelanggaran_handler {
 
                 $affected_row = $this->CI->pelanggaran_header->update($where, $data_update);
             }
-            
+
             if ($affected_row) {
                 $affected_row = $this->CI->pelanggaran_header->reset_taqlik_mutasi($data);
             }
@@ -107,7 +110,7 @@ class Pelanggaran_handler {
 
         return $affected_row;
     }
-    
+
     public function cek_tindakan_proses() {
         
     }
