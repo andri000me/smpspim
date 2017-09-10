@@ -333,5 +333,69 @@ WHERE
 
         return $query->result();
     }
+    
+    public function fix_kehadiran_komdis() {
+        $sql = "INSERT INTO komdis_siswa (TA_KS, CAWU_KS, SISWA_KS, PELANGGARAN_KS, TANGGAL_KS, SUMBER_KS, KETERANGAN_KS, KEHADIRAN_KS, USER_KS)
+            SELECT TA_AKH, CAWU_AKH, SISWA_AKH, PELANGGARAN_ALPHA_MJK, TANGGAL_AKH, PEGAWAI_USER, KETERANGAN_AKH, ID_AKH, USER_AKH
+            FROM akad_kehadiran
+            INNER JOIN md_jenis_kehadiran ON ID_MJK = JENIS_AKH
+            INNER JOIN md_user ON USER_AKH = ID_USER
+            LEFT JOIN komdis_siswa ON KEHADIRAN_KS = ID_AKH
+            WHERE KEHADIRAN_KS IS NULL
+            AND ALASAN_AKH='ALPHA'
+            AND TA_AKH=".$this->session->userdata('ID_TA_ACTIVE');
+        $this->db->query($sql);
+        
+        $sql = "UPDATE komdis_siswa_header ksh
+                    INNER JOIN
+                (SELECT 
+                    komdis_siswa_header.*, COUNT(ID_KS) AS JUMLAH_LARI
+                FROM
+                    komdis_siswa
+                INNER JOIN komdis_siswa_header ON SISWA_KSH = SISWA_KS
+                    AND TA_KS = TA_KSH 
+                    AND CAWU_KS = CAWU_KSH
+                INNER JOIN akad_kehadiran ON KEHADIRAN_KS = ID_AKH
+                WHERE
+                    JENIS_AKH = 1 AND ALASAN_AKH = 'ALPHA'
+                GROUP BY SISWA_KSH , TA_KSH , CAWU_KSH) ks ON ks.SISWA_KSH = ksh.SISWA_KSH
+                    AND ks.TA_KSH = ksh.TA_KSH
+                    AND ks.CAWU_KSH = ksh.CAWU_KSH
+            SET 
+                ksh.LARI_KSH = ks.JUMLAH_LARI
+            WHERE
+                ks.SISWA_KSH = ksh.SISWA_KSH
+                    AND ks.TA_KSH = ksh.TA_KSH
+                    AND ks.CAWU_KSH = ksh.CAWU_KSH
+                    AND ksh.TA_KSH = ".$this->session->userdata('ID_TA_ACTIVE');
+        $this->db->query($sql);
+        
+        $this->fix_poin();
+    }
+    
+    public function fix_poin() {
+        $sql = "UPDATE komdis_siswa_header ksh
+                INNER JOIN
+            (SELECT 
+                komdis_siswa_header.*, SUM(POIN_KJP) AS JUMLAH_POIN
+            FROM
+                komdis_siswa
+            INNER JOIN komdis_siswa_header ON SISWA_KSH = SISWA_KS AND TA_KS = TA_KSH
+                AND CAWU_KS = CAWU_KSH
+            INNER JOIN komdis_jenis_pelanggaran ON ID_KJP = PELANGGARAN_KS
+            GROUP BY SISWA_KSH , TA_KSH , CAWU_KSH) ks ON ksh.SISWA_KSH = ks.SISWA_KSH
+                AND ksh.TA_KSH = ks.TA_KSH
+                AND ksh.CAWU_KSH = ks.CAWU_KSH 
+        SET 
+            ksh.POIN_KSH = ks.JUMLAH_POIN
+        WHERE
+            ks.JUMLAH_POIN <> ksh.POIN_KSH
+                AND ksh.SISWA_KSH = ks.SISWA_KSH
+                AND ksh.TA_KSH = ks.TA_KSH
+                AND ksh.CAWU_KSH = ks.CAWU_KSH 
+                AND ksh.TA_KSH = ".$this->session->userdata('ID_TA_ACTIVE');
+        
+        $this->db->query($sql);
+    }
 
 }

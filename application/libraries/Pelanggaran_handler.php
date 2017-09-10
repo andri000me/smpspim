@@ -72,7 +72,11 @@ class Pelanggaran_handler {
                 $catatan = TRUE;
             }
 
-            if ($data == NULL) 
+            if ($data == NULL)  {
+                $this->CI->pelanggaran_header->fix_kehadiran_komdis();
+                
+                $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
+            }
 
             $id_pelanggaran = $data->ID_KS;
         } else {
