@@ -29,12 +29,15 @@
     <!-- Main Wrapper -->
     <div class="content animate-panel">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 text-center">
+            <div class="col-md-8 col-md-offset-2 text-center">
                 <h2>DATA SISWA</h2>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <a href="#" class="pull-right" title="Klik untuk menutup halaman" onclick="window.close();">
-                    <i class="pe-7s-close" style="font-size: 40px;"></i>
+                    <i class="pe-7s-close" style="font-size: 40px; margin-left: 30px;"></i>
+                </a>
+                <a href="<?php echo site_url('pencarian/detail/'.$SISWA->ID_SISWA.'/1'); ?>" class="pull-right" title="Klik untuk menecatak data siswa">
+                    <i class="pe-7s-print" style="font-size: 40px;"></i>
                 </a>
             </div>
         </div>
@@ -90,8 +93,10 @@ function list_detail_kehadiran($label, $data, $position) {
                             <div class="col-md-6">
                                 <?php list_detail('NIK', $SISWA->NIK_SISWA); ?>
                                 <?php list_detail('NISN', $SISWA->NISN_SISWA); ?>
+                                <?php list_detail('NO UM', $SISWA->NO_UM_SISWA); ?>
                             </div>
                             <div class="col-md-6 text-right">
+                                <?php list_detail('Nomor KK', $SISWA->KK_SISWA); ?>
                                 <?php list_detail('NIS', $SISWA->NIS_SISWA); ?>
                                 <?php list_detail('NO UN', $SISWA->NO_UN_SISWA); ?>
                             </div>
@@ -173,7 +178,7 @@ function list_detail_kehadiran($label, $data, $position) {
                                         <?php list_detail('KONDISI', $SISWA->NAMA_KONDISI); ?>
                                         <?php list_detail('BERAT BADAN (KG)', $SISWA->BERAT_SISWA); ?>
                                         <?php list_detail('NO HP', $SISWA->NOHP_SISWA); ?>
-                                        <?php list_detail('DOMISI', $SISWA->NAMA_PONDOK_MPS); ?>
+                                        <?php list_detail('DOMISILI', $SISWA->NAMA_PONDOK_MPS); ?>
                                         <?php if($SISWA->NAMA_PONDOK_MPS != NULL) list_detail('EMAIL PONDOK', $SISWA->EMAIL_MPS); ?>
                                     </div>
                                     <div class="col-md-6 text-right">

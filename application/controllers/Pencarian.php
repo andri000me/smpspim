@@ -33,10 +33,10 @@ class Pencarian extends CI_Controller {
 
         $NIS_SISWA = $this->input->post('NIS');
         $ID_SISWA = $this->pencarian->get_id_siswa(trim($NIS_SISWA));
-        
-        $this->generate->output_JSON(array('url' => ($ID_SISWA == NULL ? NULL : site_url('pencarian/detail/'.$ID_SISWA))));
+
+        $this->generate->output_JSON(array('url' => ($ID_SISWA == NULL ? NULL : site_url('pencarian/detail/' . $ID_SISWA))));
     }
-    
+
     public function cari() {
         $this->generate->set_header_JSON();
 
@@ -62,7 +62,11 @@ class Pencarian extends CI_Controller {
         ));
     }
 
-    public function detail($ID_SISWA) {
+    // REQUEST
+    // 0 = VIEW
+    // 1 = CETAK
+    // 2 = GET DETAIL SISWA
+    public function detail($ID_SISWA, $REQUEST = 0) {
         $data['SISWA'] = $this->pencarian->get_by_id($ID_SISWA);
         $data['NILAI_PSB'] = $this->pencarian->get_nilai_um($ID_SISWA);
         $data['AKADEMIK'] = array();
@@ -117,9 +121,16 @@ class Pencarian extends CI_Controller {
                 );
             }
         }
-
-        $this->load->view('layout/main/header');
-        $this->load->view('backend/pencarian/detail', $data);
+        
+        if ($REQUEST == 0) {
+            $this->load->view('layout/main/header');
+            $this->load->view('backend/pencarian/detail', $data);
+        } elseif ($REQUEST == 1) {
+            $result['data'][] = $data;
+            $this->load->view('backend/pencarian/cetak', $result);
+        } elseif ($REQUEST == 2) {
+            return $data;
+        }
     }
 
     public function cetak_untuk_pemotretan() {
@@ -133,25 +144,25 @@ class Pencarian extends CI_Controller {
             'dept' => $this->dept->get_all(false),
             'jk' => $this->jk->get_all(false),
         );
-        
+
         $this->load->view('layout/main/header');
         $this->load->view('backend/pencarian/bel_sekolah', $data);
     }
 
     public function get_alarm() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->jam_pelajaran->get_rows($this->input->post());
-        
+
         $this->generate->output_JSON($data);
     }
 
     public function get_tanggal_jam() {
         $this->generate->set_header_JSON();
-        
+
         $jam = date('H:i:s');
         $tanggal = $this->date_format->to_print_text(date('Y-m-d'));
-        
+
         $this->generate->output_JSON(array('jam' => $jam, 'tanggal' => $tanggal));
     }
 
