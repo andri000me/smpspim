@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_surat_segera_model extends CI_Model {
 
     var $table = 'komdis_siswa_header ksh';
-    var $column = array('NAMA_TA', 'NAMA_CAWU','NIS_SISWA','NAMA_SISWA','ksh.POIN_KSH', 'NAMA_KJT','POIN_KJT','ID_KSH');
+    var $column = array('NAMA_TA','NIS_SISWA','NAMA_SISWA','ksh.POIN_KSH', 'NAMA_KJT','POIN_KJT','ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("POIN_KSH" => 'DESC');
 

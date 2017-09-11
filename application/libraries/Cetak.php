@@ -223,4 +223,13 @@ class Cetak {
         return $char;
     }
 
+    function nama_wali_siswa($siswa) {
+        $siswa = (array) $siswa;
+        
+        if (!(($siswa['WALI_NAMA_SISWA'] === NULL) || ($siswa['WALI_NAMA_SISWA'] === '')))
+            return $siswa['WALI_NAMA_SISWA'];
+        else
+            return $siswa['AYAH_NAMA_SISWA'];
+    }
+
 }

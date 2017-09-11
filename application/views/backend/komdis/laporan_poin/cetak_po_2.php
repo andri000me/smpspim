@@ -194,7 +194,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Wali Santri');
-    $pdf->Cell(100, 5, ': ' . $siswa['AYAH_NAMA_SISWA']);
+    $pdf->Cell(100, 5, ': ' . $this->cetak->nama_wali_siswa($siswa));
     $pdf->Cell(20, 5, 'Jumlah Poin');
     $pdf->Cell(0, 5, ': ' . $siswa['JUMLAH_POIN_KSH']);
     $pdf->Ln();
@@ -376,7 +376,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Wali Santri');
-    $pdf->Cell(100, 5, ': ' . $siswa['AYAH_NAMA_SISWA']);
+    $pdf->Cell(100, 5, ': ' . $this->cetak->nama_wali_siswa($siswa));
     $pdf->Cell(20, 5, 'Jumlah Poin');
     $pdf->Cell(0, 5, ': ' . $siswa['JUMLAH_POIN_KSH']);
     $pdf->Ln();
