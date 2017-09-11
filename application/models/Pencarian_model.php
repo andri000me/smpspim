@@ -269,4 +269,14 @@ class Pencarian_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_tafawut($TANGGAL_TFW, $BULAN_TFW) {
+        $this->db->from('md_tafawut');
+        $this->db->where(array(
+            'TANGGAL_TFW' => $TANGGAL_TFW
+        ));
+        $result = $this->db->get()->row_array();
+
+        return $result[$BULAN_TFW.'_TFW'];
+    }
+
 }

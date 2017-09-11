@@ -93,18 +93,23 @@
     <script src="<?php echo base_url(); ?>assets/scripts/apps.js"></script>
 
     <script type="text/javascript">
-        var ALARM = new Array('11:18:00');
+        var ALARM = new Array();
         var LOOP_ALARM = new Array('3');
         var LOOP = 1;
+        
+        var DATE_SERVER = null;
+        var TAFAWUT = null;
         
         $(document).ready(function () {
             create_homer_info('Pilih jenjang untuk mengambil alarm bel sekolah');
             $("#alarm_show").hide();
             
             setInterval(function () {
-                create_ajax('<?php echo site_url('pencarian/get_tanggal_jam'); ?>', '', function (data) {
+                create_ajax('<?php echo site_url('pencarian/get_tanggal_jam'); ?>', 'date=' + DATE_SERVER + '&tafawut=' + TAFAWUT, function (data) {
                     $("#jam").html(data.jam);
                     $("#tanggal").html(data.tanggal);
+                    DATE_SERVER = data.date;
+                    TAFAWUT = data.tafawut;
                     
                     if($.inArray(data.jam, ALARM) === 0) {
                         LOOP = LOOP_ALARM[ALARM.indexOf(data.jam)];

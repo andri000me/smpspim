@@ -159,11 +159,20 @@ class Pencarian extends CI_Controller {
 
     public function get_tanggal_jam() {
         $this->generate->set_header_JSON();
+        
+        $tanggal_sekarang = $this->input->post('date');
+        $tafawut = $this->input->post('tafawut');
+        $date = date('Y-m-d');
+        
+        if(strtotime($tanggal_sekarang) != strtotime($date)) {
+            $tanggal_sekarang = $date;
+            $tafawut = $this->pencarian->get_tafawut(date('j', strtotime($tanggal_sekarang)), date('n', strtotime($tanggal_sekarang)));
+        }
+        
+        $jam = date('H:i:s', strtotime($tafawut.' minutes'));
+        $tanggal = $this->date_format->to_print_text($tanggal_sekarang);
 
-        $jam = date('H:i:s');
-        $tanggal = $this->date_format->to_print_text(date('Y-m-d'));
-
-        $this->generate->output_JSON(array('jam' => $jam, 'tanggal' => $tanggal));
+        $this->generate->output_JSON(array('jam' => $jam, 'tanggal' => $tanggal, 'date' => $tanggal_sekarang, 'tafawut' => $tafawut));
     }
 
 }
