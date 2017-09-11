@@ -94,7 +94,10 @@ foreach ($data_tindakan as $data) {
 
     $pdf->Cell(70, 5, 'Wali Kelas ' . $data['NAMA_KELAS']);
     $pdf->Cell(0, 5, 'Ketua');
+    $posisi_y = $pdf->GetY();
     $pdf->Ln(18);
+    
+    $pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), 80, $posisi_y - 5, 23, 24, '', '');
 
     $pdf->Cell(70, 5, $this->cetak->nama_peg_print_short($data['WALI_KELAS']));
     $pdf->Cell(0, 5, $this->cetak->nama_peg_print_short($data['NAMA_TANGGUNGJAWAB']));

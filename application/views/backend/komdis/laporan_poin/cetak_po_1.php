@@ -48,7 +48,7 @@ $pdf->Ln(15);
 $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
 $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'Sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf c yang berbunyi: "Pemanggilan wali siswa jika akumulasi skor pelanggaran antara '.$POIN_MIN.' hingga '.$POIN_MAKS.' poin", maka dengan ini kami dari  Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan pemanggilan orang tua/pengasuh pondok dari siswa-siswa berikut ini:');
+$pdf->MultiCell(0, 5, 'Sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf c yang berbunyi: "Pemanggilan wali siswa jika akumulasi skor pelanggaran antara ' . $POIN_MIN . ' hingga ' . $POIN_MAKS . ' poin", maka dengan ini kami dari  Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan pemanggilan orang tua/pengasuh pondok dari siswa-siswa berikut ini:');
 $pdf->Ln();
 
 $pdf->MultiCell(0, 5, 'Adapun data-data pelanggaran siswa sebagaimana terlampir.');
@@ -63,8 +63,12 @@ $pdf->Ln(20);
 $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ' . $this->date_format->to_print_text($tanggal));
 $pdf->Ln(8);
 
+$posisi_x = $pdf->GetX();
 $pdf->Cell(0, 5, 'Ketua');
+$posisi_y = $pdf->GetY();
 $pdf->Ln(18);
+
+$pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), $posisi_x, $posisi_y - 5, 23, 24, '', '');
 
 $pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB, $GELAR_AKHIR_TANGGUNGJAWAB));
 $pdf->Ln(15);

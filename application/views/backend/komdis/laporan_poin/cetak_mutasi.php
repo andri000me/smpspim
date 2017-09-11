@@ -51,7 +51,7 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
     $pdf->Ln(10);
 
-    $pdf->MultiCell(0, 5, 'Dengan ini kami dari Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan siswa terlampir untuk mendapatkan Sanksi dan Pembinaan berupa PENCABUTAN HAK SEBAGAI SISWA SECARA TETAP karena pelanggaran yang telah dilakukan siswa tersebut sampai pada hari ini Kamis 21 Nopember 2013 telah memiliki akumulasi poin '.$POIN_MIN.'. Hal ini sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 poin d Bab III Peraturan Pelengkap yang berbunyi : "Dicabut seluruh haknya sebagai siswa secara tetap, jika akumulasi skor pelanggaran telah mencapai 100 poin".');
+    $pdf->MultiCell(0, 5, 'Dengan ini kami dari Komisi Disiplin Siswa Perguruan Islam Mathali\'ul Falah, merekomendasikan siswa terlampir untuk mendapatkan Sanksi dan Pembinaan berupa PENCABUTAN HAK SEBAGAI SISWA SECARA TETAP karena pelanggaran yang telah dilakukan siswa tersebut sampai pada hari ini Kamis 21 Nopember 2013 telah memiliki akumulasi poin ' . $POIN_MIN . '. Hal ini sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 poin d Bab III Peraturan Pelengkap yang berbunyi : "Dicabut seluruh haknya sebagai siswa secara tetap, jika akumulasi skor pelanggaran telah mencapai 100 poin".');
     $pdf->Ln();
 
     $pdf->MultiCell(0, 5, 'Adapun data-data pelanggaran siswa sebagaimana terlampir.');
@@ -66,8 +66,12 @@ if (isset($data['NON-SYARIAH'])) {
     $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ' . $this->date_format->to_print_text($tanggal));
     $pdf->Ln(8);
 
+    $posisi_x = $pdf->GetX();
     $pdf->Cell(0, 5, 'Ketua');
+    $posisi_y = $pdf->GetY();
     $pdf->Ln(18);
+
+    $pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), $posisi_x, $posisi_y - 5, 23, 24, '', '');
 
     $pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB, $GELAR_AKHIR_TANGGUNGJAWAB));
     $pdf->Ln(15);
