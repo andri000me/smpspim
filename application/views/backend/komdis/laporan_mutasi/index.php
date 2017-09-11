@@ -52,6 +52,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
         $(".js-source-states-ID_KELAS").on("change", "", function () {
             var data = $(this).select2("data");
 
+            $('.checkbox-kelas').removeAttr('checked');
+
             ID_KELAS = data.id;
         });
 

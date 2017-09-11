@@ -68,12 +68,16 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         $(".js-source-states-ID_KELAS").on("change", "", function () {
             var data = $(this).select2("data");
 
+            $('.checkbox-kelas').removeAttr('checked');
+            
             ID_KELAS = data.id;
         });
 
         $(".js-source-states-PONDOK_SISWA").on("change", "", function () {
             var data = $(this).select2("data");
 
+            $('.checkbox-pondok').removeAttr('checked');
+            
             ID_PONDOK = data.id;
         });
 
