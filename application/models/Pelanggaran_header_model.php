@@ -305,7 +305,7 @@ WHERE
     }
     
     public function get_group_kelas() {
-        $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
+        $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
         $this->db->from('komdis_siswa');
         $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA');
         $this->db->join('akad_siswa', 'SISWA_AS = ID_SISWA AND TA_KS = TA_AS');
