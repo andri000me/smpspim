@@ -13,8 +13,6 @@ $pdf = $this->fpdf;
 
 foreach ($SISWA as $detail) {
     $pdf = cetak($pdf, $detail, $DATA);
-    
-    break;
 }
 
 function cetak($pdf, $siswa, $data) {

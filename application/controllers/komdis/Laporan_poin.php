@@ -131,8 +131,10 @@ class Laporan_poin extends CI_Controller {
         $start = TRUE;
         if ($input_kolektif) {
             foreach ($data_kolektif as $detail) {
-                if ($start || $data['TINDAKAN_KT'] == 1)
+                if ($start || $data['TINDAKAN_KT'] == 1) {
                     $data['NOMOR_SURAT_KT'] = $nomor_surat;
+                    $nomor_surat++;
+                }
                 if ($data['TINDAKAN_KT'] == 1)
                     $data['PAKET_SP_KT'] = $nomor_paket_sp;
 
@@ -152,7 +154,6 @@ class Laporan_poin extends CI_Controller {
                 }
 
                 $start = FALSE;
-                $nomor_surat++;
             }
         } else {
             $data['NOMOR_SURAT_KT'] = $nomor_surat;
@@ -487,7 +488,7 @@ class Laporan_poin extends CI_Controller {
 
     public function download_statistik() {
 //        $this->laporan_poin->fix_poin();
-        
+
         $data = array(
             'kelas' => $this->laporan_poin->get_group_kelas(),
             'kode' => $this->laporan_poin->get_group_pelanggaran_kelas()

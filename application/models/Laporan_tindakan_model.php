@@ -148,7 +148,7 @@ class Laporan_tindakan_model extends CI_Model {
         $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->group_by('SISWA_KSH');
         $result = $this->db->get();
-        
+
         return $result->result_array();
     }
 
@@ -252,6 +252,22 @@ class Laporan_tindakan_model extends CI_Model {
         $result = $this->db->query($sql);
 
         return $result;
+    }
+
+    public function get_nomor_surat($TINDAKAN_KT, $NOMOR_SURAT_KT = NULL) {
+        $this->db->from($this->table);
+        $this->db->where('TINDAKAN_KT', $TINDAKAN_KT);
+        if ($NOMOR_SURAT_KT != NULL)
+            $this->db->where('NOMOR_SURAT_KT', $NOMOR_SURAT_KT);
+        $this->db->group_by('NOMOR_SURAT_KT');
+        
+        $result = $this->db->get();
+        
+        if($NOMOR_SURAT_KT == NULL)
+            return $result->result();
+        else
+            return $result->row();
+            
     }
 
 }
