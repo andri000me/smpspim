@@ -485,7 +485,9 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_perpondok', $data);
     }
 
-    public function xls_rangking_kelas() {
+    public function download_statistik() {
+//        $this->laporan_poin->fix_poin();
+        
         $data = array(
             'kelas' => $this->laporan_poin->get_group_kelas(),
             'kode' => $this->laporan_poin->get_group_pelanggaran_kelas()

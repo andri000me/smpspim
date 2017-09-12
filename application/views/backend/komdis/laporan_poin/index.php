@@ -88,8 +88,12 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         });
 
         $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_siswa_multi()">Pelanggaran Persiswa</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_siswa_multi()">Pelanggaran Persiswa</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li><li><a href="#" onclick="download_statistik()">Download Statistik</a></li></ul></div>').insertAfter('.buttons-reload');
     });
+    
+    function download_statistik() {
+        window.open('<?php echo site_url('komdis/laporan_poin/download_statistik'); ?>', '_blank');
+    }
 
     function set_type_kelas(TYPE) {
         TYPE_KELAS = TYPE;

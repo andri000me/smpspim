@@ -325,6 +325,7 @@ WHERE
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP');
         $this->db->from('komdis_siswa');
         $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
+        $this->db->join('md_jenis_kehadiran', 'PELANGGARAN_ALPHA_MJK = ID_KJP', 'LEFT');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->group_by('KODE_KJP');
         $this->db->order_by('KODE_KJP', 'ASC');
