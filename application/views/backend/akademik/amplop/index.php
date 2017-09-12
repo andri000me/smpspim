@@ -5,6 +5,7 @@ $subtitle = "Form cetak amplop";
 $this->generate->generate_panel_content($title, $subtitle);
 ?>
 <div class="content animate-panel">
+    <form method="post" action="<?php echo site_url('akademik/amplop/cetak'); ?>" class="form-horizontal" target="_blank">
         <div class="row">
             <div class="col-md-12">
                 <div class="hpanel collapsed">
