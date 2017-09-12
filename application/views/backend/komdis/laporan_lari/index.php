@@ -53,10 +53,14 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/laporan_lari/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
-        $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas">Cetak Perkelas</a></li><li><a href="#" onclick="cetak_siswa_multi()">Lari Persiswa</a></li></ul></div>').insertAfter('.buttons-reload');
+        $(".buttons-add, .buttons-print").remove();
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas">Cetak Perkelas</a></li><li><a href="#" onclick="cetak_siswa_multi()">Lari Persiswa</a></li></ul></div><button class="btn btn-sm btn-default" onclick="check_all()">Check All</button>').insertAfter('.buttons-reload');
         $('').insertAfter('.buttons-reload');
     });
+    
+    function check_all() {
+        $(".checkbox").trigger('click');
+    }
 
     function cetak_modal_kelas() {
         $("#cetak_modal_kelas").modal("hide");

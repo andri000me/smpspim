@@ -43,7 +43,7 @@ foreach ($siswa as $data) {
         $pdf->Ln();
 
         $pdf->Cell(20, 5, 'Domisili');
-        $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa->PONDOK_SISWA == NULL || $siswa->PONDOK_SISWA == 1) ? 'Belum Mondok' : $siswa->NAMA_PONDOK_MPS . ' ' . $siswa['ALAMAT_MPS'], 100));
+        $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa->PONDOK_SISWA == NULL || $siswa->PONDOK_SISWA == 1) ? 'Belum Mondok' : $siswa->NAMA_PONDOK_MPS . ' ' . $siswa->ALAMAT_MPS, 100));
         $pdf->Cell(20, 5, 'Kelas');
         $pdf->Cell(0, 5, ': ' . $siswa->NAMA_KELAS);
         $pdf->Ln();
