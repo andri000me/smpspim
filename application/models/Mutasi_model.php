@@ -41,6 +41,7 @@ class Mutasi_model extends CI_Model {
         $this->db->join('akad_siswa as', 'as.SISWA_AS=mn.SISWA_NIS AND as.TA_AS=mn.TA_NIS', 'LEFT');
         $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS', 'LEFT');
         $this->db->join('md_tingkat mt','as.TINGKAT_AS=mt.ID_TINGK', 'LEFT');
+        $this->db->join('md_departemen dept','dept.ID_DEPT=mt.DEPT_TINGK', 'LEFT');
         $this->db->join('md_status_mutasi msmt', 'ms.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');

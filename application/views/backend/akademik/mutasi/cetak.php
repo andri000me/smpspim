@@ -69,10 +69,10 @@ $pdf->Ln();
 
 $pdf->Cell(20);
 $pdf->Cell(20, 5, 'Kelas');
-$pdf->Cell(0, 5, ': '.$siswa->NAMA_KELAS);
+$pdf->Cell(0, 5, ': '.($siswa->NAMA_KELAS == NULL ? '-' : $siswa->NAMA_KELAS));
 $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'adalah benar-benar belajar di kelas '.$siswa->NAMA_TINGK.' ('.$this->money->terbilang($siswa->NAMA_TINGK).') Madrasah Tsanawiyah Perguruan Islam Mathali\'ul Falah Kajen Margoyoso Pati Jawa Tengah pada tahun ajaran '.$this->session->userdata('NAMA_TA_ACTIVE').'.');
+$pdf->MultiCell(0, 5, 'adalah benar-benar belajar '.($siswa->NAMA_TINGK == NULL ? 'pelajar di' : ('di kelas '.$siswa->NAMA_TINGK.' ('. trim($this->money->terbilang($siswa->NAMA_TINGK)).') '. ucwords(strtolower($siswa->NAMA_DEPT)))).' Perguruan Islam Mathali\'ul Falah Kajen Margoyoso Pati Jawa Tengah pada tahun ajaran '.$this->session->userdata('NAMA_TA_ACTIVE').'.');
 $pdf->Ln();
 
 $pdf->MultiCell(0, 5, 'Siswa tersebut keluar sekolah pada tanggal '.$this->date_format->to_print_text($siswa->TANGGAL_MUTASI_SISWA).' '.$alasan[$siswa->ID_MUTASI].'.');
