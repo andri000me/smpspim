@@ -214,7 +214,7 @@ class Pelanggaran_header_model extends CI_Model {
             $where_pondok = 'WHERE PONDOK_SISWA=' . $ID_KELAS;
 
         $sql = "SELECT 
-    NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT,
+    NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT, NAMA_KELAS,
     MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) AS 'B07',
     MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END) AS 'B08',
     MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END) AS 'B09',
@@ -249,6 +249,7 @@ FROM
     (
         SELECT *, MONTH(TANGGAL_KS) AS BULAN, SUM(POIN_KJP) AS TOTAL_POIN
         FROM akad_siswa
+        INNER JOIN akad_kelas ON KELAS_AS=ID_KELAS
         LEFT OUTER JOIN komdis_siswa ON SISWA_KS=SISWA_AS AND TA_KS=TA_AS
         LEFT OUTER JOIN komdis_jenis_pelanggaran ON PELANGGARAN_KS=ID_KJP 
         WHERE " . $where_kelas . " TA_AS=" . $this->session->userdata('ID_TA_ACTIVE') . " AND KONVERSI_AS=0
@@ -263,7 +264,7 @@ INNER JOIN komdis_jenis_tindakan ON ID_KJT=TINDAKAN_KT
 GROUP BY SISWA_KSH) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
 " . $where_pondok . "
 GROUP BY SISWA_AS
-ORDER BY NO_ABSEN_AS ASC
+ORDER BY NAMA_KELAS, NO_ABSEN_AS ASC
 ";
         $query = $this->db->query($sql);
 
