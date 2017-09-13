@@ -111,13 +111,13 @@ function cetak($pdf, $data, $title) {
     $pdf->Cell($length, 3, ' Kec. ' . $data->NAMA_KEC_SISWA . ', ' . str_replace('Kabupaten', 'Kab', $data->NAMA_KAB_SISWA), 0, 0, 'L');
     $pdf->Ln(8);
 
-    $pdf->Cell($header_content - 4, 3, 'TA', 0, 0, 'L');
-    $pdf->Cell($length, 3, ': ' . $CI->session->userdata('NAMA_TA_ACTIVE'), 0, 0, 'L');
-    $pdf->Ln();
-
-    $pdf->Cell($header_content - 4, 3, 'Kelas', 0, 0, 'L');
-    $pdf->Cell($length, 3, ': ' . $data->NAMA_KELAS, 0, 0, 'L');
-    $pdf->Ln();
+//    $pdf->Cell($header_content - 4, 3, 'TA', 0, 0, 'L');
+//    $pdf->Cell($length, 3, ': ' . $CI->session->userdata('NAMA_TA_ACTIVE'), 0, 0, 'L');
+//    $pdf->Ln();
+//
+//    $pdf->Cell($header_content - 4, 3, 'Kelas', 0, 0, 'L');
+//    $pdf->Cell($length, 3, ': ' . $data->NAMA_KELAS, 0, 0, 'L');
+//    $pdf->Ln();
 
     $file_name = 'files/barcode/' . $data->ID_SISWA . '.png';
     $text = $data->NIS_SISWA;
@@ -148,7 +148,7 @@ function cetak($pdf, $data, $title) {
         elseif (file_exists('files/siswa/' . $data->ID_SISWA . '.png'))
             $pdf->Image(base_url('files/siswa/' . $data->ID_SISWA . '.png'), $posisi_x, $posisi_y + 18, 20, 26.6, '', '');
         else
-            $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 20, 20, '', '');
+            $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 20, 26.6, '', '');
     }
 
     return $pdf;
