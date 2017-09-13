@@ -163,6 +163,10 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
 
     $pdf->Cell(90);
     $pdf->Cell(0, 5, 'Pembantu Direktur Bidang Kesiswaan');
+    $ttd = strtolower($post['TTD_SURAT']);
+    $ttd = str_replace('.', '', $ttd);
+    $ttd = str_replace(' ', '_', $ttd);
+    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 115, $pdf->GetY(), 23, 24, '', '');
     $pdf->Ln(18);
 
     $pdf->SetFont('Arial', 'UB', 10);
@@ -255,6 +259,72 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     }
     $pdf->SetFont('Arial', 'I', 8);
     $pdf->Cell(0, 5, 'Dicetak tanggal: ' . $this->date_format->to_print_short(date('Y-m-d')), 0, 0, 'R');
+}
+
+
+$pdf->AddPage("P", "A4");
+
+for ($i = 0; $i < 300; $i++) {
+    $pdf->Line(0, $i, 250, $i);
+}
+
+$pdf->SetY(100);
+$pdf->SetFont('Arial', 'B', 40);
+$pdf->Cell(0, 5, 'DIVIDER', 0, 0, 'C');
+$pdf->Ln();
+
+$MULAI_NOMOR_SURAT = $post['MULAI_NOMOR_SURAT'];
+foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
+    $siswa = $detail['siswa'];
+    $pelanggaran = $detail['pelanggaran'];
+    $pdf = cetak($pdf, $siswa, $post, $MULAI_NOMOR_SURAT);
+    $MULAI_NOMOR_SURAT++;
+}
+
+function cetak($pdf, $siswa, $data, $nomor_surat) {
+    $CI = & get_instance();
+
+    $width = 210;
+    $height = 297 / 4;
+    $margin = 4;
+
+    $pdf->SetMargins($margin + 6, $margin);
+    $pdf->AddPage("L", array($width, $height));
+    $pdf->SetAutoPageBreak(true, 0);
+
+    $pdf->SetTextColor(2, 116, 54);
+    $pdf->SetDrawColor(2, 116, 54);
+    $pdf = $CI->cetak->header_yayasan($pdf, $margin);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetDrawColor(0, 0, 0);
+
+    $pdf->SetFont('Arial', '', 9);
+
+    $pdf->Cell(13, 5, 'Nomor');
+    $pdf->Cell(0, 5, ': KM/' . $nomor_surat . '/A-II/PIM/' . (date('Y') - $CI->pengaturan->getTahunBerdiri()) . '/' . $CI->date_format->toRomawi(date('n')) . '/' . date('Y'));
+    $pdf->Ln();
+
+    $pdf->Cell(13, 5, 'Hal');
+    $pdf->SetFont('Arial', 'I', 9);
+    $pdf->MultiCell(80, 5, ': Pemberitahuan & Undangan');
+    $pdf->Ln();
+
+    $pdf->SetY($height * 0.6);
+    $pdf->SetFont('Arial', '', 9);
+
+    $pdf->Cell(120);
+    $pdf->Cell(0, 5, 'Kepada Yang Terhormat,');
+    $pdf->Ln(8);
+
+    $pdf->Cell(120);
+    $pdf->Cell(0, 5, 'Bapak/Ibu Wali Murid');
+    $pdf->Ln();
+
+    $pdf->Cell(120);
+    $pdf->Cell(0, 5, 'sdr. ' . $CI->cetak->nama_wali_siswa($siswa));
+    $pdf->Ln();
+
+    return $pdf;
 }
 
 $pdf->Output();
