@@ -31,7 +31,7 @@ foreach ($data as $detail) {
     $pdf->Ln();
 
     $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(7, 4, 'No', 'LTR', 0, 'C');
+    $pdf->Cell(7, 8, 'No', 'LTR', 0, 'C');
     $pdf->Cell(20, 8, 'NIS', 1, 0, 'C');
     $pdf->Cell(40, 8, 'Nama', 1, 0, 'C');
     $pdf->Cell(7, 4, 'Poin', 'LTR', 0, 'C');
@@ -41,7 +41,7 @@ foreach ($data as $detail) {
     $pdf->Cell(18, 4, 'Cawu', 1, 0, 'C');
     $pdf->Cell(7, 8, 'Jml', 1, 0, 'C');
     $pdf->Ln(4);
-    $pdf->Cell(7, 4, 'Absn', 'LBR', 0, 'C');
+    $pdf->Cell(7);
     $pdf->Cell(60);
     $pdf->Cell(7, 4, 'Lalu', 'LBR', 0, 'C');
     $pdf->Cell(27);
@@ -68,6 +68,7 @@ foreach ($data as $detail) {
     $jumlah_takliq = 0;
     foreach ($DATA as $DETAIL) {
         if ($temp_kelas != $DETAIL->NAMA_KELAS) {
+            $no = 1;
             $pdf->SetFont('Arial', 'B', 9);
             $pdf->Cell(191, 4, 'KELAS ' . strtoupper($DETAIL->NAMA_KELAS), 1, 0, 'L');
             $pdf->Ln();
@@ -90,7 +91,7 @@ foreach ($data as $detail) {
             $pdf->setFillColor(128, 128, 128);
 
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(7, 4, $DETAIL->NO_ABSEN_AS, 1, 0, 'C', TRUE);
+        $pdf->Cell(7, 4, $no++, 1, 0, 'C', TRUE);
         $pdf->Cell(20, 4, $DETAIL->NIS_SISWA == NULL ? 'KELUAR' : $DETAIL->NIS_SISWA, 1, 0, 'C', TRUE);
         $pdf->Cell(40, 4, $DETAIL->NAMA_SISWA, 1, 0, 'L', TRUE);
         $pdf->Cell(7, 4, $DETAIL->POIN_TAHUN_LALU_KSH, 1, 0, 'C', TRUE);
