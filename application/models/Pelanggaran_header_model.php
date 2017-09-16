@@ -311,11 +311,13 @@ WHERE
         $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA');
         $this->db->join('akad_siswa', 'SISWA_AS = ID_SISWA AND TA_KS = TA_AS');
         $this->db->join('akad_kelas', 'KELAS_AS = ID_KELAS');
+        $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS');
+        $this->db->join('md_departemen', 'ID_DEPT= DEPT_TINGK');
         $this->db->join('md_pegawai','WALI_KELAS = ID_PEG');
         $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->group_by('ID_KELAS , KODE_KJP');
-        $this->db->order_by('NAMA_KELAS, KODE_KJP', 'ASC');
+        $this->db->order_by('TINGKAT_KELAS, JK_KELAS, NAMA_KELAS, KODE_KJP', 'ASC');
         
         $query = $this->db->get();
 
@@ -324,11 +326,12 @@ WHERE
     
     public function get_group_pelanggaran_kelas() {
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP');
-        $this->db->from('komdis_siswa');
-        $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
+        $this->db->from('komdis_jenis_pelanggaran');
+//        $this->db->from('komdis_siswa');
+//        $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
         $this->db->join('md_jenis_kehadiran', 'PELANGGARAN_ALPHA_MJK = ID_KJP', 'LEFT');
-        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
-        $this->db->group_by('KODE_KJP');
+//        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
+//        $this->db->group_by('KODE_KJP');
         $this->db->order_by('KODE_KJP', 'ASC');
         
         $query = $this->db->get();
