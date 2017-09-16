@@ -240,10 +240,11 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
 // ======================================================================== WALI KELAS ========================================================================
 
 
-$pdf->AddPage("P", "A4");
-
-$pdf->SetLineWidth(600);
-$pdf->Line(0, 0, 200, 0);
+//$pdf->AddPage("P", "A4");
+//
+//$pdf->SetLineWidth(600);
+//$pdf->Line(0, 0, 200, 0);
+//$pdf->SetLineWidth(0.2);
 
 $temp_kelas = null;
 $kelas = array();
@@ -261,12 +262,12 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
         $jumlah_anak = 0;
 
         $pdf->AddPage("P", "A4");
-
-        $pdf->SetLineWidth(80);
-        $pdf->Line(0, 0, 200, 0);
-
-        $pdf->SetLineWidth(130);
-        $pdf->Line(0, 240, 200, 240);
+//
+//        $pdf->SetLineWidth(80);
+//        $pdf->Line(0, 0, 200, 0);
+//
+//        $pdf->SetLineWidth(130);
+//        $pdf->Line(0, 240, 200, 240);
 
         $pdf->SetY(100);
         $pdf->SetFont('Arial', 'B', 24);
@@ -332,8 +333,12 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
         $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ' . $this->date_format->to_print_text($tanggal));
         $pdf->Ln(8);
 
+        $posisi_x = $pdf->GetX();
         $pdf->Cell(0, 5, 'Ketua');
+        $posisi_y = $pdf->GetY();
         $pdf->Ln(18);
+
+        $pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), $posisi_x, $posisi_y - 5, 23, 24, '', '');
 
         $pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB, $GELAR_AKHIR_TANGGUNGJAWAB));
     }

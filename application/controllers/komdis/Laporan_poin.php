@@ -460,6 +460,24 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_perkelas', $data);
     }
 
+    public function cetak_pondok_perkelas($ID_KELAS = NULL) {
+        $input_kelas = $this->input->get('KELAS');
+        $data = array();
+
+        if ($input_kelas != "") {
+            $kelas_exp = explode(',', $input_kelas);
+            foreach ($kelas_exp as $ID_KELAS) {
+                $data['data'][] = array(
+                    'KELAS' => $this->kelas->get_by_id($ID_KELAS),
+                    'DATA' => $this->laporan_poin->get_data_perkelas($ID_KELAS, TRUE, 'ORDER BY NAMA_KELAS, NAMA_PONDOK_MPS, NO_ABSEN_AS ASC'),
+                );
+            }
+            $data['TANGGAL'] = $this->laporan_poin->get_terakhir_input();
+        }
+
+        $this->load->view('backend/komdis/laporan_poin/cetak_pondok_perkelas', $data);
+    }
+
     public function cetak_perpondok() {
         $input_pondok = $this->input->get('PONDOK');
         $data = array();

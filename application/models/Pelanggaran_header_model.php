@@ -204,9 +204,14 @@ class Pelanggaran_header_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
-    public function get_data_perkelas($ID_KELAS, $KELAS = TRUE) {
+    public function get_data_perkelas($ID_KELAS, $KELAS = TRUE, $ORDER_BY = NULL) {
         $where_kelas = '';
         $where_pondok = '';
+        
+        if($ORDER_BY == NULL) 
+            $order = 'ORDER BY NAMA_KELAS, NO_ABSEN_AS ASC';
+        else
+            $order = $ORDER_BY;
 
         if ($KELAS)
             $where_kelas = 'KELAS_AS=' . $ID_KELAS . ' AND';
@@ -214,7 +219,7 @@ class Pelanggaran_header_model extends CI_Model {
             $where_pondok = 'WHERE PONDOK_SISWA=' . $ID_KELAS;
 
         $sql = "SELECT 
-    NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT, NAMA_KELAS,
+    NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT, NAMA_KELAS, ID_MPS, NAMA_PONDOK_MPS, ALAMAT_MPS,
     MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) AS 'B07',
     MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END) AS 'B08',
     MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END) AS 'B09',
@@ -262,10 +267,10 @@ LEFT OUTER JOIN (SELECT SISWA_KSH, NAMA_KJT, ID_KJT FROM
 INNER JOIN komdis_siswa_header ON ID_KSH=PELANGGARAN_HEADER_KT
 INNER JOIN komdis_jenis_tindakan ON ID_KJT=TINDAKAN_KT
 GROUP BY SISWA_KSH) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
+LEFT OUTER JOIN md_pondok_siswa ON ID_MPS=PONDOK_SISWA
 " . $where_pondok . "
 GROUP BY SISWA_AS
-ORDER BY NAMA_KELAS, NO_ABSEN_AS ASC
-";
+".$order;
         $query = $this->db->query($sql);
 
         return $query->result();

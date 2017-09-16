@@ -48,7 +48,7 @@ $pdf->Ln(15);
 $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
 $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai '.$POIN_MIN.' poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menandatangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
+$pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai ' . $POIN_MIN . ' poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menandatangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
 $pdf->Ln();
 
 $pdf->MultiCell(0, 5, 'Selanjutnya, kami merekomendasikan agar orang tua / wali dari anak tersebut diberi pemberitahuan.');
@@ -70,7 +70,7 @@ $pdf->Ln(18);
 
 $pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), $posisi_x, $posisi_y - 5, 23, 24, '', '');
 
-$pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB,$GELAR_AKHIR_TANGGUNGJAWAB));
+$pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB, $GELAR_AKHIR_TANGGUNGJAWAB));
 $pdf->Ln(15);
 
 $pdf->SetFont('Arial', 'U', 10);
@@ -237,12 +237,12 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
 }
 
 // ======================================================================== WALI KELAS ========================================================================
-
-
-$pdf->AddPage("P", "A4");
-
-$pdf->SetLineWidth(600);
-$pdf->Line(0, 0, 200, 0);
+//
+//$pdf->AddPage("P", "A4");
+//
+//$pdf->SetLineWidth(600);
+//$pdf->Line(0, 0, 200, 0);
+//$pdf->SetLineWidth(0.2);
 
 $temp_kelas = null;
 $kelas = array();
@@ -261,11 +261,11 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
 
         $pdf->AddPage("P", "A4");
 
-        $pdf->SetLineWidth(80);
-        $pdf->Line(0, 0, 200, 0);
-
-        $pdf->SetLineWidth(130);
-        $pdf->Line(0, 240, 200, 240);
+//        $pdf->SetLineWidth(80);
+//        $pdf->Line(0, 0, 200, 0);
+//
+//        $pdf->SetLineWidth(130);
+//        $pdf->Line(0, 240, 200, 240);
 
         $pdf->SetY(100);
         $pdf->SetFont('Arial', 'B', 24);
@@ -316,7 +316,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
         $pdf->Cell(0, 5, 'Assalamu\'alaikum Warahamtullahi Wabarakatuh');
         $pdf->Ln(10);
 
-$pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai 80 poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menanda tangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
+        $pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 tentang Pembinaan dan Sanksi Pasal 10 dan 11 Bab III Peraturan Pelengkap, yang menyatakan siswa akan diberi peringatan terakhir disertai janji untuk tidak mengulangi pelanggaran, jika akumulasi skor pelanggaran telah mencapai 80 poin, dengan ini kami beritahukan kepada bapak bahwa siswa-siswa terlampir telah menanda tangani surat pernyataan untuk tidak melakukan pelanggaran apapun lagi.');
         $pdf->Ln();
 
         $pdf->MultiCell(0, 5, 'Adapun data-data pelanggaran siswa sebagaimana terlampir.');
@@ -331,8 +331,12 @@ $pdf->MultiCell(0, 5, 'Sesuai dengan Tata Tertib Siswa Perguruan Islam Mathali\'
         $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ' . $this->date_format->to_print_text($tanggal));
         $pdf->Ln(8);
 
+        $posisi_x = $pdf->GetX();
         $pdf->Cell(0, 5, 'Ketua');
+        $posisi_y = $pdf->GetY();
         $pdf->Ln(18);
+
+        $pdf->Image(base_url('files/aplikasi/tt_ketua_komdis.png'), $posisi_x, $posisi_y - 5, 23, 24, '', '');
 
         $pdf->Cell(0, 5, $this->cetak->nama_peg_print_title($GELAR_AWAL_TANGGUNGJAWAB, $NAMA_TANGGUNGJAWAB, $GELAR_AKHIR_TANGGUNGJAWAB));
     }

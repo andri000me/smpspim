@@ -20,11 +20,11 @@ foreach ($data as $kelas) {
 
     $pdf->AddPage("P", "A4");
 
-    $pdf->SetLineWidth(80);
-    $pdf->Line(0, 0, 200, 0);
-
-    $pdf->SetLineWidth(130);
-    $pdf->Line(0, 240, 200, 240);
+//    $pdf->SetLineWidth(80);
+//    $pdf->Line(0, 0, 200, 0);
+//
+//    $pdf->SetLineWidth(130);
+//    $pdf->Line(0, 240, 200, 240);
 
     $pdf->SetY(100);
     $pdf->SetFont('Arial', 'B', 40);

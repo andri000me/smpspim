@@ -18,12 +18,12 @@ foreach ($data_tindakan as $data) {
 
     if ($temp_kelas != $data['NAMA_KELAS']) {
         $pdf->AddPage("P", "A5");
-
-        $pdf->SetLineWidth(50);
-        $pdf->Line(0, 0, 200, 0);
-
-        $pdf->SetLineWidth(70);
-        $pdf->Line(0, 180, 200, 180);
+//
+//        $pdf->SetLineWidth(50);
+//        $pdf->Line(0, 0, 200, 0);
+//
+//        $pdf->SetLineWidth(70);
+//        $pdf->Line(0, 180, 200, 180);
 
         $pdf->SetY(70);
         $pdf->SetFont('Arial', 'B', 24);
