@@ -62,10 +62,8 @@ class Siswa extends CI_Controller {
             $row[] = $item->JK_SISWA;
             $row[] = $item->TEMPAT_LAHIR_SISWA;
             $row[] = $item->TANGGAL_LAHIR_SISWA;
-            $row[] = $item->ALAMAT_SISWA;
-            $row[] = $item->NAMA_KEC;
-            $row[] = $item->NAMA_KAB;
-            $row[] = $item->NAMA_PROV;
+            $row[] = $item->ALAMAT_SISWA_SHOW;
+            $row[] = $item->NAMA_PONDOK_MPS_SHOW;
             $row[] = $item->NAMA_KELAS_SHOW;
 
             if ($item->KELAS_AS == NULL)

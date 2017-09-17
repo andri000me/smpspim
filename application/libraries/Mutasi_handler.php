@@ -21,6 +21,7 @@ class Mutasi_handler {
         $this->CI->load->model(array(
             'akad_siswa_model' => 'akad_siswa',
             'siswa_model' => 'siswa',
+            'kelas_model' => 'kelas',
             'assign_tagihan_model' => 'assign_tagihan'
         ));
         $this->CI->load->library('nis_handler');
@@ -81,6 +82,8 @@ class Mutasi_handler {
             
             $data_siswa = $this->CI->siswa->get_by_id_mutasi($ID_SISWA);
             $this->CI->nis_handler->hapus_nis($data_siswa);
+            
+            $this->CI->kelas->fix_jumlah_siswa();
         }
         
         return $insert;

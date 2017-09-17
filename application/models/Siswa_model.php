@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Siswa_model extends CI_Model {
 
     var $table = 'md_siswa';
-    var $column = array('NIS_SISWA','NAMA_SISWA', 'ANGKATAN_SISWA','JK_SISWA', 'TEMPAT_LAHIR_SISWA', 'TANGGAL_LAHIR_SISWA', 'ALAMAT_SISWA', 'kec.NAMA_KEC', 'kab.NAMA_KAB', 'prov.NAMA_PROV','IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS)','ID_SISWA');
+    var $column = array('NIS_SISWA','NAMA_SISWA', 'ANGKATAN_SISWA','JK_SISWA', 'TEMPAT_LAHIR_SISWA', 'TANGGAL_LAHIR_SISWA', 'CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV)','IF(NAMA_PONDOK_MPS IS NULL, "-", NAMA_PONDOK_MPS)','IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS)','ID_SISWA');
     var $primary_key = "ID_SISWA";
     var $order = array("ID_SISWA" => 'ASC');
 
@@ -69,12 +69,13 @@ class Siswa_model extends CI_Model {
     }
     
     private function _get_table_simple($ALL = FALSE) {
-        $this->db->select('*, IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS) AS NAMA_KELAS_SHOW');
+        $this->db->select('*, IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS) AS NAMA_KELAS_SHOW, IF(NAMA_PONDOK_MPS IS NULL, "-", NAMA_PONDOK_MPS) AS NAMA_PONDOK_MPS_SHOW, CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV) AS ALAMAT_SISWA_SHOW');
         $this->db->from($this->table);
         $this->db->join('md_jenis_kelamin mjk', $this->table.'.JK_SISWA=mjk.ID_JK', 'LEFT');
         $this->db->join('md_kecamatan kec', $this->table.'.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
+        $this->db->join('md_pondok_siswa mps', $this->table.'.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ', 'LEFT');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
         if ($ALL)
@@ -125,7 +126,9 @@ class Siswa_model extends CI_Model {
         }
 
         if (isset($_POST['order'])) {
-            $column[10] = 'NAMA_KELAS_SHOW';
+            $column[6] = 'ALAMAT_SISWA_SHOW';
+            $column[7] = 'NAMA_PONDOK_MPS_SHOW';
+            $column[8] = 'NAMA_KELAS_SHOW';
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;

@@ -11,9 +11,7 @@ $columns = array(
     'TEMPAT LAHIR',
     'TANGGAL LAHIR',
     'ALAMAT',
-    'KECAMATAN',
-    'KABUPATEN',
-    'PROVINSI',
+    'PONDOK',
     'KELAS',
     'AKSI',
 );

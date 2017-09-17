@@ -42,6 +42,7 @@ $DATA_SHEET[$NUMBER_SHEET] = array(
     'text' => 'Tahunan'
 );
 
+// TITLE
 $objPHPExcel->getActiveSheet()->setCellValue('A1', $DATA_SHEET[0]['text']);
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(16);
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
@@ -52,18 +53,18 @@ $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PH
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 $objPHPExcel->getActiveSheet()->getCell('A1')->getHyperlink()->setUrl("sheet://'" . $DATA_SHEET[0]['title'] . "'!A1");
 
-$start_row_data = 6;
-$end_row_data = 0;
+$START_ROW_DATA = 6;
+$END_ROW_DATA = 0;
 
-$column_end_header = 'E';
-$column_jumlah_siswa = 'D';
-$column_porsentase_siswa = 'E';
-$column_start_pelanggaran = $this->cetak->next_char($column_end_header, 1);
-$last_column_kode_pelanggaran = $this->cetak->next_char($column_start_pelanggaran, $jumlah_kode_pelanggaran * 3);
+$COLUMN_END_HEADER = 'E';
+$COLUMN_JUMLAH_SISWA = 'D';
+$COLUMN_PORSENTASE_SISWA = 'E';
+$COLUMN_START_PELANGGARAN = $this->cetak->next_char($COLUMN_END_HEADER, 1);
 
-$objPHPExcel->getActiveSheet()->setCellValue($column_start_pelanggaran . '1', 'DATA JUMLAH SISWA DAN POIN PELANGGARAN SERTA RANGKING KELAS YANG BUTUH PENANGANAN INTENSIF');
-$objPHPExcel->getActiveSheet()->getStyle($column_start_pelanggaran . '1')->getFont()->setSize(14);
-$objPHPExcel->getActiveSheet()->getStyle($column_start_pelanggaran . '1')->getFont()->setBold(true);
+// HEADER
+$objPHPExcel->getActiveSheet()->setCellValue($COLUMN_START_PELANGGARAN . '1', 'DATA JUMLAH SISWA DAN POIN PELANGGARAN SERTA RANGKING KELAS YANG BUTUH PENANGANAN INTENSIF');
+$objPHPExcel->getActiveSheet()->getStyle($COLUMN_START_PELANGGARAN . '1')->getFont()->setSize(14);
+$objPHPExcel->getActiveSheet()->getStyle($COLUMN_START_PELANGGARAN . '1')->getFont()->setBold(true);
 
 $objPHPExcel->getActiveSheet()->setCellValue('A3', 'NO');
 $objPHPExcel->getActiveSheet()->mergeCells('A3:A5');
@@ -76,30 +77,56 @@ $objPHPExcel->getActiveSheet()->mergeCells('D3:D5');
 $objPHPExcel->getActiveSheet()->setCellValue('E3', '% KELAS');
 $objPHPExcel->getActiveSheet()->mergeCells('E3:E5');
 
-$objPHPExcel->getActiveSheet()->setCellValue($column_start_pelanggaran . '3', 'KODE PELANGGARAN');
-$objPHPExcel->getActiveSheet()->mergeCells($column_start_pelanggaran . '3:' . $this->cetak->next_char($column_start_pelanggaran, ($jumlah_kode_pelanggaran * 3) - 1) . '3');
+$objPHPExcel->getActiveSheet()->setCellValue($COLUMN_START_PELANGGARAN . '3', 'KODE PELANGGARAN');
+$objPHPExcel->getActiveSheet()->mergeCells($COLUMN_START_PELANGGARAN . '3:' . $this->cetak->next_char($COLUMN_START_PELANGGARAN, ($jumlah_kode_pelanggaran * 3) - 1) . '3');
 
-$objPHPExcel->getActiveSheet()->setCellValue($last_column_kode_pelanggaran . '3', 'UMUM');
-$objPHPExcel->getActiveSheet()->mergeCells($last_column_kode_pelanggaran . '3:' . $this->cetak->next_char($last_column_kode_pelanggaran, 6) . '3');
-$objPHPExcel->getActiveSheet()->setCellValue($last_column_kode_pelanggaran . '4', 'JUMLAH');
-$objPHPExcel->getActiveSheet()->mergeCells($last_column_kode_pelanggaran . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 2) . '4');
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 3) . '4', 'PORSENTASE');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 3) . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 5) . '4');
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 6) . '4', 'RANGKING');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 6) . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 6) . '5');
+for ($i = 0; $i < 2; $i++) {
+    if ($i == 0) {
+        $column_start = $this->cetak->next_char($COLUMN_START_PELANGGARAN, $jumlah_kode_pelanggaran * 3);
+    } elseif ($i == 1) {
+        $column_start = $this->cetak->next_char($column_start, $end_column + 1);
+    }
 
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 7) . '3', 'KHUSUS');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 7) . '3:' . $this->cetak->next_char($last_column_kode_pelanggaran, 13) . '3');
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 7) . '4', 'JUMLAH');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 7) . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 9) . '4');
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 10) . '4', 'PORSENTASE');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 10) . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 12) . '4');
-$objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 13) . '4', 'RANGKING');
-$objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($last_column_kode_pelanggaran, 13) . '4:' . $this->cetak->next_char($last_column_kode_pelanggaran, 13) . '5');
+    $objPHPExcel->getActiveSheet()->setCellValue($column_start . '3', $i == 0 ? 'UMUM' : 'KHUSUS');
+    $objPHPExcel->getActiveSheet()->mergeCells($column_start . '3:' . $this->cetak->next_char($column_start, 7) . '3');
 
+    $objPHPExcel->getActiveSheet()->setCellValue($column_start . '4', 'JUMLAH');
+    $objPHPExcel->getActiveSheet()->mergeCells($column_start . '4:' . $this->cetak->next_char($column_start, 2) . '4');
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 3) . '4', 'PORSENTASE KELAS');
+    $objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($column_start, 3) . '4:' . $this->cetak->next_char($column_start, 5) . '4');
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 6) . '4', 'RANGKING');
+    $objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($column_start, 6) . '4:' . $this->cetak->next_char($column_start, 6) . '5');
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 7) . '4', 'PORSENTASE PELANGGARAN');
+    $objPHPExcel->getActiveSheet()->mergeCells($this->cetak->next_char($column_start, 7) . '4:' . $this->cetak->next_char($column_start, 7) . '5');
+
+    if ($i == 0)
+        $COLUMN_START_UMUM = $column_start;
+    elseif ($i == 1)
+        $COLUMN_START_KHUSUS = $column_start;
+
+    $end_column = 7;
+}
+
+// HEADER JENIS TINDAKAN
+$COLUMN_START_JENIS_PELANGGARAN = $this->cetak->next_char($column_start, $end_column + 1);
+$DATA_TINDAKAN = array();
+$i = 0;
+foreach ($jenis_tindakan as $detail) {
+    $column = $this->cetak->next_char($COLUMN_START_JENIS_PELANGGARAN, $i);
+    $objPHPExcel->getActiveSheet()->setCellValue($column . '4', $detail->NAMA_KJT);
+    $objPHPExcel->getActiveSheet()->mergeCells($column . '4:' . $column . '5');
+
+    $DATA_TINDAKAN[$detail->ID_KJT] = $column;
+
+    $i++;
+}
+$objPHPExcel->getActiveSheet()->setCellValue($COLUMN_START_JENIS_PELANGGARAN . '3', 'JUMLAH TINDAKAN');
+$objPHPExcel->getActiveSheet()->mergeCells($COLUMN_START_JENIS_PELANGGARAN . '3:' . $this->cetak->next_char($COLUMN_START_JENIS_PELANGGARAN, $i - 1) . '3');
+
+// HEADER KODE PELANGGARAN
 $DATA_KODE = array();
 $DATA_KODE_WARNING = array();
-$temp_column = $column_end_header;
+$temp_column = $COLUMN_END_HEADER;
 foreach ($kode as $detail) {
     $temp_column = $this->cetak->next_char($temp_column, 1);
     $objPHPExcel->getActiveSheet()->setCellValue($temp_column . '4', $detail->KODE_KJP);
@@ -113,7 +140,8 @@ foreach ($kode as $detail) {
     $temp_column = $this->cetak->next_char($temp_column, 2);
 }
 
-$temp_column = $column_end_header;
+// HEADER DETAIL
+$temp_column = $COLUMN_END_HEADER;
 for ($colomn = 0; $colomn < $jumlah_kode_pelanggaran; $colomn++) {
     $temp_column = $this->cetak->next_char($temp_column, 1);
     $objPHPExcel->getActiveSheet()->setCellValue($temp_column . '5', '*');
@@ -126,126 +154,208 @@ for ($colomn = 0; $colomn < $jumlah_kode_pelanggaran; $colomn++) {
     $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(5);
 }
 
+// HEADER DETAIL UMUM DAN KHUSUS
 for ($i = 0; $i < 2; $i++) {
+    if ($i == 0)
+        $temp_column = $COLUMN_START_UMUM;
+    elseif ($i == 1)
+        $temp_column = $COLUMN_START_KHUSUS;
+
     for ($j = 0; $j < 2; $j++) {
-        $temp_column = $this->cetak->next_char($temp_column, 1);
+        if ($j == 1)
+            $temp_column = $this->cetak->next_char($temp_column, 1);
+
         $objPHPExcel->getActiveSheet()->setCellValue($temp_column . '5', '*');
-        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(8);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(10);
         $temp_column = $this->cetak->next_char($temp_column, 1);
         $objPHPExcel->getActiveSheet()->setCellValue($temp_column . '5', '**');
-        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(8);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(10);
         $temp_column = $this->cetak->next_char($temp_column, 1);
         $objPHPExcel->getActiveSheet()->setCellValue($temp_column . '5', '***');
-        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(8);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(10);
     }
-    $temp_column = $this->cetak->next_char($temp_column, 1);
-    $objPHPExcel->getActiveSheet()->getColumnDimension($temp_column)->setWidth(10);
 }
 
+// DATA TABEL PELANGGARAN
 $temp_jenjang = NULL;
 $temp_kelas = NULL;
 $start_row_jenjang = 0;
-$end_row_data = $start_row_data - 1;
+$DATA_ROW_KELAS = array();
+$END_ROW_DATA = $START_ROW_DATA - 1;
 foreach ($kelas as $detail) {
     if ($temp_kelas != $detail->NAMA_KELAS) {
-        $end_row_data++;
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $end_row_data, $end_row_data - 5);
-        $objPHPExcel->getActiveSheet()->setCellValue('C' . $end_row_data, $detail->NAMA_KELAS);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . $end_row_data, $detail->JUMLAH_SISWA_KELAS);
+        $END_ROW_DATA++;
+
+        $DATA_ROW_KELAS[$detail->ID_KELAS] = $END_ROW_DATA;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $END_ROW_DATA, $END_ROW_DATA - 5);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $END_ROW_DATA, $detail->NAMA_KELAS);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $END_ROW_DATA, $detail->JUMLAH_SISWA_KELAS);
         $temp_kelas = $detail->NAMA_KELAS;
     }
     if ($temp_jenjang != $detail->NAMA_DEPT) {
-        $objPHPExcel->getActiveSheet()->setCellValue('B' . $end_row_data, $detail->NAMA_DEPT);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $END_ROW_DATA, $detail->NAMA_DEPT);
         $temp_jenjang = $detail->NAMA_DEPT;
 
-        if (($start_row_jenjang > 0) && ($start_row_jenjang != $end_row_data))
-            $objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . ($end_row_data - 1));
+        if (($start_row_jenjang > 0) && ($start_row_jenjang != $END_ROW_DATA))
+            $objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . ($END_ROW_DATA - 1));
 
-        $start_row_jenjang = $end_row_data;
+        $start_row_jenjang = $END_ROW_DATA;
     }
-    $objPHPExcel->getActiveSheet()->setCellValue($DATA_KODE[$detail->KODE_KJP] . $end_row_data, $detail->JUMLAH_PELANGGAR);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 1) . $end_row_data, $detail->JUMLAH_PELANGGARAN);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 2) . $end_row_data, $detail->JUMLAH_POIN);
+    $objPHPExcel->getActiveSheet()->setCellValue($DATA_KODE[$detail->KODE_KJP] . $END_ROW_DATA, $detail->JUMLAH_PELANGGAR);
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 1) . $END_ROW_DATA, $detail->JUMLAH_PELANGGARAN);
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 2) . $END_ROW_DATA, $detail->JUMLAH_POIN);
 }
-$objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . $end_row_data);
-$end_row_data = $end_row_data;
+$objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . $END_ROW_DATA);
+$END_ROW_DATA = $END_ROW_DATA;
 
-for ($i = $start_row_data; $i <= $end_row_data; $i++) {
-    $objPHPExcel->getActiveSheet()->setCellValue($column_porsentase_siswa . $i, '=(' . $column_jumlah_siswa . $i . '/' . $column_jumlah_siswa . ($end_row_data + 1) . ')*100');
+// DATA TABEL TINDAKAN
+//foreach ($tindakan as $detail) {
+//    $objPHPExcel->getActiveSheet()->setCellValue('A' . $END_ROW_DATA, $detail->);
+//}
 
-    $formula_pelanggar = '';
-    $formula_pelanggaran = '';
-    $formula_poin = '';
+// MENGHITUNG JUMLAH UMUM DAN KHUSUS
+for ($i = $START_ROW_DATA; $i <= $END_ROW_DATA; $i++) {
+    $objPHPExcel->getActiveSheet()->setCellValue($COLUMN_PORSENTASE_SISWA . $i, '=(' . $COLUMN_JUMLAH_SISWA . $i . '/' . $COLUMN_JUMLAH_SISWA . ($END_ROW_DATA + 1) . ')');
+    $objPHPExcel->getActiveSheet()->getStyle($COLUMN_PORSENTASE_SISWA . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
 
-    $j = 1;
-    foreach ($DATA_KODE as $key => $column) {
-        $formula_pelanggar .= $column . $i . ($j == count($DATA_KODE) ? '' : '+');
-        $formula_pelanggaran .= $this->cetak->next_char($column, 1) . $i . ($j == count($DATA_KODE) ? '' : '+');
-        $formula_poin .= $this->cetak->next_char($column, 2) . $i . ($j == count($DATA_KODE) ? '' : '+');
-        $j++;
+    for ($k = 0; $k < 2; $k++) {
+        if ($k == 0) {
+            $DATA = $DATA_KODE;
+            $column_start = $COLUMN_START_UMUM;
+        } elseif ($k == 1) {
+            $DATA = $DATA_KODE_WARNING;
+            $column_start = $COLUMN_START_KHUSUS;
+        }
+
+        $formula_pelanggar = '';
+        $formula_pelanggaran = '';
+        $formula_poin = '';
+
+        $j = 1;
+        foreach ($DATA as $key => $column) {
+            $formula_pelanggar .= $column . $i . ($j == count($DATA) ? '' : '+');
+            $formula_pelanggaran .= $this->cetak->next_char($column, 1) . $i . ($j == count($DATA) ? '' : '+');
+            $formula_poin .= $this->cetak->next_char($column, 2) . $i . ($j == count($DATA) ? '' : '+');
+            $j++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue($column_start . $i, '=' . $formula_pelanggar);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 1) . $i, '=' . $formula_pelanggaran);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 2) . $i, '=' . $formula_poin);
+
+        $column_porsentase = $column_start;
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 3) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
+        $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column_start, 3) . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+        $column_porsentase = $this->cetak->next_char($column_start, 1);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 4) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
+        $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column_start, 4) . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+        $column_porsentase = $this->cetak->next_char($column_start, 2);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 5) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
+        $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column_start, 5) . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+
+        $column_rank = $this->cetak->next_char($column_start, 4);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 6) . $i, '=RANK(' . $column_rank . $i . ',' . $column_rank . $START_ROW_DATA . ':' . $column_rank . $END_ROW_DATA . ')');
+
+        $column_pors = $this->cetak->next_char($column_start, 1);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 7) . $i, '=(' . $column_pors . $i . '/' . $column_pors . ($END_ROW_DATA + 1) . ')');
+        $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column_start, 7) . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
     }
-
-    $objPHPExcel->getActiveSheet()->setCellValue($last_column_kode_pelanggaran . $i, '=' . $formula_pelanggar);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 1) . $i, '=' . $formula_pelanggaran);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 2) . $i, '=' . $formula_poin);
-
-    $column_porsentase = $last_column_kode_pelanggaran;
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 3) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-    $column_porsentase = $this->cetak->next_char($last_column_kode_pelanggaran, 1);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 4) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-    $column_porsentase = $this->cetak->next_char($last_column_kode_pelanggaran, 2);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 5) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-
-    $column_rank = $this->cetak->next_char($last_column_kode_pelanggaran, 4);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 6) . $i, '=RANK(' . $column_rank . $i . ',' . $column_rank . $start_row_data . ':' . $column_rank . $end_row_data . ')');
-
-    $formula_pelanggar = '';
-    $formula_pelanggaran = '';
-    $formula_poin = '';
-
-    $j = 1;
-    foreach ($DATA_KODE_WARNING as $key => $column) {
-        $formula_pelanggar .= $column . $i . ($j == count($DATA_KODE_WARNING) ? '' : '+');
-        $formula_pelanggaran .= $this->cetak->next_char($column, 1) . $i . ($j == count($DATA_KODE_WARNING) ? '' : '+');
-        $formula_poin .= $this->cetak->next_char($column, 2) . $i . ($j == count($DATA_KODE_WARNING) ? '' : '+');
-        $j++;
-    }
-
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 7) . $i, '=' . $formula_pelanggar);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 8) . $i, '=' . $formula_pelanggaran);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 9) . $i, '=' . $formula_poin);
-
-    $column_porsentase = $last_column_kode_pelanggaran;
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 10) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-    $column_porsentase = $this->cetak->next_char($last_column_kode_pelanggaran, 1);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 11) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-    $column_porsentase = $this->cetak->next_char($last_column_kode_pelanggaran, 2);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 12) . $i, '=' . $column_porsentase . $i . '*' . $column_porsentase_siswa . $i);
-
-    $column_rank = $this->cetak->next_char($last_column_kode_pelanggaran, 11);
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($last_column_kode_pelanggaran, 13) . $i, '=RANK(' . $column_rank . $i . ',' . $column_rank . $start_row_data . ':' . $column_rank . $end_row_data . ')');
 }
 
-$objPHPExcel->getActiveSheet()->setCellValue('A' . ($end_row_data + 1), 'TOTAL');
-$objPHPExcel->getActiveSheet()->mergeCells('A' . ($end_row_data + 1) . ':C' . ($end_row_data + 1));
+// MENGHITUNG JUMLAH SETIAP DATA TABEL
+$objPHPExcel->getActiveSheet()->setCellValue('A' . ($END_ROW_DATA + 1), 'TOTAL');
+$objPHPExcel->getActiveSheet()->mergeCells('A' . ($END_ROW_DATA + 1) . ':C' . ($END_ROW_DATA + 1));
 
-$objPHPExcel->getActiveSheet()->setCellValue('D' . ($end_row_data + 1), '=SUM(D' . $start_row_data . ':D' . $end_row_data . ')');
-$objPHPExcel->getActiveSheet()->setCellValue('E' . ($end_row_data + 1), '=SUM(E' . $start_row_data . ':E' . $end_row_data . ')');
+$objPHPExcel->getActiveSheet()->setCellValue('A' . ($END_ROW_DATA + 2), 'PORSENTASE');
+$objPHPExcel->getActiveSheet()->mergeCells('A' . ($END_ROW_DATA + 2) . ':C' . ($END_ROW_DATA + 2));
+
+$objPHPExcel->getActiveSheet()->setCellValue('D' . ($END_ROW_DATA + 1), '=SUM(D' . $START_ROW_DATA . ':D' . $END_ROW_DATA . ')');
 foreach ($DATA_KODE as $key => $column) {
-    $objPHPExcel->getActiveSheet()->setCellValue($column . ($end_row_data + 1), '=SUM(' . $column . $start_row_data . ':' . $column . $end_row_data . ')');
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 1) . ($end_row_data + 1), '=SUM(' . $this->cetak->next_char($column, 1) . $start_row_data . ':' . $this->cetak->next_char($column, 1) . $end_row_data . ')');
-    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 2) . ($end_row_data + 1), '=SUM(' . $this->cetak->next_char($column, 2) . $start_row_data . ':' . $this->cetak->next_char($column, 2) . $end_row_data . ')');
+    // MENGHITUNG JUMLAH DATA SETIAP KOLOM
+    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 1), '=SUM(' . $column . $START_ROW_DATA . ':' . $column . $END_ROW_DATA . ')');
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 1) . ($END_ROW_DATA + 1), '=SUM(' . $this->cetak->next_char($column, 1) . $START_ROW_DATA . ':' . $this->cetak->next_char($column, 1) . $END_ROW_DATA . ')');
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 1), '=SUM(' . $this->cetak->next_char($column, 2) . $START_ROW_DATA . ':' . $this->cetak->next_char($column, 2) . $END_ROW_DATA . ')');
+
+    // MENGHITUNG PORSENTASE DATA SETIAP KOLOM
+    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 2), '=(' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_START_UMUM . ($END_ROW_DATA + 1) . ')');
+    $objPHPExcel->getActiveSheet()->getStyle($column . ($END_ROW_DATA + 2))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+    $objPHPExcel->getActiveSheet()->getStyle($column . ($END_ROW_DATA + 2))->getFont()->setSize(8);
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 1) . ($END_ROW_DATA + 2), '=(' . $this->cetak->next_char($column, 1) . ($END_ROW_DATA + 1) . '/' . $this->cetak->next_char($COLUMN_START_UMUM, 1) . ($END_ROW_DATA + 1) . ')');
+    $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 1) . ($END_ROW_DATA + 2))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+    $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 1) . ($END_ROW_DATA + 2))->getFont()->setSize(8);
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 2), '=(' . $this->cetak->next_char($column, 2) . ($END_ROW_DATA + 1) . '/' . $this->cetak->next_char($COLUMN_START_UMUM, 2) . ($END_ROW_DATA + 1) . ')');
+    $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 2))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+    $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 2))->getFont()->setSize(8);
 }
 
-$start = 3;
+
+
 for ($i = 0; $i < 2; $i++) {
-    for ($j = $start; $j < ($start + 3); $j++) {
-        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, $j) . ($end_row_data + 1), '=SUM(' . $this->cetak->next_char($column, $j) . $start_row_data . ':' . $this->cetak->next_char($column, $j) . $end_row_data . ')');
+    if ($i == 0)
+        $column = $COLUMN_START_UMUM;
+    elseif ($i == 1)
+        $column = $COLUMN_START_KHUSUS;
+
+    for ($j = 0; $j < 3; $j++) {
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, $j) . ($END_ROW_DATA + 1), '=SUM(' . $this->cetak->next_char($column, $j) . $START_ROW_DATA . ':' . $this->cetak->next_char($column, $j) . $END_ROW_DATA . ')');
     }
-    $start = 10;
 }
 
-$start_row_keterangan = $end_row_data + 3;
+$end_row_table = $END_ROW_DATA + 2;
+
+// MENGHITUNG TINDAKAN
+foreach ($tindakan as $detail) {
+    
+}
+
+// MEWARNAI DATA PELANGGARAN
+foreach ($DATA_KODE as $key => $column) {
+    $cell = $column . ($START_ROW_DATA - 1) . ':' . $column . $end_row_table;
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFFFFF99');
+
+    $cell = $this->cetak->next_char($column, 1) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, 1) . $end_row_table;
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
+
+    $cell = $this->cetak->next_char($column, 2) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, 2) . $end_row_table;
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FF66FFFF');
+}
+
+for ($i = 0; $i < 2; $i++) {
+    $start = 0;
+    if ($i == 0)
+        $column = $COLUMN_START_UMUM;
+    elseif ($i == 1)
+        $column = $COLUMN_START_KHUSUS;
+
+    for ($j = 0; $j < 2; $j++) {
+        $cell = $this->cetak->next_char($column, $start) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, $start) . $end_row_table;
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFFFFF99');
+        $start++;
+
+        $cell = $this->cetak->next_char($column, $start) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, $start) . $end_row_table;
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
+        $start++;
+
+        $cell = $this->cetak->next_char($column, $start) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, $start) . $end_row_table;
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FF66FFFF');
+        $start++;
+    }
+
+    for ($k = 0; $k < 2; $k++) {
+        $cell = $this->cetak->next_char($column, $start) . ($START_ROW_DATA - 1) . ':' . $this->cetak->next_char($column, $start) . $end_row_table;
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
+        $start++;
+    }
+}
+
+// MEMBERIKAN KETERANGAN
+$start_row_keterangan = $end_row_table + 2;
 $objPHPExcel->getActiveSheet()->setCellValue('A' . $start_row_keterangan, 'KETERANGAN');
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
 $objPHPExcel->getActiveSheet()->setCellValue('B' . ($start_row_keterangan + 1), '1. Kolom tanda * adalah jumlah pelanggar (siswa yang melanggar)');
@@ -259,44 +369,6 @@ $objPHPExcel->getActiveSheet()->mergeCells('B' . ($start_row_keterangan + 4) . '
 $objPHPExcel->getActiveSheet()->setCellValue('B' . ($start_row_keterangan + 5), '5. Kolom KHUSUS adalah kalkulasi untuk pelanggaran pada jenis absensi. Kolom ini harus mendapatkan perhatian penanganan khusus.');
 $objPHPExcel->getActiveSheet()->mergeCells('B' . ($start_row_keterangan + 5) . ':' . $objPHPExcel->getActiveSheet()->getHighestColumn() . ($start_row_keterangan + 5));
 
-foreach ($DATA_KODE as $key => $column) {
-    $cell = $column . ($start_row_data - 1) . ':' . $column . ($end_row_data + 1);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFFFFF99');
-
-    $cell = $this->cetak->next_char($column, 1) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, 1) . ($end_row_data + 1);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
-
-    $cell = $this->cetak->next_char($column, 2) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, 2) . ($end_row_data + 1);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FF66FFFF');
-}
-
-$start = 2;
-for ($i = 0; $i < 2; $i++) {
-    for ($j = 0; $j < 2; $j++) {
-        $start++;
-        $cell = $this->cetak->next_char($column, $start) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, $start) . ($end_row_data + 1);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFFFFF99');
-
-        $start++;
-        $cell = $this->cetak->next_char($column, $start) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, $start) . ($end_row_data + 1);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
-
-        $start++;
-        $cell = $this->cetak->next_char($column, $start) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, $start) . ($end_row_data + 1);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-        $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FF66FFFF');
-    }
-    $start++;
-    $cell = $this->cetak->next_char($column, $start) . ($start_row_data - 1) . ':' . $this->cetak->next_char($column, $start) . ($end_row_data + 1);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-    $objPHPExcel->getActiveSheet()->getStyle($cell)->getFill()->getStartColor()->setARGB('FFCCCCCC');
-}
-
 $styleArrayBorder = array(
     'borders' => array(
         'allborders' => array(
@@ -305,16 +377,16 @@ $styleArrayBorder = array(
         )
     )
 );
-$objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . ($end_row_data + 1))->applyFromArray($styleArrayBorder);
+$objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . $end_row_table)->applyFromArray($styleArrayBorder);
 
 $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(15);
 
 $objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-$objPHPExcel->getActiveSheet()->getStyle('B' . $start_row_data . ':B' . $end_row_data)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('B' . $START_ROW_DATA . ':B' . $END_ROW_DATA)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 $objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getAlignment()->setWrapText(true);
 $objPHPExcel->getActiveSheet()->getStyle('A3:' . $objPHPExcel->getActiveSheet()->getHighestColumn() . '5')->getFont()->setBold(true);
-$objPHPExcel->getActiveSheet()->getStyle('A' . ($end_row_data + 1) . ':' . $objPHPExcel->getActiveSheet()->getHighestColumn() . ($end_row_data + 1))->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_table . ':' . $objPHPExcel->getActiveSheet()->getHighestColumn() . $end_row_table)->getFont()->setBold(true);
 
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
@@ -323,26 +395,26 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
 $objPHPExcel->getActiveSheet()->getColumnDimension($objPHPExcel->getActiveSheet()->getHighestColumn())->setWidth(10);
 $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
 
-$objPHPExcel->getActiveSheet()->freezePane($column_start_pelanggaran . $start_row_data);
+$objPHPExcel->getActiveSheet()->freezePane($COLUMN_START_PELANGGARAN . $START_ROW_DATA);
 
 // ##########################################################################################################################################################################
 
 $start = -1;
 
 $dataSeriesLabels = array(
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 1) . '$' . ($start_row_data - 1), NULL, 1),
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 2) . '$' . ($start_row_data - 1), NULL, 1),
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 3) . '$' . ($start_row_data - 1), NULL, 1),
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . ($START_ROW_DATA - 1), NULL, 1),
 );
 
 $xAxisTickValues = array(
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$C$' . $start_row_data . ':$C$' . $end_row_data, NULL, $end_row_data - $start_row_data)
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$C$' . $START_ROW_DATA . ':$C$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA)
 );
 
 $dataSeriesValues = array(
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 1) . '$' . $start_row_data . ':$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 1) . '$' . $end_row_data, NULL, $end_row_data - $start_row_data),
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 2) . '$' . $start_row_data . ':$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 2) . '$' . $end_row_data, NULL, $end_row_data - $start_row_data),
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 3) . '$' . $start_row_data . ':$' . $this->cetak->next_char($last_column_kode_pelanggaran, $start + 3) . '$' . $end_row_data, NULL, $end_row_data - $start_row_data),
+    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
+    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
+    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
 );
 
 $series = new PHPExcel_Chart_DataSeries(
@@ -362,8 +434,8 @@ $chart = new PHPExcel_Chart(
         'chart1', $title, $legend, $plotArea, true, 0, $xAxisLabel, $yAxisLabel
 );
 
-$chart->setTopLeftPosition($this->cetak->next_char($column_end_header, 2) . ($end_row_data + 15));
-$chart->setBottomRightPosition($this->cetak->next_char($column_end_header, 60) . ($end_row_data + 65));
+$chart->setTopLeftPosition($this->cetak->next_char($COLUMN_END_HEADER, 2) . ($END_ROW_DATA + 15));
+$chart->setBottomRightPosition($this->cetak->next_char($COLUMN_END_HEADER, 60) . ($END_ROW_DATA + 65));
 
 $objPHPExcel->getActiveSheet()->addChart($chart);
 
@@ -382,22 +454,22 @@ $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DATA JENIS PELANGGARAN');
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(14);
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
 
-$end_row_data = 3;
-$objPHPExcel->getActiveSheet()->setCellValue('A' . $end_row_data, 'KODE');
-$objPHPExcel->getActiveSheet()->setCellValue('B' . $end_row_data, 'JENIS PELANGGARAN');
-$objPHPExcel->getActiveSheet()->setCellValue('C' . $end_row_data, 'POIN');
-$objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_data . ':C' . $end_row_data)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-$objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_data . ':C' . $end_row_data)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-$objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_data . ':C' . $end_row_data)->getFont()->setBold(true);
+$END_ROW_DATA = 3;
+$objPHPExcel->getActiveSheet()->setCellValue('A' . $END_ROW_DATA, 'KODE');
+$objPHPExcel->getActiveSheet()->setCellValue('B' . $END_ROW_DATA, 'JENIS PELANGGARAN');
+$objPHPExcel->getActiveSheet()->setCellValue('C' . $END_ROW_DATA, 'POIN');
+$objPHPExcel->getActiveSheet()->getStyle('A' . $END_ROW_DATA . ':C' . $END_ROW_DATA)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A' . $END_ROW_DATA . ':C' . $END_ROW_DATA)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A' . $END_ROW_DATA . ':C' . $END_ROW_DATA)->getFont()->setBold(true);
 
-$end_row_data++;
+$END_ROW_DATA++;
 foreach ($kode as $detail) {
-    $objPHPExcel->getActiveSheet()->setCellValue('A' . $end_row_data, $detail->KODE_KJP);
-    $objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_data)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-    $objPHPExcel->getActiveSheet()->getStyle('A' . $end_row_data)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-    $objPHPExcel->getActiveSheet()->setCellValue('B' . $end_row_data, $detail->NAMA_KJP);
-    $objPHPExcel->getActiveSheet()->setCellValue('C' . $end_row_data, $detail->POIN_KJP);
-    $end_row_data++;
+    $objPHPExcel->getActiveSheet()->setCellValue('A' . $END_ROW_DATA, $detail->KODE_KJP);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . $END_ROW_DATA)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . $END_ROW_DATA)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    $objPHPExcel->getActiveSheet()->setCellValue('B' . $END_ROW_DATA, $detail->NAMA_KJP);
+    $objPHPExcel->getActiveSheet()->setCellValue('C' . $END_ROW_DATA, $detail->POIN_KJP);
+    $END_ROW_DATA++;
 }
 
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(8);
@@ -445,7 +517,6 @@ $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
 $objPHPExcel->setActiveSheetIndex(1);
 
 // ===========================================================================================================================================================================
-
 //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 //header('Content-Disposition: attachment;filename="statistik_komdis_' . date('Y_m_d_H_i_s') . '.xlsx"');
 //header('Cache-Control: max-age=0');

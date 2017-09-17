@@ -229,5 +229,12 @@ class Kelas_model extends CI_Model {
 
         return $this->db->get()->result_array();
     }
+    
+    public function fix_jumlah_siswa() {
+        $sql = 'UPDATE akad_kelas INNER JOIN (SELECT *, COUNT(ID_AS) AS JUMLAH_SISWA FROM akad_siswa INNER JOIN md_siswa ON SISWA_AS=ID_SISWA AND AKTIF_SISWA=1 WHERE AKTIF_AS=1 AND KONVERSI_AS=0 GROUP BY KELAS_AS) akad_siswa ON KELAS_AS=ID_KELAS SET JUMLAH_SISWA_KELAS=JUMLAH_SISWA WHERE KELAS_AS=ID_KELAS';
+        $this->db->query($sql);
+        
+        return $this->db->affected_rows();
+    }
 
 }

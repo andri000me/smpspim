@@ -100,6 +100,8 @@ class Nis_handler {
             $where_update = array('ID_SISWA' => $data_siswa->ID_SISWA);
             
             $this->CI->siswa->update($where_update, $data_update);
+            
+            $this->CI->kelas->fix_jumlah_siswa();
         } else {
             $this->CI->generate->output_JSON(array('status' => FALSE, 'msg' => 'Gagal menyimpan data NIS Siswa.'));
         }

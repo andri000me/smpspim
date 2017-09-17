@@ -284,24 +284,27 @@ GROUP BY SISWA_AS
     }
     
     public function get_hari_aktif() {
+        $start_date = '(SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)';
+        $end_date = '(SELECT TANGGAL_AKHIR_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)';
+        
         $sql = "SELECT 
     (COUNT(*) - (SELECT 
             SUM(DATEDIFF(TGL_SELESAI_AK, TGL_MULAI_AK) + 1) AS JUMLAH_LIBUR
         FROM
             akad_kalender
         WHERE
-            TGL_MULAI_AK >= (SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)
-                AND TGL_SELESAI_AK <= (SELECT TANGGAL_AKHIR_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)
+            TGL_MULAI_AK >= ".$start_date."
+                AND TGL_SELESAI_AK <= ".$end_date."
                 AND LIBUR_AK = 1)) AS JUMLAH_HARI_AKTIF
 FROM
     (SELECT 
-        DAYNAME(DATE_ADD((SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1), INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS HARI
+        DAYNAME(DATE_ADD(".$start_date.", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS HARI
     FROM
         (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS UNITS
     CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS TENS
     CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS HUNDREDS
     WHERE
-        DATE_ADD((SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1), INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY) <= (SELECT TANGGAL_AKHIR_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)) LIST_HARI
+        DATE_ADD(".$start_date.", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY) <= ".$end_date.") LIST_HARI
 WHERE
     HARI <> 'Friday'
 ";
@@ -310,10 +313,10 @@ WHERE
         return $query->row()->JUMLAH_HARI_AKTIF;
     }
     
-    public function get_group_kelas() {
+    public function get_group_kelas($where = NULL) {
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
         $this->db->from('komdis_siswa');
-        $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA');
+        $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA AND AKTIF_SISWA=1');
         $this->db->join('akad_siswa', 'SISWA_AS = ID_SISWA AND TA_KS = TA_AS');
         $this->db->join('akad_kelas', 'KELAS_AS = ID_KELAS');
         $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS');
@@ -321,6 +324,7 @@ WHERE
         $this->db->join('md_pegawai','WALI_KELAS = ID_PEG');
         $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
+        if($where != NULL) $this->db->where($where);
         $this->db->group_by('ID_KELAS , KODE_KJP');
         $this->db->order_by('TINGKAT_KELAS, JK_KELAS, NAMA_KELAS, KODE_KJP', 'ASC');
         
@@ -338,6 +342,30 @@ WHERE
 //        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
 //        $this->db->group_by('KODE_KJP');
         $this->db->order_by('KODE_KJP', 'ASC');
+        
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    
+    public function get_group_tindakan($where = NULL) {
+        $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
+        $this->db->from('komdis_tindakan');
+        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
+        $this->db->join('md_siswa', 'ID_SISWA=SISWA_KSH');
+        $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
+        if($where != NULL) $this->db->where($where);
+        $this->db->group_by('KELAS_AS');
+        $query = $this->db->get();
+        
+        $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
+        $this->db->from('komdis_tindakan');
+        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
+        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
+        if($where != NULL) $this->db->where($where);
+        $this->db->group_by('SISWA_KSH');
+        
         
         $query = $this->db->get();
 
