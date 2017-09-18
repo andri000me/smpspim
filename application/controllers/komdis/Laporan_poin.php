@@ -174,6 +174,7 @@ class Laporan_poin extends CI_Controller {
     public function cetak($ID_KSH) {
         $where = array('ID_KSH' => $ID_KSH);
         $siswa = $this->laporan_poin->get_full_by_id($where);
+        var_dump($siswa);
         $data = array();
 
         if (count($siswa) == 1) {

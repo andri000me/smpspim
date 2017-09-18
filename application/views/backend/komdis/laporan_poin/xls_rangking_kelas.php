@@ -209,9 +209,11 @@ $objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . $EN
 $END_ROW_DATA = $END_ROW_DATA;
 
 // DATA TABEL TINDAKAN
-//foreach ($tindakan as $detail) {
-//    $objPHPExcel->getActiveSheet()->setCellValue('A' . $END_ROW_DATA, $detail->);
-//}
+foreach ($tindakan as $detail) {
+    foreach ($DATA_TINDAKAN as $id => $column) {
+        $objPHPExcel->getActiveSheet()->setCellValue($column. $DATA_ROW_KELAS[$detail['KELAS_AS']], $detail['TINDAKAN_'.$id]);
+    }
+}
 
 // MENGHITUNG JUMLAH UMUM DAN KHUSUS
 for ($i = $START_ROW_DATA; $i <= $END_ROW_DATA; $i++) {
@@ -269,6 +271,7 @@ $objPHPExcel->getActiveSheet()->setCellValue('A' . ($END_ROW_DATA + 2), 'PORSENT
 $objPHPExcel->getActiveSheet()->mergeCells('A' . ($END_ROW_DATA + 2) . ':C' . ($END_ROW_DATA + 2));
 
 $objPHPExcel->getActiveSheet()->setCellValue('D' . ($END_ROW_DATA + 1), '=SUM(D' . $START_ROW_DATA . ':D' . $END_ROW_DATA . ')');
+
 foreach ($DATA_KODE as $key => $column) {
     // MENGHITUNG JUMLAH DATA SETIAP KOLOM
     $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 1), '=SUM(' . $column . $START_ROW_DATA . ':' . $column . $END_ROW_DATA . ')');
@@ -287,6 +290,10 @@ foreach ($DATA_KODE as $key => $column) {
     $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 2))->getFont()->setSize(8);
 }
 
+// MENGHITUNG JUMLAH TINDAKAN SETIAP KOLOM
+foreach ($DATA_TINDAKAN as $column) {
+    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 1), '=SUM(' . $column . $START_ROW_DATA . ':' . $column . $END_ROW_DATA . ')');
+}
 
 
 for ($i = 0; $i < 2; $i++) {

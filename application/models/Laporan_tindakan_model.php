@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_tindakan_model extends CI_Model {
 
     var $table = 'komdis_tindakan';
-    var $column = array('NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KJT', 'CONCAT(NIP_PEG," - ", NAMA_PEG)', 'TANGGAL_KT', 'ID_KT');
+    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS','NAMA_KJT', 'CONCAT(NIP_PEG," - ", NAMA_PEG)', 'TANGGAL_KT', 'ID_KT');
     var $primary_key = "ID_KT";
     var $order = array("ID_KT" => 'DESC');
 
@@ -26,12 +26,12 @@ class Laporan_tindakan_model extends CI_Model {
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA');
-        $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
+        $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.TINDAKAN_KT=kjt.ID_KJT');
         $this->db->join('md_user mu', $this->table . '.PENANGGUNGJAWAB_KT=mu.ID_USER');
         $this->db->join('md_pegawai mp', 'mu.PEGAWAI_USER=mp.ID_PEG');
-        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+//        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
     }
 
     private function _get_table_detail($select = false) {

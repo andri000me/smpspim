@@ -19,7 +19,7 @@ class Pelanggaran_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($select = false) {
+    private function _get_table($select = false, $option_jk = true) {
         if(!$select) $this->db->select('*, CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP)) AS NO_KJP, mpw.NAMA_PEG AS WALI_KELAS, mp.NAMA_PEG AS SUMBER_INFO, IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS)) AS DOMISILI_SISWA');
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KS=mta.ID_TA');
@@ -35,7 +35,7 @@ class Pelanggaran_model extends CI_Model {
         $this->db->join('md_pegawai mp', $this->table.'.SUMBER_KS=mp.ID_PEG');
         $this->db->join('komdis_jenis_pelanggaran kjp', $this->table.'.PELANGGARAN_KS=kjp.ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
-        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+        if($option_jk) $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
 //        $this->db->order_by('CAWU_KS', 'DESC');
 //        $this->db->order_by('NAMA_KELAS', 'ASC');
 //        $this->db->order_by('NO_ABSEN_AS', 'ASC');
@@ -132,7 +132,7 @@ class Pelanggaran_model extends CI_Model {
 
     public function get_cetak_pelanggaran($where) {
         $this->db->select('NAMA_KJP, TANGGAL_KS, POIN_KJP, LEFT(CREATED_KS, 10) AS TANGGAL_INPUT');
-        $this->_get_table(TRUE);
+        $this->_get_table(TRUE, FALSE);
         $this->db->where($where);
         $this->db->order_by('TANGGAL_INPUT', 'ASC');
         $this->db->order_by('TANGGAL_KS', 'ASC');

@@ -19,10 +19,10 @@ class Pelanggaran_header_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($datatables = true) {
+    private function _get_table($datatables = true, $option_jk = true) {
         if ($datatables) {
-            $this->table = '(SELECT *, IF(NAMA_KJT IS NULL, "", NAMA_KJT) AS SURAT FROM (SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH='.$this->session->userdata('ID_TA_ACTIVE').' GROUP BY SISWA_KSH) komdis_siswa_header LEFT OUTER JOIN komdis_jenis_tindakan ON JUMLAH_POIN_KSH >= POIN_KJT AND JUMLAH_POIN_KSH <= POIN_MAKS_KJT) komdis_siswa_header';
-            $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+            $this->table = '(SELECT *, IF(NAMA_KJT IS NULL, "", NAMA_KJT) AS SURAT FROM (SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH=' . $this->session->userdata('ID_TA_ACTIVE') . ' GROUP BY SISWA_KSH) komdis_siswa_header LEFT OUTER JOIN komdis_jenis_tindakan ON JUMLAH_POIN_KSH >= POIN_KJT AND JUMLAH_POIN_KSH <= POIN_MAKS_KJT) komdis_siswa_header';
+            if($option_jk) $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         }
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', 'komdis_siswa_header.TA_KSH=mta.ID_TA');
@@ -105,16 +105,17 @@ class Pelanggaran_header_model extends CI_Model {
     }
 
     public function get_full_by_id($where, $order_by = NULL) {
-        $this->_get_table();
+        $this->_get_table(TRUE, FALSE);
         $this->db->join('komdis_jenis_tindakan kjt', 'komdis_siswa_header.JUMLAH_POIN_KSH>=kjt.POIN_KJT AND komdis_siswa_header.JUMLAH_POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
         $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
-        if($order_by != NULL) $this->db->order_by($order_by, 'ASC');
-
+        if ($order_by != NULL)
+            $this->db->order_by($order_by, 'ASC');
         $this->db->where($where);
-
-        return $this->db->get()->result();
+        $result = $this->db->get();
+        
+        return $result->result();
     }
 
     public function get_poin_siswa($TA_KSH, $CAWU_KSH, $SISWA_KSH) {
@@ -183,17 +184,17 @@ class Pelanggaran_header_model extends CI_Model {
 
         return $this->db->affected_rows();
     }
-    
+
     public function reset_taqlik_mutasi($data_siswa) {
-        $sql_update = 'UPDATE komdis_siswa_header SET PROSES_TAKLIQ_KSH=0, PROSES_MUTASI_KSH=0 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+        $sql_update = 'UPDATE komdis_siswa_header SET PROSES_TAKLIQ_KSH=0, PROSES_MUTASI_KSH=0 WHERE TA_KSH=' . $data_siswa->TA_KS . ' AND CAWU_KSH=' . $data_siswa->CAWU_KS . ' AND SISWA_KSH=' . $data_siswa->SISWA_KS;
         $status_update = $this->db->query($sql_update);
-        
-        $sql_update_taqlik = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=4 SET PROSES_TAKLIQ_KSH=1 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+
+        $sql_update_taqlik = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=4 SET PROSES_TAKLIQ_KSH=1 WHERE TA_KSH=' . $data_siswa->TA_KS . ' AND CAWU_KSH=' . $data_siswa->CAWU_KS . ' AND SISWA_KSH=' . $data_siswa->SISWA_KS;
         $status_takliq = $this->db->query($sql_update_taqlik);
-        
-        $sql_update_mutasi = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=5 SET PROSES_MUTASI_KSH=1 WHERE TA_KSH='.$data_siswa->TA_KS.' AND CAWU_KSH='.$data_siswa->CAWU_KS.' AND SISWA_KSH='.$data_siswa->SISWA_KS;
+
+        $sql_update_mutasi = 'UPDATE komdis_siswa_header ksh INNER JOIN komdis_jenis_tindakan kjt ON ksh.POIN_KSH >= kjt.POIN_KJT AND ksh.POIN_KSH <= kjt.POIN_MAKS_KJT AND kjt.ID_KJT=5 SET PROSES_MUTASI_KSH=1 WHERE TA_KSH=' . $data_siswa->TA_KS . ' AND CAWU_KSH=' . $data_siswa->CAWU_KS . ' AND SISWA_KSH=' . $data_siswa->SISWA_KS;
         $status_mutasi = $this->db->query($sql_update_mutasi);
-        
+
         return ($status_update || $status_takliq || $status_mutasi);
     }
 
@@ -207,8 +208,8 @@ class Pelanggaran_header_model extends CI_Model {
     public function get_data_perkelas($ID_KELAS, $KELAS = TRUE, $ORDER_BY = NULL) {
         $where_kelas = '';
         $where_pondok = '';
-        
-        if($ORDER_BY == NULL) 
+
+        if ($ORDER_BY == NULL)
             $order = 'ORDER BY NAMA_KELAS, NO_ABSEN_AS ASC';
         else
             $order = $ORDER_BY;
@@ -270,7 +271,7 @@ GROUP BY SISWA_KSH) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
 LEFT OUTER JOIN md_pondok_siswa ON ID_MPS=PONDOK_SISWA
 " . $where_pondok . "
 GROUP BY SISWA_AS
-".$order;
+" . $order;
         $query = $this->db->query($sql);
 
         return $query->result();
@@ -282,29 +283,29 @@ GROUP BY SISWA_AS
 
         return $query->row()->CREATED_KS;
     }
-    
+
     public function get_hari_aktif() {
         $start_date = '(SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)';
         $end_date = '(SELECT TANGGAL_AKHIR_TA FROM md_tahun_ajaran WHERE AKTIF_TA = 1)';
-        
+
         $sql = "SELECT 
     (COUNT(*) - (SELECT 
             SUM(DATEDIFF(TGL_SELESAI_AK, TGL_MULAI_AK) + 1) AS JUMLAH_LIBUR
         FROM
             akad_kalender
         WHERE
-            TGL_MULAI_AK >= ".$start_date."
-                AND TGL_SELESAI_AK <= ".$end_date."
+            TGL_MULAI_AK >= " . $start_date . "
+                AND TGL_SELESAI_AK <= " . $end_date . "
                 AND LIBUR_AK = 1)) AS JUMLAH_HARI_AKTIF
 FROM
     (SELECT 
-        DAYNAME(DATE_ADD(".$start_date.", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS HARI
+        DAYNAME(DATE_ADD(" . $start_date . ", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS HARI
     FROM
         (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS UNITS
     CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS TENS
     CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS HUNDREDS
     WHERE
-        DATE_ADD(".$start_date.", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY) <= ".$end_date.") LIST_HARI
+        DATE_ADD(" . $start_date . ", INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY) <= " . $end_date . ") LIST_HARI
 WHERE
     HARI <> 'Friday'
 ";
@@ -312,7 +313,7 @@ WHERE
 
         return $query->row()->JUMLAH_HARI_AKTIF;
     }
-    
+
     public function get_group_kelas($where = NULL) {
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
         $this->db->from('komdis_siswa');
@@ -321,18 +322,19 @@ WHERE
         $this->db->join('akad_kelas', 'KELAS_AS = ID_KELAS');
         $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS');
         $this->db->join('md_departemen', 'ID_DEPT= DEPT_TINGK');
-        $this->db->join('md_pegawai','WALI_KELAS = ID_PEG');
+        $this->db->join('md_pegawai', 'WALI_KELAS = ID_PEG');
         $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
         $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
-        if($where != NULL) $this->db->where($where);
+        if ($where != NULL)
+            $this->db->where($where);
         $this->db->group_by('ID_KELAS , KODE_KJP');
         $this->db->order_by('TINGKAT_KELAS, JK_KELAS, NAMA_KELAS, KODE_KJP', 'ASC');
-        
+
         $query = $this->db->get();
 
         return $query->result();
     }
-    
+
     public function get_group_pelanggaran_kelas() {
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP');
         $this->db->from('komdis_jenis_pelanggaran');
@@ -342,36 +344,34 @@ WHERE
 //        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
 //        $this->db->group_by('KODE_KJP');
         $this->db->order_by('KODE_KJP', 'ASC');
-        
+
         $query = $this->db->get();
 
         return $query->result();
     }
-    
+
     public function get_group_tindakan($where = NULL) {
         $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
         $this->db->from('komdis_tindakan');
         $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
-        $this->db->join('md_siswa', 'ID_SISWA=SISWA_KSH');
-        $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
-        if($where != NULL) $this->db->where($where);
+        if ($where != NULL)
+            $this->db->where($where);
+        $this->db->group_by('SISWA_KSH');
+        $sql = $this->db->get_compiled_select();
+        
+        $this->db->select('*, SUM(IF(TINDAKAN_KT_MAKS = 1, 1, 0)) AS TINDAKAN_1,SUM(IF(TINDAKAN_KT_MAKS = 2, 1, 0)) AS TINDAKAN_2,SUM(IF(TINDAKAN_KT_MAKS = 3, 1, 0)) AS TINDAKAN_3,SUM(IF(TINDAKAN_KT_MAKS = 4, 1, 0)) AS TINDAKAN_4,SUM(IF(TINDAKAN_KT_MAKS = 5, 1, 0)) AS TINDAKAN_5');
+        $this->db->from('('.$sql.') t');
+        $this->db->join('md_siswa', 'SISWA_KSH=ID_SISWA');
+        $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_AS=TA_KSH AND KONVERSI_AS=0');
+        if ($where != NULL)
+            $this->db->where($where);
         $this->db->group_by('KELAS_AS');
         $query = $this->db->get();
-        
-        $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
-        $this->db->from('komdis_tindakan');
-        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
-        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
-        if($where != NULL) $this->db->where($where);
-        $this->db->group_by('SISWA_KSH');
-        
-        
-        $query = $this->db->get();
-
-        return $query->result();
-    }
     
+        return $query->result_array();
+    }
+
     public function fix_kehadiran_komdis() {
         $sql = "INSERT INTO komdis_siswa (TA_KS, CAWU_KS, SISWA_KS, PELANGGARAN_KS, TANGGAL_KS, SUMBER_KS, KETERANGAN_KS, KEHADIRAN_KS, USER_KS)
             SELECT TA_AKH, CAWU_AKH, SISWA_AKH, PELANGGARAN_ALPHA_MJK, TANGGAL_AKH, PEGAWAI_USER, KETERANGAN_AKH, ID_AKH, USER_AKH
@@ -381,9 +381,9 @@ WHERE
             LEFT JOIN komdis_siswa ON KEHADIRAN_KS = ID_AKH
             WHERE KEHADIRAN_KS IS NULL
             AND ALASAN_AKH='ALPHA'
-            AND TA_AKH=".$this->session->userdata('ID_TA_ACTIVE');
+            AND TA_AKH=" . $this->session->userdata('ID_TA_ACTIVE');
         $this->db->query($sql);
-        
+
         $sql = "UPDATE komdis_siswa_header ksh
                     INNER JOIN
                 (SELECT 
@@ -405,12 +405,12 @@ WHERE
                 ks.SISWA_KSH = ksh.SISWA_KSH
                     AND ks.TA_KSH = ksh.TA_KSH
                     AND ks.CAWU_KSH = ksh.CAWU_KSH
-                    AND ksh.TA_KSH = ".$this->session->userdata('ID_TA_ACTIVE');
+                    AND ksh.TA_KSH = " . $this->session->userdata('ID_TA_ACTIVE');
         $this->db->query($sql);
-        
+
         $this->fix_poin();
     }
-    
+
     public function fix_poin() {
         $sql = "UPDATE komdis_siswa_header ksh
                 INNER JOIN
@@ -431,8 +431,8 @@ WHERE
                 AND ksh.SISWA_KSH = ks.SISWA_KSH
                 AND ksh.TA_KSH = ks.TA_KSH
                 AND ksh.CAWU_KSH = ks.CAWU_KSH 
-                AND ksh.TA_KSH = ".$this->session->userdata('ID_TA_ACTIVE');
-        
+                AND ksh.TA_KSH = " . $this->session->userdata('ID_TA_ACTIVE');
+
         $this->db->query($sql);
     }
 
