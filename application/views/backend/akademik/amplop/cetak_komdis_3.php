@@ -85,7 +85,7 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $pdf->Ln(12);
 
     $pdf->SetFont('Arial', 'I', 10);
-    $pdf->MultiCell(0, 5, 'As salamu\'alaikum Warahmatullahi Wabarakatuh');
+    $pdf->MultiCell(0, 5, 'Assalamu\'alaikum Warahmatullahi Wabarakatuh');
     $pdf->Ln(2);
 
     $pdf->SetFont('Arial', '', 10);
@@ -166,7 +166,7 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $ttd = strtolower($post['TTD_SURAT']);
     $ttd = str_replace('.', '', $ttd);
     $ttd = str_replace(' ', '_', $ttd);
-    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 115, $pdf->GetY(), 23, 24, '', '');
+    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 105, $pdf->GetY(), 75, 23, '', '');
     $pdf->Ln(18);
 
     $pdf->SetFont('Arial', 'UB', 10);
