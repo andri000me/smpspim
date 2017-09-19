@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_tindakan_model extends CI_Model {
 
     var $table = 'komdis_tindakan';
-    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS','NAMA_KJT', 'CONCAT(NIP_PEG," - ", NAMA_PEG)', 'TANGGAL_KT', 'ID_KT');
+    var $column = array('IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA)', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KJT', 'CONCAT(NIP_PEG," - ", NAMA_PEG)', 'TANGGAL_KT', 'ID_KT');
     var $primary_key = "ID_KT";
     var $order = array("ID_KT" => 'DESC');
 
@@ -20,12 +20,13 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     private function _get_table() {
-        $this->db->select('*, CONCAT(NIP_PEG," - ", NAMA_PEG) AS NAMA_PEG');
+        $this->db->select('*, IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA) AS NIS_SHOW, CONCAT(NIP_PEG," - ", NAMA_PEG) AS NAMA_PEG');
         $this->db->from($this->table);
         $this->db->join('komdis_siswa_header ksh', $this->table . '.PELANGGARAN_HEADER_KT=ksh.ID_KSH');
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('md_nis mn', 'ms.ID_SISWA=mn.SISWA_NIS AND mn.TA_NIS=' . $this->session->userdata("ID_TA_ACTIVE"), 'LEFT');
         $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.TINDAKAN_KT=kjt.ID_KJT');
@@ -95,6 +96,7 @@ class Laporan_tindakan_model extends CI_Model {
         }
 
         if (isset($_POST['order'])) {
+            $column[0] = 'NIS_SHOW';
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;
@@ -260,14 +262,13 @@ class Laporan_tindakan_model extends CI_Model {
         if ($NOMOR_SURAT_KT != NULL)
             $this->db->where('NOMOR_SURAT_KT', $NOMOR_SURAT_KT);
         $this->db->group_by('NOMOR_SURAT_KT');
-        
+
         $result = $this->db->get();
-        
-        if($NOMOR_SURAT_KT == NULL)
+
+        if ($NOMOR_SURAT_KT == NULL)
             return $result->result();
         else
             return $result->row();
-            
     }
 
 }

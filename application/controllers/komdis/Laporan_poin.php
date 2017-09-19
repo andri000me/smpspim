@@ -509,6 +509,10 @@ class Laporan_poin extends CI_Controller {
 
         $data = array(
             'kelas' => $this->laporan_poin->get_group_kelas(),
+            'pelanggar' => array(
+                'umum' => $this->laporan_poin->get_group_pelanggar(FALSE),
+                'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE)
+            ),
             'kode' => $this->laporan_poin->get_group_pelanggaran_kelas(),
             'tindakan' => $this->laporan_poin->get_group_tindakan(),
             'jenis_tindakan' => $this->jenis_tindakan->get_all(FALSE),

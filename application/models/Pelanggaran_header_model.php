@@ -22,7 +22,8 @@ class Pelanggaran_header_model extends CI_Model {
     private function _get_table($datatables = true, $option_jk = true) {
         if ($datatables) {
             $this->table = '(SELECT *, IF(NAMA_KJT IS NULL, "", NAMA_KJT) AS SURAT FROM (SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH=' . $this->session->userdata('ID_TA_ACTIVE') . ' GROUP BY SISWA_KSH) komdis_siswa_header LEFT OUTER JOIN komdis_jenis_tindakan ON JUMLAH_POIN_KSH >= POIN_KJT AND JUMLAH_POIN_KSH <= POIN_MAKS_KJT) komdis_siswa_header';
-            if($option_jk) $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+            if ($option_jk)
+                $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         }
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', 'komdis_siswa_header.TA_KSH=mta.ID_TA');
@@ -114,7 +115,7 @@ class Pelanggaran_header_model extends CI_Model {
             $this->db->order_by($order_by, 'ASC');
         $this->db->where($where);
         $result = $this->db->get();
-        
+
         return $result->result();
     }
 
@@ -317,7 +318,7 @@ WHERE
     public function get_group_kelas($where = NULL) {
         $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
         $this->db->from('komdis_siswa');
-        $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA AND AKTIF_SISWA=1');
+        $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA');
         $this->db->join('akad_siswa', 'SISWA_AS = ID_SISWA AND TA_KS = TA_AS');
         $this->db->join('akad_kelas', 'KELAS_AS = ID_KELAS');
         $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS');
@@ -350,25 +351,58 @@ WHERE
         return $query->result();
     }
 
-    public function get_group_tindakan($where = NULL) {
-        $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
-        $this->db->from('komdis_tindakan');
-        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
-        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
+    public function get_group_pelanggar($khusus, $where = NULL) {
+        $this->db->from('komdis_siswa');
+        $this->db->join('md_siswa', 'SISWA_KS = ID_SISWA');
+        $this->db->join('akad_siswa', 'SISWA_AS = ID_SISWA AND TA_KS = TA_AS');
+        $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
+        if ($khusus)
+            $this->db->join('md_jenis_kehadiran', 'PELANGGARAN_ALPHA_MJK = ID_KJP');
+        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         if ($where != NULL)
             $this->db->where($where);
-        $this->db->group_by('SISWA_KSH');
+        $this->db->group_by('SISWA_KS');
         $sql = $this->db->get_compiled_select();
-        
-        $this->db->select('*, SUM(IF(TINDAKAN_KT_MAKS = 1, 1, 0)) AS TINDAKAN_1,SUM(IF(TINDAKAN_KT_MAKS = 2, 1, 0)) AS TINDAKAN_2,SUM(IF(TINDAKAN_KT_MAKS = 3, 1, 0)) AS TINDAKAN_3,SUM(IF(TINDAKAN_KT_MAKS = 4, 1, 0)) AS TINDAKAN_4,SUM(IF(TINDAKAN_KT_MAKS = 5, 1, 0)) AS TINDAKAN_5');
-        $this->db->from('('.$sql.') t');
+
+        $this->db->select('*, COUNT(SISWA_KS) AS JUMLAH_PELANGGAR');
+        $this->db->from('(' . $sql . ') ks');
+        $this->db->group_by('KELAS_AS');
+        $query = $this->db->get();
+//        var_dump($this->db->last_query());exit();
+
+        return $query->result();
+    }
+
+    public function get_group_tindakan($where = NULL) {
+//        $this->db->select('*, MAX(TINDAKAN_KT) AS TINDAKAN_KT_MAKS');
+//        $this->db->from('komdis_tindakan');
+//        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
+//        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
+//        if ($where != NULL)
+//            $this->db->where($where);
+//        $this->db->group_by('SISWA_KSH');
+//        $sql = $this->db->get_compiled_select();
+//        
+//        $this->db->select('*, SUM(IF(TINDAKAN_KT_MAKS = 1, 1, 0)) AS TINDAKAN_1,SUM(IF(TINDAKAN_KT_MAKS = 2, 1, 0)) AS TINDAKAN_2,SUM(IF(TINDAKAN_KT_MAKS = 3, 1, 0)) AS TINDAKAN_3,SUM(IF(TINDAKAN_KT_MAKS = 4, 1, 0)) AS TINDAKAN_4,SUM(IF(TINDAKAN_KT_MAKS = 5, 1, 0)) AS TINDAKAN_5');
+//        $this->db->from('('.$sql.') t');
+//        $this->db->join('md_siswa', 'SISWA_KSH=ID_SISWA');
+//        $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_AS=TA_KSH AND KONVERSI_AS=0');
+//        if ($where != NULL)
+//            $this->db->where($where);
+//        $this->db->group_by('KELAS_AS');
+//        $query = $this->db->get();
+
+        $this->db->select('*, SUM(IF(TINDAKAN_KT = 1, 1, 0)) AS TINDAKAN_1,SUM(IF(TINDAKAN_KT = 2, 1, 0)) AS TINDAKAN_2,SUM(IF(TINDAKAN_KT = 3, 1, 0)) AS TINDAKAN_3,SUM(IF(TINDAKAN_KT = 4, 1, 0)) AS TINDAKAN_4,SUM(IF(TINDAKAN_KT = 5, 1, 0)) AS TINDAKAN_5');
+        $this->db->from('komdis_tindakan');
+        $this->db->join('komdis_siswa_header', 'PELANGGARAN_HEADER_KT=ID_KSH');
         $this->db->join('md_siswa', 'SISWA_KSH=ID_SISWA');
         $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_AS=TA_KSH AND KONVERSI_AS=0');
+        $this->db->where('TA_KSH', $this->session->userdata('ID_TA_ACTIVE'));
         if ($where != NULL)
             $this->db->where($where);
         $this->db->group_by('KELAS_AS');
         $query = $this->db->get();
-    
+
         return $query->result_array();
     }
 

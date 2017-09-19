@@ -1,5 +1,9 @@
 <?php
 
+// MODE 0 => XLS (TIDAK MUNCUL GRAFIK)
+// MODE 1 => XLSX (MUNCUL GRAFIK NAMUN ADA ISU BUG)
+$MODE = 1;
+
 $DATA_SHEET = array();
 $NUMBER_SHEET = 0;
 
@@ -38,8 +42,8 @@ $NUMBER_SHEET++;
 $objPHPExcel->setActiveSheetIndex($NUMBER_SHEET);
 
 $DATA_SHEET[$NUMBER_SHEET] = array(
-    'title' => 'tahunan',
-    'text' => 'Tahunan'
+    'title' => 'data_tahunan',
+    'text' => 'Data Tahunan'
 );
 
 // TITLE
@@ -120,8 +124,9 @@ foreach ($jenis_tindakan as $detail) {
 
     $i++;
 }
+$COLUMN_END_JENIS_PELANGGARAN = $this->cetak->next_char($COLUMN_START_JENIS_PELANGGARAN, $i - 1);
 $objPHPExcel->getActiveSheet()->setCellValue($COLUMN_START_JENIS_PELANGGARAN . '3', 'JUMLAH TINDAKAN');
-$objPHPExcel->getActiveSheet()->mergeCells($COLUMN_START_JENIS_PELANGGARAN . '3:' . $this->cetak->next_char($COLUMN_START_JENIS_PELANGGARAN, $i - 1) . '3');
+$objPHPExcel->getActiveSheet()->mergeCells($COLUMN_START_JENIS_PELANGGARAN . '3:' . $COLUMN_END_JENIS_PELANGGARAN . '3');
 
 // HEADER KODE PELANGGARAN
 $DATA_KODE = array();
@@ -208,10 +213,18 @@ foreach ($kelas as $detail) {
 $objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . $END_ROW_DATA);
 $END_ROW_DATA = $END_ROW_DATA;
 
+// DATA TABEL PELANGGAR
+foreach ($pelanggar as $mode => $value) {
+    foreach ($value as $detail) {
+        $objPHPExcel->getActiveSheet()->setCellValue(($mode == 'umum' ? $COLUMN_START_UMUM : $COLUMN_START_KHUSUS) . $DATA_ROW_KELAS[$detail->KELAS_AS], $detail->JUMLAH_PELANGGAR);
+    }
+}
+
 // DATA TABEL TINDAKAN
 foreach ($tindakan as $detail) {
     foreach ($DATA_TINDAKAN as $id => $column) {
-        $objPHPExcel->getActiveSheet()->setCellValue($column. $DATA_ROW_KELAS[$detail['KELAS_AS']], $detail['TINDAKAN_'.$id]);
+        if ($detail['TINDAKAN_' . $id] > 0)
+            $objPHPExcel->getActiveSheet()->setCellValue($column . $DATA_ROW_KELAS[$detail['KELAS_AS']], $detail['TINDAKAN_' . $id]);
     }
 }
 
@@ -240,12 +253,13 @@ for ($i = $START_ROW_DATA; $i <= $END_ROW_DATA; $i++) {
             $formula_poin .= $this->cetak->next_char($column, 2) . $i . ($j == count($DATA) ? '' : '+');
             $j++;
         }
-        $objPHPExcel->getActiveSheet()->setCellValue($column_start . $i, '=' . $formula_pelanggar);
+//        $objPHPExcel->getActiveSheet()->setCellValue($column_start . $i, '=' . $formula_pelanggar);
         $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 1) . $i, '=' . $formula_pelanggaran);
         $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 2) . $i, '=' . $formula_poin);
 
         $column_porsentase = $column_start;
-        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 3) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
+//        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 3) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
+        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 3) . $i, '=' . $column_porsentase . $i . '/' . $COLUMN_JUMLAH_SISWA . $i);
         $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column_start, 3) . $i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
         $column_porsentase = $this->cetak->next_char($column_start, 1);
         $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column_start, 4) . $i, '=' . $column_porsentase . $i . '*' . $COLUMN_PORSENTASE_SISWA . $i);
@@ -279,7 +293,8 @@ foreach ($DATA_KODE as $key => $column) {
     $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 1), '=SUM(' . $this->cetak->next_char($column, 2) . $START_ROW_DATA . ':' . $this->cetak->next_char($column, 2) . $END_ROW_DATA . ')');
 
     // MENGHITUNG PORSENTASE DATA SETIAP KOLOM
-    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 2), '=(' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_START_UMUM . ($END_ROW_DATA + 1) . ')');
+//    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 2), '=(' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_START_UMUM . ($END_ROW_DATA + 1) . ')');
+    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 2), '=(' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_JUMLAH_SISWA . ($END_ROW_DATA + 1) . ')');
     $objPHPExcel->getActiveSheet()->getStyle($column . ($END_ROW_DATA + 2))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
     $objPHPExcel->getActiveSheet()->getStyle($column . ($END_ROW_DATA + 2))->getFont()->setSize(8);
     $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 1) . ($END_ROW_DATA + 2), '=(' . $this->cetak->next_char($column, 1) . ($END_ROW_DATA + 1) . '/' . $this->cetak->next_char($COLUMN_START_UMUM, 1) . ($END_ROW_DATA + 1) . ')');
@@ -290,12 +305,29 @@ foreach ($DATA_KODE as $key => $column) {
     $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 2) . ($END_ROW_DATA + 2))->getFont()->setSize(8);
 }
 
+// MENGHITUNG PORSENTASE JUMLAH SISWA
+for ($i = 0; $i < 2; $i++) {
+    if ($i == 0)
+        $column = $COLUMN_START_UMUM;
+    elseif ($i == 1)
+        $column = $COLUMN_START_KHUSUS;
+
+    $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($column, 3) . ($END_ROW_DATA + 1), '=' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_JUMLAH_SISWA . ($END_ROW_DATA + 1));
+    $objPHPExcel->getActiveSheet()->getStyle($this->cetak->next_char($column, 3) . ($END_ROW_DATA + 1))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+}
+
+// MENGHITUNG PORSENTASE JUMLAH TINDAKAN
+foreach ($DATA_TINDAKAN as $id => $column) {
+    $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 2), '=' . $column . ($END_ROW_DATA + 1) . '/' . $COLUMN_JUMLAH_SISWA . ($END_ROW_DATA + 1));
+    $objPHPExcel->getActiveSheet()->getStyle($column . ($END_ROW_DATA + 2))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+}
+
 // MENGHITUNG JUMLAH TINDAKAN SETIAP KOLOM
 foreach ($DATA_TINDAKAN as $column) {
     $objPHPExcel->getActiveSheet()->setCellValue($column . ($END_ROW_DATA + 1), '=SUM(' . $column . $START_ROW_DATA . ':' . $column . $END_ROW_DATA . ')');
 }
 
-
+// MENGHITUNG TINDAKAN
 for ($i = 0; $i < 2; $i++) {
     if ($i == 0)
         $column = $COLUMN_START_UMUM;
@@ -308,11 +340,6 @@ for ($i = 0; $i < 2; $i++) {
 }
 
 $end_row_table = $END_ROW_DATA + 2;
-
-// MENGHITUNG TINDAKAN
-foreach ($tindakan as $detail) {
-    
-}
 
 // MEWARNAI DATA PELANGGARAN
 foreach ($DATA_KODE as $key => $column) {
@@ -404,47 +431,115 @@ $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
 
 $objPHPExcel->getActiveSheet()->freezePane($COLUMN_START_PELANGGARAN . $START_ROW_DATA);
 
-// ##########################################################################################################################################################################
+// ===========================================================================================================================================================================
+$objPHPExcel->createSheet();
+$NUMBER_SHEET++;
+$objPHPExcel->setActiveSheetIndex($NUMBER_SHEET);
+
+$DATA_SHEET[$NUMBER_SHEET] = array(
+    'title' => 'grafik_tahunan',
+    'text' => 'Grafik Tahunan'
+);
+
+$DATA_NUMBER_SHEET = $NUMBER_SHEET - 1;
 
 $start = -1;
 
-$dataSeriesLabels = array(
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . ($START_ROW_DATA - 1), NULL, 1),
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . ($START_ROW_DATA - 1), NULL, 1),
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+for ($i = 0; $i < 2; $i++) {
+    if ($i == 0) {
+        $colomn = $COLUMN_START_UMUM;
+        $title_grafik = 'GRAFIK JUMLAH PELANGGARAN UMUM';
+    } elseif ($i == 1) {
+        $colomn = $COLUMN_START_KHUSUS;
+        $title_grafik = 'GRAFIK JUMLAH PELANGGARAN KHUSUS';
+    }
+
+    $dataSeriesLabels = array(
+        new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 1) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+        new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 2) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+        new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 3) . '$' . ($START_ROW_DATA - 1), NULL, 1),
+    );
+
+    $xAxisTickValues = array(
+        new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$C$' . $START_ROW_DATA . ':$C$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA)
+    );
+
+    $dataSeriesValues = array(
+        new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 1) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($colomn, $start + 1) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
+        new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 2) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($colomn, $start + 2) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
+        new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($colomn, $start + 3) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($colomn, $start + 3) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
+    );
+
+    $series = new PHPExcel_Chart_DataSeries(
+            PHPExcel_Chart_DataSeries::TYPE_BARCHART, PHPExcel_Chart_DataSeries::GROUPING_STANDARD, range(0, count($dataSeriesValues) - 1), $dataSeriesLabels, $xAxisTickValues, $dataSeriesValues
+    );
+
+    $series->setPlotDirection(PHPExcel_Chart_DataSeries::DIRECTION_COL);
+
+    $plotArea = new PHPExcel_Chart_PlotArea(NULL, array($series));
+    $legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_BOTTOM, NULL, false);
+
+    $title = new PHPExcel_Chart_Title($title_grafik);
+    $xAxisLabel = new PHPExcel_Chart_Title('Kelas');
+    $yAxisLabel = new PHPExcel_Chart_Title('Jumlah');
+
+    $chart = new PHPExcel_Chart(
+            'chart1', $title, $legend, $plotArea, true, 0, $xAxisLabel, $yAxisLabel
+    );
+
+    $COLUMN_START_CHART = 'B';
+
+    if ($i == 0) {
+        $ROW_START_CHART = 4;
+    } elseif ($i == 1) {
+        $ROW_START_CHART += 40;
+    }
+    $chart->setTopLeftPosition($COLUMN_START_CHART . $ROW_START_CHART);
+    $chart->setBottomRightPosition($this->cetak->next_char($COLUMN_START_CHART, 60) . ($ROW_START_CHART + 35));
+
+    $objPHPExcel->getActiveSheet()->addChart($chart);
+
+    $objPHPExcel->getActiveSheet()->setCellValue('A' . ($ROW_START_CHART - 2), $title_grafik);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . ($ROW_START_CHART - 2))->getFont()->setSize(14);
+    $objPHPExcel->getActiveSheet()->getStyle('A' . ($ROW_START_CHART - 2))->getFont()->setBold(true);
+}
+
+$ROW_START_CHART += 45;
+
+$title_grafik = 'GRAFIK JUMLAH TINDAKAN';
+
+$objPHPExcel->getActiveSheet()->setCellValue('A' . ($ROW_START_CHART - 2), $title_grafik);
+$objPHPExcel->getActiveSheet()->getStyle('A' . ($ROW_START_CHART - 2))->getFont()->setSize(14);
+$objPHPExcel->getActiveSheet()->getStyle('A' . ($ROW_START_CHART - 2))->getFont()->setBold(true);
+
+$dataSeriesLabels1 = array(
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$A$' . ($END_ROW_DATA + 2), NULL, 1)
+);
+$xAxisTickValues1 = array(
+    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $COLUMN_START_JENIS_PELANGGARAN . '$4:$' . $COLUMN_END_JENIS_PELANGGARAN . '$4', NULL, count($jenis_tindakan)),
+);
+$dataSeriesValues1 = array(
+    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$DATA_NUMBER_SHEET]['title'] . '!$' . $COLUMN_START_JENIS_PELANGGARAN . '$' . ($END_ROW_DATA + 1) . ':$' . $COLUMN_END_JENIS_PELANGGARAN . '$' . ($END_ROW_DATA + 1), NULL, count($jenis_tindakan)),
 );
 
-$xAxisTickValues = array(
-    new PHPExcel_Chart_DataSeriesValues('String', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$C$' . $START_ROW_DATA . ':$C$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA)
+$series1 = new PHPExcel_Chart_DataSeries(
+        PHPExcel_Chart_DataSeries::TYPE_PIECHART, NULL, range(0, count($dataSeriesValues1) - 1), $dataSeriesLabels1, $xAxisTickValues1, $dataSeriesValues1
+);
+$layout1 = new PHPExcel_Chart_Layout();
+$layout1->setShowVal(TRUE);
+$layout1->setShowPercent(TRUE);
+$plotArea1 = new PHPExcel_Chart_PlotArea($layout1, array($series1));
+$legend1 = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
+
+$title1 = new PHPExcel_Chart_Title('GRAFIK JUMLAH TINDAKAN');
+$chart1 = new PHPExcel_Chart(
+        'chart1', $title1, $legend1, $plotArea1, true, 0, NULL, NULL
 );
 
-$dataSeriesValues = array(
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 1) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 2) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
-    new PHPExcel_Chart_DataSeriesValues('Number', $DATA_SHEET[$NUMBER_SHEET]['title'] . '!$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . $START_ROW_DATA . ':$' . $this->cetak->next_char($COLUMN_START_UMUM, $start + 3) . '$' . $END_ROW_DATA, NULL, $END_ROW_DATA - $START_ROW_DATA),
-);
+$chart1->setTopLeftPosition($COLUMN_START_CHART . $ROW_START_CHART);
+$chart1->setBottomRightPosition($this->cetak->next_char($COLUMN_START_CHART, 10) . ($ROW_START_CHART + 25));
 
-$series = new PHPExcel_Chart_DataSeries(
-        PHPExcel_Chart_DataSeries::TYPE_BARCHART, PHPExcel_Chart_DataSeries::GROUPING_STANDARD, range(0, count($dataSeriesValues) - 1), $dataSeriesLabels, $xAxisTickValues, $dataSeriesValues
-);
-
-$series->setPlotDirection(PHPExcel_Chart_DataSeries::DIRECTION_COL);
-
-$plotArea = new PHPExcel_Chart_PlotArea(NULL, array($series));
-$legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_BOTTOM, NULL, false);
-
-$title = new PHPExcel_Chart_Title('Grafik Jumlah Pelanggaran Umum');
-$xAxisLabel = new PHPExcel_Chart_Title('Kelas');
-$yAxisLabel = new PHPExcel_Chart_Title('Jumlah');
-
-$chart = new PHPExcel_Chart(
-        'chart1', $title, $legend, $plotArea, true, 0, $xAxisLabel, $yAxisLabel
-);
-
-$chart->setTopLeftPosition($this->cetak->next_char($COLUMN_END_HEADER, 2) . ($END_ROW_DATA + 15));
-$chart->setBottomRightPosition($this->cetak->next_char($COLUMN_END_HEADER, 60) . ($END_ROW_DATA + 65));
-
-$objPHPExcel->getActiveSheet()->addChart($chart);
+$objPHPExcel->getActiveSheet()->addChart($chart1);
 
 // ===========================================================================================================================================================================
 
@@ -524,19 +619,22 @@ $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
 $objPHPExcel->setActiveSheetIndex(1);
 
 // ===========================================================================================================================================================================
-//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-//header('Content-Disposition: attachment;filename="statistik_komdis_' . date('Y_m_d_H_i_s') . '.xlsx"');
-//header('Cache-Control: max-age=0');
-//header('Cache-Control: max-age=1');
-//
-//$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-//$objWriter->setIncludeCharts(TRUE);
-//$objWriter->save('php://output');
 
-header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="statistik_komdis_' . date('Y_m_d_H_i_s') . '.xls"');
-header('Cache-Control: max-age=0');
-header('Cache-Control: max-age=1');
+if ($MODE == 0) {
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="statistik_komdis_' . date('Y_m_d_H_i_s') . '.xls"');
+    header('Cache-Control: max-age=0');
+    header('Cache-Control: max-age=1');
 
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+} elseif ($MODE == 1) {
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="statistik_komdis_' . date('Y_m_d_H_i_s') . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    header('Cache-Control: max-age=1');
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $objWriter->setIncludeCharts(TRUE);
+}
+
 $objWriter->save('php://output');
