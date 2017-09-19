@@ -59,7 +59,7 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading'.$jk.$key.'">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion'.$jk.'" href="#collapse'.$jk.$key.'" aria-expanded="true" aria-controls="collapse'.$jk.$key.'" data-jk="'.$jk.'" data-key="'.$key.'" onclick="request_denah(this);">
-                                            '.($key + 1).'.&nbsp;&nbsp;&nbsp;Ruang '.$ruang[$key]['NAMA_RUANG'].' '.(($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? '( Sisa: '.$data_denah[$jk]['JUMLAH_SISA'][$key].' orang )' : '').'
+                                            '.($key + 1).'.&nbsp;&nbsp;&nbsp;Ruang '.$ruang[$key]['KODE_RUANG'].' - '.$ruang[$key]['NAMA_RUANG'].' '.(($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? '( Sisa: '.$data_denah[$jk]['JUMLAH_SISA'][$key].' orang )' : '').'
                                         </a>
                                     </h4>
                                 </div>
@@ -98,7 +98,7 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading'.$jk.$key.'">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion'.$jk.'" href="#collapse'.$jk.$key.'" aria-expanded="true" aria-controls="collapse'.$jk.$key.'" data-jk="'.$jk.'" data-key="'.$key.'" onclick="request_denah(this);">
-                                            '.($key + 1).'.&nbsp;&nbsp;&nbsp;Ruang '.$ruang[$key]['NAMA_RUANG'].' '.(($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? '( Sisa: '.$data_denah[$jk]['JUMLAH_SISA'][$key].' orang )' : '').'
+                                            '.($key + 1).'.&nbsp;&nbsp;&nbsp;Ruang '.$ruang[$key]['KODE_RUANG'].' - '.$ruang[$key]['NAMA_RUANG'].' '.(($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? '( Sisa: '.$data_denah[$jk]['JUMLAH_SISA'][$key].' orang )' : '').'
                                         </a>
                                     </h4>
                                 </div>
@@ -195,7 +195,7 @@ function show_denah(jk, key, id, data, data_denah, mode) {
                 mark_col++;
             }
 
-            $("#mark_col_" + mode + (mark_col - 1)).append(kursi_siswa(jk, key, data.PARSE_COL, value1, key1, data.NAMA_JENJANG[value1], data.TINGKAT[value1], data.WARNA_JENJANG[value1], mode, data.KURSI_KOSONG));
+            $("#mark_col_" + mode + (mark_col - 1)).append(kursi_siswa(jk, key, data.PARSE_COL, value1, key1, data.NAMA_DEPT[value1], data.TINGKAT[value1], data.WARNA_JENJANG[value1], mode, data.KURSI_KOSONG));
 
             y++;
         } else {
@@ -212,7 +212,7 @@ function show_denah(jk, key, id, data, data_denah, mode) {
                     mark_col++;
                 }
 
-                $("#mark_col_" + mode + (mark_col - 1)).append(kursi_siswa(jk, key, data.PARSE_COL, key1, y, data.NAMA_JENJANG[key1], data.TINGKAT[key1], data.WARNA_JENJANG[key1], mode, data.KURSI_KOSONG));
+                $("#mark_col_" + mode + (mark_col - 1)).append(kursi_siswa(jk, key, data.PARSE_COL, key1, y, data.NAMA_DEPT[key1], data.TINGKAT[key1], data.WARNA_JENJANG[key1], mode, data.KURSI_KOSONG));
 
                 y++;
             }
@@ -221,8 +221,8 @@ function show_denah(jk, key, id, data, data_denah, mode) {
 
     if(mode === 'sisa') return;
 
-    if (y < data.JUMLAH_PERUANG) {
-        for (var z = y; z < data.JUMLAH_PERUANG; z++) {
+    if (y < data.JUMLAH_KAPASITAS_PERUANG) {
+        for (var z = y; z < data.JUMLAH_KAPASITAS_PERUANG; z++) {
             if (((parseInt(z) === 0) && !data.DOUBLE_COL) || (!data.DOUBLE_COL && ((parseInt(z) / data.JUMLAH_PERBARIS) == mark_col))) {
                 $("#" + id).append('<div class="row" id="mark_col_' + mode + mark_col + '"></div>');
                 mark_col++;

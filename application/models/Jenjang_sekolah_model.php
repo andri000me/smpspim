@@ -146,6 +146,14 @@ class Jenjang_sekolah_model extends CI_Model {
         return $this->db->affected_rows();
     }
     
+    public function get_nama_dept($id) {
+        $this->_get_table();
+        $this->db->join('md_jenjang_departemen', 'JENJANG_MJD=ID_JS');
+        $this->db->where($this->primary_key, $id);
+
+        return $this->db->get()->row()->DEPT_MJD;
+    }
+    
     public function get_nama_jenjang($id) {
         $this->_get_table();
         $this->db->where($this->primary_key, $id);
