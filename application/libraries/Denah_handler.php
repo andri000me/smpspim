@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+ 
 class Denah_handler {
 
     public function __construct() {
