@@ -44,6 +44,8 @@ class Ruang extends CI_Controller {
             if ($item->UJIAN_RUANG) $row[] = '<i class="fa fa-check"></i>';
             else $row[] = '<i class="fa fa-close" style="cursor: pointer;" onclick="return change_active(1, \''.$item->KODE_RUANG.'\');"></i>';
             
+            $row[] = $item->KAPASITAS_UJIAN_RUANG;
+            
             $row[] = '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
@@ -112,6 +114,18 @@ class Ruang extends CI_Controller {
                     'value' => $data == NULL ? "40" : $data->KAPASITAS_RUANG
                 )
             ),
+            array(
+                'label' => 'Kapasitas Ujian',
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',
+                    'name' => 'KAPASITAS_UJIAN_RUANG',
+                    "placeholder" => " ",
+                    'value' => $data == NULL ? "40" : $data->KAPASITAS_UJIAN_RUANG
+                )
+            ),
         );
         
         $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
@@ -141,6 +155,7 @@ class Ruang extends CI_Controller {
         
         $data['NAMA_RUANG'] = $this->input->post('NAMA_RUANG');
         $data['KAPASITAS_RUANG'] = $this->input->post('KAPASITAS_RUANG');
+        $data['KAPASITAS_UJIAN_RUANG'] = $this->input->post('KAPASITAS_UJIAN_RUANG');
         $data['UJIAN_RUANG'] = $this->input->post('UJIAN_RUANG');
         
         $affected_row = $this->ruang->update($where, $data);

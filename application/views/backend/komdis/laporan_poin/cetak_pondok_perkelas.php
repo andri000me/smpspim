@@ -34,9 +34,9 @@ foreach ($data as $detail) {
     $pdf->Ln();
 
     $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(7, 4, 'No', 'LTR', 0, 'C');
+    $pdf->Cell(7, 8, 'No', 'LTR', 0, 'C');
     $pdf->Cell(20, 8, 'NIS', 1, 0, 'C');
-    $pdf->Cell(40, 8, 'Nama', 1, 0, 'C');
+    $pdf->Cell(43, 8, 'Nama', 1, 0, 'C');
     $pdf->Cell(7, 4, 'Poin', 'LTR', 0, 'C');
     $pdf->Cell(7, 8, 'L', 1, 0, 'C');
     $pdf->Cell(20, 8, 'Surat', 1, 0, 'C');
@@ -44,8 +44,7 @@ foreach ($data as $detail) {
     $pdf->Cell(18, 4, 'Cawu', 1, 0, 'C');
     $pdf->Cell(7, 8, 'Jml', 1, 0, 'C');
     $pdf->Ln(4);
-    $pdf->Cell(7, 4, 'Absn', 'LBR', 0, 'C');
-    $pdf->Cell(60);
+    $pdf->Cell(70);
     $pdf->Cell(7, 4, 'Lalu', 'LBR', 0, 'C');
     $pdf->Cell(27);
     $pdf->Cell(65 / 12, 4, '07', 1, 0, 'C');
@@ -72,11 +71,12 @@ foreach ($data as $detail) {
     $jumlah_mutasi = 0;
     $no = 1;
     $start = TRUE;
+    $jumlah_siswa = 0;
     foreach ($DATA as $DETAIL) {
         if ((($temp_pondok != $DETAIL->ID_MPS) && !$start) || (($temp_pondok == NULL) && $start)) {
             $no = 1;
             $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(191, 4, $DETAIL->NAMA_PONDOK_MPS == NULL ? 'BELUM MONDOK' : 'PONDOK ' . strtoupper($DETAIL->NAMA_PONDOK_MPS) . ', ' . strtoupper($DETAIL->ALAMAT_MPS), 1, 0, 'L');
+            $pdf->Cell(194, 4, $DETAIL->NAMA_PONDOK_MPS == NULL ? 'BELUM MONDOK' : 'PONDOK ' . strtoupper($DETAIL->NAMA_PONDOK_MPS) . ', ' . strtoupper($DETAIL->ALAMAT_MPS), 1, 0, 'L');
             $pdf->Ln();
 
             $temp_pondok = $DETAIL->ID_MPS;
@@ -102,7 +102,7 @@ foreach ($data as $detail) {
 
         $pdf->Cell(7, 4, $no++, 1, 0, 'C', TRUE);
         $pdf->Cell(20, 4, $DETAIL->NIS_SISWA == NULL ? 'KELUAR' : $DETAIL->NIS_SISWA, 1, 0, 'C', TRUE);
-        $pdf->Cell(40, 4, $DETAIL->NAMA_SISWA, 1, 0, 'L', TRUE);
+        $pdf->Cell(43, 4, $DETAIL->NAMA_SISWA, 1, 0, 'L', TRUE);
         $pdf->Cell(7, 4, ($DETAIL->POIN_TAHUN_LALU_KSH > 0 ? $DETAIL->POIN_TAHUN_LALU_KSH : ''), 1, 0, 'C', TRUE);
         $pdf->Cell(7, 4, ($DETAIL->TOTAL_LARI > 0 ? $DETAIL->TOTAL_LARI : ''), 1, 0, 'C', TRUE);
         $pdf->Cell(20, 4, $DETAIL->NAMA_KJT, 1, 0, 'L', TRUE);
@@ -126,6 +126,8 @@ foreach ($data as $detail) {
         $pdf->Ln();
         
         $start = FALSE;
+        
+        $jumlah_siswa++;
     }
     $pdf->Cell(0, 4, 'NB.');
     $pdf->Ln();
@@ -156,6 +158,10 @@ foreach ($data as $detail) {
 
     $pdf->Cell(5);
     $pdf->Cell(0, 4, 'Jumlah Luar Batas: ' . $jumlah_mutasi);
+    $pdf->Ln();
+
+    $pdf->Cell(5);
+    $pdf->Cell(0, 4, 'Jumlah Siswa: ' . $jumlah_siswa);
     $pdf->Ln();
 }
 

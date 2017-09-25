@@ -44,7 +44,7 @@ class Laporan_tindakan extends CI_Controller {
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_KJT;
-            $row[] = $item->NAMA_PEG;
+            $row[] = $item->DOMISILI_SISWA;
             $row[] = $item->TANGGAL_KT;
 
             $row[] = '<a href="'. site_url('komdis/laporan_poin/cetak_surat/'.($item->ID_KJT > 1 ? $item->ID_KT : $item->PAKET_SP_KT).'/'.$item->ID_KJT).'" target="_blank"><button type="button" class="btn btn-'.($item->NIS_SISWA == NULL ? 'danger' : 'success').' btn-sm"><i class="fa fa-print"></i>&nbsp;&nbsp;'.$item->NAMA_KJT.'</button></a>';

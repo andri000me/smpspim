@@ -71,7 +71,19 @@ class Siswa extends CI_Controller {
             else
                 $surat_keterangan_aktif = '<li><a href="javascript:void()" title="Surat Keterangan Aktif" onclick="surat_keterangan_aktif(\'' . $item->ID_SISWA . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Surat Keterangan Aktif</a></li>';
 
-            $row[] = '
+            if ($this->session->userdata('ID_HAKAKSES') == 7) {
+                $row[] = '
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void()" title="Lihat Data" onclick="view_data(\'' . $item->ID_SISWA . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Data</a></li>
+                        <li><a href="javascript:void()" title="Foto Siswa" onclick="view_photo(\'' . $item->ID_SISWA . '\')"><i class="fa fa-file-photo-o "></i>&nbsp;&nbsp;Foto Siswa</a></li>
+                        ' . $surat_keterangan_aktif . '
+                    </ul>
+                </div>';
+                
+            } else {
+                $row[] = '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
@@ -84,6 +96,7 @@ class Siswa extends CI_Controller {
                         ' . $surat_keterangan_aktif . '
                     </ul>
                 </div>';
+            }
 
             $data[] = $row;
         }

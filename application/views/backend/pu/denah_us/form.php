@@ -166,7 +166,7 @@
         var kapasitas = 0;
 
         if (detail === 'Data') {
-            kapasitas = parseInt(ruang[key]['KAPASITAS_RUANG']);
+            kapasitas = parseInt(ruang[key]['KAPASITAS_UJIAN_RUANG']);
 
             tag_html += '<td class="ruang_' + key + '_' + jk + '">' + (parseInt(jumlah_peserta_ruang) > 0 ? '<strong>' : '') + (key + 1) + '.&nbsp;&nbsp;&nbsp;Ruang ' + ruang[key]['KODE_RUANG'] + ' [' + kapasitas + ' siswa] ' + (parseInt(jumlah_peserta_ruang) > 0 ? '</strong>' : '') + '</td>';
         } else {

@@ -69,7 +69,9 @@ $this->generate->datatables($id_datatables, $title, $columns);
         table = initialize_datatables(id_table, '<?php echo site_url('akademik/siswa/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
         $(".buttons-print, .buttons-copy").remove();
+        <?php if ($this->session->userdata('ID_HAKAKSES') != 7) { ?>
         $('<a class="btn btn-default btn-sm buttons-kehadiran" tabindex="0" aria-controls="datatable1" data-vivaldi-spatnav-clickable="1" data-toggle="modal" data-target="#cetak_modal"><span>Cetak Semua Kartu</span></a>').insertAfter('.buttons-add');
+        <?php } ?>
         $(".buttons-add").html('Editor');
         
         

@@ -18,8 +18,9 @@ foreach ($SISWA as $detail) {
 function cetak($pdf, $siswa, $data) {
     $CI =& get_instance();
 
-    $width = 210;
-    $height = 297 / 4;
+    $f4 = $CI->pengaturan->getUkuranF4();
+    $width = $f4[0];
+    $height = $f4[1] / 3;
     $margin = 4;
 
     $pdf->SetMargins($margin + 6, $margin);
@@ -28,23 +29,23 @@ function cetak($pdf, $siswa, $data) {
     
     $pdf->SetTextColor(2, 116, 54);
     $pdf->SetDrawColor(2, 116, 54);
-    $pdf = $CI->cetak->header_yayasan($pdf, $margin);
+    $pdf = $CI->cetak->header_yayasan($pdf, $margin, 'f4');
     $pdf->SetTextColor(0, 0, 0);
     $pdf->SetDrawColor(0, 0, 0);
 
-    $pdf->SetFont('Arial', '', 9);
+    $pdf->SetFont('Arial', '', 10);
     
     $pdf->Cell(13, 5, 'Nomor');
     $pdf->Cell(0, 5, ': KM/         /A-II/PIM/'.(date('Y') - $CI->pengaturan->getTahunBerdiri()).'/'.$CI->date_format->toRomawi(date('n')).'/'. date('Y'));
     $pdf->Ln();
     
     $pdf->Cell(13, 5, 'Hal');
-    $pdf->SetFont('Arial', 'I', 9);
+    $pdf->SetFont('Arial', 'I', 10);
     $pdf->MultiCell(80, 5, ': '.$data['HAL']);
     $pdf->Ln();
     
     $pdf->SetY($height * 0.6);
-    $pdf->SetFont('Arial', '', 9);
+    $pdf->SetFont('Arial', '', 10);
     
     $pdf->Cell(120);
     $pdf->Cell(0, 5, 'Kepada Yang Terhormat,');

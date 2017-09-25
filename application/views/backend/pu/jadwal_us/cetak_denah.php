@@ -71,7 +71,7 @@ foreach ($data as $detail) {
         }
 
         foreach ($data_denah['DENAH'] as $ruang => $value) {
-            $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_RUANG'];
+            $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_UJIAN_RUANG'];
 
             $pdf->AddPage("L", $this->pengaturan->getUkuranF4());
             $pdf->SetAutoPageBreak(true, 0);

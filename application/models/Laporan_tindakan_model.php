@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_tindakan_model extends CI_Model {
 
     var $table = 'komdis_tindakan';
-    var $column = array('IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA)', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KJT', 'CONCAT(NIP_PEG," - ", NAMA_PEG)', 'TANGGAL_KT', 'ID_KT');
+    var $column = array('IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA)', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KJT', 'IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS))', 'TANGGAL_KT', 'ID_KT');
     var $primary_key = "ID_KT";
     var $order = array("ID_KT" => 'DESC');
 
@@ -20,19 +20,22 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     private function _get_table() {
-        $this->db->select('*, IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA) AS NIS_SHOW, CONCAT(NIP_PEG," - ", NAMA_PEG) AS NAMA_PEG');
+        $this->db->select('*, IF(NIS_SISWA IS NULL, NIS_NIS, NIS_SISWA) AS NIS_SHOW, CONCAT(NIP_PEG," - ", NAMA_PEG) AS NAMA_PEG, IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS)) AS DOMISILI_SISWA');
         $this->db->from($this->table);
         $this->db->join('komdis_siswa_header ksh', $this->table . '.PELANGGARAN_HEADER_KT=ksh.ID_KSH');
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB');
+        $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_nis mn', 'ms.ID_SISWA=mn.SISWA_NIS AND mn.TA_NIS=' . $this->session->userdata("ID_TA_ACTIVE"), 'LEFT');
         $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.TINDAKAN_KT=kjt.ID_KJT');
         $this->db->join('md_user mu', $this->table . '.PENANGGUNGJAWAB_KT=mu.ID_USER');
         $this->db->join('md_pegawai mp', 'mu.PEGAWAI_USER=mp.ID_PEG');
-//        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
     }
 
     private function _get_table_detail($select = false) {
@@ -97,6 +100,7 @@ class Laporan_tindakan_model extends CI_Model {
 
         if (isset($_POST['order'])) {
             $column[0] = 'NIS_SHOW';
+            $column[4] = 'DOMISILI_SISWA';
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;

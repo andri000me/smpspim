@@ -33,8 +33,8 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     var id_form = '<?php echo $id_form; ?>';
     var id_table = '<?php echo $id_datatables; ?>';
     var title = '<?php echo $title; ?>';
-    var columns = '';//[{ "width": "100px", "targets": 2 }, {"targets": [-1],"orderable": false}];
-    var orders = '';//[[ 0, "ASC" ]];
+    var columns = [{"targets": [-1],"orderable": false}];
+    var orders = [[ 0, "ASC" ]];
     var requestExport = true;
     var functionInitComplete = function(settings, json) {
         

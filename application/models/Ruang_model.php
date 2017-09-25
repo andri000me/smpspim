@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Ruang_model extends CI_Model {
 
     var $table = 'md_ruang';
-    var $column = array('KODE_RUANG', 'NAMA_RUANG', 'KAPASITAS_RUANG', 'UJIAN_RUANG','KODE_RUANG');
+    var $column = array('KODE_RUANG', 'NAMA_RUANG', 'KAPASITAS_RUANG', 'UJIAN_RUANG','KAPASITAS_UJIAN_RUANG','KODE_RUANG');
     var $primary_key = "KODE_RUANG";
     var $order = array("KODE_RUANG" => 'ASC');
 

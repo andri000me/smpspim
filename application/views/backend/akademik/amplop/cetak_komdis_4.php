@@ -27,12 +27,12 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     // =================================== AMPLOP =================================== 
 
     $pdf->SetMargins($margin + 14, $margin);
-    $pdf->AddPage("P", "A4");
+    $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
     $pdf->SetAutoPageBreak(true, 0);
 
     $pdf->SetTextColor(2, 116, 54);
     $pdf->SetDrawColor(2, 116, 54);
-    $pdf = $this->cetak->header_yayasan($pdf, $margin);
+    $pdf = $this->cetak->header_yayasan($pdf, $margin, 'f4');
     $pdf->SetTextColor(0, 0, 0);
     $pdf->SetDrawColor(0, 0, 0);
 
@@ -154,30 +154,30 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(90);
-    $pdf->Cell(0, 5, 'Kajen, '.$this->date_format->to_print_text(date('Y-m-d')));
+    $pdf->Cell(0, 5, 'Kajen, ' . $this->date_format->to_print_text(date('Y-m-d')));
     $pdf->Ln(8);
-    
+
     $pdf->Cell(90);
     $pdf->Cell(0, 5, 'A/n Direktur,');
     $pdf->Ln();
-    
+
     $pdf->Cell(90);
     $pdf->Cell(0, 5, 'Pembantu Direktur Bidang Kesiswaan');
     $ttd = strtolower($post['TTD_SURAT']);
     $ttd = str_replace('.', '', $ttd);
     $ttd = str_replace(' ', '_', $ttd);
-    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 105, $pdf->GetY(), 75, 23, '', '');
+    $pdf->Image(base_url('files/aplikasi/ttd_' . $ttd . '.png'), 105, $pdf->GetY(), 75, 23, '', '');
     $pdf->Ln(18);
 
     $pdf->SetFont('Arial', 'UB', 10);
     $pdf->Cell(90);
     $pdf->Cell(0, 5, $post['TTD_SURAT']);
     $pdf->Ln(12);
-    
+
     // =================================== DETAIL =================================== 
 
-    $pdf->SetMargins(10, 10);
-    $pdf->AddPage("P", "A4");
+    $pdf->SetMargins(13, 10);
+    $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
     $pdf->SetAutoPageBreak(true, 0);
 
     $pdf->SetFont('Arial', 'B', 12);
@@ -255,9 +255,9 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
 }
 
 
-$pdf->AddPage("P", "A4");
+$pdf->AddPage("P", $this->pengaturan->getUkuranF4());
 
-for ($i = 0; $i < 300; $i++) {
+for ($i = 0; $i < 350; $i++) {
     $pdf->Line(0, $i, 250, $i);
 }
 
@@ -277,9 +277,11 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
 function cetak($pdf, $siswa, $data, $nomor_surat) {
     $CI = & get_instance();
 
-    $width = 210;
-    $height = 297 / 4;
+    $f4 = $CI->pengaturan->getUkuranF4();
+    $width = $f4[0];
+    $height = $f4[1] / 3;
     $margin = 4;
+    $penerima_margin = 110;
 
     $pdf->SetMargins($margin + 6, $margin);
     $pdf->AddPage("L", array($width, $height));
@@ -287,34 +289,42 @@ function cetak($pdf, $siswa, $data, $nomor_surat) {
 
     $pdf->SetTextColor(2, 116, 54);
     $pdf->SetDrawColor(2, 116, 54);
-    $pdf = $CI->cetak->header_yayasan($pdf, $margin);
+    $pdf = $CI->cetak->header_yayasan($pdf, $margin, 'f4');
     $pdf->SetTextColor(0, 0, 0);
     $pdf->SetDrawColor(0, 0, 0);
 
-    $pdf->SetFont('Arial', '', 9);
-
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Ln(2);
     $pdf->Cell(13, 5, 'Nomor');
     $pdf->Cell(0, 5, ': KM/' . $nomor_surat . '/A-II/PIM/' . (date('Y') - $CI->pengaturan->getTahunBerdiri()) . '/' . $CI->date_format->toRomawi(date('n')) . '/' . date('Y'));
     $pdf->Ln();
 
     $pdf->Cell(13, 5, 'Hal');
-    $pdf->SetFont('Arial', 'I', 9);
+    $pdf->SetFont('Arial', 'I', 10);
     $pdf->MultiCell(80, 5, ': Pemberitahuan & Undangan');
     $pdf->Ln();
 
     $pdf->SetY($height * 0.6);
-    $pdf->SetFont('Arial', '', 9);
+    $pdf->SetFont('Arial', '', 10);
 
-    $pdf->Cell(120);
+    $pdf->Cell($penerima_margin);
     $pdf->Cell(0, 5, 'Kepada Yang Terhormat,');
     $pdf->Ln(8);
 
-    $pdf->Cell(120);
+    $pdf->Cell($penerima_margin);
     $pdf->Cell(0, 5, 'Bapak/Ibu Wali Murid');
     $pdf->Ln();
 
-    $pdf->Cell(120);
+    $pdf->Cell($penerima_margin);
     $pdf->Cell(0, 5, 'sdr. ' . $CI->cetak->nama_wali_siswa($siswa));
+    $pdf->Ln();
+
+    $pdf->Cell($penerima_margin);
+    $pdf->Cell(0, 5, $siswa['ALAMAT_SISWA'] . ', Kec. ' . $siswa['NAMA_KEC']);
+    $pdf->Ln();
+
+    $pdf->Cell($penerima_margin);
+    $pdf->Cell(0, 5, str_replace('Kabupaten', 'Kab.', $siswa['NAMA_KAB']));
     $pdf->Ln();
 
     return $pdf;

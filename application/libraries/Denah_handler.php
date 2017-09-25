@@ -546,7 +546,7 @@ class Denah_handler {
 
                         $jumlah_peserta_ruang = $this->jumlah_peserta_diruang($data['ATURAN_DENAH_BARU'][$index_ruang]);
                         $index_ruang_ujian = $data['RUANG_UJIAN_DEPT'][$data['NAMA_DEPT'][$temp_data_index] . '_' . $data['TINGKAT'][$temp_data_index]];
-                        $kapasitas = $data['RUANG'][$index_ruang]['KAPASITAS_RUANG'] < $data['JUMLAH_PERRUANG'] ? $data['RUANG'][$index_ruang]['KAPASITAS_RUANG'] : $data['JUMLAH_PERRUANG'];
+                        $kapasitas = $data['RUANG'][$index_ruang]['KAPASITAS_UJIAN_RUANG'] < $data['JUMLAH_PERRUANG'] ? $data['RUANG'][$index_ruang]['KAPASITAS_UJIAN_RUANG'] : $data['JUMLAH_PERRUANG'];
 
                         $index_ruang_terakhir = end($index_ruang_ujian);
                         reset($index_ruang_ujian);
@@ -835,12 +835,12 @@ class Denah_handler {
 
             // MENDAPATKAN MAKSIMAL JUMLAH SISA PERRUANG PERTINGKAT
             $jumlah_perbaris = $data['JUMLAH_PERBARIS'];
-            $kapasitas_ruang = array();
+            $KAPASITAS_UJIAN_RUANG = array();
             $maksimal_perruang_pertingkat = array();
             foreach ($data['RUANG'] as $key => $value) {
                 if ($key >= $ruang_terakhir) {
-                    $kapasitas_ruang[$key] = $value['KAPASITAS_RUANG'];
-                    $jumlah_baris = round($value['KAPASITAS_RUANG'] / $jumlah_perbaris);
+                    $KAPASITAS_UJIAN_RUANG[$key] = $value['KAPASITAS_UJIAN_RUANG'];
+                    $jumlah_baris = round($value['KAPASITAS_UJIAN_RUANG'] / $jumlah_perbaris);
                     $jumlah_baris = (($jumlah_baris % 2) == 0) ? $jumlah_baris : ($jumlah_baris + 1);
                     $maksimal_perruang_pertingkat[$key] = round($jumlah_baris / 2) * round($jumlah_perbaris / 2);
                 }
@@ -958,7 +958,7 @@ class Denah_handler {
                     $temp_jumlah_ruang_gabung = count($temp_ruang_gabung);
                     $temp_ruang_gabung_proses = $temp_ruang_gabung;
 
-                    if ($temp_jumlah_peserta_gabung > $data['RUANG'][$index_ruang]['KAPASITAS_RUANG']) {
+                    if ($temp_jumlah_peserta_gabung > $data['RUANG'][$index_ruang]['KAPASITAS_UJIAN_RUANG']) {
                         $temp_jumlah_peserta_gabung = 0;
                         $temp_ruang_gabung = array();
                     }
@@ -981,7 +981,7 @@ class Denah_handler {
                         if (!isset($sisa['SISA'][$index_ruang][$index_tingkat]) || (isset($sisa['SISA'][$index_ruang][$index_tingkat]) && ($sisa['SISA'][$index_ruang][$index_tingkat] == 0)) && ((!isset($data['RUANG_WARIS'])) || (isset($data['RUANG_WARIS']) && !in_array($index_ruang_ujian_dept . '_' . $index_ruang, $data['RUANG_WARIS'])))) {
                             $data_ruang = $sisa['ATURAN_DENAH'][$index_ruang];
                             $jumlah_peserta_ruang = $this->jumlah_peserta_diruang($data_ruang);
-                            $kapasitas_ruang = $sisa['RUANG'][$index_ruang]['KAPASITAS_RUANG'];
+                            $KAPASITAS_UJIAN_RUANG = $sisa['RUANG'][$index_ruang]['KAPASITAS_UJIAN_RUANG'];
 
 //                            echo '<hr><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><br>';
 ////                            echo '<hr>SISA<br>' . json_encode($sisa['SISA'][$index_ruang]);
@@ -991,14 +991,14 @@ class Denah_handler {
 //                            echo '<hr>$index_ruang<br>' . json_encode($index_ruang);
 //                            echo '<hr>KODE_RUANG<br>' . json_encode($sisa['RUANG'][$index_ruang]['KODE_RUANG']);
 //                            echo '<hr>$jumlah_peserta_ruang<br>' . json_encode($jumlah_peserta_ruang);
-//                            echo '<hr>$kapasitas_ruang<br>' . json_encode($kapasitas_ruang);
+//                            echo '<hr>$KAPASITAS_UJIAN_RUANG<br>' . json_encode($KAPASITAS_UJIAN_RUANG);
 //                            echo '<hr>$data_ruang<br>' . json_encode($data_ruang);
 //                            echo '<hr>ATURAN_DENAH<br>' . json_encode($sisa['ATURAN_DENAH'][$index_ruang]);
 
                             $temp_jumlah_peserta_sisa = $jumlah_peserta_sisa;
-                            if ($jumlah_peserta_ruang < $kapasitas_ruang) {
+                            if ($jumlah_peserta_ruang < $KAPASITAS_UJIAN_RUANG) {
 //                            echo '<hr>RUANG_WARIS<br>' . json_encode($data['RUANG_WARIS']);
-                                $jumlah_peserta_kosong = $kapasitas_ruang - $jumlah_peserta_ruang;
+                                $jumlah_peserta_kosong = $KAPASITAS_UJIAN_RUANG - $jumlah_peserta_ruang;
 
                                 if ($jumlah_peserta_kosong >= $jumlah_peserta_sisa) {
                                     $sisa['ATURAN_DENAH'][$index_ruang][$index_tingkat] += $jumlah_peserta_sisa;
@@ -1108,7 +1108,7 @@ class Denah_handler {
             }
 
             // MENGAMBIL NILAI JUMLAH PERUANG
-            $jumlah_peruang = $jumlah_peserta > $data['RUANG'][$z]['KAPASITAS_RUANG'] ? $jumlah_peserta : $data['RUANG'][$z]['KAPASITAS_RUANG'];
+            $jumlah_peruang = $jumlah_peserta > $data['RUANG'][$z]['KAPASITAS_UJIAN_RUANG'] ? $jumlah_peserta : $data['RUANG'][$z]['KAPASITAS_UJIAN_RUANG'];
 
             // LOOPING SETIAP TINGKAT
             $count_loop_ruang = 0;

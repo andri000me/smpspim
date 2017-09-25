@@ -8,6 +8,7 @@ $columns = array(
     'NAMA',
     'KAPASITAS',
     'UJIAN',
+    'KAPASITAS UJIAN',
     'AKSI',
 );
 

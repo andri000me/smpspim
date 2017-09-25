@@ -372,7 +372,7 @@ class Jadwal_us extends CI_Controller {
                     $jumlah = 0;
                     $temp_data_siswa = array();
                     // LOOPING NOMOR URUT DALAM RUANGAN
-                    $jumlah_peruang = $data_denah["RUANG"][$ruang]['KAPASITAS_RUANG'];
+                    $jumlah_peruang = $data_denah["RUANG"][$ruang]['KAPASITAS_UJIAN_RUANG'];
                     for ($i = 0; $i < $jumlah_peruang; $i++) {
                         $no_urut = $i;
                         // MEMBUAT ATURAN DALAM DISTRIBUSI SISWA DIRUANGAN

@@ -6,6 +6,7 @@ class Cetak {
 
     var $margin_title = 25;
     var $length_kop = 90;
+    var $margin_left = 0;
 
     public function __construct() {
         $this->CI = & get_instance();
@@ -13,35 +14,39 @@ class Cetak {
     }
 
     public function logo_yayasan($pdf, $margin = 0) {
-        $pdf->Image(base_url($this->setup->getLogo()), 13, 10 - $margin, 23, 24, '', '');
+        $pdf->Image(base_url($this->setup->getLogo()), 13 + $this->margin_left, 10 - $margin, 23, 24, '', '');
 
         return $pdf;
     }
 
-    public function header_yayasan($pdf, $margin = 0) {
+    public function header_yayasan($pdf, $margin = 0, $ukuran_kertas = 'A4') {
+        if (strtoupper($ukuran_kertas) == 'F4') {
+            $this->margin_left = 5;
+        }
+        
         if ($margin > 0)
-            $margin = 10 - $margin;
+            $margin = 10 - $margin;        
 
         $pdf = $this->logo_yayasan($pdf, $margin);
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell($this->margin_title);
         $pdf->Cell($this->length_kop, 5, strtoupper($this->setup->getNamaLembaga()), 0, 0, 'C');
-        $pdf->Image(base_url('files/aplikasi/kop_1.png'), 130, 10 - $margin, 55, 7, '', '');
+        $pdf->Image(base_url('files/aplikasi/kop_1.png'), 130 + $this->margin_left, 10 - $margin, 55, 7, '', '');
 
         $pdf->Ln(5);
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell($this->margin_title);
         $pdf->Cell($this->length_kop, 5, strtoupper($this->setup->getNamaYayasan()), 0, 0, 'C');
-        $pdf->Image(base_url('files/aplikasi/kop_2.png'), 142, 17 - $margin, 30, 7, '', '');
+        $pdf->Image(base_url('files/aplikasi/kop_2.png'), 142 + $this->margin_left, 17 - $margin, 30, 7, '', '');
 
         $pdf->Ln(5);
 
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell($this->margin_title);
         $pdf->Cell($this->length_kop, 5, strtoupper($this->setup->getDesa() . ' - ' . $this->setup->getKecamatan() . ' - ' . $this->setup->getKabupaten() . ' ' . $this->setup->getKodepos()), 0, 0, 'C');
-        $pdf->Image(base_url('files/aplikasi/kop_3.png'), 139, 23 - $margin, 35, 6, '', '');
+        $pdf->Image(base_url('files/aplikasi/kop_3.png'), 139 + $this->margin_left, 23 - $margin, 35, 6, '', '');
 
         $pdf->Ln(4);
 
@@ -52,14 +57,14 @@ class Cetak {
 
         $pdf->Cell($this->margin_title);
         $pdf->Cell($this->length_kop, 5, 'TELP. ' . $this->setup->getTelp() . ' FAX. ' . $this->setup->getFax(), 0, 0, 'C');
-        $pdf->Image(base_url('files/aplikasi/kop_4.png'), 130, 28 - $margin, 60, 6, '', '');
+        $pdf->Image(base_url('files/aplikasi/kop_4.png'), 130 + $this->margin_left, 28 - $margin, 60, 6, '', '');
 
         $pdf->Ln(8);
 
         $pdf->SetLineWidth(0.50);
-        $pdf->Line(11, 35 - $margin, 200, 35 - $margin);
+        $pdf->Line(11, 35 - $margin, 200 + $this->margin_left, 35 - $margin);
         $pdf->SetLineWidth(0.30);
-        $pdf->Line(11, 36 - $margin, 200, 36 - $margin);
+        $pdf->Line(11, 36 - $margin, 200 + $this->margin_left, 36 - $margin);
 
         return $pdf;
     }

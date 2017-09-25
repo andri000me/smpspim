@@ -63,7 +63,7 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading' . $jk . $key . '">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion' . $jk . '" href="#collapse' . $jk . $key . '" aria-expanded="true" aria-controls="collapse' . $jk . $key . '" data-jk="' . $jk . '" data-key="' . $key . '" onclick="request_denah(this);">
-                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
+                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_UJIAN_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
                                         </a>
                                     </h4>
                                 </div>
@@ -106,7 +106,7 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading' . $jk . $key . '">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion' . $jk . '" href="#collapse' . $jk . $key . '" aria-expanded="true" aria-controls="collapse' . $jk . $key . '" data-jk="' . $jk . '" data-key="' . $key . '" onclick="request_denah(this);">
-                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
+                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_UJIAN_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
                                         </a>
                                     </h4>
                                 </div>

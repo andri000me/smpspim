@@ -8,7 +8,7 @@ $columns = array(
     'NAMA',
     'KELAS',
     'TINDAKAN',
-    'PENANGGUNGJAWAB',
+    'DOMISILI',
     'TANGGAL',
     'AKSI'
 );
