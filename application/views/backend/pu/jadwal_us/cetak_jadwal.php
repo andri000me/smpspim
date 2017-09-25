@@ -12,7 +12,7 @@ $size_font = 8;
 
 $pdf = $this->fpdf;
 
-$pdf->AddPage("P", "A4");
+$pdf->AddPage("P", $this->pengaturan->getUkuranF4());
 
 $pdf->SetFont('Arial', 'B', $size_font + 2);
 $pdf->Cell(0, 4, 'JADWAL UJIAN SEKOLAH', 0, 0, 'C');

@@ -116,6 +116,10 @@ class Pengaturan {
         return $this->CI->data_pengaturan->get_by_id('maksimal_lari_hafalan');
     }
 
+    public function getUkuranF4() {
+        return json_decode($this->CI->data_pengaturan->get_by_id('ukuran_f4'), TRUE);
+    }
+
     public function getNilaiLulusPSB() {
         return $this->CI->data_pengaturan->get_by_id('nilai_lulus_psb');
     }

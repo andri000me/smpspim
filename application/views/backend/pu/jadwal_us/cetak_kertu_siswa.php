@@ -24,7 +24,7 @@ $height_photo = 17;
 $pdf = $this->fpdf;
 
 function create_page($pdf) {
-    $pdf->AddPage("P", "A4");
+    $pdf->AddPage("P",  "A4");
     $pdf->SetAutoPageBreak(true, 0);
 
     return $pdf;

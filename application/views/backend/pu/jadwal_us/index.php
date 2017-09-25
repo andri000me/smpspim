@@ -105,5 +105,9 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         window.open('<?php echo site_url('pu/jadwal_us/cetak_sampul'); ?>/' + id, '_blank');
     }
     
+    function cetak_soal_<?php echo $id_datatables; ?>(id) {
+        window.open('<?php echo site_url('pu/jadwal_us/cetak_soal'); ?>/' + id, '_blank');
+    }
+    
     
 </script>

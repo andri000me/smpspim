@@ -167,6 +167,11 @@ class Siswa_model extends CI_Model {
 
     public function get_by_id_simple($id) {
         $this->db->from($this->table);
+        $this->db->join('akad_siswa asw', $this->table.'.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0', 'LEFT');
+        $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
+        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        $this->db->join('md_tahun_ajaran mta','ak.TA_KELAS=mta.ID_TA', 'LEFT');
+        $this->db->join('md_tingkat mtnow', 'asw.TINGKAT_AS=mtnow.ID_TINGK', 'LEFT');
         $this->db->where($this->primary_key, $id);
 
         return $this->db->get()->row();

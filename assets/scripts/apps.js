@@ -148,14 +148,14 @@ function create_nav_notication() {
 
 function change_hakakses_header(ID_HAKAKSES) {
     create_splash("Mohon tunggu sebentar, sistem sedang mengatur Hak Akses Anda.");
-    var success = function(data) {
+    var success = function (data) {
         remove_splash();
 
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
             create_swal_success('', data.msg);
 
-            setTimeout(function(){
+            setTimeout(function () {
                 window.location = data.link;
             }, 1500);
         } else {
@@ -169,23 +169,23 @@ function change_hakakses_header(ID_HAKAKSES) {
 
 function create_nav_change_hakakses() {
     var tag_html = "";
-    $.each(list_hakakses, function(index, item){
-        tag_html += '<li style="padding: 5px">' + 
-                        '<a href="#" onclick="change_hakakses_header(' + item.ID_HAKAKSES + ')">' + 
-                            '<h5 class="font-extra-bold text-primary">' + item.NAME_HAKAKSES + '</h5>' + 
-                        '</a>' + 
-                    '</li>';
-    });
-    
-    return '<li class="dropdown">' + 
-                    '<a class="dropdown-toggle" href="#" data-toggle="dropdown">' + 
-                        '<i class="pe-7s-keypad"></i>' + 
-                    '</a>' + 
-                    '<ul class="dropdown-menu hdropdown notification animated flipInX">' + 
-                            tag_html +
-                    '</ul>' + 
+    $.each(list_hakakses, function (index, item) {
+        tag_html += '<li style="padding: 5px">' +
+                '<a href="#" onclick="change_hakakses_header(' + item.ID_HAKAKSES + ')">' +
+                '<h5 class="font-extra-bold text-primary">' + item.NAME_HAKAKSES + '</h5>' +
+                '</a>' +
                 '</li>';
-    
+    });
+
+    return '<li class="dropdown">' +
+            '<a class="dropdown-toggle" href="#" data-toggle="dropdown">' +
+            '<i class="pe-7s-keypad"></i>' +
+            '</a>' +
+            '<ul class="dropdown-menu hdropdown notification animated flipInX">' +
+            tag_html +
+            '</ul>' +
+            '</li>';
+
 }
 
 function create_nav_logout() {
@@ -376,7 +376,8 @@ function create_swal_success(title, message) {
     swal({
         title: title,
         text: message,
-        type: "success"
+        type: "success",
+        html: true,
     });
 }
 
@@ -387,7 +388,8 @@ function create_swal_error(title, message) {
     swal({
         title: title,
         text: message,
-        type: "error"
+        type: "error",
+        html: true,
     });
 }
 

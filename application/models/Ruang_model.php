@@ -132,6 +132,7 @@ class Ruang_model extends CI_Model {
     public function get_ruang_ujian() {
         $this->_get_table();
         $this->db->where('UJIAN_RUANG', 1);
+        $this->db->order_by('KODE_RUANG');
 
         return $this->db->get()->result_array();
     }

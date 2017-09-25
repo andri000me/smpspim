@@ -26,7 +26,7 @@ class Pengawas_pu_model extends CI_Model {
         $this->_get_table();
         $this->db->where('JADWAL_PENG', $id);
         $this->db->where('JK_PENG', 'L');
-        $this->db->order_by('CREATED_PENG', 'ASC');
+        $this->db->order_by('RUANGAN_PENG', 'ASC');
 
         return $this->db->get()->result_array();
     }

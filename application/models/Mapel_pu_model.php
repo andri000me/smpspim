@@ -20,13 +20,15 @@ class Mapel_pu_model extends CI_Model {
         $this->db->join('pu_jadwal pj',$this->table.'.JADWAL_PUM=pj.ID_PUJ');
         $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_PUM=mt.ID_TINGK');
         $this->db->join('md_departemen md','mt.DEPT_TINGK=md.ID_DEPT');
+        $this->db->join('md_jenjang_departemen jp','mt.DEPT_TINGK=jp.DEPT_MJD');
+        $this->db->join('md_jenjang_sekolah js','js.ID_JS=jp.JENJANG_MJD');
         $this->db->join('md_mapel mm',$this->table.'.MAPEL_PUM=mm.ID_MAPEL');
     }
 
     public function get_by_jadwal($id) {
         $this->_get_table();
         $this->db->where('JADWAL_PUM', $id);
-        $this->db->order_by('CREATED_PUM', 'ASC');
+        $this->db->order_by('ID_JS', 'ASC');
 
         return $this->db->get()->result_array();
     }

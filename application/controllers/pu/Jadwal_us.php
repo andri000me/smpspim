@@ -65,14 +65,15 @@ class Jadwal_us extends CI_Controller {
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void()" title="Cetak Sampul" onclick="cetak_sampul_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Sampul Sesi Ini</a></li>
-                        <hr class="line-divider">
-                        <li><a href="javascript:void()" title="Cetak Jadwal Tanggal Ini" onclick="cetak_jadwal_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Jadwal Tanggal Ini</a></li>
-                        <li><a href="javascript:void()" title="Cetak Denah Tanggal Ini" onclick="cetak_denah_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Denah Tanggal Ini</a></li>
+                        <li><a href="javascript:void()" title="Cetak Sampul" onclick="cetak_sampul_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Sampul</a></li>
+                        <li><a href="javascript:void()" title="Cetak Soal" onclick="cetak_soal_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Soal</a></li>
                         <li><a href="javascript:void()" title="Cetak Absen Pengawas" onclick="cetak_absen_pengawas_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Absen Pengawas</a></li>
                         <li><a href="javascript:void()" title="Cetak Absen Peserta" onclick="cetak_absen_peserta_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Absen Peserta</a></li>
                         <hr class="line-divider">
+                        <li><a href="javascript:void()" title="Cetak Jadwal Tanggal Ini" onclick="cetak_jadwal_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Jadwal</a></li>
+                        <li><a href="javascript:void()" title="Cetak Denah Tanggal Ini" onclick="cetak_denah_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Denah</a></li>
                         <li><a href="javascript:void()" title="Cetak Kartu Peserta" onclick="cetak_kertu_siswa_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Kartu Peserta</a></li>
+                        <hr class="line-divider">
                         <li><a href="javascript:void()" title="Cetak Blanko Nilai" onclick="cetak_blanko_nilai()"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Blanko Nilai</a></li>
                         <hr class="line-divider">
                         <li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a></li>
@@ -165,25 +166,29 @@ class Jadwal_us extends CI_Controller {
         }
 
         foreach ($data['RUANGAN_PENG_LK'] as $key => $value) {
-            $data_save = array(
-                'JADWAL_PENG' => $insert,
-                'RUANGAN_PENG' => $value,
-                'JK_PENG' => 'L',
-                'PEGAWAI_PENG' => $data['PEGAWAI_PENG_LK'][$key]
-            );
+            if (isset($data['PEGAWAI_PENG_LK'][$key]) && ($data['PEGAWAI_PENG_LK'][$key] != NULL)) {
+                $data_save = array(
+                    'JADWAL_PENG' => $insert,
+                    'RUANGAN_PENG' => $value,
+                    'JK_PENG' => 'L',
+                    'PEGAWAI_PENG' => $data['PEGAWAI_PENG_LK'][$key]
+                );
 
-            $this->pengawas->save($data_save);
+                $this->pengawas->save($data_save);
+            }
         }
 
         foreach ($data['RUANGAN_PENG_PR'] as $key => $value) {
-            $data_save = array(
-                'JADWAL_PENG' => $insert,
-                'RUANGAN_PENG' => $value,
-                'JK_PENG' => 'P',
-                'PEGAWAI_PENG' => $data['PEGAWAI_PENG_PR'][$key]
-            );
+            if (isset($data['PEGAWAI_PENG_PR'][$key]) && ($data['PEGAWAI_PENG_PR'][$key] != NULL)) {
+                $data_save = array(
+                    'JADWAL_PENG' => $insert,
+                    'RUANGAN_PENG' => $value,
+                    'JK_PENG' => 'P',
+                    'PEGAWAI_PENG' => $data['PEGAWAI_PENG_PR'][$key]
+                );
 
-            $this->pengawas->save($data_save);
+                $this->pengawas->save($data_save);
+            }
         }
     }
 
@@ -210,8 +215,8 @@ class Jadwal_us extends CI_Controller {
         $this->generate->cek_validation_simple('add');
 
         $data = $this->input->post();
-        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
-        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
+//        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
+//        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
 
         $this->cek_jam_bentrok($data);
         if ($data['JAM_MULAI_PUJ'] == $data['JAM_SELESAI_PUJ'])
@@ -241,8 +246,8 @@ class Jadwal_us extends CI_Controller {
         $this->generate->cek_validation_simple('edit');
 
         $data = $this->input->post();
-        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
-        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
+//        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
+//        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
 
         $this->cek_jam_bentrok($data, TRUE);
         if ($data['JAM_MULAI_PUJ'] == $data['JAM_SELESAI_PUJ'])
@@ -293,9 +298,11 @@ class Jadwal_us extends CI_Controller {
     }
 
     public function cetak_absen_pengawas($id) {
-        $data['jadwal'] = $this->jadwal->get_by_id($this->tipe, $id);
+        $jadwal = $this->jadwal->get_by_id($this->tipe, $id);
+        $data['jadwal'] = $jadwal;
         $data['data']['L'] = $this->pengawas->get_by_jadwal_lk($id);
         $data['data']['P'] = $this->pengawas->get_by_jadwal_pr($id);
+        $data['denah'] = $this->denah->get_denah_by_tanggal($jadwal->TANGGAL_PUJ);
         $data['ketua'] = $this->pengaturan->getDataKetuaPU();
 
         $this->load->view('backend/pu/jadwal_us/cetak_absen_pengawas', $data);
@@ -331,24 +338,29 @@ class Jadwal_us extends CI_Controller {
         );
         $data_denah = $this->denah->get_rows_array($where);
 
-        if(count($data_denah) != 6) {
-            echo '<h1>UJIAN HARUS 6 HARI. SILAHKAN PERIKSA KEMBALI DATA JADWAL UJIAN SEKOLAH.</h1>';
-            
-            exit();
-        }
-        
+//        if (count($data_denah) != 6) {
+//            echo '<h1>UJIAN HARUS 6 HARI. SILAHKAN PERIKSA KEMBALI DATA JADWAL UJIAN SEKOLAH.</h1>';
+//
+//            exit();
+//        }
         // MENDAPATKAN DATA SISWA SESUAI DENGAN DENAH
         $data_siswa = array();
         foreach ($data_denah as $detail_denah) { // LOOPING PERTANGGAL DENAH
             $denah = json_decode($detail_denah['SISWA_DENAH'], TRUE);
             $jadwal_denah = $detail_denah['JADWAL_DENAH'];
             foreach ($denah as $data_denah) { // LOOPING L DAN P
-                $jumlah_peruang = $data_denah['JUMLAH_PERUANG'];
+//                $jumlah = 0;
+//                for ($id = 0; $id < count($data_denah['DATA_SISWA']); $id++) {
+//                    $jumlah += count($data_denah['DATA_SISWA'][$id]);
+////                    echo '<hr>$data_denah<br>' . json_encode(count($data_denah['DATA_SISWA'][$id]));
+//                }
+//                echo '<hr>$jumlah<br>' . json_encode($jumlah);
+//                echo '<hr>$data_denah<br>' . json_encode(count($data_denah['DATA_SISWA']));
+//                echo '<hr>$data_denah<br>' . json_encode($data_denah['DATA_SISWA']);
+
                 $jumlah_perbaris = $data_denah['JUMLAH_PERBARIS'];
                 // MEMBUAT PARAMENTER UNTUK JENJANG
-                $temp_jenjang = array_values(array_unique($data_denah['JENJANG']));
-                $temp_jenjang_reset = array_fill(0, count($temp_jenjang), 0);
-                $temp_last_id = array_combine($temp_jenjang, $temp_jenjang_reset);
+                $temp_last_id = array_fill(0, count($data_denah['TINGKAT']), 0);
                 // MENGAMBIL KODE DEPARTEMEN
                 foreach ($data_denah['JENJANG'] as $dept) {
                     $data_denah['KODE_JENJANG'][] = $this->departemen->get_id_by_jenjang($dept);
@@ -357,7 +369,10 @@ class Jadwal_us extends CI_Controller {
                 foreach ($data_denah['DENAH'] as $ruang => $value) {
                     $id_ruang = $data_denah["RUANG"][$ruang]['KODE_RUANG'];
                     $nama_ruang = $data_denah["RUANG"][$ruang]['NAMA_RUANG'];
+                    $jumlah = 0;
+                    $temp_data_siswa = array();
                     // LOOPING NOMOR URUT DALAM RUANGAN
+                    $jumlah_peruang = $data_denah["RUANG"][$ruang]['KAPASITAS_RUANG'];
                     for ($i = 0; $i < $jumlah_peruang; $i++) {
                         $no_urut = $i;
                         // MEMBUAT ATURAN DALAM DISTRIBUSI SISWA DIRUANGAN
@@ -368,7 +383,7 @@ class Jadwal_us extends CI_Controller {
                                     $id_tingkat = $data_denah['DENAH'][$ruang][$x];
                                     $id_dept = $data_denah['KODE_JENJANG'][$id_tingkat];
                                     $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
-                                    $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_jenjang][$temp_last_id[$id_jenjang]];
+                                    $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
 
                                     $data_siswa[$id_siswa][] = array(
                                         'TANGGAL' => $jadwal_denah,
@@ -381,21 +396,48 @@ class Jadwal_us extends CI_Controller {
                                             'NOMOR' => $no_urut,
                                         )
                                     );
+                                    $temp_data_siswa[$jumlah] = $id_siswa;
 
-                                    $temp_last_id[$id_jenjang] ++;
+                                    $temp_last_id[$id_tingkat] ++;
+                                    $jumlah++;
                                 }
                             }
                         }
                     }
+
+//                    $count_denah = count($data_denah['DENAH'][$ruang]);
+//                    
+//                    if ($count_denah == $jumlah) {
+//                        echo '<br>'.$ruang.' | ' . $count_denah . ' | ' . $jumlah;
+//                    } else {
+//                        echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>>>>>>>>>>&nbsp;&nbsp;&nbsp;'.$ruang.' | ' . $count_denah . ' | ' . $jumlah;
+//                        echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<<<<<<<<<<<&nbsp;&nbsp;&nbsp;'. json_encode((object)$data_denah['DENAH'][$ruang]);
+//                        echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<<<<<<<<<<<&nbsp;&nbsp;&nbsp;'. json_encode((object)$temp_data_siswa);
+//                    }
                 }
+//                echo '<hr>$data_siswa<br>' . json_encode(count($data_siswa));
+//
+//                $jumlah = 0;
+//                for ($id = 0; $id < count($data_denah['DENAH']); $id++) {
+//                    $jumlah += count($data_denah['DENAH'][$id]);
+////                    echo '<hr>$data_denah<br>' . json_encode(count($data_denah['DATA_SISWA'][$id]));
+//                }
+//                echo '<hr>$jumlah<br>' . json_encode($jumlah);
+//                echo '<hr>$data_siswa<br>' . json_encode($data_siswa);
+//                echo '<hr>DENAH<br>' . json_encode($data_denah['DENAH']);
+//                exit();
             }
         }
-        
+
         $data_peserta_us = $this->peserta->get_siswa_kartu();
-        
-        if(count($data_peserta_us) != count($data_siswa)) {
+
+//        echo '<hr>$data_siswa<br>' . json_encode(count($data_siswa));
+//        echo '<hr>$data_peserta_us<br>' . json_encode(count($data_peserta_us));
+//        exit();
+
+        if (count($data_peserta_us) != count($data_siswa)) {
             echo '<h1>DATA SISWA BERBEDA ANTARA DENAH DENGAN DATABASE. SILAHKAN ULANGI KEMBALI PEMBUATAN DENAHNYA.</h1>';
-            
+
             exit();
         }
         // MENYUSUN ULANG DATA SISWA AGAR SESUAI PERKELAS
@@ -407,7 +449,7 @@ class Jadwal_us extends CI_Controller {
                 'DENAH' => $data_siswa[$detail_siswa['ID_SISWA']]
             );
         }
-        
+        exit();
         $data['siswa'] = $data_siswa_final;
 
         $this->load->view('backend/pu/jadwal_us/cetak_kertu_siswa', $data);
@@ -423,10 +465,21 @@ class Jadwal_us extends CI_Controller {
 
         $this->load->view('backend/pu/jadwal_us/cetak_sampul', $data);
     }
-    
+
+    public function cetak_soal($id) {
+        $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
+        $data['ID'] = $id;
+        $data['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
+        $data['JAM_MULAI'] = $data_jadwal->JAM_MULAI_PUJ;
+        $data['JAM_SELESAI'] = $data_jadwal->JAM_SELESAI_PUJ;
+        $data['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
+
+        $this->generate->backend_view('pu/jadwal_us/cetak_soal', $data);
+    }
+
     public function cetak_blanko_nilai() {
         $data['data'] = $this->peserta->get_data_blanko_nilai(FALSE);
-        
+
         $this->load->view('backend/pu/jadwal_us/cetak_blanko_nilai', $data);
     }
 

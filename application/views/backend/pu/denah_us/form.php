@@ -16,6 +16,15 @@
 </div>
 <?php echo $this->generate->form_open('form-denah', 'denah'); ?>
 <div class="content animate-panel">
+    <div class="row loading_us">
+        <div class="col-md-12">
+            <div class="hpanel hbggreen">
+                <div class="panel-body text-center">
+                    <h1>SEDANG MEMUAT ATURAN DENAH UJIAN SEKOLAH</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="hpanel hgreen">
@@ -24,17 +33,17 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
+                        <!--                        <div class="col-md-2">
+                                                    <input type="text" id="jumlah_perruang" class="form-control input-block-level" onkeyup="change_capacity(this);" onchange="change_capacity(this);" placeholder="Kapasitas Ruang" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-info" id="btn_request" disabled="true" onclick="proses_aturan();">BUAT ATURAN BARU</button>
+                                                </div>-->
+                        <div class="col-md-2 col-md-offset-4">
+                            <button type="button" class="btn btn-danger btn-block btn-action" onclick="reset_aturan();" disabled="">RESET ATURAN</button>
+                        </div>
                         <div class="col-md-2">
-                            <input type="text" id="jumlah_perruang" class="form-control input-block-level" onkeyup="change_capacity(this);" onchange="change_capacity(this);" placeholder="Kapasitas Ruang" />
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-info" id="btn_request" disabled="true" onclick="proses_aturan();">BUAT ATURAN BARU</button>
-                        </div>
-                        <div class="col-md-2 col-md-offset-3">
-                            <button type="button" class="btn btn-danger btn-block" onclick="reset_aturan();">RESET ATURAN</button>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary btn-block" id="btn_buat">BUAT DENAH</button>
+                            <button type="submit" class="btn btn-primary btn-block btn-action" id="btn_buat" disabled="">BUAT DENAH</button>
                         </div>
                     </div>
                 </div>
@@ -110,10 +119,13 @@
                 create_swal_error('Gagal membuat aturan denah', data.msg);
             }
 
+            $(".loading_us").slideUp();
+            $(".btn-action").removeAttr('disabled');
+
             remove_splash();
         };
 
-        create_ajax('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/proses_aturan' : 'pu/denah_us/proses_aturan' ); ?>', 'jumlah_perruang=' + jumlah_perruang, success);
+        create_ajax('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/proses_aturan' : 'pu/denah_us/proses_aturan'); ?>', 'jumlah_perruang=' + jumlah_perruang, success);
     }
 
     function show_data_denah(data) {
@@ -140,27 +152,23 @@
 
     function create_tag_html(data, jk) {
         var tag_html = '';
-        var key_ruang_sisa = data.data_aturan.length;
 
         $.each(data.data_aturan, function (key, value) {
-            tag_html += build_tag_html(value, key, 'Data', data.ruang, key_ruang_sisa, jk);
+            tag_html += build_tag_html(value, key, 'Data', data.ruang, jk, data.jumlah_peserta_ruang[key]);
         });
 
         return tag_html;
     }
 
-    function build_tag_html(data, key, detail, ruang, key_ruang_sisa, jk) {
+    function build_tag_html(data, key, detail, ruang, jk, jumlah_peserta_ruang) {
         var tag_html = '<tr>';
         var total = 0;
         var kapasitas = 0;
 
         if (detail === 'Data') {
             kapasitas = parseInt(ruang[key]['KAPASITAS_RUANG']);
-            
-            if (key === (key_ruang_sisa - 1))
-                tag_html += '<td>' + (key + 1) + '.&nbsp;&nbsp;&nbsp;SISA</td>';
-            else
-                tag_html += '<td>' + (key + 1) + '.&nbsp;&nbsp;&nbsp;Ruang ' + ruang[key]['KODE_RUANG'] + ' [' + kapasitas + ' siswa]</td>';
+
+            tag_html += '<td class="ruang_' + key + '_' + jk + '">' + (parseInt(jumlah_peserta_ruang) > 0 ? '<strong>' : '') + (key + 1) + '.&nbsp;&nbsp;&nbsp;Ruang ' + ruang[key]['KODE_RUANG'] + ' [' + kapasitas + ' siswa] ' + (parseInt(jumlah_peserta_ruang) > 0 ? '</strong>' : '') + '</td>';
         } else {
             tag_html += '<td>' + detail + '</td>';
         }
@@ -265,10 +273,10 @@
         var success = function (data) {
             if (data.status) {
 //                window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/proses_aturan'); ?>', '_blank');
-                create_homer_success("Berhasil menyimpan denah. Halaman ini akan ditutup secara otomatis.");
+                create_homer_success("Berhasil menyimpan denah. Halaman ini akan diarahkan ke halaman denah Ujian Sekolah.");
 
                 setTimeout(function () {
-                    window.close();
+                    window.history.back();
                 }, 2500);
             } else {
                 create_homer_error(data.msg);

@@ -110,7 +110,7 @@ class Denah_us extends CI_Controller {
     }
     
     public function simpan_denah() {
-        $this->generate->set_header_JSON();
+         $this->generate->set_header_JSON();
         
         if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
         
@@ -172,10 +172,12 @@ class Denah_us extends CI_Controller {
         
         if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
         
-        if (($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY")) && $this->aturan_denah->validasi_denah_us()) {
+        $result = 1;//$this->denah_handler->validasi_denah($this->mode);
+        
+        if (($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY")) && $this->aturan_denah->validasi_denah_us() && $result) {
             $status = 1;
             $msg = 'Berhasil memvalidasi denah. Anda akan diarahkan pada menu jadwal ujian masuk';
-            $link = site_url('pu/denah_us');
+            $link = site_url('pu/jadwal_us');
         } else {
             $status = 0;
             $msg = 'Denah gagal divalidasi';

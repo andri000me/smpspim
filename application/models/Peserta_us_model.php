@@ -28,6 +28,9 @@ class Peserta_us_model extends CI_Model {
         $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
         $this->db->where(array(
             'KONVERSI_AS' => 0,
+            'AKTIF_SISWA' => 1,
+            'AKTIF_AS' => 1,
+            'STATUS_MUTASI_SISWA' => NULL,
             'TA_AS' => $this->session->userdata('ID_TA_ACTIVE')
         ));
     }
@@ -127,6 +130,9 @@ class Peserta_us_model extends CI_Model {
         $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
         $this->db->where(array(
             'KONVERSI_AS' => 0,
+            'AKTIF_SISWA' => 1,
+            'AKTIF_AS' => 1,
+            'STATUS_MUTASI_SISWA' => NULL,
             'TA_AS' => $this->session->userdata('ID_TA_ACTIVE')
         ));
         $this->db->order_by('TINGKAT_AS', 'ASC');

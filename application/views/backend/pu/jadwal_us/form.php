@@ -65,39 +65,41 @@ $this->generate->generate_panel_content($title, $subtitle);
                         JADWAL MATAPELAJARAN
                     </div>
                     <div class="panel-body">
-                        <?php //var_dump($mapel);
+                        <?php
+//                        var_dump($mapel);
                         $id_mapel = array();
                         $x = 0;
-                            foreach ($tingkat_us as $jenjang => $value) { ?>
-                        <h3>JENJANG: <?php echo $dept[$jenjang]; ?></h3>
-                                <?php foreach ($value as $tingkat) {
+                        foreach ($tingkat_us as $jenjang => $value) {
                             ?>
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label">TINGKAT</label>
-                            <div class="col-sm-1">
-                                <input class="form-control" readonly="TRUE" type="hidden" name="DEPT_TINGK[]" value="<?php echo $dept[$jenjang]; ?>" />
-                                <input class="form-control" readonly="TRUE" type="text" name="NAMA_TINGK[]" value="<?php echo $tingkat; ?>" />
-                            </div>
-                            <label class="col-sm-2 control-label">MATAPELAJARAN</label>
-                            <div class="col-sm-5">
-                                <input class="form-control js-source-multi js-source-states-mapel required mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]).'-'.$tingkat; ?>">
-                                <span class="help-block m-b-none text-left">Wajib diisi</span>
-                            </div>
-                            <label class="col-sm-1 control-label">JENIS</label>
-                            <div class="col-sm-2">
-                                <select name="JENIS_PUM[]" class="form-control" >
-                                    <option value="TULIS">TULIS</option>
-                                    <option value="LISAN" <?php if($mode_edit && $mapel[$x]['JENIS_PUM'] == 'LISAN') echo 'selected'; ?>>LISAN</option>
-                                </select>
-                            </div>
-                        </div>
-                        <?php 
-                                    $id_mapel[] = 'mapel-'.strtolower($dept[$jenjang]).'-'.$tingkat;
-                                    $x++;
-                                }
-                            ?><hr><?php
+                            <h3>JENJANG: <?php echo $dept[$jenjang]; ?></h3>
+        <?php foreach ($value as $tingkat) {
+            ?>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label">TINGKAT</label>
+                                    <div class="col-sm-1">
+                                        <input class="form-control" readonly="TRUE" type="hidden" name="DEPT_TINGK[]" value="<?php echo $dept[$jenjang]; ?>" />
+                                        <input class="form-control" readonly="TRUE" type="text" name="NAMA_TINGK[]" value="<?php echo $tingkat; ?>" />
+                                    </div>
+                                    <label class="col-sm-2 control-label">MATAPELAJARAN</label>
+                                    <div class="col-sm-5">
+                                        <input class="form-control js-source-multi js-source-states-mapel required mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]) . '-' . $tingkat; ?>">
+                                        <span class="help-block m-b-none text-left">Wajib diisi</span>
+                                    </div>
+                                    <label class="col-sm-1 control-label">JENIS</label>
+                                    <div class="col-sm-2">
+                                        <select name="JENIS_PUM[]" class="form-control" >
+                                            <option value="TULIS">TULIS</option>
+                                            <option value="LISAN" <?php if ($mode_edit && $mapel[$x]['JENIS_PUM'] == 'LISAN') echo 'selected'; ?>>LISAN</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <?php
+                                $id_mapel[] = 'mapel-' . strtolower($dept[$jenjang]) . '-' . $tingkat;
+                                $x++;
                             }
-                            ?>
+                            ?><hr><?php
+                }
+                ?>
                     </div>
                 </div>
             </div>
@@ -113,27 +115,26 @@ $this->generate->generate_panel_content($title, $subtitle);
                         JADWAL PENGAWAS LAKI-LAKI
                     </div>
                     <div class="panel-body">
-                        <?php 
-                            $denah = json_decode($denah, TRUE);
-                            $jadwal_lk = $denah['L'];
-                            $id_pengawas_lk = array();
-                            for ($i = 0; $i < count($jadwal_lk['DATA']); $i++) {
+                        <?php
+                        $denah = json_decode($denah, TRUE);
+                        $jadwal_lk = $denah['L'];
+                        $number = 1;
+                        foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {
                             ?>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><?php echo ($i + 1); ?>.&nbsp;&nbsp;&nbsp;RUANG *</label>
-                            <div class="col-sm-2">
-                                <input class="form-control" readonly="TRUE" type="text" name="RUANGAN_PENG_LK[]" value="<?php echo $jadwal_lk['RUANG'][$i]['KODE_RUANG']; ?>" />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><?php echo ($number++); ?>.&nbsp;&nbsp;&nbsp;RUANG</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control" readonly="TRUE" type="text" name="RUANGAN_PENG_LK[]" value="<?php echo $jadwal_lk['RUANG'][$index_ruang]['KODE_RUANG']; ?>" />
+                                </div>
+                                <label class="col-sm-1 control-label">PENGAWAS</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $index_ruang; ?>">
+                                </div>
                             </div>
-                            <label class="col-sm-1 control-label">PENGAWAS</label>
-                            <div class="col-sm-6">
-                                <input class="form-control js-source-multi js-source-states-pengawas required pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $i; ?>">
-                                <span class="help-block m-b-none text-left">Wajib diisi</span>
-                            </div>
-                        </div>
-                        <?php                            
-                            $id_pengawas_lk[] = 'pegawas-lk-'.$i;
-                            }
-                            ?>
+                            <?php
+                            $id_pengawas_lk[] = 'pegawas-lk-' . $index_ruang;
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -149,31 +150,31 @@ $this->generate->generate_panel_content($title, $subtitle);
                         JADWAL PENGAWAS PEREMPUAN
                     </div>
                     <div class="panel-body">
-                        <?php 
-                            $jadwal_pr = $denah['P'];
-                            $id_pengawas_pr = array();
-                            for ($i = 0; $i < count($jadwal_pr['DATA']); $i++) {
+                        <?php
+                        $jadwal_pr = $denah['P'];
+                        $id_pengawas_pr = array();
+                        $number = 1;
+                        foreach ($jadwal_pr['DATA'] as $index_ruang => $data_ruang) {
                             ?>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><?php echo ($i + 1); ?>.&nbsp;&nbsp;&nbsp;RUANG *</label>
-                            <div class="col-sm-2">
-                                <input class="form-control" readonly="TRUE" type="text" name="RUANGAN_PENG_PR[]" value="<?php echo $jadwal_pr['RUANG'][$i]['KODE_RUANG']; ?>" />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><?php echo ($number++); ?>.&nbsp;&nbsp;&nbsp;RUANG</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control" readonly="TRUE" type="text" name="RUANGAN_PENG_PR[]" value="<?php echo $jadwal_pr['RUANG'][$index_ruang]['KODE_RUANG']; ?>" />
+                                </div>
+                                <label class="col-sm-1 control-label">PENGAWAS</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $index_ruang; ?>">
+                                </div>
                             </div>
-                            <label class="col-sm-1 control-label">PENGAWAS</label>
-                            <div class="col-sm-6">
-                                <input class="form-control js-source-multi js-source-states-pengawas required pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $i; ?>">
-                                <span class="help-block m-b-none text-left">Wajib diisi</span>
-                            </div>
-                        </div>
-                        <?php          
-                            $id_pengawas_pr[] = 'pegawas-pr-'.$i;
-                            }                   
-                            ?>
+                            <?php
+                            $id_pengawas_pr[] = 'pegawas-pr-' . $index_ruang;
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
-        <?php if (!$mode_view) { ?>
+    <?php if (!$mode_view) { ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="hpanel hbgblue">
@@ -188,136 +189,143 @@ $this->generate->generate_panel_content($title, $subtitle);
                     </div>
                 </div>
             </div>
-        <?php } ?>
+    <?php } ?>
 
         <script type="text/javascript">
     <?php
     if ($mode_view) {
         ?>
-            $(function () {
-                $(".form-control").prop('disabled', true);
-                $(".js-source-multi").select2("enable", false);
-            });
+                $(function () {
+                    $(".form-control").prop('disabled', true);
+                    $(".js-source-multi").select2("enable", false);
+                });
         <?php
     } else {
         ?>
-            
-    function action_save_<?php echo $name_function; ?>(id) {
-        var action = function(isConfirm) {
-            var message = "Mohon tunggu sebentar, sistem sedang menyimpan data...";
-            var success = function (data) {
-                if (data.status) {
-                    remove_splash();
-                    create_swal_success('', 'Data berhasil disimpan. Halaman ini akan dimuat ulang.');
-                    reaload_page();
-                } else {
-                    remove_splash();
-                    create_homer_error('Gagal menyimpan data. ' + data.msg);
-                }
-            };
-    <?php if ($mode_edit) { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_update') ?>', id, success, message);
-    <?php } else { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_add') ?>', id, success, message);
-    <?php } ?>
-        };
-        
-        create_swal_option('Apakah Anda yakin akan menyimpan?', '', action);
-        
-        return false;
-    }
 
-    function reaload_page() {
-        setTimeout(function () {
-        window.location.reload();
-<?php // if (!$mode_edit) {           ?>window.location.reload();<?php //}           ?>
-        }, 1500);
-    }
-    
-    $(".js-source-states-pengawas").select2({escapeMarkup: function (markup) { return markup; },
-        ajax: {
-            url: "<?php echo site_url('master_data/pegawai/auto_complete'); ?>",
-            dataType: "json",
-            type: "POST",
-            delay: 100,
-            cache: true,
-            data: function (term, page) {
-                return {
-                    q: term
-                }
-            },
-            results: function (data) {
-                return {
-                    results: $.map(data, function (item) {
-                        return {
-                            text: item.text,
-                            id: item.id
-                        }
-                    })
+                function action_save_<?php echo $name_function; ?>(id) {
+                    var action = function (isConfirm) {
+                        var message = "Mohon tunggu sebentar, sistem sedang menyimpan data...";
+                        var success = function (data) {
+                            if (data.status) {
+                                remove_splash();
+                                create_swal_success('', 'Data berhasil disimpan. Halaman ini akan dimuat ulang.');
+                                reaload_page();
+                            } else {
+                                remove_splash();
+                                create_homer_error('Gagal menyimpan data. ' + data.msg);
+                            }
+                        };
+        <?php if ($mode_edit) { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_update') ?>', id, success, message);
+        <?php } else { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_add') ?>', id, success, message);
+        <?php } ?>
                 };
+
+                create_swal_option('Apakah Anda yakin akan menyimpan?', '', action);
+
+                return false;
             }
-        },
-        formatResult: function(element){
-            return element.id + " - " + element.text;
-        },
-        formatSelection: function(element){
-            return element.id + " - " + element.text;
-        },
-    });
-    $(".js-source-states-mapel").select2({escapeMarkup: function (markup) { return markup; },
-        ajax: {
-            url: "<?php echo site_url('master_data/matapelajaran/auto_complete'); ?>",
-            dataType: "json",
-            type: "POST",
-            delay: 100,
-            cache: true,
-            data: function (term, page) {
-                return {
-                    q: term
-                }
-            },
-            results: function (data) {
-                return {
-                    results: $.map(data, function (item) {
+
+            function reaload_page() {
+                setTimeout(function () {
+                    window.location.reload();
+        <?php // if (!$mode_edit) {            ?>window.location.reload();<?php //}            ?>
+                }, 1500);
+            }
+
+            $(".js-source-states-pengawas").select2({escapeMarkup: function (markup) {
+                    return markup;
+                },
+                ajax: {
+                    url: "<?php echo site_url('master_data/pegawai/auto_complete'); ?>",
+                    dataType: "json",
+                    type: "POST",
+                    delay: 100,
+                    cache: true,
+                    data: function (term, page) {
                         return {
-                            text: item.text,
-                            id: item.id
+                            q: term
                         }
-                    })
-                };
-            }
-        },
-        formatResult: function(element){
-            return element.id + " - " + element.text;
-        },
-        formatSelection: function(element){
-            return element.id + " - " + element.text;
-        },
-    });
-    <?php if ($mode_edit) { ?>
+                    },
+                    results: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.text,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    }
+                },
+                formatResult: function (element) {
+                    return element.id + " - " + element.text;
+                },
+                formatSelection: function (element) {
+                    return element.id + " - " + element.text;
+                },
+            });
+            $(".js-source-states-mapel").select2({escapeMarkup: function (markup) {
+                    return markup;
+                },
+                ajax: {
+                    url: "<?php echo site_url('master_data/matapelajaran/auto_complete'); ?>",
+                    dataType: "json",
+                    type: "POST",
+                    delay: 100,
+                    cache: true,
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        }
+                    },
+                    results: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.text,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    }
+                },
+                formatResult: function (element) {
+                    return element.id + " - " + element.text;
+                },
+                formatSelection: function (element) {
+                    return element.id + " - " + element.text;
+                },
+            });
+        <?php if ($mode_edit) { ?>
 
-        <?php foreach ($id_mapel as $key => $value) {
-            if(isset($mapel[$key]['MAPEL_PUM']) && isset($mapel[$key]['NAMA_MAPEL'])) {
-        ?>
-        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $mapel[$key]['MAPEL_PUM']; ?>', text: "<?php echo $mapel[$key]['NAMA_MAPEL']; ?>"});
-    <?php } ?>
-    <?php } ?>
+            <?php
+            foreach ($id_mapel as $key => $value) {
+                if (isset($mapel[$key]['MAPEL_PUM']) && isset($mapel[$key]['NAMA_MAPEL'])) {
+                    ?>
+                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $mapel[$key]['MAPEL_PUM']; ?>', text: "<?php echo $mapel[$key]['NAMA_MAPEL']; ?>"});
+                <?php } ?>
+            <?php } ?>
 
-        <?php foreach ($id_pengawas_lk as $key => $value) {
-            if(isset($pengawas_lk[$key]['PEGAWAI_PENG']) && isset($pengawas_lk[$key]['NAMA_PEG'])) {
-        ?>
-        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_lk[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_lk[$key]['NAMA_PEG']; ?>"});
-    <?php } ?>
-    <?php } ?>
+            <?php
+            foreach ($id_pengawas_lk as $key => $value) {
+                if (isset($pengawas_lk[$key]['PEGAWAI_PENG']) && isset($pengawas_lk[$key]['NAMA_PEG'])) {
+                    ?>
+                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_lk[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_lk[$key]['NAMA_PEG']; ?>"});
+                <?php } ?>
+            <?php } ?>
 
-        <?php foreach ($id_pengawas_pr as $key => $value) {
-            if(isset($pengawas_pr[$key]['PEGAWAI_PENG']) && isset($pengawas_pr[$key]['NAMA_PEG'])) {
-        ?>
-        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_pr[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_pr[$key]['NAMA_PEG']; ?>"});
-    <?php } ?>
-    <?php } ?>
-        
-    <?php } ?>
+            <?php
+            foreach ($id_pengawas_pr as $key => $value) {
+                if (isset($pengawas_pr[$key]['PEGAWAI_PENG']) && isset($pengawas_pr[$key]['NAMA_PEG'])) {
+                    ?>
+                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_pr[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_pr[$key]['NAMA_PEG']; ?>"});
+                    <?php } ?>
+                <?php } ?>
+
+        <?php } ?>
     <?php } ?>
         </script>
-    <?php } ?>
+<?php } ?>
 </form>
 </div>

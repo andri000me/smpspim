@@ -29,3 +29,7 @@ and open the template in the editor.
 .dropdown-menu {
     left: -100px;
 }
+.sweet-alert p {
+    max-height: 300px;
+    overflow: auto;
+}

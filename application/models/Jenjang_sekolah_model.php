@@ -154,6 +154,27 @@ class Jenjang_sekolah_model extends CI_Model {
         return $this->db->get()->row()->DEPT_MJD;
     }
     
+    public function get_gedung_dept($id, $tingkat, $jk) {
+        $this->_get_table();
+        $this->db->join('md_jenjang_departemen', 'JENJANG_MJD=ID_JS');
+        $this->db->join('md_tingkat', 'DEPT_MJD=DEPT_TINGK');
+        $this->db->where(array(
+            $this->primary_key => $id,
+            'NAMA_TINGK' => $tingkat
+        ));
+        $result = $this->db->get()->row()->GEDUNG_UJIAN_TINGK;
+        $data = json_decode($result, TRUE);
+
+        if ($data == null) {
+            $this->CI->generate->output_JSON(array(
+                'status' => false,
+                'msg' => 'Ada kesalahan dalam penulian gedung ujian jenjang '.$data['NAMA_DEPT'][$key].' tingkat '.$data['TINGKAT'][$key].' jenis kelamin  di database. Silahkan atur gedung ujian di datatabase pada tabel md_tingkat field GEDUNG_UJIAN_TINGK.'
+            ));
+        }
+
+        return $data[$jk];
+    }
+    
     public function get_nama_jenjang($id) {
         $this->_get_table();
         $this->db->where($this->primary_key, $id);

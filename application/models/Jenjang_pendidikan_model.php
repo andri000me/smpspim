@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -90,7 +91,8 @@ class Jenjang_pendidikan_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_JP as value, NAMA_JP as label");
+        if ($for_html)
+            $this->db->select("ID_JP as value, NAMA_JP as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -118,14 +120,14 @@ class Jenjang_pendidikan_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 

@@ -8,7 +8,8 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/metisMenu/dist/metisMenu.css" />
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/animate.css/animate.css" />
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
+        <!--<link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/sweetalert/lib/sweet-alert.css" />-->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/sweetalert/dist/sweetalert.css" />
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/vendor/toastr/build/toastr.min.css" />
         <link href="<?php echo base_url(); ?>assets/vendor/ladda/dist/ladda-themeless.min.css" rel="stylesheet" type="text/css"/>
         <link href="<?php echo base_url(); ?>assets/vendor/select2-3.5.2/select2.css" rel="stylesheet" type="text/css"/>
@@ -42,7 +43,8 @@
         <script src="<?php echo base_url(); ?>assets/vendor/moment/moment.js" type="text/javascript"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/select2-3.5.2/select2.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
-        <script src="<?php echo base_url(); ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
+        <!--<script src="<?php echo base_url(); ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>-->
+        <script src="<?php echo base_url(); ?>assets/vendor/sweetalert/dist/sweetalert.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/toastr/build/toastr.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/ladda/dist/spin.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/ladda/dist/ladda.min.js" type="text/javascript"></script>

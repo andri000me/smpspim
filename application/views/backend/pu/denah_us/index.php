@@ -48,7 +48,8 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                     if (data.status)
                         create_homer_error(data.msg);
                     else
-                        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>', '_blank');
+                        window.location = '<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>';
+//                        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>');
                 };
 
                 create_ajax('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/cek_denah' : 'pu/denah_us/cek_denah'); ?>', '', success);
@@ -63,11 +64,13 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     });
 
     function update_data_<?php echo $id_datatables; ?>(id) {
-        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>', '_blank');
+        window.location = '<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>';
+//        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/buat_denah' : 'pu/denah_us/buat_denah'); ?>', '_blank');
     }
 
     function view_data_<?php echo $id_datatables; ?>(id) {
-        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/show_denah'); ?>', '_blank');
+        window.location = '<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/show_denah'); ?>';
+//        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/show_denah'); ?>', '_blank');
     }
 
     function jadwal_<?php echo $id_datatables; ?>(id) {
