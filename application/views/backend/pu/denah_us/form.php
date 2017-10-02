@@ -276,7 +276,7 @@
                 create_homer_success("Berhasil menyimpan denah. Halaman ini akan diarahkan ke halaman denah Ujian Sekolah.");
 
                 setTimeout(function () {
-                    window.history.back();
+                    window.location = '<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/show_denah'); ?>';
                 }, 2500);
             } else {
                 create_homer_error(data.msg);

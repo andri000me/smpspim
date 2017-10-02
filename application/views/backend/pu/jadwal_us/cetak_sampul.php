@@ -96,15 +96,18 @@ foreach ($data as $detail) {
             $pdf->Cell(0, 4, $data_denah["RUANG"][$ruang]['KODE_RUANG'] . ' - ' . $data_denah["RUANG"][$ruang]['NAMA_RUANG'], 0, 0, 'C');
             $pdf->Ln(10);
 
-            $data_pengawas = $this->pengawas->get_by_jadwal_ruang($ID, $jk, $data_denah["RUANG"][$ruang]['KODE_RUANG']);
+//            $data_pengawas = $this->pengawas->get_by_jadwal_ruang($ID, $jk, $data_denah["RUANG"][$ruang]['KODE_RUANG']);
+//
+//            $pdf->SetFont('Arial', 'B', $size_font + 5);
+//            $pdf->Cell(0, 4, 'PENGAWAS', 0, 0, 'C');
+//            $pdf->Ln(7);
+//            $pdf->SetFont('Arial', 'B', $size_font + 7);
+//            $pdf->Cell(0, 4, ($data_pengawas == NULL) ? '................................................................' : $data_pengawas->NIP_PEG . ' - ' . $this->cetak->nama_peg_print($data_pengawas), 0, 0, 'C');
+//            $pdf->Ln(10);
 
             $pdf->SetFont('Arial', 'B', $size_font + 5);
-            $pdf->Cell(0, 4, 'PENGAWAS', 0, 0, 'C');
+            $pdf->Cell(0, 4, 'TANGGAL', 0, 0, 'C');
             $pdf->Ln(7);
-            $pdf->SetFont('Arial', 'B', $size_font + 7);
-            $pdf->Cell(0, 4, ($data_pengawas == NULL) ? '................................................................' : $data_pengawas->NIP_PEG . ' - ' . $this->cetak->nama_peg_print($data_pengawas), 0, 0, 'C');
-            $pdf->Ln(10);
-
             $pdf->SetFont('Arial', 'B', $size_font + 3);
             $pdf->Cell(0, 4, strtoupper($this->date_format->get_day($detail['TANGGAL']) . ', ' . $this->date_format->to_print_text($detail['TANGGAL'])), 0, 0, 'C');
             $pdf->Ln(6);
@@ -113,12 +116,12 @@ foreach ($data as $detail) {
             $pdf->Cell(0, 4, 'JAM: ' . $this->time_format->jam_menit($detail['JAM_MULAI']) . ' - ' . $this->time_format->jam_menit($detail['JAM_SELESAI']) . ' WIS', 0, 0, 'C');
             $pdf->Ln(10);
 
-            $pdf->SetFont('Arial', '', $size_font);
+            $pdf->SetFont('Arial', 'B', $size_font + 1);
             foreach ($data_denah["JENJANG"] as $index => $jenjang) {
                 $data_relasi = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $data_denah["TINGKAT"][$index]);
-                $pdf->Cell(35, 6, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
-                $pdf->Cell(110, 6, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
-                $pdf->Cell(45, 6, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                $pdf->Cell(35, 7, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
+                $pdf->Cell(110, 7, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
+                $pdf->Cell(45, 7, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
                 $pdf->Ln();
             }
         }

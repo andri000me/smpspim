@@ -43,15 +43,16 @@ class Matapelajaran extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->URUTAN_MAPEL . '&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" title="Klik untuk menaikan urutan" onclick="pindah_urutan(1, ' . $item->URUTAN_MAPEL . ')"><i class="fa fa-angle-double-up"></i></a>&nbsp;&nbsp;<a href="#" title="Klik untuk menurunkan urutan" onclick="pindah_urutan(0, ' . $item->URUTAN_MAPEL . ')"><i class="fa fa-angle-double-down"></i></a>';
+            $row[] = $item->ID_MAPEL;
             $row[] = $item->KODE_MAPEL;
-            $row[] = $item->NAMA_DEPT;
+//            $row[] = $item->NAMA_DEPT;
             $row[] = $item->NAMA_MTM;
             $row[] = $item->NAMA_MAPEL;
             $row[] = ($item->PMB_MAPEL == 1) ? 'YA' : 'TIDAK';
-            $row[] = ($item->UJIAN_MAPEL == 1) ? 'YA' : 'TIDAK';
-            $row[] = ($item->RAPOR_MAPEL == 1) ? 'YA' : 'TIDAK';
-            $row[] = ($item->TRANSKRIP_MAPEL == 1) ? 'YA' : 'TIDAK';
-            $row[] = ($item->SYAHADAH_MAPEL == 1) ? 'YA' : 'TIDAK';
+//            $row[] = ($item->UJIAN_MAPEL == 1) ? 'YA' : 'TIDAK';
+//            $row[] = ($item->RAPOR_MAPEL == 1) ? 'YA' : 'TIDAK';
+//            $row[] = ($item->TRANSKRIP_MAPEL == 1) ? 'YA' : 'TIDAK';
+//            $row[] = ($item->SYAHADAH_MAPEL == 1) ? 'YA' : 'TIDAK';
             $row[] = ($item->AKTIF_MAPEL == 1) ? 'YA' : 'TIDAK';
             $row[] = $item->NAMA_ARAB_MAPEL;
 

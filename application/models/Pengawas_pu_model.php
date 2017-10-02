@@ -79,5 +79,25 @@ class Pengawas_pu_model extends CI_Model {
         
         return $this->db->affected_rows();
     }
+    
+    public function get_pengawas($search, $pengawas) {
+        $where = '';
+        $start = TRUE;
+        foreach ($pengawas as $id_peg) {
+            if($id_peg != '') {
+                $where .= ($start ? ' ' : ' AND ').' ID_PEG <> '.$id_peg.' ';
+                $start = false;
+            }
+        }
+        
+        $this->db->select("ID_PEG as id, NAMA_PEG as text");
+        $this->db->from('md_pegawai');
+        $this->db->like('NAMA_PEG', $search);
+        $this->db->where('AKTIF_PEG', 1);
+        if($where != '') $this->db->where($where);
+        $this->db->order_by('NAMA_PEG', 'ASC');
+
+        return $this->db->get()->result();
+    }
 
 }

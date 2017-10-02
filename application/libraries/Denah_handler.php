@@ -121,7 +121,7 @@ class Denah_handler {
         $data = $this->format_satu_baris($peserta, $jk);
 
         // MENGAMBIL DATA RUANG
-        $data['RUANG'] = $this->CI->ruang->get_ruang_ujian();
+        $data['RUANG'] = $this->CI->ruang->get_ruang_ujian($jk);
         $jumlah_ruang_tersedia = count($data['RUANG']);
 
         // MENGAMBIL DATA KODE RUANG
@@ -137,6 +137,9 @@ class Denah_handler {
 
         // MENDAPATKAN JUMLAH RUANG YANG DIBUTUHKAN
         $data = $this->jumlah_ruang_dibutuhkan($data);
+
+        // MEMBAGI PESERTA YANG TIDAK DIACAK
+        $data = $this->distribusi_peserta_non_acak($mode, $data);
 
         // MENATARA GEDUNG UJIAN
         $data = $this->gedung_ujian_peserta($data);
@@ -186,9 +189,16 @@ class Denah_handler {
                 $temp = $gedung;
             }
             $data['KODE_RUANG'][] = $detail['KODE_RUANG'];
+            $data['RUANG_KELAS'][$detail['ID_KELAS']] = $detail['KODE_RUANG'];
             $data['DATA_RUANG'][$detail['KODE_RUANG']] = $detail;
             $i++;
         }
+
+//        echo '<hr>DATA<br>' . json_encode($data['DATA']);
+//        echo '<hr>KELAS_SISWA<br>' . json_encode($data['KELAS_SISWA']);
+//        echo '<hr>KODE_RUANG<br>' . json_encode($data['KODE_RUANG']);
+//        echo '<hr>RUANG_KELAS<br>' . json_encode($data['RUANG_KELAS']);
+//        exit();
 
         return $data;
     }
@@ -211,16 +221,25 @@ class Denah_handler {
             foreach ($detail1 as $jenjang => $detail2) {
                 foreach ($detail2 as $tingkat => $detail3) {
                     if ($type == 'DATA') {
+                        $data_gedung = $this->CI->jenjang_sekolah->get_gedung_dept($jenjang, $tingkat, $jk);
                         $data['JENJANG'][] = $jenjang;
                         $data['NAMA_JENJANG'][] = $this->CI->jenjang_sekolah->get_nama_jenjang($jenjang);
                         $data['NAMA_DEPT'][] = $this->CI->jenjang_sekolah->get_nama_dept($jenjang);
-                        $data['GEDUNG_DEPT'][] = $this->CI->jenjang_sekolah->get_gedung_dept($jenjang, $tingkat, $jk);
+                        $data['GEDUNG_DEPT'][] = $data_gedung['DATA'];
+                        $data['STATUS_ACAK'][] = $data_gedung['STATUS'];
                         $data['TINGKAT'][] = $tingkat;
                         $data['DATA'][] = $detail3;
                     } else {
                         $data['JUMLAH'][] = $detail3;
                     }
                 }
+            }
+        }
+
+        foreach ($data['DATA'] as $index => $detail) {
+            foreach ($detail as $key => $item) {
+                $data['RUANG_SISWA'][$index][$key]['RUANG_KELAS'] = $item->RUANG_KELAS;
+                unset($data['DATA'][$index][$key]->RUANG_KELAS);
             }
         }
 
@@ -232,7 +251,7 @@ class Denah_handler {
     private function jumlah_peserta($data) {
         $data['JUMLAH_PESERTA'] = 0;
         foreach ($data['JUMLAH'] as $value) {
-            $data['JUMLAH_PESERTA'] += $value;
+            $data['JUMLAH_PESERTA'] += abs($value);
         }
 
         return $data;
@@ -256,10 +275,39 @@ class Denah_handler {
         $result = 0;
 
         foreach ($array as $value) {
-            $result += $value;
+            $result += abs($value);
         }
 
         return $result;
+    }
+
+    private function distribusi_peserta_non_acak($mode, $data) {
+        if ($mode == 'US') {
+            // MENGESET NILAI AWAL
+            foreach ($data['KODE_RUANG'] as $value) {
+                $data['ATURAN_DENAH'][] = array_fill(0, count($data['TINGKAT']), 0);
+            }
+
+            // MENGESET NILAI AWAL
+            $kode_ruang_flip = array_flip($data['KODE_RUANG']);
+            $data['STATUS_ACAK_RUANG'] = array_fill(0, count($data['KODE_RUANG']), true);
+            foreach ($data['STATUS_ACAK'] as $index_tingkat => $status_acak) {
+                if (!$status_acak) {
+                    foreach ($data['RUANG_SISWA'][$index_tingkat] as $kode_ruang) {
+                        $index_ruang = $kode_ruang_flip[$kode_ruang['RUANG_KELAS']];
+                        $data['ATURAN_DENAH'][$index_ruang][$index_tingkat] ++;
+                        $data['STATUS_ACAK_RUANG'][$index_ruang] = false;
+                    }
+                }
+            }
+//            echo '<hr>STATUS_ACAK<br>' . json_encode($data['STATUS_ACAK']);
+//            echo '<hr>STATUS_ACAK_RUANG<br>' . json_encode($data['STATUS_ACAK_RUANG']);
+//            echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
+//            echo '<hr>RUANG_SISWA<br>' . json_encode($data['RUANG_SISWA']);
+//            exit();
+        }
+
+        return $data;
     }
 
     // MEMBAGI SISWA KESETIAP RUANG
@@ -292,11 +340,18 @@ class Denah_handler {
             $data['JUMLAH_SISA_SISWA_PERRUANG'] = 0;
             foreach ($data['JUMLAH'] as $index => $value) {
                 $jumlah_ruang_tersedia = $data['JUMLAH_RUANG_UJIAN_DEPT'][$index];
-                $sisa_siswa = $value % $jumlah_ruang_tersedia;
-                $data['JUMLAH_SISWA_PERUANG_PERTINGKAT'][] = ($value - $sisa_siswa) / $jumlah_ruang_tersedia;
-                $data['JUMLAH_SISA_SISWA_PERRUANG'] += $sisa_siswa;
-                $data['JUMLAH_SISA_SISWA_PERTINGKAT'][] = $sisa_siswa;
+                $sisa_siswa = $data['STATUS_ACAK'][$index] ? $value % $jumlah_ruang_tersedia : 0;
+                $data['JUMLAH_SISWA_PERUANG_PERTINGKAT'][] = $data['STATUS_ACAK'][$index] ? (($value - $sisa_siswa) / $jumlah_ruang_tersedia) : 0;
+                $data['JUMLAH_SISA_SISWA_PERRUANG'] += $data['STATUS_ACAK'][$index] ? $sisa_siswa : 0;
+                $data['JUMLAH_SISA_SISWA_PERTINGKAT'][] = $data['STATUS_ACAK'][$index] ? $sisa_siswa : 0;
             }
+//            echo '<hr>JUMLAH<br>' . json_encode($data['JUMLAH']);
+//            echo '<hr>JUMLAH_RUANG_UJIAN_DEPT<br>' . json_encode($data['JUMLAH_RUANG_UJIAN_DEPT']);
+//            echo '<hr>JUMLAH_SISWA_PERUANG_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISWA_PERUANG_PERTINGKAT']);
+//            echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+//            echo '<hr>JUMLAH_RUANG_UJIAN_DEPT<br>' . json_encode($data['JUMLAH_RUANG_UJIAN_DEPT']);
+//            echo '<hr>STATUS_ACAK<br>' . json_encode($data['STATUS_ACAK']);
+//            exit();
         }
 
         return $data;
@@ -316,9 +371,14 @@ class Denah_handler {
                     $maks = count($data['KODE_RUANG']);
                 }
 
-                for ($i = $start; $i < $maks; $i++) {
-                    $data['RUANG_UJIAN_DEPT'][$data['NAMA_DEPT'][$key] . '_' . $data['TINGKAT'][$key]][] = $i;
+                for ($index_ruang = $start; $index_ruang < $maks; $index_ruang++) {
+                    if ($data['STATUS_ACAK_RUANG'][$index_ruang])
+                        $data['RUANG_UJIAN_DEPT'][$data['NAMA_DEPT'][$key] . '_' . $data['TINGKAT'][$key]][] = $index_ruang;
                 }
+            }
+
+            if (!$data['STATUS_ACAK'][$key]) {
+                $data['RUANG_UJIAN_DEPT'][$data['NAMA_DEPT'][$key] . '_' . $data['TINGKAT'][$key]] = array();
             }
 
             $data['JUMLAH_RUANG_UJIAN_DEPT'][$key] = count($data['RUANG_UJIAN_DEPT'][$data['NAMA_DEPT'][$key] . '_' . $data['TINGKAT'][$key]]);
@@ -328,6 +388,14 @@ class Denah_handler {
         foreach ($data['GEDUNG_UJIAN_DEPT'] as $index => $jenjang) {
             $data['GEDUNG_UJIAN_DEPT'][$index] = array_values(array_unique($jenjang));
         }
+
+//        echo '<hr>STATUS_ACAK<br>' . json_encode($data['STATUS_ACAK']);
+//        echo '<hr>STATUS_ACAK_RUANG<br>' . json_encode($data['STATUS_ACAK_RUANG']);
+//        echo '<hr>JUMLAH_RUANG_UJIAN_DEPT<br>' . json_encode($data['JUMLAH_RUANG_UJIAN_DEPT']);
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        echo '<hr>GEDUNG_DEPT<br>' . json_encode($data['GEDUNG_DEPT']);
+//        echo '<hr>GEDUNG_UJIAN_DEPT<br>' . json_encode($data['GEDUNG_UJIAN_DEPT']);
+//        exit();
 
         return $data;
     }
@@ -345,10 +413,6 @@ class Denah_handler {
                 $data['ATURAN_DENAH'][$jumlah_ruang_digunakan_hasil_bagi] = $data['JUMLAH_SISA_SISWA_PERTINGKAT'];
             }
         } elseif ($mode == 'US') {
-            // MENGESET NILAI AWAL
-            foreach ($data['KODE_RUANG'] as $value) {
-                $data['ATURAN_DENAH'][] = array_fill(0, count($data['TINGKAT']), 0);
-            }
 
             // MENGHITUNG JUMLAH SISWA SETIAP RUANG
             $data['RUANG_SISA'] = array_fill(0, count($data['TINGKAT']), 0);
@@ -357,7 +421,8 @@ class Denah_handler {
                     for ($i = 0; $i < $data['JUMLAH_RUANG_UJIAN_DEPT'][$index]; $i++) {
                         $index_ruang_ujian_dept = $data['NAMA_DEPT'][$index] . '_' . $data['TINGKAT'][$index];
                         $index_ruang_ujian = $data['RUANG_UJIAN_DEPT'][$index_ruang_ujian_dept][$data['RUANG_SISA'][$index]];
-                        $data['ATURAN_DENAH'][$index_ruang_ujian][$index] = $jumlah_siswa;
+                        if ($data['STATUS_ACAK_RUANG'][$index_ruang_ujian])
+                            $data['ATURAN_DENAH'][$index_ruang_ujian][$index] = $jumlah_siswa;
 
                         // if ($index == 6) {
                         //     echo $data['RUANG_SISA'][$index].'-'.$data['ATURAN_DENAH'][$index_ruang_ujian][$index].'-'.$jumlah_siswa.'<br>';
@@ -374,6 +439,17 @@ class Denah_handler {
 
         $this->cek_jumlah_siswa_aturan($mode, $data);
 
+//        echo '<hr>STATUS_ACAK<br>' . json_encode($data['STATUS_ACAK']);
+//        echo '<hr>JUMLAH_SISWA_PERUANG_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISWA_PERUANG_PERTINGKAT']);
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
+//        echo '<hr>STATUS_ACAK_RUANG<br>' . json_encode($data['STATUS_ACAK_RUANG']);
+//        echo '<hr>KODE_RUANG<br>' . json_encode($data['KODE_RUANG']);
+//        echo '<hr>$kode_ruang_flip<br>' . json_encode($kode_ruang_flip);
+////            echo '<hr>RUANG<br>' . json_encode($data['RUANG']);
+////            echo '<hr>DATA<br>' . json_encode($data['DATA']);
+//        echo '<hr>RUANG_SISWA<br>' . json_encode($data['RUANG_SISWA']);
+//        exit();
+
         return $data;
     }
 
@@ -385,14 +461,14 @@ class Denah_handler {
                 if (!isset($temp[$index])) {
                     $temp[$index] = 0;
                 }
-                $temp[$index] += $item;
+                $temp[$index] += abs($item);
             }
         }
 
         if ($mode == 'US') {
             if (isset($data['JUMLAH_SISA_SISWA_PERTINGKAT'])) {
                 foreach ($temp as $index => $value) {
-                    $temp[$index] = $value + $data['JUMLAH_SISA_SISWA_PERTINGKAT'][$index];
+                    $temp[$index] = abs($value) + abs($data['JUMLAH_SISA_SISWA_PERTINGKAT'][$index]);
                 }
             }
         }
@@ -418,7 +494,7 @@ class Denah_handler {
     private function sisa_peserta_ada($data_sisa) {
         $jumlah_sisa = 0;
         foreach ($data_sisa as $detail) {
-            $jumlah_sisa += $detail;
+            $jumlah_sisa += abs($detail);
             if ($jumlah_sisa > 0) {
                 return true;
             }
@@ -531,6 +607,9 @@ class Denah_handler {
                 $data['JUMLAH_SISA_SISWA_PERTINGKAT'][$temp_data_index] = $temp_data_item;
             }
 
+//            echo '<hr>ATURAN_DENAH_BARU<br>' . json_encode($data['ATURAN_DENAH_BARU']);
+//            echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+//            exit();
             // MERATAKAN JUMLAH PESERTA AGAR SESUAI DENGAN JUMLAH MAKSIMAL PERUANG
             $looping_break = false;
             $i = 0;
@@ -539,6 +618,9 @@ class Denah_handler {
                 $data['JUMLAH_PESERTA_PERRUANG'] = array_fill(0, count($data['ATURAN_DENAH_BARU']), 0);
                 $j = 0;
                 foreach ($data['ATURAN_DENAH_BARU'] as $index_ruang => $data_ruang) {
+                    if (!$data['STATUS_ACAK_RUANG'][$index_ruang])
+                        continue;
+
                     $temp_data = $this->urut_sisa_terbesar($data_ruang);
 
                     foreach ($temp_data['DATA'] as $index => $jumlah) {
@@ -580,9 +662,9 @@ class Denah_handler {
                         $data['JUMLAH_PESERTA_PERRUANG'][$index] = $this->jumlah_peserta_diruang($data['ATURAN_DENAH_BARU'][$index]);
                     }
 
-                    // echo '<hr>index<br>' . $j;
-                    // echo '<hr>ATURAN_DENAH_BARU<br>' . json_encode($data['ATURAN_DENAH_BARU']);
-                    // echo '<hr>data['JUMLAH_PESERTA_PERRUANG']<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
+//                     echo '<hr>index<br>' . $j;
+//                     echo '<hr>ATURAN_DENAH_BARU<br>' . json_encode($data['ATURAN_DENAH_BARU']);
+//                     echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
                 }
 
                 $looping_break = true;
@@ -600,33 +682,34 @@ class Denah_handler {
             $data['JUMLAH_SISA_SISWA_PERRUANG'] = $this->jumlah_peserta_ruang($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
         }
 
-        // echo '<hr>NAMA_DEPT<br>' . json_encode($data['NAMA_DEPT']);
-        // echo '<hr>TINGKAT<br>' . json_encode($data['TINGKAT']);
-        // echo '<hr>RUANG_GEDUNG<br>' . json_encode($data['RUANG_GEDUNG']);
-        // // echo '<hr>GEDUNG<br>'.json_encode($data['GEDUNG']);
-        // // echo '<hr>KODE_RUANG<br>'.json_encode($data['KODE_RUANG']);
-        // echo '<hr>GEDUNG_UJIAN_DEPT<br>' . json_encode($data['GEDUNG_UJIAN_DEPT']);
-        // echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
-        // echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
-        // echo '<hr>ATURAN_DENAH_BARU<br>' . json_encode($data['ATURAN_DENAH_BARU']);
-        // echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
-        // echo '<hr>temp_ruang_penuh<br>' . json_encode($temp_ruang_penuh);
-        // echo '<hr>JUMLAH<br>' . json_encode($data['JUMLAH']);
-        // echo '<hr>CI_DEPT<br>' . json_encode($data['JUMLAH_RUANG_UJIAN_DEPT']);
-        // echo '<hr>JUMLAH_SISWA_PERUANG_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISWA_PERUANG_PERTINGKAT']);
-        // // echo '<hr>JUMLAH_SISA_SISWA_PERRUANG<br>'.json_encode($data['JUMLAH_SISA_SISWA_PERRUANG']);
-        // echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
-        // echo '<hr>temp_data<br>' . json_encode($temp_data);
-        // echo '<hr>RUANG_UJIAN_DEPT<br>'.json_encode($data['RUANG_UJIAN_DEPT']);
-        // // echo '<hr>DATA_RUANG<br>'.json_encode($data['DATA_RUANG']);
-        // echo '<hr>RUANG<br>'.json_encode($data['RUANG']);
-
         $data['ATURAN_DENAH'] = $data['ATURAN_DENAH_BARU'];
         unset($data['ATURAN_DENAH_BARU']);
 
         $this->cek_jumlah_siswa_aturan($mode, $data);
 
-        // exit();
+
+//        echo '<hr>NAMA_DEPT<br>' . json_encode($data['NAMA_DEPT']);
+//        echo '<hr>TINGKAT<br>' . json_encode($data['TINGKAT']);
+//        echo '<hr>RUANG_GEDUNG<br>' . json_encode($data['RUANG_GEDUNG']);
+//        // echo '<hr>GEDUNG<br>'.json_encode($data['GEDUNG']);
+//        // echo '<hr>KODE_RUANG<br>'.json_encode($data['KODE_RUANG']);
+//        echo '<hr>GEDUNG_UJIAN_DEPT<br>' . json_encode($data['GEDUNG_UJIAN_DEPT']);
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
+////        echo '<hr>ATURAN_DENAH_BARU<br>' . json_encode($data['ATURAN_DENAH_BARU']);
+//        echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
+//        echo '<hr>temp_ruang_penuh<br>' . json_encode($temp_ruang_penuh);
+//        echo '<hr>JUMLAH<br>' . json_encode($data['JUMLAH']);
+//        echo '<hr>CI_DEPT<br>' . json_encode($data['JUMLAH_RUANG_UJIAN_DEPT']);
+//        echo '<hr>JUMLAH_SISWA_PERUANG_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISWA_PERUANG_PERTINGKAT']);
+//        // echo '<hr>JUMLAH_SISA_SISWA_PERRUANG<br>'.json_encode($data['JUMLAH_SISA_SISWA_PERRUANG']);
+//        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+//        echo '<hr>temp_data<br>' . json_encode($temp_data);
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        // echo '<hr>DATA_RUANG<br>'.json_encode($data['DATA_RUANG']);
+//        echo '<hr>RUANG<br>' . json_encode($data['RUANG']);
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        exit();
 
         return $data;
     }
@@ -914,7 +997,11 @@ class Denah_handler {
             }
         } elseif ($mode == 'US') {
 
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//            echo '<hr>ATURAN_DENAH<br>' . json_encode((object) $data['ATURAN_DENAH']);
             // MENGGABUNG RUANGAN YG ISINYA SEDIKIT
+//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($sisa['JUMLAH_PESERTA_PERRUANG']);
+//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode((object) $sisa['JUMLAH_PESERTA_PERRUANG']);
             $temp_jumlah_peserta_peruang = $sisa['JUMLAH_PESERTA_PERRUANG'];
             krsort($temp_jumlah_peserta_peruang);
 //            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($temp_jumlah_peserta_peruang);
@@ -925,6 +1012,11 @@ class Denah_handler {
             $temp_ruang_gabung_proses = array();
             $temp_ruang_waris = array_flip($data['RUANG_WARIS']);
             foreach ($temp_jumlah_peserta_peruang as $index_ruang => $jumlah_peserta) {
+                if (!$data['STATUS_ACAK_RUANG'][$index_ruang])
+                    continue;
+
+                $jumlah_peserta = abs($jumlah_peserta);
+
                 if ($jumlah_peserta > 0) {
                     $temp_jumlah_peserta_gabung += $jumlah_peserta;
                     $temp_ruang_gabung[] = $index_ruang;
@@ -936,9 +1028,14 @@ class Denah_handler {
                         asort($temp_ruang_gabung_proses);
 //                        echo '<hr>$temp_ruang_gabung_proses<br>' . json_encode($temp_ruang_gabung_proses);
                         $index_ruang_target = NULL;
+
+//                        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH'][39]);
+//                        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH'][40]);
                         foreach ($temp_ruang_gabung_proses as $index_ruang_gabung) {
                             if ($index_ruang_target != NULL) {
-                                foreach ($data['ATURAN_DENAH'][$index_ruang_gabung] as $index_tingkat => $jumlah) {
+                                foreach ($sisa['ATURAN_DENAH'][$index_ruang_gabung] as $index_tingkat => $jumlah) {
+//                                    echo '<hr> >>>>>>>>>>> '.$jumlah.' >>>>> ' . json_encode($sisa['ATURAN_DENAH'][39]).' >>>>>> '. json_encode($sisa['ATURAN_DENAH'][40]);
+
                                     $sisa['ATURAN_DENAH'][$index_ruang_target][$index_tingkat] += $jumlah;
                                     $sisa['ATURAN_DENAH'][$index_ruang_gabung][$index_tingkat] -= $jumlah;
 
@@ -953,6 +1050,8 @@ class Denah_handler {
 
 //                            echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH'][$index_ruang_target]) . ' | ' . json_encode($data['ATURAN_DENAH'][$index_ruang_gabung]);
                         }
+//                        echo '<hr>ATURAN_DENAH<br>' . json_encode($sisa['ATURAN_DENAH'][39]);
+//                        echo '<hr>ATURAN_DENAH<br>' . json_encode($sisa['ATURAN_DENAH'][40]);
                     }
 
                     $temp_jumlah_ruang_gabung = count($temp_ruang_gabung);
@@ -967,6 +1066,7 @@ class Denah_handler {
 
             // MEMBAGI SISA PESERTA KE RUANGAN YANG ADA
 //            echo '<hr>##############################################################################################################################################################<br>';
+//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($sisa['JUMLAH_PESERTA_PERRUANG'][39]);
 //            echo '<hr>NAMA_DEPT<br>' . json_encode($sisa['NAMA_DEPT']);
 //            echo '<hr>TINGKAT<br>' . json_encode($sisa['TINGKAT']);
 //            echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($sisa['JUMLAH_SISA_SISWA_PERTINGKAT']);
@@ -975,6 +1075,9 @@ class Denah_handler {
 //            echo '<hr>ATURAN_DENAH<br>' . json_encode((object) $sisa['ATURAN_DENAH']);
 
             foreach ($sisa['JUMLAH_SISA_SISWA_PERTINGKAT'] as $index_tingkat => $jumlah_peserta_sisa) {
+                if (!$data['STATUS_ACAK'][$index_tingkat])
+                    continue;
+
                 if ($jumlah_peserta_sisa > 0) {
                     $index_ruang_ujian_dept = $data['NAMA_DEPT'][$index_tingkat] . '_' . $data['TINGKAT'][$index_tingkat];
                     foreach ($data['RUANG_UJIAN_DEPT'][$index_ruang_ujian_dept] as $key => $index_ruang) {
@@ -1044,7 +1147,9 @@ class Denah_handler {
             foreach ($sisa['ATURAN_DENAH'] as $index_ruang => $data_ruang) {
                 $sisa['JUMLAH_PESERTA_PERRUANG'][$index_ruang] = $this->jumlah_peserta_diruang($data_ruang);
             }
-//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($sisa['JUMLAH_PESERTA_PERRUANG']);
+//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
+//            echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode((object) $sisa['JUMLAH_PESERTA_PERRUANG']);
+//            echo '<hr>STATUS_ACAK_RUANG<br>' . json_encode($data['STATUS_ACAK_RUANG']);
 
             $sisa['ATURAN_DENAH_FINAL'] = $sisa['ATURAN_DENAH'];
             $sisa['RUANG_WARIS'] = $data['RUANG_WARIS'];
@@ -1056,10 +1161,10 @@ class Denah_handler {
 //        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($sisa['JUMLAH_SISA_SISWA_PERTINGKAT']);
 ////        echo '<hr>SISA<br>' . json_encode($sisa['SISA']);
 //            echo '<hr>RUANG_WARIS<br>' . json_encode($data['RUANG_WARIS']);
-//        echo '<hr>ATURAN_DENAH<br>' . json_encode((object) $sisa['ATURAN_DENAH']);
+////        echo '<hr>ATURAN_DENAH<br>' . json_encode((object) $sisa['ATURAN_DENAH']);
 //        echo '<hr>##############################################################################################################################################################<br>';
-//        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
-//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode($sisa['ATURAN_DENAH']);
+////        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
 ////        echo '<hr>DATA<br>' . json_encode($sisa['DATA']);
 //        exit();
 
@@ -1166,9 +1271,12 @@ class Denah_handler {
                                             ) ||
                                             (
                                             ($mode == 'US') &&
+                                            ($data['STATUS_ACAK_RUANG'][$key]) &&
                                             (
                                             (isset($result_denah[$key][$cek_bangku_kosong + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 1]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 0)) ||
+                                            (isset($result_denah[$key][$cek_bangku_kosong + 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 2]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 1)) ||
                                             (isset($result_denah[$key][$cek_bangku_kosong - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - 1]) && (($cek_bangku_kosong % $jumlah_perbaris) != 0)) ||
+                                            (isset($result_denah[$key][$cek_bangku_kosong - 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - 2]) && (($cek_bangku_kosong % $jumlah_perbaris) != 1)) ||
                                             (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris])) ||
                                             (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1])) ||
                                             (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1])) ||
@@ -1268,12 +1376,17 @@ class Denah_handler {
             'SISA' => $result_denah_sisa,
             'JUMLAH_SISA' => $jumlah_sisa,
         );
-//        echo '<hr>ATURAN_DENAH<br>' . json_encode($return['ATURAN_DENAH']);
-//        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($return['JUMLAH_SISA_SISWA_PERTINGKAT']);
-//        echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($return['JUMLAH_PESERTA_PERRUANG']);
-//        exit();
 
         $this->cek_jumlah_siswa_aturan($mode, $return);
+
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode((object)$return['ATURAN_DENAH']);
+//        echo '<hr>RUANG<br>' . json_encode((object)$return['RUANG']);
+//        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+//        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($return['JUMLAH_SISA_SISWA_PERTINGKAT']);
+//        echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($return['JUMLAH_PESERTA_PERRUANG']);
+//        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+//        exit();
 
         return $return;
     }

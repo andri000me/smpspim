@@ -217,7 +217,7 @@ class Peserta_us_model extends CI_Model {
     }
 
     public function get_detail_denah($jenjang, $tingkat, $jk) {
-        $this->db->select('ID_SISWA');
+        $this->db->select('ID_SISWA, RUANG_KELAS');
         $this->_get_table();
         $this->db->where(array(
             'JK_SISWA' => $jk,

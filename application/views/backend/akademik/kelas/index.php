@@ -6,6 +6,7 @@ $id_datatables = 'datatable1';
 $columns = array(
 //    'TA',
     'JENJANG - TINGKAT',
+    'KODE RUANG',
     'RUANG',
     
     'WALI KELAS',

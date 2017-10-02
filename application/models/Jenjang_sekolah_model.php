@@ -166,13 +166,13 @@ class Jenjang_sekolah_model extends CI_Model {
         $data = json_decode($result, TRUE);
 
         if ($data == null) {
-            $this->CI->generate->output_JSON(array(
+            $this->generate->output_JSON(array(
                 'status' => false,
-                'msg' => 'Ada kesalahan dalam penulian gedung ujian jenjang '.$data['NAMA_DEPT'][$key].' tingkat '.$data['TINGKAT'][$key].' jenis kelamin  di database. Silahkan atur gedung ujian di datatabase pada tabel md_tingkat field GEDUNG_UJIAN_TINGK.'
+                'msg' => 'Ada kesalahan dalam penulian gedung ujian  di database. Silahkan atur gedung ujian di datatabase pada tabel md_tingkat field GEDUNG_UJIAN_TINGK. ERROR CODE:'.$id.'_'.$tingkat
             ));
         }
 
-        return $data[$jk];
+        return array('DATA' => $data[$jk], 'STATUS' => $data['ACAK'][$jk]);
     }
     
     public function get_nama_jenjang($id) {

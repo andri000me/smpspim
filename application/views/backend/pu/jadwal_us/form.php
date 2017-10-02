@@ -72,8 +72,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                         foreach ($tingkat_us as $jenjang => $value) {
                             ?>
                             <h3>JENJANG: <?php echo $dept[$jenjang]; ?></h3>
-        <?php foreach ($value as $tingkat) {
-            ?>
+                            <?php foreach ($value as $tingkat) {
+                                ?>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label">TINGKAT</label>
                                     <div class="col-sm-1">
@@ -82,7 +82,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                     </div>
                                     <label class="col-sm-2 control-label">MATAPELAJARAN</label>
                                     <div class="col-sm-5">
-                                        <input class="form-control js-source-multi js-source-states-mapel required mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]) . '-' . $tingkat; ?>">
+                                        <input class="form-control js-source-multi js-source-states-mapel required mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]) . '-' . $tingkat; ?>" data-dept="<?php echo $dept[$jenjang]; ?>" data-tingk="<?php echo $tingkat; ?>">
                                         <span class="help-block m-b-none text-left">Wajib diisi</span>
                                     </div>
                                     <label class="col-sm-1 control-label">JENIS</label>
@@ -98,8 +98,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 $x++;
                             }
                             ?><hr><?php
-                }
-                ?>
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 </div>
                                 <label class="col-sm-1 control-label">PENGAWAS</label>
                                 <div class="col-sm-6">
-                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $index_ruang; ?>">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $index_ruang; ?>" data-jk="L" data-index="<?php echo $index_ruang; ?>">
                                 </div>
                             </div>
                             <?php
@@ -163,7 +163,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 </div>
                                 <label class="col-sm-1 control-label">PENGAWAS</label>
                                 <div class="col-sm-6">
-                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $index_ruang; ?>">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $index_ruang; ?>" data-jk="P" data-index="<?php echo $index_ruang; ?>">
                                 </div>
                             </div>
                             <?php
@@ -174,7 +174,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                 </div>
             </div>
         </div>
-    <?php if (!$mode_view) { ?>
+        <?php if (!$mode_view) { ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="hpanel hbgblue">
@@ -189,9 +189,21 @@ $this->generate->generate_panel_content($title, $subtitle);
                     </div>
                 </div>
             </div>
-    <?php } ?>
+        <?php } ?>
 
         <script type="text/javascript">
+            var pengawas = {
+                'L': {<?php 
+                foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {
+                    echo $index_ruang.':null,';
+                }
+                ?>},
+                'P': {<?php 
+                foreach ($jadwal_pr['DATA'] as $index_ruang => $data_ruang) {
+                    echo $index_ruang.':null,';
+                }
+                ?>},
+            };
     <?php
     if ($mode_view) {
         ?>
@@ -219,91 +231,108 @@ $this->generate->generate_panel_content($title, $subtitle);
         <?php if ($mode_edit) { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_update') ?>', id, success, message);
         <?php } else { ?>create_form_ajax('<?php echo site_url('pu/jadwal_us/ajax_add') ?>', id, success, message);
         <?php } ?>
-                };
+                    };
 
-                create_swal_option('Apakah Anda yakin akan menyimpan?', '', action);
+                    create_swal_option('Apakah Anda yakin akan menyimpan?', '', action);
 
-                return false;
-            }
+                    return false;
+                }
 
-            function reaload_page() {
-                setTimeout(function () {
-                    window.location.reload();
-        <?php // if (!$mode_edit) {            ?>window.location.reload();<?php //}            ?>
-                }, 1500);
-            }
+                function reaload_page() {
+                    setTimeout(function () {
+                        window.location.reload();
+        <?php // if (!$mode_edit) {                    ?>window.location.reload();<?php //}                    ?>
+                    }, 1500);
+                }
 
-            $(".js-source-states-pengawas").select2({escapeMarkup: function (markup) {
-                    return markup;
-                },
-                ajax: {
-                    url: "<?php echo site_url('master_data/pegawai/auto_complete'); ?>",
-                    dataType: "json",
-                    type: "POST",
-                    delay: 100,
-                    cache: true,
-                    data: function (term, page) {
-                        return {
-                            q: term
-                        }
-                    },
-                    results: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
+                $(".js-source-states-pengawas").each(function () {
+                var jk = $(this).data("jk");
+                var index = $(this).data("index");
+                
+                    $(this).select2({
+                        escapeMarkup: function (markup) {
+                            return markup;
+                        },
+                        ajax: {
+                            url: "<?php echo site_url('pu/jadwal_us/get_pengawas'); ?>",
+                            dataType: "json",
+                            type: "POST",
+                            delay: 100,
+                            cache: true,
+                            data: function (term, page) {
                                 return {
-                                    text: item.text,
-                                    id: item.id
+                                    q: term,
+                                    pengawas: pengawas[jk]
                                 }
-                            })
-                        };
-                    }
-                },
-                formatResult: function (element) {
-                    return element.id + " - " + element.text;
-                },
-                formatSelection: function (element) {
-                    return element.id + " - " + element.text;
-                },
-            });
-            $(".js-source-states-mapel").select2({escapeMarkup: function (markup) {
-                    return markup;
-                },
-                ajax: {
-                    url: "<?php echo site_url('master_data/matapelajaran/auto_complete'); ?>",
-                    dataType: "json",
-                    type: "POST",
-                    delay: 100,
-                    cache: true,
-                    data: function (term, page) {
-                        return {
-                            q: term
-                        }
-                    },
-                    results: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
+                            },
+                            results: function (data) {
                                 return {
-                                    text: item.text,
-                                    id: item.id
+                                    results: $.map(data, function (item) {
+                                        return {
+                                            text: item.text,
+                                            id: item.id
+                                        }
+                                    })
+                                };
+                            }
+                        },
+                        formatResult: function (element) {
+                            return element.id + " - " + element.text;
+                        },
+                        formatSelection: function (element) {
+                            pengawas[jk][index] = element.id;
+                            console.log('RESULT', pengawas);
+                            
+                            return element.id + " - " + element.text;
+                        },
+                    });
+                });
+                $(".js-source-states-mapel").each(function () {
+                    var dept = $(this).data('dept');
+                    var tingk = $(this).data('tingk');
+
+                    $(this).select2({escapeMarkup: function (markup) {
+                            return markup;
+                        },
+                        ajax: {
+                            url: "<?php echo site_url('pu/jadwal_us/get_mapel'); ?>",
+                            dataType: "json",
+                            type: "POST",
+                            delay: 100,
+                            cache: true,
+                            data: function (term, page) {
+                                return {
+                                    q: term,
+                                    dept: dept,
+                                    tingk: tingk,
                                 }
-                            })
-                        };
-                    }
-                },
-                formatResult: function (element) {
-                    return element.id + " - " + element.text;
-                },
-                formatSelection: function (element) {
-                    return element.id + " - " + element.text;
-                },
-            });
+                            },
+                            results: function (data) {
+                                return {
+                                    results: $.map(data, function (item) {
+                                        return {
+                                            text: item.text,
+                                            id: item.id
+                                        }
+                                    })
+                                };
+                            }
+                        },
+                        formatResult: function (element) {
+                            return element.id + " - " + element.text;
+                        },
+                        formatSelection: function (element) {
+                            return element.id + " - " + element.text;
+                        },
+                    });
+                });
         <?php if ($mode_edit) { ?>
 
             <?php
             foreach ($id_mapel as $key => $value) {
                 if (isset($mapel[$key]['MAPEL_PUM']) && isset($mapel[$key]['NAMA_MAPEL'])) {
                     ?>
-                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $mapel[$key]['MAPEL_PUM']; ?>', text: "<?php echo $mapel[$key]['NAMA_MAPEL']; ?>"});
+                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $mapel[$key]['MAPEL_PUM']; ?>', text: "<?php echo $mapel[$key]['NAMA_MAPEL']; ?>"});
                 <?php } ?>
             <?php } ?>
 
@@ -311,7 +340,7 @@ $this->generate->generate_panel_content($title, $subtitle);
             foreach ($id_pengawas_lk as $key => $value) {
                 if (isset($pengawas_lk[$key]['PEGAWAI_PENG']) && isset($pengawas_lk[$key]['NAMA_PEG'])) {
                     ?>
-                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_lk[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_lk[$key]['NAMA_PEG']; ?>"});
+                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_lk[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_lk[$key]['NAMA_PEG']; ?>"});
                 <?php } ?>
             <?php } ?>
 
@@ -319,13 +348,13 @@ $this->generate->generate_panel_content($title, $subtitle);
             foreach ($id_pengawas_pr as $key => $value) {
                 if (isset($pengawas_pr[$key]['PEGAWAI_PENG']) && isset($pengawas_pr[$key]['NAMA_PEG'])) {
                     ?>
-                        $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_pr[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_pr[$key]['NAMA_PEG']; ?>"});
-                    <?php } ?>
+                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_pr[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_pr[$key]['NAMA_PEG']; ?>"});
                 <?php } ?>
+            <?php } ?>
 
         <?php } ?>
     <?php } ?>
         </script>
-<?php } ?>
+    <?php } ?>
 </form>
 </div>

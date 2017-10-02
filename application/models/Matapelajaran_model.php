@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Matapelajaran_model extends CI_Model {
 
     var $table = 'md_mapel';
-    var $column = array('URUTAN_MAPEL','KODE_MAPEL', 'NAMA_DEPT', 'NAMA_MTM','NAMA_MAPEL','PMB_MAPEL','UJIAN_MAPEL','RAPOR_MAPEL','TRANSKRIP_MAPEL','SYAHADAH_MAPEL', 'AKTIF_MAPEL','NAMA_ARAB_MAPEL','ID_MAPEL');
+    var $column = array('URUTAN_MAPEL','ID_MAPEL','KODE_MAPEL', 'NAMA_MTM','NAMA_MAPEL','PMB_MAPEL', 'AKTIF_MAPEL','NAMA_ARAB_MAPEL','ID_MAPEL');
     var $primary_key = "ID_MAPEL";
     var $order = array("URUTAN_MAPEL" => 'ASC');
 

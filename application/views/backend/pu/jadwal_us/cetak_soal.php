@@ -46,7 +46,7 @@
     </div>
     <div class="row">
         <?php
-        $cetak_test = 'null';
+        $cetak_test = 'TEST.pdf';
         $data_cetak = array();
         $nama_mapel = array();
         $nama_tingkat = array();
@@ -78,13 +78,13 @@
                                             }
 
                                             foreach ($value as $tingkat) {
-                                                $cetak_test = $data_relasi[$tingkat]->ID_MAPEL . '.pdf';
                                                 $data_cetak[$jk . $ruang][] = $data_relasi[$tingkat]->ID_MAPEL . '.pdf';
                                                 $nama_mapel[$jk . $ruang][] = $data_relasi[$tingkat]->NAMA_MAPEL;
                                                 $nama_tingkat[$jk . $ruang][] = $data_relasi[$tingkat]->DEPT_MAPEL . '-' . $data_relasi[$tingkat]->NAMA_TINGK;
                                             }
 
                                             echo '<input type="hidden" class="data-cetak" value="', $jk . $ruang . '" />';
+                                            echo '<input type="hidden" class="title" value="', $data_denah['RUANG'][$ruang]['KODE_RUANG'] . '_' . $jk . '" />';
                                             ?>
                                         </div>
                                     </div>
@@ -100,7 +100,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    var dataCetak = 'TEST.pdf';//<?php echo trim(json_encode($data_cetak)); ?>;
+    var dataCetak = <?php echo trim(json_encode($data_cetak)); ?>;
     var namaMapel = <?php echo trim(json_encode($nama_mapel)); ?>;
     var namaTingkat = <?php echo trim(json_encode($nama_tingkat)); ?>;
 
@@ -123,13 +123,6 @@
         return OSName;
     }
 
-    function runCommand(fileAdobe, filePdf) {
-        // https://stackoverflow.com/questions/619158/adobe-reader-command-line-reference
-        var shell = WScript.CreateObject("WScript.Shell");
-        var msg = "\"" + fileAdobe + "\"  /n /s /h /t \"" + filePdf + "\" ";
-        shell.Run(msg);
-    }
-
     function cetakTest() {
         var item = <?php echo trim(json_encode($cetak_test)); ?>;
         var OSName = checkOS();
@@ -138,10 +131,9 @@
             var lokasiAdobeReader = $('#lokasiAdobeReader').val();
             var lokasiFolderSoal = $('#lokasiFolderSoal').val();
 
-            console.log(lokasiFolderSoal + item);
-            runCommand(lokasiAdobeReader, lokasiFolderSoal + item);
+            window.open('<?php echo site_url('pu/jadwal_us/get_file_bat'); ?>?exe=' + lokasiAdobeReader + '&folder=' + lokasiFolderSoal + '&file=' + item + '&title=TEST');
 
-            create_swal_success("Berhasil", "File " + item + " telah dikirim ke printer. Jika printer gagal mencetak, silahkan running code <br><code>" + msg + "</code><br> di command promt (cmd) dan lihat pesan errornya.");
+            create_swal_success("Berhasil", "Silahkan running file yang telah didownload.");
         } else {
             create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
         }
@@ -149,6 +141,7 @@
 
     function cetak(that) {
         var id = $(that).find('.data-cetak').val();
+        var title = $(that).find('.title').val();
         var lokasiAdobeReader = $('#lokasiAdobeReader').val();
         var lokasiFolderSoal = $('#lokasiFolderSoal').val();
         var OSName = checkOS();
@@ -158,26 +151,17 @@
         //        console.log(lokasiAdobeReader);
         //        console.log(lokasiFolderSoal);
 
-        if (OSName == "Windows") {
-            var fileCetak = '';
-            var nomor = 1;
+//        if (OSName == "Windows") {
+            window.open('<?php echo site_url('pu/jadwal_us/get_file_bat'); ?>?exe=' + lokasiAdobeReader + '&folder=' + lokasiFolderSoal + '&file=' + dataCetak[id] + '&title=' + title);
 
-            $.each(dataCetak[id], function (key, item) {
-                console.log(lokasiFolderSoal + item);
-                fileCetak += '<font onmouseover="textHover(this, true)" onmouseout="textHover(this, false)">' + nomor++ + ' | ' + namaTingkat[id][key] + ' >>>>>> ' + item + ' - ' + namaMapel[id][key] + '</font><br>';
-
-                runCommand(lokasiAdobeReader, lokasiFolderSoal + item);
-            });
-
-            console.log(fileCetak);
-            create_swal_success("Berhasil", "File soal sebanyak <strong>" + dataCetak[id].length + " buah</strong> dengan kode <hr>" + fileCetak + "<hr> telah dikirim ke printer. Silahkan cek hasilnya.");
+            create_swal_success("Berhasil", "Silahkan running file yang telah didownload.");
 
             $(that).parent().removeClass('hbgnavyblue');
             $(that).parent().removeClass('hbgviolet');
             $(that).parent().addClass("hbggreen");
-        } else {
-            create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
-        }
+//        } else {
+//            create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
+//        }
     }
 
     function textHover(that, status) {

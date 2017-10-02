@@ -129,8 +129,11 @@ class Ruang_model extends CI_Model {
         return $this->db->affected_rows();
     }
     
-    public function get_ruang_ujian() {
+    public function get_ruang_ujian($jk) {
+        $this->db->select('KODE_RUANG, NAMA_RUANG, KAPASITAS_RUANG, KAPASITAS_UJIAN_RUANG, ID_KELAS, ID_TINGK, DEPT_TINGK, NAMA_TINGK');
         $this->_get_table();
+        $this->db->join('akad_kelas', 'KODE_RUANG = RUANG_KELAS AND TA_KELAS='.$this->session->userdata('ID_TA_ACTIVE').' AND JK_KELAS="'.$jk.'"', 'LEFT');
+        $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS', 'LEFT');
         $this->db->where('UJIAN_RUANG', 1);
         $this->db->order_by('KODE_RUANG');
 

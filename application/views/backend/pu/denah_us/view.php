@@ -55,6 +55,7 @@ $status_sisa = FALSE;
                         foreach ($data_denah[$jk]['DATA'] as $key => $value) {
                             if ($data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] == 0)
                                 continue;
+                            
                             if ($data_denah[$jk]['JUMLAH_SISA'][$key] > 0)
                                 $status_sisa = TRUE;
 
@@ -63,8 +64,9 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading' . $jk . $key . '">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion' . $jk . '" href="#collapse' . $jk . $key . '" aria-expanded="true" aria-controls="collapse' . $jk . $key . '" data-jk="' . $jk . '" data-key="' . $key . '" onclick="request_denah(this);">
-                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_UJIAN_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
+                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: ' . $ruang[$key]['KAPASITAS_UJIAN_RUANG'] . ' orang | Terisi: ' . $data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] . ' orang ' . (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
                                         </a>
+                                        <!--' . ($STATUS_VALIDASI ? '' : '<input type="checkbox" class="gabung-kelas-' . $jk . ' pull-right" data-ruang="' . $key . '" data-kapasitas="' . $ruang[$key]['KAPASITAS_UJIAN_RUANG'] . '" data-terisi="' . $data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] . '" data-kode="' . $ruang[$key]['KODE_RUANG'] . '" data-jk="' . $jk . '" onclick="gabungKelas(\'' . $jk . '\')">') . '-->
                                     </h4>
                                 </div>
                                 <div id="collapse' . $jk . $key . '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' . $jk . $key . '">
@@ -106,8 +108,9 @@ $status_sisa = FALSE;
                                 <div class="panel-heading" role="tab" id="heading' . $jk . $key . '">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion' . $jk . '" href="#collapse' . $jk . $key . '" aria-expanded="true" aria-controls="collapse' . $jk . $key . '" data-jk="' . $jk . '" data-key="' . $key . '" onclick="request_denah(this);">
-                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: '.$ruang[$key]['KAPASITAS_UJIAN_RUANG'].' orang | Terisi: '.$data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] .' orang '. (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
+                                            ' . ($nomor++) . '.&nbsp;&nbsp;&nbsp;Ruang ' . $ruang[$key]['KODE_RUANG'] . ' - ' . $ruang[$key]['NAMA_RUANG'] . ' ( Kapasitas: ' . $ruang[$key]['KAPASITAS_UJIAN_RUANG'] . ' orang | Terisi: ' . $data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] . ' orang ' . (($data_denah[$jk]['JUMLAH_SISA'][$key] > 0) ? ' | Belum mendapat kursi: ' . $data_denah[$jk]['JUMLAH_SISA'][$key] . ' orang' : '') . ')
                                         </a>
+                                        <!--' . ($STATUS_VALIDASI ? '' : '<input type="checkbox" class="gabung-kelas-' . $jk . ' pull-right" data-ruang="' . $key . '" data-kapasitas="' . $ruang[$key]['KAPASITAS_UJIAN_RUANG'] . '" data-terisi="' . $data_denah[$jk]['JUMLAH_PESERTA_PERRUANG'][$key] . '" data-kode="' . $ruang[$key]['KODE_RUANG'] . '" data-jk="' . $jk . '" onclick="gabungKelas(\'' . $jk . '\')">') . '-->
                                     </h4>
                                 </div>
                                 <div id="collapse' . $jk . $key . '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' . $jk . $key . '">
@@ -285,6 +288,41 @@ $status_sisa = FALSE;
         return html;
     }
 <?php if (!$STATUS_VALIDASI) { ?>
+        function gabungKelas(jk) {
+            var id_ruang = [];
+            var msg = '';
+            $('.gabung-kelas-' + jk).each(function () {
+                if ($(this).is(":checked")) {
+                    id_ruang.push($(this).data('ruang'));
+                    msg += $(this).data('kode') + ", ";
+                }
+
+                if (id_ruang.length > 1) {
+                    proses_gabung_ruang(id_ruang, '.gabung-kelas-' + jk, msg);
+                }
+            });
+        }
+
+        function proses_gabung_ruang(id_ruang, class_ruang, msg) {
+            var success = function (data) {
+                if (data.status) {
+                    window.location.reload();
+                } else {
+                    create_homer_error(data.msg);
+                }
+            };
+            var action = function (isConfirm) {
+                if (isConfirm) {
+                    create_splash('Sistem sedang menggabungkan ruangan');
+                    create_ajax('<?php echo site_url('pu/denah_us/gabung_ruang'); ?>', 'id_ruang=' + id_ruang, success);
+                }
+            };
+
+            create_swal_success('Apakah Anda yakin melanjutkan?', "Ruangan yang tercheck (" + msg + ") akan digabung menjadi satu. Jika kapasitas tidak mencukupi maka penggabungan akan dibatalkan. Jangan klik tombol SISA PESERTA SETIAP RUANG DIBUAT DENAH karena ruangan akan direset kembali oleh sistem.", action);
+
+            $(class_ruang).removeAttr('checked');
+        }
+
         function atur_ulang_denah(JK, RUANG, KURSI, TINGKAT, URUTAN, JENJANG, PILIHAN) {
             var success = function (data) {
                 if (data.status) {

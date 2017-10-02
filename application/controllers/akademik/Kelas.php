@@ -42,6 +42,7 @@ class Kelas extends CI_Controller {
             $row = array();
 //            $row[] = $item->NAMA_TA;
             $row[] = $item->KETERANGAN_TINGK;
+            $row[] = $item->KODE_RUANG;
             $row[] = $item->NAMA_RUANG;
             
             $row[] = $item->NAMA_PEG;

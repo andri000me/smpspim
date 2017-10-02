@@ -176,7 +176,7 @@ class Denah_us extends CI_Controller {
         
         if (($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY")) && $this->aturan_denah->validasi_denah_us() && $result) {
             $status = 1;
-            $msg = 'Berhasil memvalidasi denah. Anda akan diarahkan pada menu jadwal ujian masuk';
+            $msg = 'Berhasil memvalidasi denah. Anda akan diarahkan pada menu jadwal ujian sekolah';
             $link = site_url('pu/jadwal_us');
         } else {
             $status = 0;

@@ -68,8 +68,8 @@ class Jadwal_us extends CI_Controller {
                         <li><a href="javascript:void()" title="Cetak Sampul" onclick="cetak_sampul_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Sampul</a></li>
                         <li><a href="javascript:void()" title="Cetak Soal" onclick="cetak_soal_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Soal</a></li>
                         <li><a href="javascript:void()" title="Cetak Absen Pengawas" onclick="cetak_absen_pengawas_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Absen Pengawas</a></li>
-                        <li><a href="javascript:void()" title="Cetak Absen Peserta" onclick="cetak_absen_peserta_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Absen Peserta</a></li>
                         <hr class="line-divider">
+                        <li><a href="javascript:void()" title="Cetak Absen Peserta" onclick="cetak_absen_peserta_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Absen Peserta</a></li>
                         <li><a href="javascript:void()" title="Cetak Jadwal Tanggal Ini" onclick="cetak_jadwal_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Jadwal</a></li>
                         <li><a href="javascript:void()" title="Cetak Denah Tanggal Ini" onclick="cetak_denah_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Denah</a></li>
                         <li><a href="javascript:void()" title="Cetak Kartu Peserta" onclick="cetak_kertu_siswa_' . $id_datatables . '(\'' . $item->ID_PUJ . '\')"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Kartu Peserta</a></li>
@@ -279,7 +279,7 @@ class Jadwal_us extends CI_Controller {
     }
 
     public function cetak_jadwal($id) {
-        $data['data'] = $this->mapel->get_all_by_jadwal();
+        $data['data'] = $this->mapel->get_all_by_jadwal($this->tipe);
         $data['ketua'] = $this->pengaturan->getDataKetuaPU();
 
         $this->load->view('backend/pu/jadwal_us/cetak_jadwal', $data);
@@ -312,8 +312,7 @@ class Jadwal_us extends CI_Controller {
         $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['ID'] = $id;
         $data['data'][0]['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
-        $data['data'][0]['JAM_MULAI'] = $data_jadwal->JAM_MULAI_PUJ;
-        $data['data'][0]['JAM_SELESAI'] = $data_jadwal->JAM_SELESAI_PUJ;
+        $data['data'][0]['DATA'] = $this->jadwal->get_by_tanggal($this->tipe, $data_jadwal->TANGGAL_PUJ);
         $data['data'][0]['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
 
         $this->load->view('backend/pu/jadwal_us/cetak_absen_peserta', $data);
@@ -481,6 +480,34 @@ class Jadwal_us extends CI_Controller {
         $data['data'] = $this->peserta->get_data_blanko_nilai(FALSE);
 
         $this->load->view('backend/pu/jadwal_us/cetak_blanko_nilai', $data);
+    }
+    
+    public function get_file_bat() {
+        $input = $this->input->get();
+        
+        header("Content-Type: text/plain;");
+        header('Content-Disposition: attachment; filename='.$input['title'].'.bat');
+        
+        $file_exp = explode(',',$input['file']);
+        foreach ($file_exp as $pdf) {
+            printf('"'.$input['exe'].'" /n /s /h /t "'.$input['folder'].$pdf.'"\r\n');
+        }
+    }
+    
+    public function get_mapel() {
+        $this->generate->set_header_JSON();
+
+        $data = $this->mapel->get_mapel_us($this->input->post('q'), $this->input->post('dept'), $this->input->post('tingk'));
+
+        $this->generate->output_JSON($data);
+    }
+    
+    public function get_pengawas() {
+        $this->generate->set_header_JSON();
+
+        $data = $this->pengawas->get_pengawas($this->input->post('q'), $this->input->post('pengawas'));
+
+        $this->generate->output_JSON($data);
     }
 
 }
