@@ -136,6 +136,7 @@ class Ruang_model extends CI_Model {
         $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS', 'LEFT');
         $this->db->where('UJIAN_RUANG', 1);
         $this->db->order_by('KODE_RUANG');
+        $this->db->group_by('KODE_RUANG');
 
         return $this->db->get()->result_array();
     }

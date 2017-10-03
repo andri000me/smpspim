@@ -148,11 +148,21 @@ class Denah_us extends CI_Controller {
     }
     
     public function proses_sisa() {
-        $this->generate->set_header_JSON();
+//        $this->generate->set_header_JSON();
         
         if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
         
         $result = $this->denah_handler->proses_buat_denah($this->mode, TRUE);
+        
+        $this->generate->output_JSON(array('status' => 1, 'data' => $result));
+    }
+    
+    public function proses_sisa_longgar() {
+        $this->generate->set_header_JSON();
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
+        $result = $this->denah_handler->proses_buat_denah($this->mode, TRUE, TRUE);
         
         $this->generate->output_JSON(array('status' => 1, 'data' => $result));
     }
@@ -185,6 +195,22 @@ class Denah_us extends CI_Controller {
         }
         
         $this->generate->output_JSON(array('status' => $status, 'msg' => $msg, 'link' => $link));
+    }
+    
+    public function ruang_fix() {
+        $this->generate->set_header_JSON();
+        
+        $result = $this->denah_handler->ruang_fix($this->mode);
+        
+        $this->generate->output_JSON(array('status' => $result, 'msg' => 'Gagal memproses data. Halaman akan dimuat ulang otomatis.'));
+    }
+    
+    public function gabung_ruang() {
+        $this->generate->set_header_JSON();
+        
+        $result = $this->denah_handler->gabung_ruang($this->mode);
+        
+        $this->generate->output_JSON(array('status' => $result, 'msg' => 'Gagal memproses data. Halaman akan dimuat ulang otomatis.'));
     }
 
 }

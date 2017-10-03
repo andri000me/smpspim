@@ -356,7 +356,6 @@ class Jadwal_us extends CI_Controller {
 //                echo '<hr>$jumlah<br>' . json_encode($jumlah);
 //                echo '<hr>$data_denah<br>' . json_encode(count($data_denah['DATA_SISWA']));
 //                echo '<hr>$data_denah<br>' . json_encode($data_denah['DATA_SISWA']);
-
                 $jumlah_perbaris = $data_denah['JUMLAH_PERBARIS'];
                 // MEMBUAT PARAMENTER UNTUK JENJANG
                 $temp_last_id = array_fill(0, count($data_denah['TINGKAT']), 0);
@@ -448,7 +447,7 @@ class Jadwal_us extends CI_Controller {
                 'DENAH' => $data_siswa[$detail_siswa['ID_SISWA']]
             );
         }
-        exit();
+        
         $data['siswa'] = $data_siswa_final;
 
         $this->load->view('backend/pu/jadwal_us/cetak_kertu_siswa', $data);
@@ -481,19 +480,19 @@ class Jadwal_us extends CI_Controller {
 
         $this->load->view('backend/pu/jadwal_us/cetak_blanko_nilai', $data);
     }
-    
+
     public function get_file_bat() {
         $input = $this->input->get();
-        
+
         header("Content-Type: text/plain;");
-        header('Content-Disposition: attachment; filename='.$input['title'].'.bat');
-        
-        $file_exp = explode(',',$input['file']);
+        header('Content-Disposition: attachment; filename=' . $input['title'] . '.bat');
+
+        $file_exp = explode(',', $input['file']);
         foreach ($file_exp as $pdf) {
-            printf('"'.$input['exe'].'" /n /s /h /t "'.$input['folder'].$pdf.'"\r\n');
+            printf('"' . $input['exe'] . '" /n /s /h /t "' . $input['folder'] . $pdf . '"\r\n');
         }
     }
-    
+
     public function get_mapel() {
         $this->generate->set_header_JSON();
 
@@ -501,7 +500,7 @@ class Jadwal_us extends CI_Controller {
 
         $this->generate->output_JSON($data);
     }
-    
+
     public function get_pengawas() {
         $this->generate->set_header_JSON();
 

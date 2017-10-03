@@ -111,6 +111,17 @@ foreach ($data as $detail) {
                 $pdf->Ln();
             }
 
+            if (($jumlah_peruang % 2) > 0) {
+                $pdf->Cell(7, 5, '', 1, 0, 'C');
+                $pdf->Cell(23, 5, '', 1, 0, 'L');
+                $pdf->Cell(45, 5, '', 1, 0, 'L');
+                $pdf->Cell(35, 5, '', 1, 0, 'L');
+                for ($z = 0; $z < $maks; $z++) {
+                    $pdf->Cell(87 / ($maks * 2), 5, '', $ganjil ? 'LTR' : 'LBR', 0, 'L');
+                    $pdf->Cell(87 / ($maks * 2), 5, '', $ganjil ? 'LTR' : 'LBR', 0, 'L');
+                }
+            }
+
             $pdf->Ln(5);
 
             $pdf->SetFont('Arial', '', $size_font);

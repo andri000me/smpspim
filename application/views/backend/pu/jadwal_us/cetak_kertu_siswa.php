@@ -84,9 +84,9 @@ for ($i = 0; $i < count($siswa); $i++) {
         $pdf->Image(base_url($this->pengaturan->getLogo()), $start_x + $margin_right, $posisi_y, $width_logo, $height_logo, '', '');
 
     if (file_exists('files/siswa/' . $siswa[$i + 1]['AKAD_SISWA']['NIS_SISWA'] . '.jpg'))
-        $foto_siswa = base_url('files/' . $siswa[$i + 1]['AKAD_SISWA']['NIS_SISWA'] . '.jpg');
+        $foto_siswa = base_url('files/siswa/' . $siswa[$i + 1]['AKAD_SISWA']['NIS_SISWA'] . '.jpg');
     elseif (file_exists('files/siswa/' . $siswa[$i + 1]['AKAD_SISWA']['ID_SISWA'] . '.png'))
-        $foto_siswa = base_url('files/' . $siswa[$i + 1]['AKAD_SISWA']['ID_SISWA'] . '.png');
+        $foto_siswa = base_url('files/siswa/' . $siswa[$i + 1]['AKAD_SISWA']['ID_SISWA'] . '.png');
     else
         $foto_siswa = base_url('files/no_image.jpg');
 

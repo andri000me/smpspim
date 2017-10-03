@@ -44,12 +44,3 @@ application/logs/*
 /application/config/database.php
 /application/libraries/tcpdf/
 /note
-!/assets/vendor/sweetalert/
-/assets/vendor/sweetalert/example/
-/assets/vendor/sweetalert/lib/
-/assets/vendor/sweetalert/LICENSE
-/assets/vendor/sweetalert/.bower.json
-/assets/vendor/sweetalert/bower.json
-/assets/vendor/sweetalert/README.md
-/assets/vendor/sweetalert/sweetalert.gif
-/assets/vendor/sweetalert/.editorconfig
