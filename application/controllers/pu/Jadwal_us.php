@@ -357,11 +357,11 @@ class Jadwal_us extends CI_Controller {
         );
         $data_denah = $this->denah->get_rows_array($where);
 
-//        if (count($data_denah) != 6) {
-//            echo '<h1>UJIAN HARUS 6 HARI. SILAHKAN PERIKSA KEMBALI DATA JADWAL UJIAN SEKOLAH.</h1>';
-//
-//            exit();
-//        }
+        if (count($data_denah) != 6) {
+            echo '<h1>UJIAN HARUS 6 HARI. SILAHKAN PERIKSA KEMBALI DATA JADWAL UJIAN SEKOLAH.</h1>';
+
+            exit();
+        }
         // MENDAPATKAN DATA SISWA SESUAI DENGAN DENAH
         $data_siswa = array();
         foreach ($data_denah as $detail_denah) { // LOOPING PERTANGGAL DENAH
@@ -452,12 +452,12 @@ class Jadwal_us extends CI_Controller {
 //        echo '<hr>$data_siswa<br>' . json_encode(count($data_siswa));
 //        echo '<hr>$data_peserta_us<br>' . json_encode(count($data_peserta_us));
 //        exit();
-
-        if (count($data_peserta_us) != count($data_siswa)) {
-            echo '<h1>DATA SISWA BERBEDA ANTARA DENAH DENGAN DATABASE. SILAHKAN ULANGI KEMBALI PEMBUATAN DENAHNYA.</h1>';
-
-            exit();
-        }
+//
+//        if (count($data_peserta_us) != count($data_siswa)) {
+//            echo '<h1>DATA SISWA BERBEDA ANTARA DENAH DENGAN DATABASE. SILAHKAN ULANGI KEMBALI PEMBUATAN DENAHNYA.</h1>';
+//
+//            exit();
+//        }
         // MENYUSUN ULANG DATA SISWA AGAR SESUAI PERKELAS
         $data_siswa_final = array();
         foreach ($data_peserta_us as $detail_siswa) {
