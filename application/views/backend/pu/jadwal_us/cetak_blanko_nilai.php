@@ -59,11 +59,16 @@ foreach ($data as $detail) {
         $pdf->SetFont('Arial', '', 9);
     }
 
-    $pdf->Cell(7, 6.4, $detail->NO_ABSEN_AS, 1);
-    $pdf->Cell(23, 6.4, $detail->NIS_SISWA, 1);
-    $pdf->Cell(42, 6.4, $this->pdf_handler->cut_text($pdf, $detail->NAMA_SISWA, 42), 1);
-    $pdf->Cell(12, 6.4, '', 1);
-    $pdf->Cell(12, 6.4, '', 1);
+    if ($detail->AKTIF_AS)
+        $pdf->setFillColor(255, 255, 255);
+    else
+        $pdf->setFillColor(128, 128, 128);
+
+    $pdf->Cell(7, 6.4, $detail->NO_ABSEN_AS, 1, 0, 'L', TRUE);
+    $pdf->Cell(23, 6.4, $detail->NIS_SISWA == NULL ? 'KELUAR' : $detail->NIS_SISWA, 1, 0, 'L', TRUE);
+    $pdf->Cell(42, 6.4, $this->pdf_handler->cut_text($pdf, $detail->NAMA_SISWA, 42), 1, 0, 'L', TRUE);
+    $pdf->Cell(12, 6.4, '', 1, 0, 'L', TRUE);
+    $pdf->Cell(12, 6.4, '', 1, 0, 'L', TRUE);
     $pdf->Ln();
 }
 $pdf->Ln(3);

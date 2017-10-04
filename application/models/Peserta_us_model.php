@@ -112,7 +112,12 @@ class Peserta_us_model extends CI_Model {
     }
 
     public function get_data_blanko_nilai() {
-        $this->_get_table();
+        $this->db->from('akad_siswa as');
+        $this->db->join('md_siswa ms','as.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->where('KONVERSI_AS', 0);
+        $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->order_by('ID_KELAS', 'ASC');
         $this->db->order_by('NO_ABSEN_AS', 'ASC');
 
