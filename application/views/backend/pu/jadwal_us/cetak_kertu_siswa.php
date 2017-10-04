@@ -187,22 +187,22 @@ for ($i = 0; $i < count($siswa); $i++) {
 //    $pdf->Ln();    
 
     $pdf->Cell(3, 4, '', 'L', 0, 'L');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][0]['RUANG']['ID'], 1, 0, 'C');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][1]['RUANG']['ID'], 1, 0, 'C');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][2]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][2]['RUANG']['ID'], 1, 0, 'C');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][3]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][3]['RUANG']['ID'], 1, 0, 'C');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][4]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][4]['RUANG']['ID'], 1, 0, 'C');
-    $pdf->Cell(14, 4, $siswa[$i]['DENAH'][5]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][5]['RUANG']['ID'], 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][0]) ? $siswa[$i]['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][0]['RUANG']['ID'] : '', 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][1]) ? $siswa[$i]['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][1]['RUANG']['ID'] : '', 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][2]) ? $siswa[$i]['DENAH'][2]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][2]['RUANG']['ID'] : '', 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][3]) ? $siswa[$i]['DENAH'][3]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][3]['RUANG']['ID'] : '', 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][4]) ? $siswa[$i]['DENAH'][4]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][4]['RUANG']['ID'] : '', 1, 0, 'C');
+    $pdf->Cell(14, 4, isset($siswa[$i]['DENAH'][5]) ? $siswa[$i]['DENAH'][5]['RUANG']['NOMOR'] . ' ' . $siswa[$i]['DENAH'][5]['RUANG']['ID'] : '', 1, 0, 'C');
     $pdf->Cell(3, 4, '', 'R', 0, 'C');
     $pdf->Cell(5);
     if ($isset) {
         $pdf->Cell(3, 4, '', 'L', 0, 'L');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][0]['RUANG']['ID'], 1, 0, 'C');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][1]['RUANG']['ID'], 1, 0, 'C');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][2]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][2]['RUANG']['ID'], 1, 0, 'C');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][3]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][3]['RUANG']['ID'], 1, 0, 'C');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][4]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][4]['RUANG']['ID'], 1, 0, 'C');
-        $pdf->Cell(14, 4, $siswa[$i + 1]['DENAH'][5]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][5]['RUANG']['ID'], 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][0]) ? $siswa[$i + 1]['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][0]['RUANG']['ID'] : '', 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][1]) ? $siswa[$i + 1]['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][1]['RUANG']['ID'] : '', 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][2]) ? $siswa[$i + 1]['DENAH'][2]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][2]['RUANG']['ID'] : '', 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][3]) ? $siswa[$i + 1]['DENAH'][3]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][3]['RUANG']['ID'] : '', 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][4]) ? $siswa[$i + 1]['DENAH'][4]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][4]['RUANG']['ID'] : '', 1, 0, 'C');
+        $pdf->Cell(14, 4, isset($siswa[$i + 1]['DENAH'][5]) ? $siswa[$i + 1]['DENAH'][5]['RUANG']['NOMOR'] . ' ' . $siswa[$i + 1]['DENAH'][5]['RUANG']['ID'] : '', 1, 0, 'C');
         $pdf->Cell(3, 4, '', 'R', 0, 'C');
     }
     $pdf->Ln();
