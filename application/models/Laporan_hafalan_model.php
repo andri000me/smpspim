@@ -24,7 +24,7 @@ class Laporan_hafalan_model extends CI_Model {
         $this->db->join('ph_nilai_header pnh', $this->table . '.TA_AS=pnh.TA_PNH AND ID_SISWA=SISWA_PNH', 'LEFT');
     }
 
-    public function get_data($group, $ta, $tingkat, $jenjang) {
+    public function get_data($group, $ta, $tingkat, $jenjang, $jk) {
         if ($group == 'Jumlah Siswa') {
             $this->db->select('COUNT(ID_AS) AS data, NAMA_KELAS AS x_label');
         } elseif ($group == 'Jumlah Siswa Setoran') {
@@ -58,6 +58,8 @@ class Laporan_hafalan_model extends CI_Model {
             $this->db->where('TINGKAT_AS', $tingkat);
         if ($jenjang != "")
             $this->db->where('DEPT_TINGK', $jenjang);
+        if ($jk != "")
+            $this->db->where('JK_SISWA', $jk);
 
         $this->db->where('NAMA_KELAS IS NOT NULL');
         $this->db->group_by('ID_KELAS');

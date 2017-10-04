@@ -25,6 +25,19 @@ $this->generate->generate_panel_content('Laporan Hafalan Siswa', 'Laporan Hafala
                             </div>
                         </div>
                         <div class="form-group filter-lanjutan">
+                            <label class="col-sm-3 control-label">JK</label>
+                            <div class="col-sm-4">
+                                <select id="jk" class="form-control">
+                                    <option value="">-- Pilih JK --</option>
+                                    <?php
+                                    foreach ($JK as $value) {
+                                        echo '<option value="' . $value->ID_JK. '">' . $value->NAMA_JK. '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group filter-lanjutan">
                             <label class="col-sm-3 control-label">Jenjang</label>
                             <div class="col-sm-4">
                                 <select id="jenjang" class="form-control" onchange="get_tingkat()">
@@ -113,6 +126,7 @@ $this->generate->chart($id, 'Grafik Hafalan', $single);
         var ta = $("#ta").val();
         var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
+        var jk = $("#jk").val();
         var pie_donut = 0;
         var success = function (data) {
             data_response = data;
@@ -123,7 +137,7 @@ $this->generate->chart($id, 'Grafik Hafalan', $single);
         if ((type === 'pie') || (type === 'donut'))
             pie_donut = 1;
 
-        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&jenjang=" + jenjang, success);
+        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&jenjang=" + jenjang + "&jk=" + jk, success);
     }
 
     function export_data() {
@@ -131,11 +145,12 @@ $this->generate->chart($id, 'Grafik Hafalan', $single);
         var ta = $("#ta").val();
         var cawu = $("#cawu").val();
         var tingkat = $("#tingkat").val();
+        var jk = $("#jk").val();
         var kelas = $("#kelas").val();
         var bulan = $("#bulan").val();
         var tahun = $("#tahun").val();
 
-        var req = "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&cawu=" + cawu + "&bulan=" + bulan + "&tahun=" + tahun;
+        var req = "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&cawu=" + cawu + "&bulan=" + bulan + "&tahun=" + tahun + "&jk=" + jk;
 
         window.open("<?php echo site_url('laporan/hafalan/export'); ?>?" + req);
     }

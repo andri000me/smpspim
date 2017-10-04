@@ -31,7 +31,7 @@ foreach ($data as $detail) {
 
         $temp_kelas = $detail->ID_KELAS;
 
-        $pdf->SetLeftMargin(7);
+        $pdf->SetLeftMargin(5);
         $pdf->AddPage("P", array($width, $height));
 
         $pdf->SetFont('Arial', 'B', 12);
@@ -51,7 +51,7 @@ foreach ($data as $detail) {
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(7, 5, 'NO', 1, 0, 'C');
         $pdf->Cell(23, 5, 'NIS', 1, 0, 'C');
-        $pdf->Cell(40, 5, 'NAMA', 1, 0, 'C');
+        $pdf->Cell(42, 5, 'NAMA', 1, 0, 'C');
         $pdf->Cell(12, 5, 'MAPEL', 1, 0, 'C');
         $pdf->Cell(12, 5, 'MAPEL', 1, 0, 'C');
         $pdf->Ln();
@@ -59,11 +59,11 @@ foreach ($data as $detail) {
         $pdf->SetFont('Arial', '', 9);
     }
 
-    $pdf->Cell(7, 6, $detail->NO_ABSEN_AS, 1);
-    $pdf->Cell(23, 6, $detail->NIS_SISWA, 1);
-    $pdf->Cell(40, 6, $this->pdf_handler->cut_text($pdf, $detail->NAMA_SISWA, 40), 1);
-    $pdf->Cell(12, 6, '', 1);
-    $pdf->Cell(12, 6, '', 1);
+    $pdf->Cell(7, 6.5, $detail->NO_ABSEN_AS, 1);
+    $pdf->Cell(23, 6.5, $detail->NIS_SISWA, 1);
+    $pdf->Cell(42, 6.5, $this->pdf_handler->cut_text($pdf, $detail->NAMA_SISWA, 42), 1);
+    $pdf->Cell(12, 6.5, '', 1);
+    $pdf->Cell(12, 6.5, '', 1);
     $pdf->Ln();
 }
 $pdf->Ln(3);

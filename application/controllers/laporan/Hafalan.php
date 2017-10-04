@@ -24,6 +24,7 @@ class Hafalan extends CI_Controller {
             'tingkat_model' => 'tingkat',
             'departemen_model' => 'dept',
             'kelas_model' => 'kelas',
+            'jk_model' => 'jk',
         ));
         $this->load->library('chart_handler');
         $this->auth->validation(array(12, 5));
@@ -34,6 +35,7 @@ class Hafalan extends CI_Controller {
             'TA' => $this->ta->get_all(FALSE),
             'CAWU' => $this->cawu->get_all(FALSE),
             'DEPT' => $this->dept->get_all(FALSE),
+            'JK' => $this->jk->get_all(FALSE),
             'BULAN' => array(
                 '-- Pilih Bulan --',
                 'Januari',
@@ -61,14 +63,15 @@ class Hafalan extends CI_Controller {
         $ta = $this->input->post('ta');
         $tingkat = $this->input->post('tingkat');
         $jenjang = $this->input->post('jenjang');
+        $jk = $this->input->post('jk');
 
-        $jumlah_siswa = $this->hafalan->get_data('Jumlah Siswa', $ta, $tingkat, $jenjang);
-        $jumlah_siswa_setoran = $this->hafalan->get_data('Jumlah Siswa Setoran', $ta, $tingkat, $jenjang);
-        $jumlah_siswa_hafal = $this->hafalan->get_data('Jumlah Siswa Hafal', $ta, $tingkat, $jenjang);
-        $jumlah_siswa_tidak_hafal = $this->hafalan->get_data('Jumlah Siswa Tidak Hafal', $ta, $tingkat, $jenjang);
-        $jumlah_siswa_gugur = $this->hafalan->get_data('Jumlah Siswa Gugur', $ta, $tingkat, $jenjang);
-        $jumlah_siswa_keluar = $this->hafalan->get_data('Jumlah Siswa Keluar', $ta, $tingkat, $jenjang);
-        $nama_kelas = $this->hafalan->get_data('Nama Kelas', $ta, $tingkat, $jenjang);
+        $jumlah_siswa = $this->hafalan->get_data('Jumlah Siswa', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_setoran = $this->hafalan->get_data('Jumlah Siswa Setoran', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_hafal = $this->hafalan->get_data('Jumlah Siswa Hafal', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_tidak_hafal = $this->hafalan->get_data('Jumlah Siswa Tidak Hafal', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_gugur = $this->hafalan->get_data('Jumlah Siswa Gugur', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_keluar = $this->hafalan->get_data('Jumlah Siswa Keluar', $ta, $tingkat, $jenjang, $jk);
+        $nama_kelas = $this->hafalan->get_data('Nama Kelas', $ta, $tingkat, $jenjang, $jk);
         
         $data_source = array(
             $jumlah_siswa,
