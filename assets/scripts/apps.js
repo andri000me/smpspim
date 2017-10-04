@@ -7,6 +7,14 @@
 
 var option_datatables_yes_no = {'': 'Pilih Opsi', '1': 'YA', '0': 'TIDAK'};
 
+$(function () {
+    $('#side-menu').click(function() {
+        $("#menu").animate({
+            scrollTop: $("#menu").height()
+        }, 500);
+    });
+});
+
 function start_generate() {
 //    create_splash(" ");
     create_header_logo();
