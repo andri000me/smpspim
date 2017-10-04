@@ -10,13 +10,16 @@
  */
 
 $pdf = $this->fpdf;
+$f4 = $this->pengaturan->getUkuranF4();
+$width = $f4[0];
+$height = $f4[1] / 2;
 
 foreach ($SISWA as $DETAIL) {
     $DATA_SISWA = $DETAIL['DETAIL'];
     $DATA_KITAB = $DETAIL['KITAB'];
 
     $pdf->SetMargins(10, 6);
-    $pdf->AddPage("L", "A5");
+    $pdf->AddPage("L", array($width, $height));
     $pdf->SetAutoPageBreak(true, 0);
 
     $pdf->Image(base_url($this->pengaturan->getLogo()), 15, 6, 20, 20, '', '');
@@ -76,9 +79,9 @@ foreach ($SISWA as $DETAIL) {
     $pdf->MultiCell(0, 5, 'Setelah kami lakukan pembimbingan hafalan, maka bersama ini kami daftarkan siswa tersebut di atas untuk dilakukan penyemaan oleh penyemak P3H sebagaimana ketentuan yang berlaku:');
     $pdf->Ln(1);
 
-    for ($i = 0; $i <= 10; $i++) {
+    for ($i = 0; $i <= 12; $i++) {
         $pdf->Cell(10, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'No' : $i, 1, 0, 'C');
-        $pdf->Cell(32, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Nama Kitab' : '', 1, 0, 'C');
+        $pdf->Cell(37, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Nama Kitab' : '', 1, 0, 'C');
         $pdf->Cell(49, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Uraian' : '', 1, 0, 'C');
         $pdf->Cell(28, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Ttd Wali Kelas' : '', 1, 0, 'C');
         $pdf->Cell(33, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Keterangan' : '', 1, 0, 'C');
@@ -98,9 +101,11 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Ln();
 
     $pdf->SetLineWidth(0.50);
-    $pdf->Line(11, 27, 200, 27);
+    $pdf->Line(11, 27, 207, 27);
     $pdf->SetLineWidth(0.30);
-    $pdf->Line(11, 28, 200, 28);
+    $pdf->Line(11, 28, 207, 28);
+
+    break;
 }
 
 $pdf->Output();
