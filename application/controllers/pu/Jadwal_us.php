@@ -411,7 +411,7 @@ class Jadwal_us extends CI_Controller {
                                         'RUANG' => array(
                                             'ID' => $id_ruang,
                                             'NAMA' => $nama_ruang,
-                                            'NOMOR' => $no_urut,
+                                            'NOMOR' => $x + 1,
                                         )
                                     );
                                     $temp_data_siswa[$jumlah] = $id_siswa;
@@ -422,6 +422,10 @@ class Jadwal_us extends CI_Controller {
                             }
                         }
                     }
+                                    
+//                                    echo '<hr>$data_siswa<br>' . json_encode($data_siswa);
+//                                    
+//                                    exit();
 
 //                    $count_denah = count($data_denah['DENAH'][$ruang]);
 //                    
