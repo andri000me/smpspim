@@ -7,6 +7,7 @@ $columns = array(
     'ID',
     'TA',
     'CAWU',
+    'JK',
     'TANGGAL',
     'JAM MULAI',
     'JAM SELESAI',

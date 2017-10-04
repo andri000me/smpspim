@@ -47,6 +47,12 @@ $this->generate->generate_panel_content($title, $subtitle);
                         JADWAL UJIAN
                     </div>
                     <div class="panel-body">
+                        <?php
+                        $this->generate->input_dropdown('Jenis Kelamin', 'JK_PUJ', array(
+                            array('id' => 'L', 'text' => "BANIN", 'selected' => $mode_edit ? ($jadwal->JK_PUJ == 'L' ? TRUE : FALSE) : TRUE),
+                            array('id' => 'P', 'text' => "BANAT", 'selected' => $mode_edit ? ($jadwal->JK_PUJ == 'P' ? TRUE : FALSE) : FALSE),
+                                ), TRUE, 3);
+                        ?>
                         <?php $this->generate->input_date('Tanggal', array('name' => 'TANGGAL_PUJ', 'maxlength' => 100, 'value' => $mode_edit ? $this->date_format->to_view($jadwal->TANGGAL_PUJ) : ''), TRUE, 3); ?>
                         <?php $this->generate->input_time('Jam Mulai', array('name' => 'JAM_MULAI_PUJ', 'maxlength' => 100, 'value' => $mode_edit ? $jadwal->JAM_MULAI_PUJ : ''), TRUE, 2); ?>
                         <?php $this->generate->input_time('Jam Selesai', array('name' => 'JAM_SELESAI_PUJ', 'maxlength' => 100, 'value' => $mode_edit ? $jadwal->JAM_SELESAI_PUJ : ''), TRUE, 2); ?>
@@ -82,8 +88,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                     </div>
                                     <label class="col-sm-2 control-label">MATAPELAJARAN</label>
                                     <div class="col-sm-5">
-                                        <input class="form-control js-source-multi js-source-states-mapel required mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]) . '-' . $tingkat; ?>" data-dept="<?php echo $dept[$jenjang]; ?>" data-tingk="<?php echo $tingkat; ?>">
-                                        <span class="help-block m-b-none text-left">Wajib diisi</span>
+                                        <input class="form-control js-source-multi js-source-states-mapel mapel" name="MAPEL_PUM[]" style="width: 100%" multiple="multiple" id="mapel-<?php echo strtolower($dept[$jenjang]) . '-' . $tingkat; ?>" data-dept="<?php echo $dept[$jenjang]; ?>" data-tingk="<?php echo $tingkat; ?>">
                                     </div>
                                     <label class="col-sm-1 control-label">JENIS</label>
                                     <div class="col-sm-2">
@@ -104,7 +109,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row pengawas-lk">
             <div class="col-md-12">
                 <div class="hpanel hblue">
                     <div class="panel-heading hbuilt">
@@ -128,18 +133,18 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 </div>
                                 <label class="col-sm-1 control-label">PENGAWAS</label>
                                 <div class="col-sm-6">
-                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $index_ruang; ?>" data-jk="L" data-index="<?php echo $index_ruang; ?>">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $jadwal_lk['RUANG'][$index_ruang]['KODE_RUANG']; ?>" data-jk="L" data-index="<?php echo $jadwal_lk['RUANG'][$index_ruang]['KODE_RUANG']; ?>">
                                 </div>
                             </div>
                             <?php
-                            $id_pengawas_lk[] = 'pegawas-lk-' . $index_ruang;
+                            $id_pengawas_lk[] = 'pegawas-lk-' . $jadwal_lk['RUANG'][$index_ruang]['KODE_RUANG'];
                         }
                         ?>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row pengawas-pr">
             <div class="col-md-12">
                 <div class="hpanel hblue">
                     <div class="panel-heading hbuilt">
@@ -163,11 +168,11 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 </div>
                                 <label class="col-sm-1 control-label">PENGAWAS</label>
                                 <div class="col-sm-6">
-                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $index_ruang; ?>" data-jk="P" data-index="<?php echo $index_ruang; ?>">
+                                    <input class="form-control js-source-multi js-source-states-pengawas pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $jadwal_pr['RUANG'][$index_ruang]['KODE_RUANG']; ?>" data-jk="P" data-index="<?php echo $jadwal_pr['RUANG'][$index_ruang]['KODE_RUANG']; ?>">
                                 </div>
                             </div>
                             <?php
-                            $id_pengawas_pr[] = 'pegawas-pr-' . $index_ruang;
+                            $id_pengawas_pr[] = 'pegawas-pr-' . $jadwal_pr['RUANG'][$index_ruang]['KODE_RUANG'];
                         }
                         ?>
                     </div>
@@ -193,16 +198,16 @@ $this->generate->generate_panel_content($title, $subtitle);
 
         <script type="text/javascript">
             var pengawas = {
-                'L': {<?php 
-                foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {
-                    echo $index_ruang.':null,';
-                }
-                ?>},
-                'P': {<?php 
-                foreach ($jadwal_pr['DATA'] as $index_ruang => $data_ruang) {
-                    echo $index_ruang.':null,';
-                }
-                ?>},
+                'L': {<?php
+    foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {
+        echo $index_ruang . ':null,';
+    }
+    ?>},
+                'P': {<?php
+    foreach ($jadwal_pr['DATA'] as $index_ruang => $data_ruang) {
+        echo $index_ruang . ':null,';
+    }
+    ?>},
             };
     <?php
     if ($mode_view) {
@@ -214,6 +219,21 @@ $this->generate->generate_panel_content($title, $subtitle);
         <?php
     } else {
         ?>
+                $(function () {
+                    $(".pengawas-pr").hide();
+
+                    $("#JK_PUJ").change(function () {
+                        var jk = $(this).val();
+
+                        if (jk === 'L') {
+                            $(".pengawas-pr").slideUp();
+                            $(".pengawas-lk").slideDown();
+                        } else {
+                            $(".pengawas-lk").slideUp();
+                            $(".pengawas-pr").slideDown();
+                        }
+                    });
+                });
 
                 function action_save_<?php echo $name_function; ?>(id) {
                     var action = function (isConfirm) {
@@ -241,14 +261,14 @@ $this->generate->generate_panel_content($title, $subtitle);
                 function reaload_page() {
                     setTimeout(function () {
                         window.location.reload();
-        <?php // if (!$mode_edit) {                    ?>window.location.reload();<?php //}                    ?>
+        <?php // if (!$mode_edit) {                        ?>window.location.reload();<?php //}                        ?>
                     }, 1500);
                 }
 
                 $(".js-source-states-pengawas").each(function () {
-                var jk = $(this).data("jk");
-                var index = $(this).data("index");
-                
+                    var jk = $(this).data("jk");
+                    var index = $(this).data("index");
+
                     $(this).select2({
                         escapeMarkup: function (markup) {
                             return markup;
@@ -282,7 +302,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                         formatSelection: function (element) {
                             pengawas[jk][index] = element.id;
                             console.log('RESULT', pengawas);
-                            
+
                             return element.id + " - " + element.text;
                         },
                     });
@@ -329,26 +349,32 @@ $this->generate->generate_panel_content($title, $subtitle);
         <?php if ($mode_edit) { ?>
 
             <?php
-            foreach ($id_mapel as $key => $value) {
-                if (isset($mapel[$key]['MAPEL_PUM']) && isset($mapel[$key]['NAMA_MAPEL'])) {
-                    ?>
-                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $mapel[$key]['MAPEL_PUM']; ?>', text: "<?php echo $mapel[$key]['NAMA_MAPEL']; ?>"});
+            foreach ($id_mapel as $value) {
+                foreach ($mapel as $key => $detail) {
+                    if ($value == 'mapel-' . strtolower($detail['DEPT_TINGK']) . '-' . $detail['NAMA_TINGK']) {
+                        ?>
+                                $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $detail['MAPEL_PUM']; ?>', text: "<?php echo $detail['NAMA_MAPEL']; ?>"});
+                    <?php } ?>
                 <?php } ?>
             <?php } ?>
 
             <?php
-            foreach ($id_pengawas_lk as $key => $value) {
-                if (isset($pengawas_lk[$key]['PEGAWAI_PENG']) && isset($pengawas_lk[$key]['NAMA_PEG'])) {
-                    ?>
-                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_lk[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_lk[$key]['NAMA_PEG']; ?>"});
+            foreach ($id_pengawas_lk as $value) {
+                foreach ($pengawas_lk as $key => $detail) {
+                    if ($value == 'pegawas-lk-' . $detail['KODE_RUANG']) {
+                        ?>
+                                $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $detail['PEGAWAI_PENG']; ?>', text: "<?php echo $detail['NAMA_PEG']; ?>"});
+                    <?php } ?>
                 <?php } ?>
             <?php } ?>
 
             <?php
             foreach ($id_pengawas_pr as $key => $value) {
-                if (isset($pengawas_pr[$key]['PEGAWAI_PENG']) && isset($pengawas_pr[$key]['NAMA_PEG'])) {
-                    ?>
-                            $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $pengawas_pr[$key]['PEGAWAI_PENG']; ?>', text: "<?php echo $pengawas_pr[$key]['NAMA_PEG']; ?>"});
+                foreach ($pengawas_pr as $key => $detail) {
+                    if ($value == 'pegawas-pr-' . $detail['KODE_RUANG']) {
+                        ?>
+                                $('#<?php echo $value; ?>').select2('data', {id: '<?php echo $detail['PEGAWAI_PENG']; ?>', text: "<?php echo $detail['NAMA_PEG']; ?>"});
+                    <?php } ?>
                 <?php } ?>
             <?php } ?>
 

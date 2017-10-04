@@ -57,6 +57,7 @@ class Jadwal_us extends CI_Controller {
             $row[] = $item->ID_PUJ;
             $row[] = $item->NAMA_TA;
             $row[] = $item->NAMA_CAWU;
+            $row[] = $item->JK_PUJ;
             $row[] = $item->TANGGAL_PUJ;
             $row[] = $item->JAM_MULAI_PUJ;
             $row[] = $item->JAM_SELESAI_PUJ;
@@ -155,14 +156,16 @@ class Jadwal_us extends CI_Controller {
         $this->pengawas->delete_by_jadwal($insert);
 
         foreach ($data['DEPT_TINGK'] as $key => $value) {
-            $data_save = array(
-                'JADWAL_PUM' => $insert,
-                'TINGKAT_PUM' => $this->tingkat->get_id($data['DEPT_TINGK'][$key], $data['NAMA_TINGK'][$key]),
-                'MAPEL_PUM' => $data['MAPEL_PUM'][$key],
-                'JENIS_PUM' => $data['JENIS_PUM'][$key],
-            );
+            if (isset($data['MAPEL_PUM'][$key]) && (($data['MAPEL_PUM'][$key] != NULL) || ($data['MAPEL_PUM'][$key] != ''))) {
+                $data_save = array(
+                    'JADWAL_PUM' => $insert,
+                    'TINGKAT_PUM' => $this->tingkat->get_id($data['DEPT_TINGK'][$key], $data['NAMA_TINGK'][$key]),
+                    'MAPEL_PUM' => $data['MAPEL_PUM'][$key],
+                    'JENIS_PUM' => $data['JENIS_PUM'][$key],
+                );
 
-            $this->mapel->save($data_save);
+                $this->mapel->save($data_save);
+            }
         }
 
         foreach ($data['RUANGAN_PENG_LK'] as $key => $value) {
@@ -217,8 +220,7 @@ class Jadwal_us extends CI_Controller {
         $data = $this->input->post();
 //        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
 //        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
-
-        $this->cek_jam_bentrok($data);
+//        $this->cek_jam_bentrok($data);
         if ($data['JAM_MULAI_PUJ'] == $data['JAM_SELESAI_PUJ'])
             $this->generate->output_JSON(array("status" => FALSE, 'msg' => 'Jam mulai dan jam selesai tidak boleh sama.'));
 
@@ -226,6 +228,7 @@ class Jadwal_us extends CI_Controller {
             'TA_PUJ' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUJ' => $this->session->userdata('ID_CAWU_ACTIVE'),
             'TIPE_PUJ' => $this->tipe,
+            'JK_PUJ' => $data['JK_PUJ'],
             'TANGGAL_PUJ' => $this->date_format->to_store_db($data['TANGGAL_PUJ']),
             'JAM_MULAI_PUJ' => $data['JAM_MULAI_PUJ'],
             'JAM_SELESAI_PUJ' => $data['JAM_SELESAI_PUJ'],
@@ -248,8 +251,7 @@ class Jadwal_us extends CI_Controller {
         $data = $this->input->post();
 //        $this->cek_pengawas($data['PEGAWAI_PENG_LK'], 'lk');
 //        $this->cek_pengawas($data['PEGAWAI_PENG_PR'], 'pr');
-
-        $this->cek_jam_bentrok($data, TRUE);
+//        $this->cek_jam_bentrok($data, TRUE);
         if ($data['JAM_MULAI_PUJ'] == $data['JAM_SELESAI_PUJ'])
             $this->generate->output_JSON(array("status" => FALSE, 'msg' => 'Jam mulai dan jam selesai tidak boleh sama.'));
 
@@ -257,6 +259,7 @@ class Jadwal_us extends CI_Controller {
             'TANGGAL_PUJ' => $this->date_format->to_store_db($data['TANGGAL_PUJ']),
             'JAM_MULAI_PUJ' => $data['JAM_MULAI_PUJ'],
             'JAM_SELESAI_PUJ' => $data['JAM_SELESAI_PUJ'],
+            'JK_PUJ' => $data['JK_PUJ'],
         );
         $where_jadwal = array(
             'ID_PUJ' => $data['ID_PUJ']
@@ -447,7 +450,7 @@ class Jadwal_us extends CI_Controller {
                 'DENAH' => $data_siswa[$detail_siswa['ID_SISWA']]
             );
         }
-        
+
         $data['siswa'] = $data_siswa_final;
 
         $this->load->view('backend/pu/jadwal_us/cetak_kertu_siswa', $data);

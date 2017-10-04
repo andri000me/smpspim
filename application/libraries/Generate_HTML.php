@@ -510,7 +510,7 @@ class Generate_HTML {
         if (is_array($data)) {
             foreach ($data as $value) {
                 $html .= '<option value="'.$value['id'].'" ';
-                if (isset($value['selected'])) $html .= ' selected ';
+                if (isset($value['selected']) && $value['selected']) $html .= ' selected ';
                 $html .= '>'.$value['text'].'</option>';
             }
         }
