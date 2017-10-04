@@ -24,10 +24,10 @@ $alasan = array(
 for ($i = 0; $i < 2; $i++) {
     $pdf->SetLeftMargin(15);
     $pdf->SetRightMargin(15);
-    $pdf->AddPage("P", "A4");
+    $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
     $pdf->SetAutoPageBreak(true, 0);
 
-    $pdf = $this->cetak->header_yayasan($pdf);
+    $pdf = $this->cetak->header_yayasan($pdf, 0, 'f4');
 
     $pdf->Ln(7);
     $pdf->SetFont('Arial', 'B', 14);
@@ -42,6 +42,11 @@ for ($i = 0; $i < 2; $i++) {
     $pdf->Ln(10);
 
     $pdf->MultiCell(0, 5, 'Direktur Perguruan Islam Mathali\'ul Falah Kajen Margoyoso Pati, menerangkan dengan sesungguhnya bahwa :');
+    $pdf->Ln();
+
+    $pdf->Cell(20);
+    $pdf->Cell(20, 5, 'NIS');
+    $pdf->Cell(0, 5, ': ' . $siswa->NIS_NIS);
     $pdf->Ln();
 
     $pdf->Cell(20);
