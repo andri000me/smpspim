@@ -21,6 +21,7 @@ class Nilai extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(array(
+            'kelas_model' => 'kelas',
             'nilai_hafalan_model' => 'nilai',
             'nilai_hafalan_kelas_model' => 'nilai_hafalan',
             'batasan_kitab_model' => 'batasan_kitab',
@@ -115,39 +116,38 @@ class Nilai extends CI_Controller {
             'ID_KELAS' => $ID_KELAS
         );
         $data_kitab = $this->batasan_kitab->get_rows_kelas($where);
-        $list = $this->nilai_hafalan->get_datatables($ID_KELAS);
+        $list = $this->nilai_hafalan->get_data_cetak($ID_KELAS);
+        $kelas = $this->kelas->get_by_id($ID_KELAS);
         $data = array();
-        $no = $_POST['start'];
         foreach ($list as $item) {
-            $no++;
             $row = array();
             $jumlah_lari = $this->pelanggaran_header->get_total_lari_siswa($this->session->userdata('ID_TA_ACTIVE'), $item->ID_SISWA);
 
-            $row[] = $item->NO_ABSEN_AS;
-            $row[] = $item->NIS_SISWA;
-            $row[] = $item->NAMA_SISWA;
-            $row[] = $jumlah_lari;
+            $row['NO_ABSEN_AS'] = $item->NO_ABSEN_AS;
+            $row['NIS_SISWA'] = $item->NIS_SISWA;
+            $row['NAMA_SISWA'] = $item->NAMA_SISWA;
+            $row['LARI'] = $jumlah_lari;
 
-            $id_batasan = array();
-            $id_kitab = array();
-            $nilai_maks = array();
             foreach ($data_kitab as $detail_kitab) {
                 $data_nilai = $this->nilai_hafalan->get_nilai_siswa($item->TA_AS, $item->ID_SISWA, $detail_kitab->ID_BATASAN);
 
-                $id_batasan[] = intval($detail_kitab->ID_BATASAN);
-                $id_kitab[] = intval($detail_kitab->ID_KITAB);
-                $nilai_maks[] = intval($detail_kitab->NILAI_MAKS_BATASAN);
+                $row[$detail_kitab->ID_KITAB] = $data_nilai == NULL ? '' : $data_nilai->NILAI_PHN;
             }
 
-            $row[] = $item->NILAI_PNH;
-            $row[] = $item->STATUS_PNH;
+            $row['NILAI_PNH'] = $item->NILAI_PNH;
+            $row['STATUS_PNH'] = $item->STATUS_PNH;
 
             $data[] = $row;
         }
-        
+
         $output = array(
-            'data' => $data,
-            'kitab' => $data_kitab
+            'data' => array(
+                'data' => array(
+                    'siswa' => $data,
+                    'kitab' => $data_kitab,
+                    'kelas' => $kelas
+                )
+            )
         );
 
         $this->load->view('backend/ph/nilai/cetak_nilai', $output);

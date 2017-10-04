@@ -197,7 +197,7 @@ $this->generate->generate_panel_content($title, $subtitle);
         <?php } ?>
 
         <script type="text/javascript">
-            var form_jk = 'L';
+            var form_jk = '<?php echo $mode_edit ? $jadwal->JK_PUJ : 'L'; ?>';
             var pengawas = {
                 'L': {<?php
     foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {

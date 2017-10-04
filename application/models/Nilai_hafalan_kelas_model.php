@@ -75,6 +75,13 @@ class Nilai_hafalan_kelas_model extends CI_Model {
         }
     }
 
+    function get_data_cetak($ID_KELAS) {
+        $this->_get_table($ID_KELAS);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    
     function get_datatables($ID_KELAS) {
         $this->_get_datatables_query($ID_KELAS);
         if ($_POST['length'] != -1)

@@ -172,7 +172,7 @@ foreach ($data as $detail) {
     $pdf->SetXY($posisi_x_foto + $lebar_foto + 20, $atas + 10);
     $pdf->Cell(0, 5, $SISWA->NIS_SISWA);
     $pdf->SetXY($posisi_x_foto + $lebar_foto + 20, $atas + 25);
-    $pdf->MultiCell(0, 5, strtoupper($SISWA->NAMA_SISWA));
+    $pdf->MultiCell(0, 8, strtoupper($SISWA->NAMA_SISWA));
     
     $pdf->SetY(285);
     $pdf->SetFont('Arial', 'I', 10);
