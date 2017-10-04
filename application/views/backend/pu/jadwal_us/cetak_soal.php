@@ -68,7 +68,7 @@
                             <?php
                             foreach ($data_denah['DENAH'] as $ruang => $value) {
                                 ?>
-                                <div class="col-md-4" style="cursor: pointer">
+                                <div class="col-md-2" style="cursor: pointer">
                                     <div class="hpanel <?php echo ($jk == 'L' ? 'hbgnavyblue' : 'hbgviolet'); ?>">
                                         <div class="panel-body text-center" onclick="cetak(this);"> 
                                             <?php
@@ -76,14 +76,16 @@
 
                                             foreach ($data_denah["JENJANG"] as $index => $jenjang) {
                                                 $tingkat = $data_denah["TINGKAT"][$index];
-                                                $relasi = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $tingkat);
-                                                if($relasi != NULL) $data_relasi[$index] = $relasi;
+                                                $data_relasi[$index] = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $tingkat);
                                             }
 
+                                            $data_cetak[$jk . $ruang] = array();
                                             foreach ($value as $tingkat) {
-                                                $data_cetak[$jk . $ruang][] = $data_relasi[$tingkat]->ID_MAPEL . '.pdf';
-                                                $nama_mapel[$jk . $ruang][] = $data_relasi[$tingkat]->NAMA_MAPEL;
-                                                $nama_tingkat[$jk . $ruang][] = $data_relasi[$tingkat]->DEPT_MAPEL . '-' . $data_relasi[$tingkat]->NAMA_TINGK;
+                                                if($data_relasi[$tingkat] != NULL) {
+                                                    $data_cetak[$jk . $ruang][] = $data_relasi[$tingkat]->ID_MAPEL . '.pdf';
+                                                    $nama_mapel[$jk . $ruang][] = $data_relasi[$tingkat]->NAMA_MAPEL;
+                                                    $nama_tingkat[$jk . $ruang][] = $data_relasi[$tingkat]->DEPT_MAPEL . '-' . $data_relasi[$tingkat]->NAMA_TINGK;
+                                                }
                                             }
 
                                             echo '<input type="hidden" class="data-cetak" value="', $jk . $ruang . '" />';

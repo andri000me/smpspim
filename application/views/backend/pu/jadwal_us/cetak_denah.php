@@ -78,7 +78,7 @@ foreach ($data as $detail) {
                     $pdf->Ln();
 
                     if ($i == ($jumlah_peruang - 1))
-                        $start = $temp_i;
+                        $start = $temp_i + 1;
                     else
                         $start = $i + 1 - $jumlah_perbaris;
                     
