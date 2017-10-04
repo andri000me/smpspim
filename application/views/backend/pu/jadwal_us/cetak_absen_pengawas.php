@@ -23,10 +23,14 @@ foreach ($data as $jk => $detail) {
     $detail_denah = $data_denah[$jk]['DENAH'];
     $detail_ruang = $data_denah[$jk]['RUANG'];
 
+    if ($jadwal->JK_PUJ != $jk)
+        continue;
+    
     if ($jk == 'L')
         $jk = 'BANIN';
     else
         $jk = 'BANAT';
+
 
     $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
 

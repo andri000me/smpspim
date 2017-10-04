@@ -197,6 +197,7 @@ $this->generate->generate_panel_content($title, $subtitle);
         <?php } ?>
 
         <script type="text/javascript">
+            var form_jk = 'L';
             var pengawas = {
                 'L': {<?php
     foreach ($jadwal_lk['DATA'] as $index_ruang => $data_ruang) {
@@ -223,9 +224,9 @@ $this->generate->generate_panel_content($title, $subtitle);
                     $(".pengawas-pr").hide();
 
                     $("#JK_PUJ").change(function () {
-                        var jk = $(this).val();
+                        form_jk = $(this).val();
 
-                        if (jk === 'L') {
+                        if (form_jk === 'L') {
                             $(".pengawas-pr").slideUp();
                             $(".pengawas-lk").slideDown();
                         } else {
@@ -325,6 +326,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                     q: term,
                                     dept: dept,
                                     tingk: tingk,
+                                    jk: form_jk,
                                 }
                             },
                             results: function (data) {

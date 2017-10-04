@@ -29,6 +29,9 @@ foreach ($data as $detail) {
     $denah = json_decode($detail['DENAH'], TRUE);
 
     foreach ($denah as $jk => $data_denah) {
+        if ($detail['JK_PUJ'] != $jk)
+            continue;
+
         if ($jk == 'L')
             $nama_jk = 'BANIN';
         else

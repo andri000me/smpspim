@@ -23,12 +23,15 @@ $pdf = $this->fpdf;
 foreach ($data as $detail) {
     $tanggal = $detail['TANGGAL'];
     $denah = json_decode($detail['DENAH'], TRUE);
-    
+
     foreach ($denah as $jk => $data_denah) {
         if ($jk == 'L')
             $jk_text = 'BANIN';
         else
             $jk_text = 'BANAT';
+        
+        if($jk != $detail['JK_PUJ'])
+            continue;
 
         $jumlah_peruang = $data_denah['JUMLAH_PERUANG'];
         $jumlah_perbaris = $data_denah['JUMLAH_PERBARIS'];
@@ -36,7 +39,7 @@ foreach ($data as $detail) {
         foreach ($data_denah['JENJANG'] as $dept) {
             $data_denah['KODE_JENJANG'][] = $CI->departemen->get_id_by_jenjang($dept);
         }
-        
+
         foreach ($data_denah['DENAH'] as $ruang => $value) {
 
             $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
@@ -119,9 +122,15 @@ foreach ($data as $detail) {
             $pdf->SetFont('Arial', 'B', $size_font + 1);
             foreach ($data_denah["JENJANG"] as $index => $jenjang) {
                 $data_relasi = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $data_denah["TINGKAT"][$index]);
-                $pdf->Cell(35, 7, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
-                $pdf->Cell(110, 7, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
-                $pdf->Cell(45, 7, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                if ($data_relasi == NULL) {
+                    $pdf->Cell(35, 7, $data_denah["KODE_JENJANG"][$index] . ' KELAS ' . $data_denah["TINGKAT"][$index], 1, 0, 'L');
+                    $pdf->Cell(110, 7, 'MAPEL: -', 1, 0, 'L');
+                    $pdf->Cell(45, 7, 'JUMLAH: - ORANG', 1, 0, 'L');
+                } else {
+                    $pdf->Cell(35, 7, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
+                    $pdf->Cell(110, 7, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
+                    $pdf->Cell(45, 7, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                }
                 $pdf->Ln();
             }
         }

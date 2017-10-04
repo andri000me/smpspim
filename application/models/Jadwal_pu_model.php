@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -11,8 +12,8 @@ class Jadwal_pu_model extends CI_Model {
 
     var $table = 'pu_jadwal';
     var $column = array(
-        'UM' => array('ID_PUJ', 'NAMA_TA','TANGGAL_PUJ','JAM_MULAI_PUJ','JAM_SELESAI_PUJ','ID_PUJ'),
-        'US' => array('ID_PUJ', 'NAMA_TA','NAMA_CAWU','JK_PUJ','TANGGAL_PUJ','JAM_MULAI_PUJ','JAM_SELESAI_PUJ','ID_PUJ')
+        'UM' => array('ID_PUJ', 'NAMA_TA', 'TANGGAL_PUJ', 'JAM_MULAI_PUJ', 'JAM_SELESAI_PUJ', 'ID_PUJ'),
+        'US' => array('ID_PUJ', 'NAMA_TA', 'NAMA_CAWU', 'JK_PUJ', 'TANGGAL_PUJ', 'JAM_MULAI_PUJ', 'JAM_SELESAI_PUJ', 'ID_PUJ')
     );
     var $primary_key = "ID_PUJ";
     var $order = array("ID_PUJ" => 'ASC');
@@ -23,9 +24,9 @@ class Jadwal_pu_model extends CI_Model {
 
     private function _get_table($tipe) {
         $this->db->from($this->table);
-        $this->db->join('md_tahun_ajaran ta',$this->table.'.TA_PUJ=ta.ID_TA');
-        $this->db->join('md_catur_wulan cw',$this->table.'.CAWU_PUJ=cw.ID_CAWU', 'LEFT');
-        $this->db->where('TIPE_PUJ',$tipe);
+        $this->db->join('md_tahun_ajaran ta', $this->table . '.TA_PUJ=ta.ID_TA');
+        $this->db->join('md_catur_wulan cw', $this->table . '.CAWU_PUJ=cw.ID_CAWU', 'LEFT');
+        $this->db->where('TIPE_PUJ', $tipe);
     }
 
     private function _get_datatables_query($tipe) {
@@ -95,21 +96,28 @@ class Jadwal_pu_model extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function get_by_tanggal($tipe, $tanggal) {
+    public function get_by_tanggal($tipe, $tanggal, $jk = NULL) {
         $this->_get_table($tipe);
         $this->db->where('TANGGAL_PUJ', $this->date_format->to_store_db($tanggal));
+        if ($jk != NULL)
+            $this->db->where('JK_PUJ', $jk);
 
         return $this->db->get()->result_array();
     }
 
     public function get_all_group_tanggal($tipe) {
         $this->_get_table($tipe);
-        $this->db->where('TA_PUJ', $this->session->userdata('ID_PSB_ACTIVE'));
+        if ($tipe == 'UM') {
+            $this->db->where('TA_PUJ', $this->session->userdata('ID_PSB_ACTIVE'));
+        } elseif ($tipe == 'US') {
+            $this->db->where('TA_PUJ', $this->session->userdata('ID_TA_ACTIVE'));
+            $this->db->where('CAWU_PUJ', $this->session->userdata('ID_CAWU_ACTIVE'));
+        }
         $this->db->group_by('TANGGAL_PUJ');
 
         return $this->db->get()->result_array();
     }
-    
+
     public function get_jadwal_um() {
         $this->db->from($this->table);
         $this->db->where('TA_PUJ', $this->session->userdata('ID_PSB_ACTIVE'));
@@ -119,7 +127,7 @@ class Jadwal_pu_model extends CI_Model {
 
     public function count_all($tipe) {
         $this->db->from($this->table);
-        $this->db->where('TIPE_PUJ',$tipe);
+        $this->db->where('TIPE_PUJ', $tipe);
 
         return $this->db->count_all_results();
     }
@@ -132,20 +140,20 @@ class Jadwal_pu_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function get_mapel_by_tingkat($tipe, $tingkat) {
         $this->db->from($this->table);
-        $this->db->join('pu_mapel pm', $this->table.'.ID_PUJ=pm.JADWAL_PUM');
+        $this->db->join('pu_mapel pm', $this->table . '.ID_PUJ=pm.JADWAL_PUM');
         $this->db->join('md_mapel mm', 'mm.ID_MAPEL=pm.MAPEL_PUM');
         $this->db->where(array(
             'TINGKAT_PUM' => $tingkat,
@@ -153,10 +161,10 @@ class Jadwal_pu_model extends CI_Model {
             'CAWU_PUJ' => ($tipe == 'UM') ? NULL : NULL,
             'TA_PUJ' => ($tipe == 'UM') ? $this->session->userdata("ID_PSB_ACTIVE") : $this->session->userdata("ID_TA_ACTIVE"),
         ));
-        
+
         return $this->db->get()->result_array();
     }
-    
+
     public function relasi_jenjang_departemen($jadwal, $jenjang, $tingkat) {
         $this->db->from('md_jenjang_departemen mjd');
         $this->db->join('md_jenjang_sekolah mjs', 'mjs.ID_JS=mjd.JENJANG_MJD');
@@ -168,10 +176,10 @@ class Jadwal_pu_model extends CI_Model {
             'ID_JS' => $jenjang,
             'JADWAL_PUM' => $jadwal,
         ));
-        
+
         return $this->db->get()->row();
     }
-    
+
     public function get_tanggal_aktif($tipe) {
         $this->_get_table($tipe);
         $this->db->where(array(
@@ -181,9 +189,9 @@ class Jadwal_pu_model extends CI_Model {
         ));
         $this->db->group_by('TANGGAL_PUJ');
         $this->db->limit(1);
-        
+
         $result = $this->db->get()->row();
-        
+
         return $result->TANGGAL_PUJ;
     }
 

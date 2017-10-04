@@ -64,19 +64,25 @@ foreach ($data as $detail) {
             $pdf->SetFont('Arial', 'B', $size_font);
             $pdf->Cell(0, 5, 'TAHUN AJARAN ' . $this->session->userdata('NAMA_TA_ACTIVE') . ' CAWU ' . $this->session->userdata('ID_CAWU_ACTIVE'), 0, 0, 'L');
             $pdf->Ln(10);
-            
+
             $posisi_y = 0;
+            $temp_i = 0;
             for ($i = 0; $i < $jumlah_peruang; $i++) {
                 $pdf->Cell(5);
-                $pdf->SetFont('Arial', '', $size_font+10);
+                $pdf->SetFont('Arial', '', $size_font + 10);
                 $pdf->Cell($width_box, 18, $i + 1, 'RLT', 0, 'C');
-                $pdf->SetFont('Arial', 'B', $size_font+5);
+                $pdf->SetFont('Arial', 'B', $size_font + 5);
 
                 $posisi_x = 0;
-                if ((($i + 1) % $jumlah_perbaris) == 0) {
+                if (((($i + 1) % $jumlah_perbaris) == 0) || ($i == ($jumlah_peruang - 1))) {
                     $pdf->Ln();
 
-                    for ($x = ($i + 1 - $jumlah_perbaris); $x <= $i; $x++) {
+                    if ($i == ($jumlah_peruang - 1))
+                        $start = $temp_i;
+                    else
+                        $start = $i + 1 - $jumlah_perbaris;
+                    
+                    for ($x = $start; $x <= $i; $x++) {
                         if (isset($data_denah['DENAH'][$ruang][$x])) {
                             $id_tingkat = $data_denah['DENAH'][$ruang][$x];
 
@@ -87,19 +93,19 @@ foreach ($data as $detail) {
                             $pdf->Cell($width_box, 10, '-', 'RLB', 0, 'C');
                         }
                     }
+                    
+                    $temp_i = $i;
 
                     $pdf->Ln(16);
                 }
             }
-            
+
             $pdf->SetXY(200, 10);
 
-                $pdf->SetFont('Arial', 'B', $size_font+10);
+            $pdf->SetFont('Arial', 'B', $size_font + 10);
             $pdf->Cell(0, 15, 'RUANG ' . $data_denah["RUANG"][$ruang]['KODE_RUANG'], 1, 0, 'C');
         }
     }
-    
-    break;
 }
 
 $pdf->Output();

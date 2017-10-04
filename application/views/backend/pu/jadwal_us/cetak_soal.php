@@ -52,8 +52,10 @@
         $nama_tingkat = array();
         $denah = json_decode($DENAH, TRUE);
         foreach ($denah as $jk => $data_denah) {
+            if($jk != $JK_PUJ)
+                continue;
             ?>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="hpanel hgreen">
                     <div class="panel-heading hbuilt">
                         <div class="panel-tools">
@@ -74,7 +76,8 @@
 
                                             foreach ($data_denah["JENJANG"] as $index => $jenjang) {
                                                 $tingkat = $data_denah["TINGKAT"][$index];
-                                                $data_relasi[$index] = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $tingkat);
+                                                $relasi = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $tingkat);
+                                                if($relasi != NULL) $data_relasi[$index] = $relasi;
                                             }
 
                                             foreach ($value as $tingkat) {

@@ -8,7 +8,7 @@
   $this->CoreFonts = array('courier', 'helvetica', 'times', 'symbol', 'zapfdingbats');
  * 
  */
-$size_font = 8;
+$size_font = 10;
 
 $pdf = $this->fpdf;
 
@@ -37,7 +37,18 @@ $x = 1;
 $temp_mapel = NULL;
 $temp_tingkat = NULL;
 $temp_tanggal = NULL;
+$jk = NULL;
 foreach ($data as $value) {
+    if($jk != $value['JK_PUJ']) {
+        $pdf->SetFont('Arial', 'B', $size_font);
+        $pdf->Cell(188, 6, $value['JK_PUJ'] == 'L' ? 'BANIN' : 'BANAT', 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', '', $size_font);
+        
+        $jk = $value['JK_PUJ'];
+        $x = 1;
+    }
+    
     $pdf->Cell(10, 6, $x++, 1, 0, 'C');
     $pdf->Cell(30, 6, ($temp_tingkat == $value['TINGKAT_PUM']) ? '' : $value['DEPT_TINGK'].' KELAS: '.$value['NAMA_TINGK'], ($temp_tingkat == $value['TINGKAT_PUM']) ? 'RL' : 'RLT', 0, 'C');
     $pdf->Cell(30, 6, ($temp_tanggal == $value['TANGGAL_PUJ']) ? (($temp_tingkat == $value['TINGKAT_PUM']) ? '' : $this->date_format->to_print($value['TANGGAL_PUJ'])) : $this->date_format->to_print($value['TANGGAL_PUJ']), ($temp_tanggal == $value['TANGGAL_PUJ']) ? (($temp_tingkat == $value['TINGKAT_PUM']) ? 'RL' : 'RLT') : 'RLT', 0, 'C');

@@ -287,14 +287,26 @@ class Jadwal_us extends CI_Controller {
 
         $this->load->view('backend/pu/jadwal_us/cetak_jadwal', $data);
     }
+    
+    private function cek_denah_siswa() {
+        $data_jadwal = $this->jadwal->get_all_group_tanggal($this->tipe);
+        
+        foreach ($data_jadwal as $index => $detail) {
+            $this->generate_denah_siswa($detail['TANGGAL_PUJ']);
+        }
+    }
 
     public function cetak_denah($id) {
         $data_jadwal = $this->jadwal->get_all_group_tanggal($this->tipe);
         $data['ketua'] = $this->pengaturan->getDataKetuaPU();
 
+        $this->cek_denah_siswa();
+        
         foreach ($data_jadwal as $index => $detail) {
             $data['data'][$index]['TANGGAL'] = $detail['TANGGAL_PUJ'];
             $data['data'][$index]['DENAH'] = $this->denah->get_denah_by_tanggal($detail['TANGGAL_PUJ']);
+            
+            break;
         }
 
         $this->load->view('backend/pu/jadwal_us/cetak_denah', $data);
@@ -303,8 +315,10 @@ class Jadwal_us extends CI_Controller {
     public function cetak_absen_pengawas($id) {
         $jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['jadwal'] = $jadwal;
-        $data['data']['L'] = $this->pengawas->get_by_jadwal_lk($id);
-        $data['data']['P'] = $this->pengawas->get_by_jadwal_pr($id);
+        if ($jadwal->JK_PUJ == 'L')
+            $data['data']['L'] = $this->pengawas->get_by_jadwal_lk($id);
+        else
+            $data['data']['P'] = $this->pengawas->get_by_jadwal_pr($id);
         $data['denah'] = $this->denah->get_denah_by_tanggal($jadwal->TANGGAL_PUJ);
         $data['ketua'] = $this->pengaturan->getDataKetuaPU();
 
@@ -315,7 +329,8 @@ class Jadwal_us extends CI_Controller {
         $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['ID'] = $id;
         $data['data'][0]['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
-        $data['data'][0]['DATA'] = $this->jadwal->get_by_tanggal($this->tipe, $data_jadwal->TANGGAL_PUJ);
+        $data['data'][0]['JK_PUJ'] = $data_jadwal->JK_PUJ;
+        $data['data'][0]['DATA'] = $this->jadwal->get_by_tanggal($this->tipe, $data_jadwal->TANGGAL_PUJ, $data_jadwal->JK_PUJ);
         $data['data'][0]['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
 
         $this->load->view('backend/pu/jadwal_us/cetak_absen_peserta', $data);
@@ -334,6 +349,8 @@ class Jadwal_us extends CI_Controller {
     }
 
     public function cetak_kertu_siswa($id) {
+        $this->cek_denah_siswa();
+        
         $where = array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
@@ -460,6 +477,7 @@ class Jadwal_us extends CI_Controller {
         $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['ID'] = $id;
         $data['data'][0]['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
+        $data['data'][0]['JK_PUJ'] = $data_jadwal->JK_PUJ;
         $data['data'][0]['JAM_MULAI'] = $data_jadwal->JAM_MULAI_PUJ;
         $data['data'][0]['JAM_SELESAI'] = $data_jadwal->JAM_SELESAI_PUJ;
         $data['data'][0]['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
@@ -471,6 +489,7 @@ class Jadwal_us extends CI_Controller {
         $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['ID'] = $id;
         $data['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
+        $data['JK_PUJ'] = $data_jadwal->JK_PUJ;
         $data['JAM_MULAI'] = $data_jadwal->JAM_MULAI_PUJ;
         $data['JAM_SELESAI'] = $data_jadwal->JAM_SELESAI_PUJ;
         $data['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
@@ -499,7 +518,7 @@ class Jadwal_us extends CI_Controller {
     public function get_mapel() {
         $this->generate->set_header_JSON();
 
-        $data = $this->mapel->get_mapel_us($this->input->post('q'), $this->input->post('dept'), $this->input->post('tingk'));
+        $data = $this->mapel->get_mapel_us($this->input->post('q'), $this->input->post('dept'), $this->input->post('tingk'), $this->input->post('jk'));
 
         $this->generate->output_JSON($data);
     }
