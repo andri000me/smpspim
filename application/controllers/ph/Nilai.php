@@ -110,6 +110,49 @@ class Nilai extends CI_Controller {
         $this->generate->output_JSON($output);
     }
 
+    public function cetak_kelas($ID_KELAS) {
+        $where = array(
+            'ID_KELAS' => $ID_KELAS
+        );
+        $data_kitab = $this->batasan_kitab->get_rows_kelas($where);
+        $list = $this->nilai_hafalan->get_datatables($ID_KELAS);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $jumlah_lari = $this->pelanggaran_header->get_total_lari_siswa($this->session->userdata('ID_TA_ACTIVE'), $item->ID_SISWA);
+
+            $row[] = $item->NO_ABSEN_AS;
+            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NAMA_SISWA;
+            $row[] = $jumlah_lari;
+
+            $id_batasan = array();
+            $id_kitab = array();
+            $nilai_maks = array();
+            foreach ($data_kitab as $detail_kitab) {
+                $data_nilai = $this->nilai_hafalan->get_nilai_siswa($item->TA_AS, $item->ID_SISWA, $detail_kitab->ID_BATASAN);
+
+                $id_batasan[] = intval($detail_kitab->ID_BATASAN);
+                $id_kitab[] = intval($detail_kitab->ID_KITAB);
+                $nilai_maks[] = intval($detail_kitab->NILAI_MAKS_BATASAN);
+            }
+
+            $row[] = $item->NILAI_PNH;
+            $row[] = $item->STATUS_PNH;
+
+            $data[] = $row;
+        }
+        
+        $output = array(
+            'data' => $data,
+            'kitab' => $data_kitab
+        );
+
+        $this->load->view('backend/ph/nilai/cetak_nilai', $output);
+    }
+
     public function form($ID = NULL) {
         $data = array();
 

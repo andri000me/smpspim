@@ -52,7 +52,7 @@
         $nama_tingkat = array();
         $denah = json_decode($DENAH, TRUE);
         foreach ($denah as $jk => $data_denah) {
-            if($jk != $JK_PUJ)
+            if ($jk != $JK_PUJ)
                 continue;
             ?>
             <div class="col-md-12">
@@ -68,7 +68,7 @@
                             <?php
                             foreach ($data_denah['DENAH'] as $ruang => $value) {
                                 ?>
-                                <div class="col-md-2" style="cursor: pointer">
+                                <div class="col-md-2 <?php echo $jk . $ruang; ?>" style="cursor: pointer">
                                     <div class="hpanel <?php echo ($jk == 'L' ? 'hbgnavyblue' : 'hbgviolet'); ?>">
                                         <div class="panel-body text-center" onclick="cetak(this);"> 
                                             <?php
@@ -79,13 +79,20 @@
                                                 $data_relasi[$index] = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $tingkat);
                                             }
 
-                                            $data_cetak[$jk . $ruang] = array();
                                             foreach ($value as $tingkat) {
-                                                if($data_relasi[$tingkat] != NULL) {
+                                                if ($data_relasi[$tingkat] != NULL) {
                                                     $data_cetak[$jk . $ruang][] = $data_relasi[$tingkat]->ID_MAPEL . '.pdf';
                                                     $nama_mapel[$jk . $ruang][] = $data_relasi[$tingkat]->NAMA_MAPEL;
                                                     $nama_tingkat[$jk . $ruang][] = $data_relasi[$tingkat]->DEPT_MAPEL . '-' . $data_relasi[$tingkat]->NAMA_TINGK;
                                                 }
+                                            }
+
+                                            if (!isset($data_cetak[$jk . $ruang])) {
+                                                ?>
+                                                <script type="text/javascript">
+                                                    $(".<?php echo $jk . $ruang; ?>").hide();
+                                                </script>
+                                                <?php
                                             }
 
                                             echo '<input type="hidden" class="data-cetak" value="', $jk . $ruang . '" />';
@@ -157,13 +164,13 @@
         //        console.log(lokasiFolderSoal);
 
 //        if (OSName == "Windows") {
-            window.open('<?php echo site_url('pu/jadwal_us/get_file_bat'); ?>?exe=' + lokasiAdobeReader + '&folder=' + lokasiFolderSoal + '&file=' + dataCetak[id] + '&title=' + title);
+        window.open('<?php echo site_url('pu/jadwal_us/get_file_bat'); ?>?exe=' + lokasiAdobeReader + '&folder=' + lokasiFolderSoal + '&file=' + dataCetak[id] + '&title=' + title);
 
-            create_swal_success("Berhasil", "Silahkan running file yang telah didownload.");
+        create_swal_success("Berhasil", "Silahkan running file yang telah didownload.");
 
-            $(that).parent().removeClass('hbgnavyblue');
-            $(that).parent().removeClass('hbgviolet');
-            $(that).parent().addClass("hbggreen");
+        $(that).parent().removeClass('hbgnavyblue');
+        $(that).parent().removeClass('hbgviolet');
+        $(that).parent().addClass("hbggreen");
 //        } else {
 //            create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
 //        }

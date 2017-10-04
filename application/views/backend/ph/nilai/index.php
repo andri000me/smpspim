@@ -36,6 +36,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
 ?>
 <script type="text/javascript">
     var status_updated = false;
+    var ID_KELAS = null;
     var table;
     var url_delete = '<?php echo site_url('ph/nilai/ajax_delete'); ?>/';
     var id_table = '<?php echo $id_datatables; ?>';
@@ -65,6 +66,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             $(".table-datatable1").slideUp();
 
+            ID_KELAS = data_kelas.id;
             get_table_header(data_kelas.id);
             table.destroy();
             status_updated = false;
@@ -130,6 +132,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         table = initialize_datatables(id_table, '<?php echo site_url('ph/nilai/ajax_list'); ?>/' + ID_KELAS, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
         remove_splash();
+        $('<a class="dt-button btn btn-sm btn-default" href="#" onclick="cetak_nilai()"><span>Cetak Nilai</span></a>').insertAfter('.buttons-add');
         $(".buttons-add").remove();
         $(".table-datatable1").slideDown();
 //        $(".datatables-search-NO-ABSEN").replaceWith('NO ABSEN');
@@ -139,6 +142,10 @@ $this->generate->datatables($id_datatables, $title, $columns);
 //        $(".datatables-search-NILAI").replaceWith('NILAI');
 //        $(".datatables-search-STATUS").replaceWith('STATUS');
         $("#datatable1_length").children().children().val('-1').trigger('change');
+    }
+    
+    function cetak_nilai() {
+        window.open('<?php echo site_url('ph/nilai/cetak_kelas'); ?>/' + ID_KELAS, '_blank');
     }
 
     function simpan_nilai(that) {
