@@ -108,7 +108,7 @@ foreach ($JENJANG as $ID_DEPT => $NAMA_DEPT) {
     }
 
     $pdf->SetFont('Arial', 'B', 11);
-    $pdf->Cell(0, 5, 'TINGKAT ' . $NAMA_DEPT, 0, 0, 'C');
+    $pdf->Cell(0, 5, ($NAMA_DEPT == NULL || $NAMA_DEPT == '') ? 'BELUM MONDOK' : strtoupper($NAMA_DEPT), 0, 0, 'C');
     $pdf->Ln();
 
     $data_header = array(

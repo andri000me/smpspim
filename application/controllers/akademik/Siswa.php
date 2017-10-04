@@ -125,6 +125,7 @@ class Siswa extends CI_Controller {
         $data = $this->siswa->get_by_id($this->input->post('ID_SISWA'));
 
         $status = FALSE;
+        $name_file_photo = '';
         if (file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg')) {
             $status = TRUE;
             $name_file_photo = $data->NIS_SISWA . '.jpg';

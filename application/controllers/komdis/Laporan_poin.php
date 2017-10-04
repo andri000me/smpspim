@@ -392,9 +392,16 @@ class Laporan_poin extends CI_Controller {
                             }
                         }
                     } else {
-                        foreach ($data_siswa as $data_kolektif) {
-                            $data['JENJANG'][$data_kolektif['ID_DEPT']] = $data_kolektif['NAMA_DEPT'];
-                            $data['data'][$data_kolektif['ID_DEPT']][] = $data_kolektif;
+                        if ($TINDAKAN_KT == 2) {
+                            foreach ($data_siswa as $data_kolektif) {
+                                $data['JENJANG'][$data_kolektif['PONDOK_SISWA']] = $data_kolektif['NAMA_PONDOK_MPS'].' '.$data_kolektif['ALAMAT_MPS'];
+                                $data['data'][$data_kolektif['PONDOK_SISWA']][] = $data_kolektif;
+                            }
+                        } else {
+                            foreach ($data_siswa as $data_kolektif) {
+                                $data['JENJANG'][$data_kolektif['ID_DEPT']] = $data_kolektif['NAMA_DEPT'];
+                                $data['data'][$data_kolektif['ID_DEPT']][] = $data_kolektif;
+                            }
                         }
                     }
 
