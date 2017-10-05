@@ -220,5 +220,27 @@ class Kehadiran_model extends CI_Model {
 
         $this->db->delete('akad_validasi_absen', $where);
     }
+    
+    public function rekapitulasi_absen($where) {
+        $this->db->select('*, (CASE WHEN ALASAN_AKH = "SAKIT" THEN COUNT(ALASAN_AKH) END) AS TOTAL_SAKIT, (CASE WHEN ALASAN_AKH = "IZIN" THEN COUNT(ALASAN_AKH) END) AS TOTAL_IZIN, (CASE WHEN ALASAN_AKH = "ALPHA" THEN COUNT(ALASAN_AKH) END) AS TOTAL_ALPHA');
+        $this->db->from($this->table);
+        $this->db->where('TA_AKH', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('CAWU_AKH', $this->session->userdata('ID_CAWU_ACTIVE'));
+        $this->db->where('JENIS_AKH', 1);
+        $this->db->group_by('SISWA_AKH, ALASAN_AKH');
+        $sql = $this->db->get_compiled_select();
+        
+        $this->db->select('*, MAX(TOTAL_SAKIT) AS JUMLAH_SAKIT, MAX(TOTAL_IZIN) AS JUMLAH_IZIN, MAX(TOTAL_ALPHA) AS JUMLAH_ALPHA');
+        $this->db->from('akad_siswa as');
+        $this->db->join('('.$sql.') x', 'x.SISWA_AKH=as.SISWA_AS AND x.TA_AKH=as.TA_AS', 'LEFT');
+        $this->db->join('md_siswa ms', 'as.SISWA_AS=ms.ID_SISWA', 'LEFT');
+        $this->db->where($where);
+        $this->db->where('KONVERSI_AS', 0);
+        $this->db->order_by('NO_ABSEN_AS', 'ASC');
+        $this->db->group_by('SISWA_AS');
+        $result = $this->db->get();
+        
+        return $result->result();
+    }
 
 }

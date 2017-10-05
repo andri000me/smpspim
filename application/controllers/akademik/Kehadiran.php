@@ -220,7 +220,11 @@ class Kehadiran extends CI_Controller {
                 'KELAS_AS' => $detail_kelas->ID_KELAS,
                 'KONVERSI_AS' => 0
             );
-            $kelas_siswa = $this->kelas_siswa->get_absensi($where_siswa);
+            
+            if ($JENIS_CETAK == 8)
+                $kelas_siswa = $this->kehadiran->rekapitulasi_absen($where_siswa);
+            else
+                $kelas_siswa = $this->kelas_siswa->get_absensi($where_siswa);
 
             if (count($kelas_siswa) > 0) {
                 $data['DATA'][] = array(
@@ -246,6 +250,8 @@ class Kehadiran extends CI_Controller {
             $view = 'cetak_pramuka';
         elseif ($JENIS_CETAK == 7)
             $view = 'excel_daftar_nilai';
+        elseif ($JENIS_CETAK == 8)
+            $view = 'cetak_rekapitulasi_absen';
 
         $this->load->view('backend/akademik/kehadiran/' . $view, $data);
     }
@@ -347,17 +353,18 @@ class Kehadiran extends CI_Controller {
         $id = $this->input->post("ID");
         $HAPUS_POIN = $this->input->post("HAPUS_POIN");
         $data = $this->kehadiran->get_by_id($id);
-        
+
         $status = TRUE;
         if ($data->ALASAN_AKH == 'ALPHA' || $data->ALASAN_AKH == 'TERLAMBAT')
             $status = $this->pelanggaran_handler->hapus($id, TRUE, $data->ALASAN_AKH, $data->JENIS_AKH);
-        
+
         if ($status && ($HAPUS_POIN == NULL || !$HAPUS_POIN))
             $affected_row = $this->kehadiran->delete_by_id($id);
         else
             $affected_row = 0;
-        
-        if($HAPUS_POIN) $affected_row = $status;
+
+        if ($HAPUS_POIN)
+            $affected_row = $status;
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }
