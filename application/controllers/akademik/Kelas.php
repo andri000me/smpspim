@@ -23,7 +23,7 @@ class Kelas extends CI_Controller {
             'kelas_model' => 'kelas',
             'hakakses_user_model' => 'hakakses',
         ));
-        $this->auth->validation(array(2, 13, 5, 4, 7, 8));
+        $this->auth->validation(array(2, 13, 5, 4, 7, 8, 6));
     }
 
     public function index() {
