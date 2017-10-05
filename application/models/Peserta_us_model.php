@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Peserta_us_model extends CI_Model {
 
     var $table = 'akad_siswa';
-    var $column = array('NIS_SISWA', 'NAMA_SISWA','JK_SISWA','DEPT_TINGK','NAMA_TINGK','NAMA_KELAS','NAMA_PEG', 'ID_AS');
+    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'JK_SISWA', 'DEPT_TINGK', 'NAMA_TINGK', 'NAMA_KELAS', 'NAMA_PEG', 'ID_AS');
     var $primary_key = "ID_AS";
     var $order = array("ID_AS" => 'ASC');
 
@@ -20,12 +21,12 @@ class Peserta_us_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('md_siswa ms',$this->table.'.SISWA_AS=ms.ID_SISWA');
-        $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_AS=mt.ID_TINGK');
-        $this->db->join('md_jenjang_departemen mjd','mt.DEPT_TINGK=mjd.DEPT_MJD');
-        $this->db->join('md_jenjang_sekolah mjs','mjd.JENJANG_MJD=mjs.ID_JS');
-        $this->db->join('akad_kelas ak',$this->table.'.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
+        $this->db->join('md_jenjang_departemen mjd', 'mt.DEPT_TINGK=mjd.DEPT_MJD');
+        $this->db->join('md_jenjang_sekolah mjs', 'mjd.JENJANG_MJD=mjs.ID_JS');
+        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
         $this->db->where(array(
             'KONVERSI_AS' => 0,
             'AKTIF_SISWA' => 1,
@@ -61,7 +62,7 @@ class Peserta_us_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                if((($search_columns[$i]['search']['value'] != "") || ($i < 6)) && ($i != 1)) 
+                if ((($search_columns[$i]['search']['value'] != "") || ($i < 6)) && ($i != 1))
                     $this->db->like($item, $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
@@ -105,7 +106,8 @@ class Peserta_us_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AS as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AS as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -113,9 +115,9 @@ class Peserta_us_model extends CI_Model {
 
     public function get_data_blanko_nilai() {
         $this->db->from('akad_siswa as');
-        $this->db->join('md_siswa ms','as.SISWA_AS=ms.ID_SISWA');
-        $this->db->join('akad_kelas ak','as.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->join('md_siswa ms', 'as.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->order_by('ID_KELAS', 'ASC');
@@ -124,15 +126,17 @@ class Peserta_us_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function get_siswa_kartu() {
+    public function get_siswa_kartu($where = null) {
         $this->db->from($this->table);
-        $this->db->join('md_siswa ms',$this->table.'.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
-        $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_AS=mt.ID_TINGK');
-        $this->db->join('akad_kelas ak',$this->table.'.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
+        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        if ($where != null)
+            $this->db->where($where);
         $this->db->where(array(
             'KONVERSI_AS' => 0,
             'AKTIF_SISWA' => 1,
@@ -169,14 +173,14 @@ class Peserta_us_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
@@ -212,7 +216,7 @@ class Peserta_us_model extends CI_Model {
             unset($data_tingkat);
             unset($data_count);
         }
-        
+
         $result = array(
             'DATA' => $result_data,
             'COUNT' => $result_count,

@@ -287,10 +287,10 @@ class Jadwal_us extends CI_Controller {
 
         $this->load->view('backend/pu/jadwal_us/cetak_jadwal', $data);
     }
-    
+
     private function cek_denah_siswa() {
         $data_jadwal = $this->jadwal->get_all_group_tanggal($this->tipe);
-        
+
         foreach ($data_jadwal as $index => $detail) {
             $this->generate_denah_siswa($detail['TANGGAL_PUJ']);
         }
@@ -301,11 +301,11 @@ class Jadwal_us extends CI_Controller {
         $data['ketua'] = $this->pengaturan->getDataKetuaPU();
 
         $this->cek_denah_siswa();
-        
+
         foreach ($data_jadwal as $index => $detail) {
             $data['data'][$index]['TANGGAL'] = $detail['TANGGAL_PUJ'];
             $data['data'][$index]['DENAH'] = $this->denah->get_denah_by_tanggal($detail['TANGGAL_PUJ']);
-            
+
             break;
         }
 
@@ -348,9 +348,9 @@ class Jadwal_us extends CI_Controller {
         $this->load->view('backend/pu/jadwal_us/cetak_kertu_meja', $data);
     }
 
-    public function cetak_kertu_siswa($id) {
+    public function cetak_kertu_siswa($id_kelas = null) {
         $this->cek_denah_siswa();
-        
+
         $where = array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
@@ -422,11 +422,10 @@ class Jadwal_us extends CI_Controller {
                             }
                         }
                     }
-                                    
+
 //                                    echo '<hr>$data_siswa<br>' . json_encode($data_siswa);
 //                                    
 //                                    exit();
-
 //                    $count_denah = count($data_denah['DENAH'][$ruang]);
 //                    
 //                    if ($count_denah == $jumlah) {
@@ -450,8 +449,12 @@ class Jadwal_us extends CI_Controller {
 //                exit();
             }
         }
-
-        $data_peserta_us = $this->peserta->get_siswa_kartu();
+        if ($id_kelas != null)
+            $wherekelas = array('KELAS_AS' => $id_kelas);
+        else {
+            $wherekelas = null;
+        }
+        $data_peserta_us = $this->peserta->get_siswa_kartu($wherekelas);
 
 //        echo '<hr>$data_siswa<br>' . json_encode(count($data_siswa));
 //        echo '<hr>$data_peserta_us<br>' . json_encode(count($data_peserta_us));
