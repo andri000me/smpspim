@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Lokasi program Adobe Reader</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="lokasiAdobeReader" placeholder="C:\program files\Adobe\reader\AcroRd32.exe">
+                                <input type="text" class="form-control" id="lokasiAdobeReader" placeholder="C:\program files\Adobe\AcrobatDC\Acrobat\AcroRd32.exe">
                             </div>
                         </div>
                         <div class="form-group">
