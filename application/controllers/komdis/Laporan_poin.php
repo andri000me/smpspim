@@ -27,6 +27,7 @@ class Laporan_poin extends CI_Controller {
             'kelas_model' => 'kelas',
             'pondok_siswa_model' => 'pondok_siswa',
             'laporan_surat_segera_model' => 'surat_segera',
+            'tahun_ajaran_model' => 'ta',
         ));
         $this->load->library('pelanggaran_handler');
         $this->auth->validation(array(2, 7));
@@ -394,7 +395,7 @@ class Laporan_poin extends CI_Controller {
                     } else {
                         if ($TINDAKAN_KT == 2) {
                             foreach ($data_siswa as $data_kolektif) {
-                                $data['JENJANG'][$data_kolektif['PONDOK_SISWA']] = $data_kolektif['NAMA_PONDOK_MPS'].' '.$data_kolektif['ALAMAT_MPS'];
+                                $data['JENJANG'][$data_kolektif['PONDOK_SISWA']] = $data_kolektif['NAMA_PONDOK_MPS'] . ' ' . $data_kolektif['ALAMAT_MPS'];
                                 $data['data'][$data_kolektif['PONDOK_SISWA']][] = $data_kolektif;
                             }
                         } else {
@@ -514,16 +515,78 @@ class Laporan_poin extends CI_Controller {
     public function download_statistik() {
 //        $this->laporan_poin->fix_poin();
 
-        $data = array(
+        $ta = $this->ta->get_ta_active();
+        $start_ta = $ta->TANGGAL_MULAI_TA;
+        $end_ta = $ta->TANGGAL_AKHIR_TA;
+
+        $data_pelanggaran = array();
+        for ($bulan = 0; $bulan < 12; $bulan++) {
+            $bulan_tahun = date('Y-m', strtotime('+' . $bulan . ' months', strtotime($start_ta)));
+
+            $where = array(
+                'LEFT(TANGGAL_KS, 7)=' => $bulan_tahun
+            );
+            $where_tindakan = array(
+                'LEFT(TANGGAL_KT, 7)=' => $bulan_tahun
+            );
+            $data_pelanggaran[] = array(
+                'title' => date('Y-m', strtotime($bulan_tahun)),
+                'kelas' => $this->laporan_poin->get_group_kelas($where),
+                'pelanggar' => array(
+                    'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
+                    'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
+                ),
+                'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
+            );
+            
+            var_dump(count($data_pelanggaran[0]['kelas']));
+            exit();
+        }
+
+        for ($cawu = 1; $cawu <= 3; $cawu++) {
+            $where = array(
+                'CAWU_KS' => $cawu
+            );
+            $where_tindakan = array(
+                'CAWU_KSH' => $cawu
+            );
+            $data_pelanggaran[] = array(
+                'title' => 'cawu-' . $cawu,
+                'kelas' => $this->laporan_poin->get_group_kelas($where),
+                'pelanggar' => array(
+                    'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
+                    'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
+                ),
+                'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
+            );
+        }
+
+        $data_pelanggaran[] = array(
+            'title' => 'tahunan',
             'kelas' => $this->laporan_poin->get_group_kelas(),
             'pelanggar' => array(
                 'umum' => $this->laporan_poin->get_group_pelanggar(FALSE),
                 'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE)
             ),
-            'kode' => $this->laporan_poin->get_group_pelanggaran_kelas(),
             'tindakan' => $this->laporan_poin->get_group_tindakan(),
+        );
+
+        $data = array(
+            'data' => $data_pelanggaran,
+            'kode' => $this->laporan_poin->get_group_pelanggaran_kelas(),
             'jenis_tindakan' => $this->jenis_tindakan->get_all(FALSE),
         );
+
+//        $data = array(
+//            'kelas' => $this->laporan_poin->get_group_kelas(),
+//            'pelanggar' => array(
+//                'umum' => $this->laporan_poin->get_group_pelanggar(FALSE),
+//                'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE)
+//            ),
+//            'tindakan' => $this->laporan_poin->get_group_tindakan(),
+//            'kode' => $this->laporan_poin->get_group_pelanggaran_kelas(),
+//            'jenis_tindakan' => $this->jenis_tindakan->get_all(FALSE),
+//        );
 
         $this->load->view('backend/komdis/laporan_poin/xls_rangking_kelas', $data);
     }
