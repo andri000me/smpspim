@@ -139,16 +139,16 @@
         var item = <?php echo trim(json_encode($cetak_test)); ?>;
         var OSName = checkOS();
 
-//        if (OSName == "Windows") {
+        if (OSName == "Windows") {
             var lokasiAdobeReader = $('#lokasiAdobeReader').val();
             var lokasiFolderSoal = $('#lokasiFolderSoal').val();
 
             window.open('<?php echo site_url('pu/jadwal_us/get_file_bat'); ?>?exe=' + lokasiAdobeReader + '&folder=' + lokasiFolderSoal + '&file=' + item + '&title=TEST');
 
             create_swal_success("Berhasil", "Silahkan running file yang telah didownload.");
-//        } else {
-//            create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
-//        }
+        } else {
+            create_homer_error("Fitur ini tidak dapat digunakan pada Sistem Operasi " + OSName + ". Silahkan menggunakan windows untuk menggunakan fitur ini.");
+        }
     }
 
     function cetak(that) {
