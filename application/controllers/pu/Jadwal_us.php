@@ -518,7 +518,7 @@ class Jadwal_us extends CI_Controller {
 
         $file_exp = explode(',', $input['file']);
         foreach ($file_exp as $pdf) {
-            printf('"' . $input['exe'] . '" /n /s /h /t "' . $input['folder'] . $pdf . '"^');
+            printf("\"" . $input['exe'] . "\" /n /s /h /t \"" . $input['folder'] . $pdf . "\"\r\n");
         }
     }
 
