@@ -46,6 +46,8 @@ foreach ($data as $detail) {
 
         foreach ($data_denah['DENAH'] as $ruang => $value) {
             $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_UJIAN_RUANG'];
+            if (count($data_denah['DENAH'][$ruang]) > $jumlah_peruang)
+                $jumlah_peruang = count($data_denah['DENAH'][$ruang]);
 
             $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
             $pdf->SetAutoPageBreak(true, 0);
