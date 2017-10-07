@@ -50,6 +50,8 @@ foreach ($data as $detail) {
 
         foreach ($data_denah['DENAH'] as $ruang => $value) {
             $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_UJIAN_RUANG'];
+            if (count($data_denah['DENAH'][$ruang]) > $jumlah_peruang)
+                $jumlah_peruang = count($data_denah['DENAH'][$ruang]);
 
             $pdf->AddPage("L", $this->pengaturan->getUkuranF4());
             $pdf->SetAutoPageBreak(true, 0);
@@ -81,7 +83,7 @@ foreach ($data as $detail) {
                         $start = $temp_i + 1;
                     else
                         $start = $i + 1 - $jumlah_perbaris;
-                    
+
                     for ($x = $start; $x <= $i; $x++) {
                         if (isset($data_denah['DENAH'][$ruang][$x])) {
                             $id_tingkat = $data_denah['DENAH'][$ruang][$x];
@@ -93,7 +95,7 @@ foreach ($data as $detail) {
                             $pdf->Cell($width_box, 10, '-', 'RLB', 0, 'C');
                         }
                     }
-                    
+
                     $temp_i = $i;
 
                     $pdf->Ln(16);

@@ -364,10 +364,29 @@ class Jadwal_us extends CI_Controller {
         }
         // MENDAPATKAN DATA SISWA SESUAI DENGAN DENAH
         $data_siswa = array();
+//        $test_denah = array();
+//        $test_susun = array();
+        $a = 0;
         foreach ($data_denah as $detail_denah) { // LOOPING PERTANGGAL DENAH
             $denah = json_decode($detail_denah['SISWA_DENAH'], TRUE);
             $jadwal_denah = $detail_denah['JADWAL_DENAH'];
             foreach ($denah as $data_denah) { // LOOPING L DAN P
+//                $a++;
+//                if ($a == 11) {
+//                    echo '<hr>$data_denah<br>' . json_encode($data_denah);
+//                    echo '<hr>TINGKAT<br>' . json_encode($data_denah['TINGKAT'][9]);
+//                    echo '<hr>JUMLAH_SISWA<br>' . json_encode($data_denah['JUMLAH_SISWA'][9]);
+//                    echo '<hr>DATA_SISWA_RANDOM<br>' . json_encode(count($data_denah['DATA_SISWA_RANDOM'][9]));
+//                    echo '<hr>DATA_SISWA_RANDOM<br>' . json_encode($data_denah['DATA_SISWA_RANDOM'][9]);
+//
+//                    foreach ($data_denah['DENAH'] as $index_ruang => $detail) {
+//                        foreach ($detail as $nomor => $jenjang) {
+//                            if ($jenjang == 9)
+//                                $test_denah[] = $index_ruang . '_' . $nomor;
+//                        }
+//                    }
+//                    echo '<hr>$test_denah<br>' . json_encode($test_denah);
+//                }
 //                $jumlah = 0;
 //                for ($id = 0; $id < count($data_denah['DATA_SISWA']); $id++) {
 //                    $jumlah += count($data_denah['DATA_SISWA'][$id]);
@@ -391,11 +410,19 @@ class Jadwal_us extends CI_Controller {
                     $temp_data_siswa = array();
                     // LOOPING NOMOR URUT DALAM RUANGAN
                     $jumlah_peruang = $data_denah["RUANG"][$ruang]['KAPASITAS_UJIAN_RUANG'];
+                    if (count($data_denah['DENAH'][$ruang]) > $jumlah_peruang)
+                        $jumlah_peruang = count($data_denah['DENAH'][$ruang]);
+                    $temp_i = 0;
                     for ($i = 0; $i < $jumlah_peruang; $i++) {
                         $no_urut = $i;
                         // MEMBUAT ATURAN DALAM DISTRIBUSI SISWA DIRUANGAN
-                        if ((($i + 1) % $jumlah_perbaris) == 0) {
-                            for ($x = ($i + 1 - $jumlah_perbaris); $x <= $i; $x++) {
+                        if (((($i + 1) % $jumlah_perbaris) == 0) || ($i == ($jumlah_peruang - 1))) {
+                            if ($i == ($jumlah_peruang - 1))
+                                $start = $temp_i + 1;
+                            else
+                                $start = $i + 1 - $jumlah_perbaris;
+
+                            for ($x = $start; $x <= $i; $x++) {
                                 if (isset($data_denah['DENAH'][$ruang][$x])) {
                                     // MENDAPATKAN DATA SISWA PADA SETIAP RUANGAN
                                     $id_tingkat = $data_denah['DENAH'][$ruang][$x];
@@ -418,8 +445,18 @@ class Jadwal_us extends CI_Controller {
 
                                     $temp_last_id[$id_tingkat] ++;
                                     $jumlah++;
+
+//                                    if ($id_siswa == 1626) {
+//                                        echo json_encode($a) . '<br>';
+//                                        echo json_encode($data_siswa[$id_siswa]) . '<hr>';
+//                                    }
+//                                    if ($a == 11 && $id_tingkat == 9) {
+//                                        $test_susun[] = $ruang.'_'.$x;
+//                                    }
                                 }
                             }
+
+                            $temp_i = $i;
                         }
                     }
 
@@ -473,7 +510,11 @@ class Jadwal_us extends CI_Controller {
                 'AKAD_SISWA' => $detail_siswa,
                 'DENAH' => $data_siswa[$detail_siswa['ID_SISWA']]
             );
+
+//            if ($detail_siswa['ID_SISWA'] == 1626)
+//                echo '<hr>', json_encode($data_siswa[$detail_siswa['ID_SISWA']]) . '<br>';
         }
+//        exit();
 
         $data['siswa'] = $data_siswa_final;
 
