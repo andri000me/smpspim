@@ -62,6 +62,7 @@ class Cetak_kartu extends CI_Controller {
         foreach ($data_siswa as $detail_siswa) {
             $data['BULAN'] = $bulan;
             $data['KELAS'] = isset($input['tingkat']) ? '-' : $detail_siswa;
+            $data['JENJANG'] = isset($input['tingkat']) ? '-' : $detail_siswa->DEPT_TINGK;
             $data['SISWA'][] = array(
                 'DETAIL' => $detail_siswa,
                 'KELAS' => isset($input['tingkat']) ? '-' : $detail_siswa->NAMA_KELAS,
