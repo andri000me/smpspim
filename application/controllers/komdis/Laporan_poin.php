@@ -107,7 +107,7 @@ class Laporan_poin extends CI_Controller {
     }
 
     public function ajax_add() {
-//        $this->generate->set_header_JSON();
+        $this->generate->set_header_JSON();
 
         $data = $this->input->get();
 
@@ -128,8 +128,7 @@ class Laporan_poin extends CI_Controller {
 
         unset($data['URL_KJT']);
         unset($data['KOLEKTIF_KJT']);
-        var_dump($nomor_surat);
-        $start = TRUE;
+
         if ($input_kolektif) {
             foreach ($data_kolektif as $detail) {
                 if ($start || $data['TINDAKAN_KT'] == 1) {
@@ -512,7 +511,7 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_perpondok', $data);
     }
 
-    public function download_statistik() {
+    public function download_statistik($status) {
 //        $this->laporan_poin->fix_poin();
 
         $ta = $this->ta->get_ta_active();
@@ -520,56 +519,56 @@ class Laporan_poin extends CI_Controller {
         $end_ta = $ta->TANGGAL_AKHIR_TA;
 
         $data_pelanggaran = array();
-        for ($bulan = 0; $bulan < 12; $bulan++) {
-            $bulan_tahun = date('Y-m', strtotime('+' . $bulan . ' months', strtotime($start_ta)));
 
-            $where = array(
-                'LEFT(TANGGAL_KS, 7)=' => $bulan_tahun
-            );
-            $where_tindakan = array(
-                'LEFT(TANGGAL_KT, 7)=' => $bulan_tahun
-            );
+        if ($status == 0) {
+            for ($bulan = 0; $bulan < 12; $bulan++) {
+                $bulan_tahun = date('Y-m', strtotime('+' . $bulan . ' months', strtotime($start_ta)));
+
+                $where = array(
+                    'LEFT(TANGGAL_KS, 7)=' => $bulan_tahun
+                );
+                $where_tindakan = array(
+                    'LEFT(TANGGAL_KT, 7)=' => $bulan_tahun
+                );
+                $data_pelanggaran[] = array(
+                    'title' => date('Y-m', strtotime($bulan_tahun)),
+                    'kelas' => $this->laporan_poin->get_group_kelas($where),
+                    'pelanggar' => array(
+                        'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
+                        'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
+                    ),
+                    'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
+                );
+            }
+        } else {
+            for ($cawu = 1; $cawu <= 3; $cawu++) {
+                $where = array(
+                    'CAWU_KS' => $cawu
+                );
+                $where_tindakan = array(
+                    'CAWU_KSH' => $cawu
+                );
+                $data_pelanggaran[] = array(
+                    'title' => 'cawu-' . $cawu,
+                    'kelas' => $this->laporan_poin->get_group_kelas($where),
+                    'pelanggar' => array(
+                        'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
+                        'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
+                    ),
+                    'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
+                );
+            }
+
             $data_pelanggaran[] = array(
-                'title' => date('Y-m', strtotime($bulan_tahun)),
-                'kelas' => $this->laporan_poin->get_group_kelas($where),
+                'title' => 'tahunan',
+                'kelas' => $this->laporan_poin->get_group_kelas(),
                 'pelanggar' => array(
-                    'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
-                    'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
+                    'umum' => $this->laporan_poin->get_group_pelanggar(FALSE),
+                    'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE)
                 ),
-                'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
-            );
-            
-            var_dump(count($data_pelanggaran[0]['kelas']));
-            exit();
-        }
-
-        for ($cawu = 1; $cawu <= 3; $cawu++) {
-            $where = array(
-                'CAWU_KS' => $cawu
-            );
-            $where_tindakan = array(
-                'CAWU_KSH' => $cawu
-            );
-            $data_pelanggaran[] = array(
-                'title' => 'cawu-' . $cawu,
-                'kelas' => $this->laporan_poin->get_group_kelas($where),
-                'pelanggar' => array(
-                    'umum' => $this->laporan_poin->get_group_pelanggar(FALSE, $where),
-                    'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE, $where)
-                ),
-                'tindakan' => $this->laporan_poin->get_group_tindakan($where_tindakan),
+                'tindakan' => $this->laporan_poin->get_group_tindakan(),
             );
         }
-
-        $data_pelanggaran[] = array(
-            'title' => 'tahunan',
-            'kelas' => $this->laporan_poin->get_group_kelas(),
-            'pelanggar' => array(
-                'umum' => $this->laporan_poin->get_group_pelanggar(FALSE),
-                'khusus' => $this->laporan_poin->get_group_pelanggar(TRUE)
-            ),
-            'tindakan' => $this->laporan_poin->get_group_tindakan(),
-        );
 
         $data = array(
             'data' => $data_pelanggaran,
