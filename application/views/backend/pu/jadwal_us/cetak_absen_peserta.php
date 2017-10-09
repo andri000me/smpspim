@@ -129,21 +129,34 @@ foreach ($data as $detail) {
 
             $pdf->Ln(5);
 
-            $pdf->SetFont('Arial', '', $size_font);
-            $pdf->Cell(140);
-            $pdf->Cell(0, 4, 'Pengawas,', 0, 0, 'C');
+
+//            $data_pengawas = $this->pengawas->get_by_jadwal_ruang($ID, $jk, $data_denah["RUANG"][$ruang]['KODE_RUANG']);
+//
+//            $pdf->SetFont('Arial', 'BU', $size_font);
+//            $pdf->Cell(140);
+//            $pdf->Cell(0, 4, ($data_pengawas == NULL) ? '..............................................' : $this->cetak->nama_peg_print($data_pengawas), 0, 0, 'C');
+//            $pdf->Ln();
+//
+//            $pdf->SetFont('Arial', '', $size_font);
+//            $pdf->Cell(140);
+//            $pdf->Cell(0, 4, 'NIP. ' . ($data_pengawas == NULL ? '..................................' : $data_pengawas->NIP_PEG), 0, 0, 'C');
+
+            for ($z = 0; $z < $maks; $z++) {
+                $pdf->SetFont('Arial', '', $size_font);
+                $pdf->Cell(200 / $maks, 4, 'Pengawas ' . ($z + 1) . ',', 0, 0, 'C');
+            }
+
             $pdf->Ln(13);
-
-            $data_pengawas = $this->pengawas->get_by_jadwal_ruang($ID, $jk, $data_denah["RUANG"][$ruang]['KODE_RUANG']);
-
-            $pdf->SetFont('Arial', 'BU', $size_font);
-            $pdf->Cell(140);
-            $pdf->Cell(0, 4, ($data_pengawas == NULL) ? '..............................................' : $this->cetak->nama_peg_print($data_pengawas), 0, 0, 'C');
+            for ($z = 0; $z < $maks; $z++) {
+                $pdf->SetFont('Arial', 'BU', $size_font);
+                $pdf->Cell(200 / $maks, 4, '..............................................', 0, 0, 'C');
+            }
             $pdf->Ln();
 
-            $pdf->SetFont('Arial', '', $size_font);
-            $pdf->Cell(140);
-            $pdf->Cell(0, 4, 'NIP. ' . ($data_pengawas == NULL ? '..................................' : $data_pengawas->NIP_PEG), 0, 0, 'C');
+            for ($z = 0; $z < $maks; $z++) {
+                $pdf->SetFont('Arial', '', $size_font);
+                $pdf->Cell(200 / $maks, 4, 'NIP. ..................................', 0, 0, 'C');
+            }
         }
     }
 }
