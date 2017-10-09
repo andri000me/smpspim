@@ -316,25 +316,24 @@ WHERE
     }
 
     public function get_group_kelas($where = NULL) {
-//        $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
-        $this->db->from('akad_kelas');
-        $this->db->join('akad_siswa', 'ID_KELAS=KELAS_AS AND TA_KELAS = TA_AS', 'LEFT');
-        $this->db->join('komdis_siswa', 'SISWA_KS = SISWA_AS AND TA_KS=TA_KELAS', 'LEFT');
-//        $this->db->join('md_siswa', 'SISWA_AS = ID_SISWA', 'LEFT');
-//        $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS', 'LEFT');
-//        $this->db->join('md_departemen', 'ID_DEPT= DEPT_TINGK', 'LEFT');
-//        $this->db->join('md_pegawai', 'WALI_KELAS = ID_PEG', 'LEFT');
-//        $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP', 'LEFT');
-        $this->db->where('TA_KELAS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->select('*, CONCAT(INDUK_KJP, ".", ANAK_KJP) AS KODE_KJP, COUNT(ID_KS) AS JUMLAH_PELANGGARAN, COUNT(DISTINCT SISWA_KS) AS JUMLAH_PELANGGAR, SUM(POIN_KJP) AS JUMLAH_POIN');
+        $this->db->from('komdis_siswa');
+        $this->db->join('akad_siswa', 'SISWA_AS = SISWA_KS AND TA_KS = TA_AS');
+        $this->db->join('komdis_jenis_pelanggaran', 'PELANGGARAN_KS = ID_KJP');
+        $this->db->where('TA_KS', $this->session->userdata('ID_TA_ACTIVE'));
         if ($where != NULL)
             $this->db->where($where);
-//        $this->db->group_by('ID_KELAS , KODE_KJP');
-        $this->db->group_by('ID_KELAS');
-//        $this->db->order_by('TINGKAT_KELAS, JK_KELAS, NAMA_KELAS, KODE_KJP', 'ASC');
+        $this->db->group_by('KELAS_AS , KODE_KJP');
+        $sql = $this->db->get_compiled_select();
+
+        $this->db->from('akad_kelas');
+        $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS', 'LEFT');
+        $this->db->join('md_departemen', 'ID_DEPT= DEPT_TINGK', 'LEFT');
+        $this->db->join('(' . $sql . ') asq', 'ID_KELAS = KELAS_AS AND TA_KELAS=TA_AS', 'LEFT');
+        $this->db->where('TA_KELAS', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->order_by('TINGKAT_KELAS, JK_KELAS, NAMA_KELAS, KODE_KJP', 'ASC');
 
         $query = $this->db->get();
-//        echo $this->db->last_query();
-//        exit();
 
         return $query->result();
     }

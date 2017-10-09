@@ -1,6 +1,6 @@
 <?php
 
-ini_set('max_execution_time', -1);
+ini_set('max_execution_time', 10000);
 
 // MODE 0 => XLS (TIDAK MUNCUL GRAFIK)
 // MODE 1 => XLSX (MUNCUL GRAFIK NAMUN ADA ISU BUG)
@@ -50,8 +50,8 @@ foreach ($data as $detail_item) {
     $objPHPExcel->setActiveSheetIndex($NUMBER_SHEET);
 
     $DATA_SHEET[$NUMBER_SHEET] = array(
-        'title' => 'data_'.$title,
-        'text' => 'Data '.$title
+        'title' => 'data_' . $title,
+        'text' => 'Data ' . $title
     );
 
 // TITLE
@@ -214,9 +214,11 @@ foreach ($data as $detail_item) {
 
             $start_row_jenjang = $END_ROW_DATA;
         }
-        $objPHPExcel->getActiveSheet()->setCellValue($DATA_KODE[$detail->KODE_KJP] . $END_ROW_DATA, $detail->JUMLAH_PELANGGAR);
-        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 1) . $END_ROW_DATA, $detail->JUMLAH_PELANGGARAN);
-        $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 2) . $END_ROW_DATA, $detail->JUMLAH_POIN);
+        if ($detail->KODE_KJP != NULL) {
+            $objPHPExcel->getActiveSheet()->setCellValue($DATA_KODE[$detail->KODE_KJP] . $END_ROW_DATA, $detail->JUMLAH_PELANGGAR);
+            $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 1) . $END_ROW_DATA, $detail->JUMLAH_PELANGGARAN);
+            $objPHPExcel->getActiveSheet()->setCellValue($this->cetak->next_char($DATA_KODE[$detail->KODE_KJP], 2) . $END_ROW_DATA, $detail->JUMLAH_POIN);
+        }
     }
     $objPHPExcel->getActiveSheet()->mergeCells('B' . $start_row_jenjang . ':B' . $END_ROW_DATA);
     $END_ROW_DATA = $END_ROW_DATA;
