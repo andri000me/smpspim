@@ -447,8 +447,8 @@ foreach ($data as $detail_item) {
     $objPHPExcel->setActiveSheetIndex($NUMBER_SHEET);
 
     $DATA_SHEET[$NUMBER_SHEET] = array(
-        'title' => 'grafik_tahunan',
-        'text' => 'Grafik Tahunan'
+        'title' => 'grafik_' . $title,
+        'text' => 'Grafik ' . $title
     );
 
     $DATA_NUMBER_SHEET = $NUMBER_SHEET - 1;
