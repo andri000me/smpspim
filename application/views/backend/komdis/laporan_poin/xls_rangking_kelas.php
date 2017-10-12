@@ -4,7 +4,7 @@ ini_set('max_execution_time', 10000);
 
 // MODE 0 => XLS (TIDAK MUNCUL GRAFIK)
 // MODE 1 => XLSX (MUNCUL GRAFIK NAMUN ADA ISU BUG)
-$MODE = 0;
+$MODE = 1;
 
 $DATA_SHEET = array();
 $NUMBER_SHEET = 0;
