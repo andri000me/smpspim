@@ -10,6 +10,7 @@ $columns = array(
     'JARAK',
     'TELP',
     'EMAIL',
+    'JUMLAH SISWA',
     'AKSI',
 );
 

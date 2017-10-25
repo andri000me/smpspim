@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pondok_siswa_model extends CI_Model {
 
     var $table = 'md_pondok_siswa';
-    var $column = array('NAMA_PONDOK_MPS','PENGASUH_MPS','ALAMAT_MPS','JARAK_MPS','TELP_MPS','EMAIL_MPS', 'ID_MPS');
+    var $column = array('NAMA_PONDOK_MPS','PENGASUH_MPS','ALAMAT_MPS','JARAK_MPS','TELP_MPS','EMAIL_MPS', 'ID_MPS', 'ID_MPS');
     var $primary_key = "ID_MPS";
     var $order = array("ID_MPS" => 'ASC');
 
@@ -127,6 +127,14 @@ class Pondok_siswa_model extends CI_Model {
         $this->db->delete($this->table, $where);
         
         return $this->db->affected_rows();
+    }
+
+    function count_siswa($id) {
+        $this->db->from('md_siswa');
+        $this->db->where('PONDOK_SISWA', $id);
+        $query = $this->db->get();
+
+        return $query->num_rows();
     }
 
 }

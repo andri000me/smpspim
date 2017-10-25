@@ -43,6 +43,7 @@ class Pondok_siswa extends CI_Controller {
             $row[] = $item->JARAK_MPS;
             $row[] = $item->TELP_MPS;
             $row[] = $item->EMAIL_MPS;
+            $row[] = $this->pondok_siswa->count_siswa($item->ID_MPS);
 
             $row[] = '
                 <div class="btn-group">
