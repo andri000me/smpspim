@@ -98,6 +98,7 @@ class Laporan_siswa_model extends CI_Model {
                 . 'NIS_SISWA AS NIS'
                 . ',NISN_SISWA AS NISN'
                 . ',NIK_SISWA AS NIK'
+                . ',KK_SISWA AS KK'
                 . ',NO_UN_SISWA AS NOMOR_UN'
                 . ',NO_UM_SISWA AS NOMOR_URUT_UJIAN_MASUK'
                 . ',NAMA_SISWA AS NAMA'
