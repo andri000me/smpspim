@@ -107,7 +107,7 @@ class Laporan_poin extends CI_Controller {
     }
 
     public function ajax_add() {
-        $this->generate->set_header_JSON();
+//        $this->generate->set_header_JSON();
 
         $data = $this->input->get();
 
