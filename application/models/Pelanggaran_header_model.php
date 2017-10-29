@@ -87,7 +87,7 @@ class Pelanggaran_header_model extends CI_Model {
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
-
+        
         return $query->result();
     }
 
