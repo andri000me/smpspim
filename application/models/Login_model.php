@@ -19,9 +19,9 @@ class Login_model extends CI_Model {
         ));
         $result = $this->db->get($this->table)->result();
         
-        if(count($result) > $this->pengaturan->getBanyakPercobaanLogin()) 
-            return FALSE;
-        else 
+//        if(count($result) > $this->pengaturan->getBanyakPercobaanLogin()) 
+//            return FALSE;
+//        else 
             return TRUE;
     }
     
@@ -30,9 +30,10 @@ class Login_model extends CI_Model {
             'IP_LOGIN' => $this->input->ip_address(),
             'DATA_LOGIN' => json_encode($data)
         );
-        $this->db->insert($this->table, $data);
-        
-        return $this->db->affected_rows();
+//        $this->db->insert($this->table, $data);
+//        
+//        return $this->db->affected_rows();
+        return true;
     }
     
     public function login_benar($data) {
@@ -41,8 +42,9 @@ class Login_model extends CI_Model {
             'DATA_LOGIN' => json_encode($data),
             'STATUS_LOGIN' => 1
         );
-        $this->db->insert($this->table, $data);
-        
-        return $this->db->affected_rows();
+//        $this->db->insert($this->table, $data);
+//        
+//        return $this->db->affected_rows();
+        return true;
     }
 }
