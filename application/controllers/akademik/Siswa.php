@@ -19,6 +19,9 @@ class Siswa extends CI_Controller {
         parent::__construct();
         $this->load->model(array(
             'siswa_model' => 'siswa',
+            'departemen_model' => 'dept',
+            'tingkat_model' => 'tingkat',
+            'kelas_model' => 'kelas',
             'suku_model' => 'suku',
             'agama_model' => 'agama',
             'kondisi_model' => 'kondisi',
@@ -81,7 +84,6 @@ class Siswa extends CI_Controller {
                         ' . $surat_keterangan_aktif . '
                     </ul>
                 </div>';
-                
             } else {
                 $row[] = '
                 <div class="btn-group">
@@ -418,6 +420,102 @@ class Siswa extends CI_Controller {
         $data = $this->siswa->ac_siswa_kelas($this->input->post('q'));
 
         $this->generate->output_JSON($data);
+    }
+
+    public function import_export_data() {
+        $data = array(
+            'JENJANG' => $this->dept->get_all(FALSE),
+            'TINGKAT' => $this->tingkat->get_all(FALSE),
+            'KELAS' => $this->kelas->get_all(FALSE),
+        );
+
+        $this->generate->backend_view('akademik/siswa/import_export_data', $data);
+    }
+
+    public function export_data() {
+        $jenjang = $this->input->get('jenjang');
+        $tingkat = $this->input->get('tingkat');
+        $kelas = $this->input->get('kelas');
+
+        $data = $this->siswa->get_all_data_simple($jenjang, $tingkat, $kelas);
+
+        if (isset($data[0]))
+            $field_column = array_keys($data[0]);
+        else
+            $field_column = array();
+
+        $this->load->library('PHPExcel/PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Rohmad Eko Wahyudi")->setTitle("SIMAPES - AKADEMIK - DATA SISWA");
+        $objPHPExcel->getActiveSheet()->fromArray($field_column, null, 'A1');
+        $objPHPExcel->getActiveSheet()->fromArray($data, null, 'A2');
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="export_data_siswa_' . date('Y_m_d_H_i_s') . '.xls"');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
+    public function import_data() {
+        $file_element_name = 'FILE_EXCEL';
+        $config['upload_path'] = './files/general/';
+        $config['allowed_types'] = 'xls';
+        $config['overwrite'] = TRUE;
+        $config['file_name'] = 'import_data_siswa';
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload($file_element_name)) {
+            $aa = $this->upload->data();
+
+            $status = TRUE;
+            $msg = "berhasil diupload";
+
+            $this->reading_data_import('./files/general/import_data_siswa.xls');
+
+            @unlink($_FILES[$file_element_name]);
+        } else {
+            $status = FALSE;
+            $msg = 'gagal diupload (ERROR: ' . $this->upload->display_errors('', '') . ')';
+        }
+
+        $this->generate->output_JSON(array("status" => $status, 'msg' => $msg));
+    }
+
+    public function reading_data_import($filename) {
+        ini_set("precision", "20");
+
+        $this->load->library('PHPExcel/PHPExcel');
+
+        try {
+            $inputFileType = PHPExcel_IOFactory::identify($filename);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($filename);
+        } catch (Exception $e) {
+            $this->generate->output_JSON(array("status" => FALSE, 'msg' => 'Error loading file "' . pathinfo($filename, PATHINFO_BASENAME) . '": ' . $e->getMessage()));
+        }
+
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+
+        $rowData = $sheet->rangeToArray('A1:' . $highestColumn . '1', NULL, TRUE, FALSE);
+        $data_field_column = $rowData[0];
+
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
+            $data_value_column = $rowData[0];
+            $data = array_combine($data_field_column, $data_value_column);
+            $where = array(
+                'NIS_SISWA' => $data['ID_SISWA']
+            );
+            unset($data['ID_SISWA']);
+            $result = $this->siswa->update($where, $data);
+
+//            if ($result != NULL) {
+//                echo '<h2>Gagal mengimport pada baris ' . $row . '. </h2><br>Silahkan cek data para baris tersebut. <hr>QUERY: ' . $result;
+//                exit();
+//            }
+        }
     }
 
 }
