@@ -21,6 +21,7 @@ class Keuangan extends CI_Controller {
             'laporan_keuangan_modul_model' => 'keuangan',
             'tahun_ajaran_model' => 'ta',
             'catur_wulan_model' => 'cawu',
+            'departemen_model' => 'dept',
             'tingkat_model' => 'tingkat',
             'kelas_model' => 'kelas',
             'tagihan_model' => 'tagihan',
@@ -34,6 +35,7 @@ class Keuangan extends CI_Controller {
         $data = array(
             'TA' => $this->ta->get_all(FALSE),
             'CAWU' => $this->cawu->get_all(FALSE),
+            'JENJANG' => $this->dept->get_all(FALSE),
             'TINGKAT' => $this->tingkat->get_all(FALSE),
             'TAGIHAN' => $this->tagihan->get_all(FALSE),
             'BULAN' => array(
@@ -61,14 +63,15 @@ class Keuangan extends CI_Controller {
 
 //        $pie_donut = $this->input->post('pie_donut');
         $ta = $this->input->post('ta');
+        $jenjang = $this->input->post('jenjang');
         $tingkat = $this->input->post('tingkat');
         $kelas = $this->input->post('kelas');
         $akhir_tanggal = $this->input->post('akhir_tanggal');
         $mulai_tanggal = $this->input->post('mulai_tanggal');
         $pegawai = $this->input->post('pegawai');
         
-        $pembayaran = $this->keuangan->get_data('Pembayaran', $ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
-        $pengembalian = $this->keuangan->get_data('Pengembalian', $ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $pembayaran = $this->keuangan->get_data('Pembayaran', $ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $pengembalian = $this->keuangan->get_data('Pengembalian', $ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         
         $data_source = array(
             $pembayaran,
@@ -119,16 +122,17 @@ class Keuangan extends CI_Controller {
 
     public function export() {
         $ta = $this->input->get('ta');
+        $jenjang = $this->input->get('jenjang');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
-        $akhir_tanggal = $this->input->get('bulan');
-        $mulai_tanggal = $this->input->get('tahun');
-        $pegawai = $this->input->post('pegawai');
+        $akhir_tanggal = $this->input->get('akhir_tanggal');
+        $mulai_tanggal = $this->input->post('mulai_tanggal');
+        $pegawai = $this->input->get('pegawai');
         
         header("Content-type: application/vnd-ms-excel");
         header("Content-Disposition: attachment; filename=data_keuangan_" . date('Y-m-d_H-i-s') . ".csv");
 
-        echo $this->keuangan->export_data($ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        echo $this->keuangan->export_data($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
     }
     
     public function ajax_list() {
@@ -142,7 +146,7 @@ class Keuangan extends CI_Controller {
         $pegawai = $this->input->post('pegawai');
 
         $id_datatables = 'datatable1';
-        $list = $this->keuangan->get_datatables($ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $list = $this->keuangan->get_datatables($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $item) {
@@ -164,8 +168,8 @@ class Keuangan extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->keuangan->count_all($ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
-            "recordsFiltered" => $this->keuangan->count_filtered($ta, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
+            "recordsTotal" => $this->keuangan->count_all($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
+            "recordsFiltered" => $this->keuangan->count_filtered($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
             "data" => $data,
         );
 

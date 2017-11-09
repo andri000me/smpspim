@@ -64,10 +64,23 @@ $options = array(
                             </div>
                         </div>
                         <div class="form-group filter-lanjutan">
-                            <label class="col-sm-3 control-label">Jenjang Tingkat</label>
+                            <label class="col-sm-3 control-label">Jenjang</label>
+                            <div class="col-sm-4">
+                                <select id="jenjang" class="form-control">
+                                    <option value="">-- Pilih Jenjang --</option>
+                                    <?php
+                                    foreach ($JENJANG as $value) {
+                                        echo '<option value="' . $value->ID_DEPT. '">' . $value->NAMA_DEPT . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group filter-lanjutan">
+                            <label class="col-sm-3 control-label">Tingkat</label>
                             <div class="col-sm-4">
                                 <select id="tingkat" class="form-control">
-                                    <option value="">-- Pilih Jenjang Tingkat --</option>
+                                    <option value="">-- Pilih Tingkat --</option>
                                     <?php
                                     foreach ($TINGKAT as $value) {
                                         echo '<option value="' . $value->ID_TINGK . '">' . $value->KETERANGAN_TINGK . '</option>';
@@ -259,6 +272,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
     function request_chart_<?php echo $id; ?>(type) {
 //        var kelompok = $("#kelompok").val();
         var ta = $("#ta").val();
+        var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
@@ -281,7 +295,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         $(".table-datatable1").slideUp();
 
 //        if(kelompok !== '')
-        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai, success);
+        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai, success);
 //        else {
 //            $("#" + id).html(" ");
 //            
@@ -291,12 +305,13 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
     function export_data() {
         var ta = $("#ta").val();
+        var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
         var akhir_tanggal = $("#akhir_tanggal").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
 
-        var req = "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
+        var req = "&ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
 
         window.open("<?php echo site_url('laporan/keuangan/export'); ?>?detail=detail" + req);
     }
