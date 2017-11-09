@@ -20,7 +20,7 @@ class Asal_santri extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('asal_santri_model', 'asal_santri');
-        $this->auth->validation(11);
+        $this->auth->validation(array(11, 2));
     }
 
     public function index() {

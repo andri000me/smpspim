@@ -32,6 +32,8 @@ class Siswa_model extends CI_Model {
         $this->db->join('md_jenis_kelamin mjk', $this->table.'.JK_SISWA=mjk.ID_JK', 'LEFT');
         $this->db->join('md_kewarganegaraan mkw', $this->table.'.WARGA_SISWA=mkw.ID_WARGA', 'LEFT');
         $this->db->join('md_golongan_darah mgd', $this->table.'.GOL_DARAH_SISWA=mgd.ID_DARAH', 'LEFT');
+        $this->db->join('md_asal_santri mas', $this->table.'.STATUS_ASAL_SISWA=mas.MD_ASSAN', 'LEFT');
+        $this->db->join('md_status_kk mskk', $this->table.'.STATUS_KK_SISWA=mskk.ID_SKK', 'LEFT');
         $this->db->join('md_hobi mhi', $this->table.'.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
         $this->db->join('md_tempat_tinggal mtt', $this->table.'.TEMPAT_TINGGAL_SISWA=mtt.ID_TEMTING', 'LEFT');
         $this->db->join('md_pondok_siswa mps', $this->table.'.PONDOK_SISWA=mps.ID_MPS', 'LEFT');

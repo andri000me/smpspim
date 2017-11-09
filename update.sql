@@ -24,3 +24,5 @@ ALTER TABLE `md_siswa` ADD FOREIGN KEY (`STATUS_KK_SANTRI`) REFERENCES `simapes_
 INSERT INTO `md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `ICON_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('01103011000', 'STATUS KK', 'master_data/status_kk', 'index', NULL, '1', '2', '0'), ('01103011001', 'STATUS KK - ADD', 'master_data/status_kk', 'add', NULL, '0', '2', '0'), ('01103011002', 'STATUS KK - EDIT', 'master_data/status_kk', 'edit', NULL, '0', '2', '0'), ('01103011003', 'STATUS KK - DELETE', 'master_data/status_kk', 'delete', NULL, '0', '2', '0');
 INSERT INTO `md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('01103011000', '11'), ('01103011001', '11'), ('01103011002', '11'), ('01103011003', '11')
 
+ALTER TABLE `md_siswa` CHANGE `STATUS_KK_SANTRI` `STATUS_KK_SISWA` INT(12) NOT NULL;
+ALTER TABLE `md_siswa` CHANGE `STATUS_KK_SISWA` `STATUS_KK_SISWA` INT(12) NULL DEFAULT NULL;

@@ -31,6 +31,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <div id="tab-1" class="tab-pane active">
                         <div class="panel-body">
                             <?php $this->generate->input_text('Nomor KK', array('name' => 'KK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->KK_SISWA : '', 'value' => $mode_edit ? $data->KK_SISWA : ''), FALSE, 4); ?>
+                            <?php $this->generate->input_select2('Status KK', array('name' => 'STATUS_KK_SISWA', 'url' => site_url('master_data/status_kk/auto_complete')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->STATUS_KK_SISWA, 'text' => $data->NAMA_SKK) : NULL); ?>
                             <?php $this->generate->input_text('NIK', array('name' => 'NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIK_SISWA : '', 'value' => $mode_edit ? $data->NIK_SISWA : '', 'id' => 'NIK_SISWA', 'onchange' => 'return check_data(\'NIK_SISWA\');'), TRUE, 4); ?>
                             <?php $this->generate->input_text('NISN', array('name' => 'NISN_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NISN_SISWA : '', 'value' => $mode_edit ? $data->NISN_SISWA : '', 'id' => 'NISN_SISWA', 'onchange' => 'return check_data(\'NISN_SISWA\');'), FALSE, 4); ?>
                             <?php $this->generate->input_text('Nama Lengkap', array('name' => 'NAMA_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->NAMA_SISWA : ''), TRUE); ?>
@@ -38,6 +39,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <?php $this->generate->input_text('Tempat Lahir', array('name' => 'TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->TEMPAT_LAHIR_SISWA : ''), TRUE, 4); ?>
                             <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'TANGGAL_LAHIR_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_LAHIR_SISWA) : ''), TRUE, 2); ?>
                             <?php $this->generate->input_select2('Pondok Siswa', array('name' => 'PONDOK_SISWA', 'url' => site_url('master_data/pondok_siswa/auto_complete')), FALSE, 8, FALSE, $mode_edit ? array('id' => $data->PONDOK_SISWA, 'text' => $data->NAMA_PONDOK_MPS) : '', '<div class="col-sm-1"><a href="' . site_url('master_data/pondok_siswa') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
+                            <?php $this->generate->input_select2('Status Asal Siswa', array('name' => 'STATUS_ASAL_SISWA', 'url' => site_url('master_data/asal_santri/auto_complete')), FALSE, 6, FALSE, $mode_edit ? array('id' => $data->STATUS_ASAL_SISWA, 'text' => $data->NAMA_ASSAN) : NULL); ?>
                         </div>
                     </div>
                     <div id="tab-11" class="tab-pane ">
