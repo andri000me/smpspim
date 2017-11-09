@@ -374,12 +374,13 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
     function datatables_data() {
         var ta = $("#ta").val();
+        var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
         var akhir_tanggal = $("#akhir_tanggal").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
 
-        var req = "?ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
+        var req = "?ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
 
         table = initialize_datatables(id_table, '<?php echo site_url('laporan/keuangan/ajax_list'); ?>' + req, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         remove_splash();

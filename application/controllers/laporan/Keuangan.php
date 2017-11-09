@@ -126,7 +126,7 @@ class Keuangan extends CI_Controller {
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
         $akhir_tanggal = $this->input->get('akhir_tanggal');
-        $mulai_tanggal = $this->input->post('mulai_tanggal');
+        $mulai_tanggal = $this->input->get('mulai_tanggal');
         $pegawai = $this->input->get('pegawai');
         
         header("Content-type: application/vnd-ms-excel");
@@ -139,11 +139,12 @@ class Keuangan extends CI_Controller {
         $this->generate->set_header_JSON();
         
         $ta = $this->input->get('ta');
+        $jenjang = $this->input->get('jenjang');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
-        $akhir_tanggal = $this->input->get('bulan');
-        $mulai_tanggal = $this->input->get('tahun');
-        $pegawai = $this->input->post('pegawai');
+        $akhir_tanggal = $this->input->get('akhir_tanggal');
+        $mulai_tanggal = $this->input->get('mulai_tanggal');
+        $pegawai = $this->input->get('pegawai');
 
         $id_datatables = 'datatable1';
         $list = $this->keuangan->get_datatables($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
