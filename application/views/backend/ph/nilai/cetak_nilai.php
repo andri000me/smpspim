@@ -58,7 +58,7 @@ foreach ($data as $detail) {
         $pdf->Cell(45, 5, $this->pdf_handler->cut_text($pdf, $item['NAMA_SISWA'], 45), 1, 0, 'L');
         $pdf->Cell(10, 5, $item['LARI'], 1, 0, 'C');
         foreach ($kitab as $item_kitab) {
-            $pdf->Cell(75 / count($kitab), 5, $item[$item_kitab->ID_KITAB], 1, 0, 'C');
+            $pdf->Cell(75 / count($kitab), 5, $item[$item_kitab->ID_BATASAN], 1, 0, 'C');
         }
         $pdf->Cell(10, 5, $item['NILAI_PNH'], 1, 0, 'C');
         $pdf->Cell(24, 5, $item['STATUS_PNH'], 1, 0, 'L');

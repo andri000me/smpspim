@@ -1,5 +1,5 @@
 <?php
-$this->generate->generate_panel_content("Tambah Absen Siswa Harian", "Form tambah absen siswa harian");
+$this->generate->generate_panel_content("Tambah Absen Siswa Bulanan", "Form tambah absen siswa bulanan");
 ?>
 
 <div class="content animate-panel">
@@ -15,20 +15,8 @@ $this->generate->generate_panel_content("Tambah Absen Siswa Harian", "Form tamba
                         <?php $this->generate->input_select2('Jenis Kegiatan', array('name' => 'JENIS_FILTER', 'url' => site_url('master_data/jenis_absensi/auto_complete')), TRUE, 8, FALSE, NULL); ?>
                         <?php $this->generate->input_date('Tanggal', array('name' => 'TANGGAL_FILTER', 'value' => $this->date_format->to_view(date('Y-m-d')), 'onchange' => 'date_changed();'), TRUE, 2); ?>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Status Validasi KBM</label>
-                            <div class="col-md-10">
-                                <h4 id="status_validasi" class="text-info"></h4>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <div class="col-md-2 col-md-offset-2">
                                 <button type="button" class="btn btn-save btn-primary btn-block" onclick="tetapkan_filter();"><i class="fa fa-book"></i>&nbsp;&nbsp;Buka</button>
-                            </div>
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-save btn-success btn-block" id="btn-validasi" disabled onclick="validasi_kelas();"><i class="fa fa-check"></i>&nbsp;&nbsp;Validasi</button>
-                            </div>
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-save btn-info btn-block" id="btn-validasi-semua" onclick="validasi_semua_kelas();"><i class="fa fa-check"></i>&nbsp;&nbsp;Validasi Semua Kelas</button>
                             </div>
                         </div>
                     </form>

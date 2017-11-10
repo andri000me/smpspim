@@ -75,17 +75,18 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     };
     var functionAddData = function (e, dt, node, config) {
 //        create_form_input(id_form, id_modal, url_form, title, null);
-        window.open('<?php echo site_url('akademik/kehadiran/tambah_absen'); ?>', '_blank');
+        window.open('<?php // echo site_url('akademik/kehadiran/tambah_absen'); ?>', '_blank');
     };
 
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('akademik/kehadiran/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
-        $(".buttons-copy, .buttons-pdf").remove();
-        
 //        $('<a class="btn btn-default btn-sm buttons-kehadiran" tabindex="0" aria-controls="datatable1" data-vivaldi-spatnav-clickable="1" data-toggle="modal" data-target="#cetak_modal"><span>Cetak Kehadiran</span></a>').insertAfter('.buttons-add');
         $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-toggle="modal" data-target="#cetak_modal" onclick="set_type(0)"><span>Kehadiran KBM</span></a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal" onclick="set_type(1)"><span>Kehadiran Dauroh</span></a></li></ul></div>').insertAfter('.buttons-add');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Add <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="<?php echo site_url('akademik/kehadiran/tambah_absen'); ?>" target="_blank"><span>Pertanggal</span></a></li><li><a href="<?php echo site_url('akademik/kehadiran/tambah_absen_bulan'); ?>" target="_blank"><span>Perbulan</span></a></li></ul></div>').insertAfter('.buttons-add');
 //        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_kehadiran_siswa();">Kehadiran</a></li><!--<li><a href="#" onclick="cetak_rekap_semua();">Rekap Semua</a></li><li><a href="#" onclick="cetak_rekap_perkelas_perbulan();">Rekap Perkelas Perbulan</a></li><li><a href="#" onclick="cetak_rekap_perkelas_percawu();">Rekap Perkelas Percawu</a></li><li><a href="#" onclick="cetak_rekap_persiswa_perbulan();">Rekap Persiswa Perbulan</a></li><li><a href="#" onclick="cetak_rekap_persiswa_percawu();">Rekap Persiswa Percawu</a></li>--></ul></div>').insertAfter('.buttons-add');
+        
+        $(".buttons-copy, .buttons-pdf, .buttons-add").remove();
 
 
         $(".js-source-states-ID_KELAS").on("change", "", function(){

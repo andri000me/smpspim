@@ -402,4 +402,8 @@ class Kehadiran extends CI_Controller {
         $this->generate->output_JSON(array('status' => 1));
     }
 
+    public function tambah_absen_bulan() {
+        $this->generate->backend_view('akademik/kehadiran/form_bulanan');
+    }
+
 }

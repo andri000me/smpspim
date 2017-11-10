@@ -130,13 +130,13 @@ class Nilai extends CI_Controller {
 
             foreach ($data_kitab as $detail_kitab) {
                 $data_nilai = $this->nilai_hafalan->get_nilai_siswa($item->TA_AS, $item->ID_SISWA, $detail_kitab->ID_BATASAN);
-
-                $row[$detail_kitab->ID_KITAB] = $data_nilai == NULL ? '' : $data_nilai->NILAI_PHN;
+                
+                $row[$detail_kitab->ID_BATASAN] = $data_nilai == NULL ? '' : $data_nilai->NILAI_PHN;
             }
 
             $row['NILAI_PNH'] = $item->NILAI_PNH;
             $row['STATUS_PNH'] = $item->STATUS_PNH;
-
+            
             $data[] = $row;
         }
 
@@ -149,7 +149,7 @@ class Nilai extends CI_Controller {
                 )
             )
         );
-
+        
         $this->load->view('backend/ph/nilai/cetak_nilai', $output);
     }
 
@@ -236,6 +236,7 @@ class Nilai extends CI_Controller {
 
     private function hitung_nilai($ID_SISWA, $NILAI_MAKS_PNH, $NILAI_PHN, $ID_KITAB) {
         $NILAI_AKHIR = array();
+        $SETORAN_LENGKAP = TRUE;
 
         $NILAI_PERKITAB = array();
         foreach ($ID_KITAB as $INDEX => $DETAIL_KITAB) {
@@ -248,6 +249,9 @@ class Nilai extends CI_Controller {
         $NILAI = array();
         foreach ($NILAI_PERKITAB as $ID_KITAB => $DETAIL_NILAI) {
             foreach ($DETAIL_NILAI as $DETAIL) {
+                if ($DETAIL['NILAI'] == 0)
+                    $SETORAN_LENGKAP = FALSE;
+
                 if (isset($NILAI[$ID_KITAB]))
                     $NILAI[$ID_KITAB] += $DETAIL['NILAI'];
                 else
@@ -263,7 +267,7 @@ class Nilai extends CI_Controller {
         $NILAI_RATA = round($NILAI_TOTAL / count($NILAI));
         $NILAI_MINIMAL = $this->pengaturan->getNilaiMinimalHafal();
 
-        if ($NILAI_RATA >= $NILAI_MINIMAL)
+        if (($NILAI_RATA >= $NILAI_MINIMAL) && $SETORAN_LENGKAP)
             $STATUS_PNH = 'HAFAL';
         else
             $STATUS_PNH = 'TIDAK HAFAL';
