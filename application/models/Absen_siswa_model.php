@@ -18,7 +18,7 @@ class Absen_siswa_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+    private function _get_table($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH = NULL) {
         $this->db->select('*, IF(NIS_SISWA IS NULL, "KELUAR", NIS_SISWA) AS NIS_SISWA_SHOW');
         $this->db->from($this->table);
         $this->db->join('md_siswa ms',$this->table.'.SISWA_AS=ms.ID_SISWA');
@@ -31,7 +31,7 @@ class Absen_siswa_model extends CI_Model {
         ));
     }
 
-    private function _get_datatables_query($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+    private function _get_datatables_query($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH = NULL) {
         $this->_get_table($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH);
         $i = 0;
         $search_value = $_POST['search']['value'];
@@ -77,7 +77,7 @@ class Absen_siswa_model extends CI_Model {
         }
     }
 
-    function get_datatables($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+    function get_datatables($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH = NULL) {
         $this->_get_datatables_query($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
@@ -86,14 +86,14 @@ class Absen_siswa_model extends CI_Model {
         return $query->result();
     }
 
-    function count_filtered($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+    function count_filtered($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH = NULL) {
         $this->_get_datatables_query($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH);
         $query = $this->db->get();
 
         return $query->num_rows();
     }
 
-    public function count_all($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH) {
+    public function count_all($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH = NULL) {
         $this->_get_datatables_query($ID_KELAS, $JENIS_AKH, $TANGGAL_AKH);
 
         return $this->db->count_all_results();

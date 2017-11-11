@@ -13,7 +13,16 @@ $this->generate->generate_panel_content("Tambah Absen Siswa Bulanan", "Form tamb
                     <form class="form-horizontal">
                         <?php $this->generate->input_select2('Kelas', array('name' => 'KELAS_FILTER', 'url' => site_url('akademik/kelas/auto_complete')), TRUE, 7, FALSE, NULL); ?>
                         <?php $this->generate->input_select2('Jenis Kegiatan', array('name' => 'JENIS_FILTER', 'url' => site_url('master_data/jenis_absensi/auto_complete')), TRUE, 8, FALSE, NULL); ?>
-                        <?php $this->generate->input_date('Tanggal', array('name' => 'TANGGAL_FILTER', 'value' => $this->date_format->to_view(date('Y-m-d')), 'onchange' => 'date_changed();'), TRUE, 2); ?>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Bulan *</label>
+                            <div class="col-md-1">
+                                <input type="number" class="form-control" name="BULAN_FILTER" value="<?php echo date('j'); ?>" onchange="date_changed();" />
+                            </div>
+                            <label class="control-label col-md-1">Tahun *</label>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control" name="TAHUN_FILTER" value="<?php echo date('Y'); ?>" onchange="date_changed();" />
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="col-md-2 col-md-offset-2">
                                 <button type="button" class="btn btn-save btn-primary btn-block" onclick="tetapkan_filter();"><i class="fa fa-book"></i>&nbsp;&nbsp;Buka</button>
@@ -44,7 +53,6 @@ $this->generate->datatables($id_datatables, $title, $columns);
 <script type="text/javascript">
     var KELAS_FILTER = null;
     var JENIS_FILTER = null;
-    var STATUS_VALIDASI = null;
     var table;
     var id_table = '<?php echo $id_datatables; ?>';
     var title = '<?php echo $title; ?>';
@@ -67,8 +75,6 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             KELAS_FILTER = data_kelas.id;
             $(".table-datatable1").slideUp();
-
-            get_status_validasi();
         });
 
         $(".js-source-states-JENIS_FILTER").on("change", "", function () {
@@ -79,113 +85,26 @@ $this->generate->datatables($id_datatables, $title, $columns);
         });
 
         $(".table-datatable1").hide();
-
-        $("#status_validasi").html('Pilih kelas dan tanggal terlebih dahulu');
     });
-
-    function get_status_validasi() {
-        var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var success = function (data) {
-            $("#btn-validasi").removeAttr('disabled');
-
-            if (data.status) {
-                STATUS_VALIDASI = true;
-
-                $("#btn-validasi").html('<i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Validasi');
-                $("#btn-validasi").addClass('btn-danger');
-                $("#btn-validasi").removeClass('btn-success');
-
-                $("#status_validasi").html('YA');
-                $("#status_validasi").addClass('text-success');
-                $("#status_validasi").removeClass('text-info');
-                $("#status_validasi").removeClass('text-danger');
-            } else {
-                STATUS_VALIDASI = false;
-
-                $("#btn-validasi").html('<i class="fa fa-check"></i>&nbsp;&nbsp;Validasi');
-                $("#btn-validasi").addClass('btn-success');
-                $("#btn-validasi").removeClass('btn-danger');
-
-                $("#status_validasi").html('TIDAK');
-                $("#status_validasi").addClass('text-danger');
-                $("#status_validasi").removeClass('text-success');
-                $("#status_validasi").removeClass('text-info');
-            }
-        };
-
-        STATUS_VALIDASI = null;
-        $("#btn-validasi").attr('disabled', 'true');
-
-        $("#status_validasi").addClass('text-info');
-        $("#status_validasi").removeClass('text-success');
-        $("#status_validasi").removeClass('text-danger');
-        $("#status_validasi").html('Pilih kelas dan tanggal terlebih dahulu');
-
-        if (TANGGAL_AKH !== '' && KELAS_FILTER !== null)
-            create_ajax('<?php echo site_url('akademik/kehadiran/cek_status_validasi'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
-    }
-
-    function validasi_kelas() {
-        var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var success = function (data) {
-            get_status_validasi();
-
-            remove_splash();
-        };
-        var action = function (isConfirm) {
-            if (isConfirm) {
-                create_splash('Sistem sedang memvalidasi absensi KBM');
-                create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
-            }
-        };
-
-        if (STATUS_VALIDASI) {
-            create_swal_option('Peringatan', 'Menghapus validasi mengakibatkan absensi selain KBM tidak valid. Pastikan perubahan yang dilakukan di KBM juga melihat jenis kegiatan yang lain.', action);
-        } else {
-            create_splash('Sistem sedang memvalidasi absensi KBM');
-            create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
-        }
-    }
-
-    function validasi_semua_kelas() {
-        create_splash('Sistem sedang memvalidasi absensi KBM');
-        var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var success = function (data) {
-            get_status_validasi();
-
-            remove_splash();
-        };
-
-        create_ajax('<?php echo site_url('akademik/kehadiran/validasi_semua_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH, success);
-    }
-
+    
     function date_changed() {
-        var TANGGAL_FILTER = $("#TANGGAL_FILTER").val();
-
         $(".table-datatable1").slideUp();
-
-        get_status_validasi();
-
-        if (TANGGAL_FILTER !== '')
-            $("#btn-validasi-semua").removeAttr('disabled');
-        else
-            $("#btn-validasi-semua").attr('disabled', true);
     }
 
     function tetapkan_filter() {
-        var TANGGAL_FILTER = $("#TANGGAL_FILTER").val();
+        var BULAN_FILTER = $("#BULAN_FILTER").val();
+        var TAHUN_FILTER = $("#TAHUN_FILTER").val();
 
-        if (KELAS_FILTER === null || JENIS_FILTER === null || TANGGAL_FILTER === '' || STATUS_VALIDASI === null) {
+        if (KELAS_FILTER === null || JENIS_FILTER === null || BULAN_FILTER === '' || TAHUN_FILTER === null) {
             create_homer_error("Silahkan lengkapi kolom terlebih dahulu.");
+            
             $(".table-datatable1").slideUp();
-        } else if (STATUS_VALIDASI === false && parseInt(JENIS_FILTER) > 1) {
-            create_homer_error('Tidak dapat membuka absensi karena KBM belum divalidasi.');
-        } else if (STATUS_VALIDASI === true && parseInt(JENIS_FILTER) === 1) {
-            create_homer_error('Tidak dapat membuka absensi KBM karena telah divalidasi.');
+        } else if ((parseInt(BULAN_FILTER) >= 1) && (parseInt(BULAN_FILTER) <= 12)) {
+            create_homer_error('Bulan harus antara 1 sampai 12.');
         } else {
             $(".table-datatable1").attr('style', 'margin-top: -60px;');
 
-            table = initialize_datatables(id_table, '<?php echo site_url('akademik/kehadiran/ajax_form'); ?>/' + KELAS_FILTER + '/' + JENIS_FILTER + '/' + TANGGAL_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+            table = initialize_datatables(id_table, '<?php echo site_url('akademik/kehadiran/ajax_form_bulanan'); ?>/' + KELAS_FILTER + '/' + JENIS_FILTER + '/' + BULAN_FILTER + '/' + TAHUN_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
             remove_splash();
 
@@ -195,65 +114,6 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             $("#datatable1_length").children().children().val('-1').trigger('change');
         }
-    }
-
-    function simpan_absen(that) {
-        var loading_bar = '<img src="<?php echo base_url('assets/images/loading-bars.svg'); ?>" width="31px" class="loading_bar"/>';
-        var TANGGAL_AKH = $("#TANGGAL_FILTER").val();
-        var SISWA_AKH = $(that).data('siswa');
-        var KETERANGAN_AKH = $(that).parent().prev().children();
-        var ALASAN_AKH = $(that).parent().prev().prev().children();
-        var success = function (data) {
-            $(that).next().remove();
-
-            if (data.status) {
-//                $(that).next().data('siswa', data.status).show();
-                KETERANGAN_AKH.attr('disabled', 'true');
-                ALASAN_AKH.attr('disabled', 'true');
-            } else {
-                $(that).show();
-                create_homer_error("Gagal menyimpan ketidakhadiran siswa");
-                KETERANGAN_AKH.val('');
-                ALASAN_AKH.val('-');
-            }
-
-            reload_datatables(table);
-        };
-
-        if (ALASAN_AKH.val() === '-') {
-            create_homer_error("Pilih alasan terlebih dahulu");
-        } else {
-            $(loading_bar).insertAfter(that);
-            $(that).hide();
-
-            create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=' + KETERANGAN_AKH.val() + '&ALASAN_AKH=' + ALASAN_AKH.val() + '&JENIS_AKH=' + JENIS_FILTER, success);
-        }
-    }
-
-    function hapus_absen(that) {
-        var loading_bar = '<img src="<?php echo base_url('assets/images/loading-bars.svg'); ?>" width="31px" class="loading_bar"/>';
-        var ID = $(that).data('siswa');
-        var KETERANGAN_AKH = $(that).parent().prev().children();
-        var ALASAN_AKH = $(that).parent().prev().prev().children();
-        var success = function (data) {
-            $(that).next().remove();
-
-            if (data.status) {
-//                $(that).prev().show();
-                KETERANGAN_AKH.removeAttr('disabled').val('');
-                ALASAN_AKH.removeAttr('disabled').val('-');
-            } else {
-//                $(that).show();
-                create_homer_error("Gagal menyimpan ketidakhadiran siswa");
-            }
-
-            reload_datatables(table);
-        };
-
-        $(loading_bar).insertAfter(that);
-        $(that).hide();
-
-        create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_delete'); ?>', 'ID=' + ID, success);
     }
 
 </script>

@@ -144,7 +144,7 @@ foreach ($JENJANG as $ID_DEPT => $NAMA_DEPT) {
             array('align' => 'L', 'width' => 42, 'text' => $alamat),
             array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL['ALAMAT_MPS'])),
             array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
-            array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
+            array('align' => 'C', 'width' => 15, 'text' => $DETAIL['JUMLAH_POIN_KSH']),
             array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
         );
 

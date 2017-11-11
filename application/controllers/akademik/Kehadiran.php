@@ -406,4 +406,29 @@ class Kehadiran extends CI_Controller {
         $this->generate->backend_view('akademik/kehadiran/form_bulanan');
     }
 
+    public function ajax_form_bulanan($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER) {
+        $this->generate->set_header_JSON();
+
+        $id_datatables = 'datatable1';
+        $list = $this->absen_siswa->get_datatables($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $item->NO_ABSEN_AS;
+            $row[] = $item->NIS_SISWA_SHOW;
+            $row[] = $item->NAMA_SISWA;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->absen_siswa->count_all($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER),
+            "recordsFiltered" => $this->absen_siswa->count_filtered($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER),
+            "data" => $data,
+        );
+
+        $this->generate->output_JSON($output);
+    }
+
 }

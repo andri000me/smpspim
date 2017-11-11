@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -9,8 +10,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Laporan_surat_segera_model extends CI_Model {
 
-    var $table = 'komdis_siswa_header ksh';
-    var $column = array('NAMA_CAWU','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','ksh.POIN_KSH', 'NAMA_KJT','POIN_KJT','ID_KSH', 'ID_KSH');
+    var $table = 'komdis_siswa_header';
+    var $column = array('NAMA_CAWU', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'JUMLAH_POIN_KSH', 'NAMA_KJT', 'POIN_KJT', 'ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("POIN_KSH" => 'DESC');
 
@@ -19,14 +20,14 @@ class Laporan_surat_segera_model extends CI_Model {
     }
 
     private function _get_table() {
-        $this->db->from($this->table);
-        $this->db->join('md_tahun_ajaran mta', $this->table.'.TA_KSH=mta.ID_TA');
-        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
-        $this->db->join('md_siswa ms', $this->table.'.SISWA_KSH=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
-        $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="'.$this->session->userdata("ID_TA_ACTIVE").'" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
+        $this->db->from('(SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH=' . $this->session->userdata('ID_TA_ACTIVE') . ' GROUP BY SISWA_KSH) komdis_siswa_header');
+        $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_KSH=mta.ID_TA');
+        $this->db->join('md_catur_wulan mcw', $this->table . '.CAWU_KSH=mcw.ID_CAWU');
+        $this->db->join('md_siswa ms', $this->table . '.SISWA_KSH=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
+        $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('komdis_jenis_tindakan kjt', $this->table.'.POIN_KSH>=kjt.POIN_KJT AND '.$this->table.'.POIN_KSH<=kjt.POIN_MAKS_KJT');
-        $this->db->join('komdis_tindakan kt', $this->table.'.ID_KSH=kt.PELANGGARAN_HEADER_KT AND kjt.ID_KJT=kt.TINDAKAN_KT', 'LEFT');
+        $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.JUMLAH_POIN_KSH>=kjt.POIN_KJT AND ' . $this->table . '.JUMLAH_POIN_KSH<=kjt.POIN_MAKS_KJT');
+        $this->db->join('komdis_tindakan kt', $this->table . '.ID_KSH=kt.PELANGGARAN_HEADER_KT AND kjt.ID_KJT=kt.TINDAKAN_KT', 'LEFT');
         $this->db->where('((ID_KT IS NULL) OR (ID_KT IS NOT NULL AND PROSES_TAKLIQ_KSH = 0 AND TINDAKAN_KT = 4) OR (ID_KT IS NOT NULL AND PROSES_MUTASI_KSH = 0 AND TINDAKAN_KT = 5))');
         $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->group_by('ID_KSH');
@@ -81,7 +82,7 @@ class Laporan_surat_segera_model extends CI_Model {
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
-        
+
         return $query->result();
     }
 
@@ -115,15 +116,16 @@ class Laporan_surat_segera_model extends CI_Model {
         ));
 
         $result = $this->db->get()->row();
-        
-        if($result == NULL)
+
+        if ($result == NULL)
             return 0;
         else
             return $result->POIN_KSH;
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_KSH as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_KSH as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -151,14 +153,14 @@ class Laporan_surat_segera_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
