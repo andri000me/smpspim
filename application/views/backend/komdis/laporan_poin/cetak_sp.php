@@ -78,7 +78,7 @@ foreach ($data_tindakan as $data) {
     $pdf->MultiCell(0, 5, ': ' . (($data['PONDOK_SISWA'] == NULL || $data['PONDOK_SISWA'] == 1) ? $alamat_siswa : ($data['NAMA_PONDOK_MPS'] . ' ' . $data['ALAMAT_MPS'])));
     $pdf->Ln(4);
 
-    $pdf->MultiCell(0, 5, 'Diberikan PERINGATAN sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf b yang berbunyi: "Peringatan tertulis jika akumulasi skor pelanggaran antara ' . $POIN_MIN . ' hingga ' . $POIN_MAKS . ' poin" dikarenakan telah memiliki akumulasi poin ' . $data['POIN_KSH'] . '. Adapun data pelanggaran sebagaimana terlampir.');
+    $pdf->MultiCell(0, 5, 'Diberikan PERINGATAN sesuai dengan Peraturan Pelengkap Tata Tertib Siswa Perguruan Islam Mathali\'ul Falah Tahun 2010 Bab III tentang Pembinaan dan Sanksi Pasal 11 huruf b yang berbunyi: "Peringatan tertulis jika akumulasi skor pelanggaran antara ' . $POIN_MIN . ' hingga ' . $POIN_MAKS . ' poin" dikarenakan telah memiliki akumulasi poin ' . $data['JUMLAH_POIN_KSH'] . '. Adapun data pelanggaran sebagaimana terlampir.');
     $pdf->Ln(4);
 
     $pdf->Cell(12);

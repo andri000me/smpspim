@@ -139,8 +139,8 @@ if (isset($data['NON-SYARIAH'])) {
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
                 array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL['ALAMAT_MPS'])),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
-                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
-                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
+                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['JUMLAH_POIN_KSH']),
+                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['JUMLAH_LARI_KSH']),
             );
 
             $pdf = $this->pdf_handler->wrap_row_table($pdf, $data_detail);
@@ -268,8 +268,8 @@ if (isset($data['SYARIAH'])) {
                 array('align' => 'L', 'width' => 42, 'text' => $alamat),
                 array('align' => 'L', 'width' => 42, 'text' => (($DETAIL['PONDOK_SISWA'] == NULL || $DETAIL['PONDOK_SISWA'] == 1) ? $alamat : $DETAIL['NAMA_PONDOK_MPS'] . ' ' . $DETAIL['ALAMAT_MPS'])),
                 array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_TAHUN_LALU_KSH']),
-                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['POIN_KSH']),
-                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['LARI_KSH']),
+                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['JUMLAH_POIN_KSH']),
+                array('align' => 'C', 'width' => 15, 'text' => $DETAIL['JUMLAH_LARI_KSH']),
             );
 
             $pdf = $this->pdf_handler->wrap_row_table($pdf, $data_detail);
