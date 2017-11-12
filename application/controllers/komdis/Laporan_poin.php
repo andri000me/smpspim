@@ -334,6 +334,7 @@ class Laporan_poin extends CI_Controller {
                         'NAMA_PONDOK_MPS' => $detail['NAMA_PONDOK_MPS'],
                         'ALAMAT_MPS' => $detail['ALAMAT_MPS'],
                         'POIN_KSH' => $detail['POIN_KSH'],
+                        'JUMLAH_POIN_KSH' => $detail['JUMLAH_POIN_KSH'],
                         'WALI_KELAS' => $detail['WALI_KELAS'],
                         'NAMA_TANGGUNGJAWAB' => $detail['NAMA_TANGGUNGJAWAB'],
                         'GELAR_AWAL_TANGGUNGJAWAB' => $detail['GELAR_AWAL_TANGGUNGJAWAB'],

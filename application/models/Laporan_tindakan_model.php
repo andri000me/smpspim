@@ -39,12 +39,14 @@ class Laporan_tindakan_model extends CI_Model {
     }
 
     private function _get_table_detail($select = false) {
-        if ($select)
-            $this->db->select('ID_SISWA, NIS_SISWA, NAMA_SISWA,NAMA_KELAS, AYAH_NAMA_SISWA, WALI_NAMA_SISWA, ALAMAT_SISWA, NAMA_KEC, NAMA_KAB, PONDOK_SISWA, NAMA_PONDOK_MPS, ALAMAT_MPS, POIN_TAHUN_LALU_KSH, POIN_KSH, LARI_KSH, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.GELAR_AWAL_PEG AS GELAR_AWAL_WALI_KELAS, mpk.NAMA_PEG AS WALI_KELAS, mpk.GELAR_AKHIR_PEG AS GELAR_AKHIR_WALI_KELAS, ID_DEPT, NAMA_DEPT, TA_KSH, SISWA_KSH, NAMA_KJT, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH, DATA_KT, NOMOR_SURAT_KT, URL_KJT, TANGGAL_KT, NAMA_PROV, mp.GELAR_AWAL_PEG AS GELAR_AWAL_TANGGUNGJAWAB, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mp.GELAR_AKHIR_PEG AS GELAR_AKHIR_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS, TANGGAL_KT');
-        else
-            $this->db->select('*, mp.GELAR_AWAL_PEG AS GELAR_AWAL_TANGGUNGJAWAB, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mp.GELAR_AKHIR_PEG AS GELAR_AKHIR_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
         $this->db->from($this->table);
-        $this->db->join('komdis_siswa_header ksh', $this->table . '.PELANGGARAN_HEADER_KT=ksh.ID_KSH', 'LEFT');
+        if ($select) {
+            $this->db->select('ID_SISWA, NIS_SISWA, NAMA_SISWA,NAMA_KELAS, AYAH_NAMA_SISWA, WALI_NAMA_SISWA, ALAMAT_SISWA, NAMA_KEC, NAMA_KAB, PONDOK_SISWA, NAMA_PONDOK_MPS, ALAMAT_MPS, POIN_TAHUN_LALU_KSH, POIN_KSH, LARI_KSH, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mpk.GELAR_AWAL_PEG AS GELAR_AWAL_WALI_KELAS, mpk.NAMA_PEG AS WALI_KELAS, mpk.GELAR_AKHIR_PEG AS GELAR_AKHIR_WALI_KELAS, ID_DEPT, NAMA_DEPT, TA_KSH, SISWA_KSH, NAMA_KJT, JUMLAH_POIN_KSH, JUMLAH_LARI_KSH, DATA_KT, NOMOR_SURAT_KT, URL_KJT, TANGGAL_KT, NAMA_PROV, mp.GELAR_AWAL_PEG AS GELAR_AWAL_TANGGUNGJAWAB, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mp.GELAR_AKHIR_PEG AS GELAR_AKHIR_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS, TANGGAL_KT');
+            $this->db->join('(SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH=' . $this->session->userdata('ID_TA_ACTIVE') . ' GROUP BY SISWA_KSH) ksh', $this->table . '.PELANGGARAN_HEADER_KT=ksh.ID_KSH', 'LEFT');
+        } else {
+            $this->db->select('*, mp.GELAR_AWAL_PEG AS GELAR_AWAL_TANGGUNGJAWAB, mp.NAMA_PEG AS NAMA_TANGGUNGJAWAB, mp.GELAR_AKHIR_PEG AS GELAR_AKHIR_TANGGUNGJAWAB, mpk.NAMA_PEG AS WALI_KELAS');
+            $this->db->join('komdis_siswa_header ksh', $this->table . '.PELANGGARAN_HEADER_KT=ksh.ID_KSH', 'LEFT');
+        }
         $this->db->join('md_tahun_ajaran mta', 'ksh.TA_KSH=mta.ID_TA', 'LEFT');
         $this->db->join('md_catur_wulan mcw', 'ksh.CAWU_KSH=mcw.ID_CAWU', 'LEFT');
         $this->db->join('md_siswa ms', 'ksh.SISWA_KSH=ms.ID_SISWA', 'LEFT');
@@ -249,7 +251,7 @@ class Laporan_tindakan_model extends CI_Model {
         $this->db->group_by('SISWA_KSH');
 
         $result = $this->db->get();
-        
+
         return $result->result_array();
     }
 
