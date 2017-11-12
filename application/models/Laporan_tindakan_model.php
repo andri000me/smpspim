@@ -152,6 +152,7 @@ class Laporan_tindakan_model extends CI_Model {
     public function get_data_tindakan_sp($id) {
         $where = array('PAKET_SP_KT' => $id);
         $this->_get_table_detail(true);
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->where($where);
         $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->group_by('SISWA_KSH');
@@ -246,6 +247,7 @@ class Laporan_tindakan_model extends CI_Model {
             'TINDAKAN_KT' => $ID_KJT,
             'NOMOR_SURAT_KT' => $NOMOR_SURAT,
         ));
+        $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->order_by('ID_TINGK', 'ASC');
         $this->db->order_by('NAMA_SISWA', 'ASC');
         $this->db->group_by('SISWA_KSH');
