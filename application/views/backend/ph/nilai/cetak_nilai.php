@@ -39,13 +39,13 @@ foreach ($data as $detail) {
     $pdf->setRTL(true);
     $pdf->SetFont('aefurat', '', 9);
     $pdf->Cell(33);
-    foreach ($kitab as $item) {
+    foreach (array_reverse($kitab) as $item) {
         $pdf->Cell(75 / count($kitab), 5, $item->NAMA_KITAB, 'RLT', 0, 'C');
     }
     $pdf->Ln();
     
     $pdf->Cell(33);
-    foreach ($kitab as $item) {
+    foreach (array_reverse($kitab) as $item) {
         $pdf->Cell(75 / count($kitab), 5, $item->AWAL_BATASAN.' - '.$item->AKHIR_BATASAN, 'RLB', 0, 'C');
     }
     $pdf->setRTL(false);
