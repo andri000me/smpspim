@@ -37,25 +37,26 @@
                 <div class="hpanel">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-2">
-                                <select class="form-control" id="jenjang_jk" onchange="get_alarm()">
-                                    <option value="">-- Pilih Jenjang --</option>
-                                    <?php
-                                    foreach ($dept as $detail_dept) {
-                                        foreach ($jk as $detail_jk) {
-                                            echo '<option value="'.$detail_dept->ID_DEPT.'_'.$detail_jk->ID_JK.'">'.$detail_dept->NAMA_DEPT.' - '.$detail_jk->NAMA_JK.'</option>';
-                                        }
-                                    }
-                                    ?>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select class="form-control" id="jenjang_jk" onchange="get_alarm()">
+                                            <option value="">-- Pilih Jenis --</option>
+                                            <?php
+                                            foreach ($jk as $detail_jk) {
+                                                echo '<option value="KBM_' . $detail_jk->ID_JK . '">KBM - ' . $detail_jk->NAMA_JK . '</option>';
+                                                echo '<option value="UJIAN_' . $detail_jk->ID_JK . '">UJIAN - ' . $detail_jk->NAMA_JK . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row" id="alarm">
+                                </div>
+                                <hr>
                             </div>
-                            <div class="col-md-10">
-                                <h4 id="alarm" class="pull-right"></h4>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 50px;margin-bottom: 50px;height: 200px;">
-                            <div class="col-md-12 text-center">
-                                <i id="alarm_show" class="pe-7s-alarm" style="font-size: 150px"></i>
+                            <div class="col-md-6 text-center">
                                 <h1 id="jam" class="font-light text-primary" style="font-size: 150px;"></h1>
                             </div>
                         </div>
@@ -93,85 +94,69 @@
     <script src="<?php echo base_url(); ?>assets/scripts/apps.js"></script>
 
     <script type="text/javascript">
-        var ALARM = new Array();
-        var LOOP_ALARM = new Array('3');
-        var LOOP = 1;
-        
-        var DATE_SERVER = null;
-        var TAFAWUT = null;
-        
-        $(document).ready(function () {
-            create_homer_info('Pilih jenjang untuk mengambil alarm bel sekolah');
-            $("#alarm_show").hide();
-            
-            setInterval(function () {
-                create_ajax('<?php echo site_url('pencarian/get_tanggal_jam'); ?>', 'date=' + DATE_SERVER + '&tafawut=' + TAFAWUT, function (data) {
-                    $("#jam").html(data.jam);
-                    $("#tanggal").html(data.tanggal);
-                    DATE_SERVER = data.date;
-                    TAFAWUT = data.tafawut;
-                    
-                    if($.inArray(data.jam, ALARM) === 0) {
-                        LOOP = LOOP_ALARM[ALARM.indexOf(data.jam)];
-                        alarm_ringing();
-                    }
-                });
-            }, 1000);
-        });
-        
-        function alarm_ringing() {
-            var audio = new Audio('../files/aplikasi/alarm_' + LOOP + '.mp3');
-            var timer = 5000;
-            var timeout = (LOOP * timer) + 1000;
-            var RING = true;
-            var interval = setInterval(function() {
-                    if(RING) {
-                        $("#alarm_show").show();
-                        $("#jam").hide();
-                    } else {
-                        $("#alarm_show").hide();
-                        $("#jam").show();
-                    }
-                    RING = !RING;
-                }, 1000);
-                
-            audio.play();
-            setTimeout(function(){
-                clearInterval(interval);
-            }, timeout);
-            
-            $("#alarm_show").hide();
-            $("#jam").show();
-            
-            LOOP = 1;
-        }
-        
-        function get_alarm() {
-            var jenjang_jk = $('#jenjang_jk').val();
-            var jenjang_jk_split = jenjang_jk.split("_");
-            
-            if(jenjang_jk_split !== '') {
-                create_ajax('<?php echo site_url('pencarian/get_alarm'); ?>', 'DEPT_MJP=' + jenjang_jk_split[0] + '&JK_MJP=' + jenjang_jk_split[1], function (data) {
-                    $("#alarm").html(' ');
-                    $.each(data, function(key, value) {
-                        var bel_mulai = parseInt(value.BEL_MULAI_MJP);
-                        var bel_akhir = parseInt(value.BEL_AKHIR_MJP);
-                        
-                        if(bel_mulai > 0) {
-                            $("#alarm").append('<span class="label label-success">' + value.MULAI_MJP + '</span>&nbsp;<span class="label label-info">' + value.BEL_MULAI_MJP + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                            ALARM.push(value.MULAI_MJP);
-                            LOOP_ALARM.push(bel_mulai);
-                        } 
-                        
-                        if(bel_akhir > 0) {
-                            $("#alarm").append('<span class="label label-success">' + value.AKHIR_MJP + '</span>&nbsp;<span class="label label-info">' + value.BEL_AKHIR_MJP + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                            ALARM.push(value.AKHIR_MJP);
-                            LOOP_ALARM.push(bel_akhir);
-                        }
-                    });
-                });
-            }
-        }
+                                    var ALARM = new Array();
+                                    var FILE_ALARM = new Array();
+                                    var FILE_RINGING = 'alarm_1.mp3';
+
+                                    var DATE_SERVER = null;
+                                    var TAFAWUT = null;
+
+                                    $(document).ready(function () {
+                                        create_homer_info('Pilih jenis untuk mengambil alarm bel sekolah');
+
+                                        setInterval(function () {
+                                            create_ajax('<?php echo site_url('pencarian/get_tanggal_jam'); ?>', 'date=' + DATE_SERVER + '&tafawut=' + TAFAWUT, function (data) {
+                                                $("#jam").html(data.jam);
+                                                $("#tanggal").html(data.tanggal);
+                                                DATE_SERVER = data.date;
+                                                TAFAWUT = data.tafawut;
+                                                
+                                                jam_server = data.jam.toString();
+                                                
+                                                if ($.inArray(jam_server, ALARM) !== -1) {
+                                                    FILE_RINGING = FILE_ALARM[ALARM.indexOf(jam_server)];
+                                                    alarm_ringing();
+                                                }
+                                            });
+                                        }, 1000);
+                                    });
+
+                                    function alarm_ringing() {
+                                        var audio = new Audio('../files/aplikasi/' + FILE_RINGING);
+                                        
+                                        console.log('ALARM IS RINGING NOW');
+                                        flag_alarm(true);
+                                        audio.play();
+                                        flag_alarm(false);
+                                    }
+
+                                    function flag_alarm(seeFlag) {
+                                        if (seeFlag) {
+                                            $("#jam").removeClass('text-primary');
+                                            $("#jam").addClass('text-success');
+                                        } else {
+                                            setTimeout(function () {
+                                                $("#jam").removeClass('text-success');
+                                                $("#jam").addClass('text-primary');
+                                            }, 15000);
+                                        }
+                                    }
+
+                                    function get_alarm() {
+                                        var jenjang_jk = $('#jenjang_jk').val();
+                                        var jenjang_jk_split = jenjang_jk.split("_");
+
+                                        if (jenjang_jk_split !== '') {
+                                            create_ajax('<?php echo site_url('pencarian/get_alarm'); ?>', 'JENIS_MA=' + jenjang_jk_split[0] + '&JK_MA=' + jenjang_jk_split[1], function (data) {
+                                                $("#alarm").html(' ');
+                                                $.each(data, function (key, value) {
+                                                    $("#alarm").append('<div class="col-md-6"><h4><span class="label label-success">' + value.JAM_MA + '</span>&nbsp;<span class="label label-info">' + value.FILE_MA + '</span></h4></div>');
+                                                    ALARM.push(value.JAM_MA);
+                                                    FILE_ALARM.push(value.FILE_MA);
+                                                });
+                                            });
+                                        }
+                                    }
     </script>
 
 </body>

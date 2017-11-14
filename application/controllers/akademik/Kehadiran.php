@@ -220,7 +220,7 @@ class Kehadiran extends CI_Controller {
                 'KELAS_AS' => $detail_kelas->ID_KELAS,
                 'KONVERSI_AS' => 0
             );
-            
+
             if ($JENIS_CETAK == 8)
                 $kelas_siswa = $this->kehadiran->rekapitulasi_absen($where_siswa);
             else
@@ -406,11 +406,11 @@ class Kehadiran extends CI_Controller {
         $this->generate->backend_view('akademik/kehadiran/form_bulanan');
     }
 
-    public function ajax_form_bulanan($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER) {
+    public function ajax_form_bulanan($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER, $JUMLAH_HARI) {
         $this->generate->set_header_JSON();
 
         $id_datatables = 'datatable1';
-        $list = $this->absen_siswa->get_datatables($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER);
+        $list = $this->absen_siswa->get_datatables($ID_KELAS);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $item) {
@@ -419,16 +419,32 @@ class Kehadiran extends CI_Controller {
             $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA_SHOW;
             $row[] = $item->NAMA_SISWA;
+
+            for ($i = 1; $i <= $JUMLAH_HARI; $i++) {
+//                $row[] = '<select class="form-control input-sm option-presensi" style="width:10%" id="' . $i . '-' . $item->ID_SISWA . '" onchange="change_presensi(' . $item->ID_SISWA . ', ' . $i . ');"><option value=""></option><option value="SAKIT">SAKIT</option><option value="IZIN">IZIN</option><option value="ALPHA">LARI</option></select>';
+                $name = $i . '-' . $item->ID_SISWA;
+                $row[] = '<input type="radio" id="'.$name.'" name="' . $name . '" checked="" /><input type="radio"  name="' . $name . '"/><input type="radio" name="' . $name . '" /><input type="radio" name="' . $name . '" />';
+            }
+
+            $row[] = '0';
+
+            $data[] = $row;
         }
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->absen_siswa->count_all($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER),
-            "recordsFiltered" => $this->absen_siswa->count_filtered($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER),
+            "recordsTotal" => $this->absen_siswa->count_all($ID_KELAS),
+            "recordsFiltered" => $this->absen_siswa->count_filtered($ID_KELAS),
             "data" => $data,
         );
 
         $this->generate->output_JSON($output);
+    }
+
+    public function get_kehadiran_bulanan($JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER) {
+        $BULAN_FILTER = (strlen($BULAN_FILTER) == 1 ? '0' . $BULAN_FILTER : $BULAN_FILTER);
+
+        $data_presensi = $this->absen_siswa->get_kehadiran($item->ID_SISWA, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER);
     }
 
 }

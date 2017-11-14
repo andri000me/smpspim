@@ -14,6 +14,7 @@ class Pencarian extends CI_Controller {
             'jk_model' => 'jk',
             'departemen_model' => 'dept',
             'jam_pelajaran_model' => 'jam_pelajaran',
+            'alarm_model' => 'alarm',
         ));
         $this->auth->validation();
     }
@@ -141,7 +142,6 @@ class Pencarian extends CI_Controller {
 
     public function bel_sekolah() {
         $data = array(
-            'dept' => $this->dept->get_all(false),
             'jk' => $this->jk->get_all(false),
         );
 
@@ -152,7 +152,7 @@ class Pencarian extends CI_Controller {
     public function get_alarm() {
         $this->generate->set_header_JSON();
 
-        $data = $this->jam_pelajaran->get_rows($this->input->post());
+        $data = $this->alarm->get_rows($this->input->post());
 
         $this->generate->output_JSON($data);
     }
