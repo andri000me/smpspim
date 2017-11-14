@@ -117,6 +117,8 @@
                                                     FILE_RINGING = FILE_ALARM[ALARM.indexOf(jam_server)];
                                                     alarm_ringing();
                                                 }
+                                                
+                                                $(".error-response").remove();
                                             });
                                         }, 1000);
                                     });
