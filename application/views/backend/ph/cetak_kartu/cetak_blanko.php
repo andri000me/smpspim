@@ -104,8 +104,6 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Line(11, 27, 207, 27);
     $pdf->SetLineWidth(0.30);
     $pdf->Line(11, 28, 207, 28);
-
-    break;
 }
 
 $pdf->Output();
