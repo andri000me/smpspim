@@ -113,7 +113,7 @@ class Laporan_poin extends CI_Controller {
 
         $nomor_surat = $this->pengaturan->getNomorSuratKomdis($data['URL_KJT']);
         $nomor_paket_sp = $this->pengaturan->getNomorPaketSP();
-
+        
         $input_kolektif = $data['KOLEKTIF_KJT'];
         $where_surat_segera = array(
             'ID_KJT' => $data['TINDAKAN_KT']
@@ -129,6 +129,7 @@ class Laporan_poin extends CI_Controller {
         unset($data['URL_KJT']);
         unset($data['KOLEKTIF_KJT']);
 
+        $start = true;
         if ($input_kolektif) {
             foreach ($data_kolektif as $detail) {
                 if ($start || $data['TINDAKAN_KT'] == 1) {
