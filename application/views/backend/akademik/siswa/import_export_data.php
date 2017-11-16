@@ -91,7 +91,7 @@ $this->generate->generate_panel_content($title, $subtitle);
 <script type="text/javascript">
     function export_data() {
 
-        window.open('<?php echo site_url('akademik/siswa/export_data'); ?>?jenjang=' + $("#jenjang").val() + '&tingkat=' + $("#tingkat").val() + '&kelas=' + $("#jenjang").val(), '_blank');
+        window.open('<?php echo site_url('akademik/siswa/export_data'); ?>?jenjang=' + $("#jenjang").val() + '&tingkat=' + $("#tingkat").val() + '&kelas=' + $("#kelas").val(), '_blank');
     }
 
     function import_data() {
