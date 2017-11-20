@@ -506,7 +506,7 @@ class Siswa extends CI_Controller {
             $data_value_column = $rowData[0];
             $data = array_combine($data_field_column, $data_value_column);
             $where = array(
-                'NIS_SISWA' => $data['ID_SISWA']
+                'ID_SISWA' => $data['ID_SISWA']
             );
             unset($data['ID_SISWA']);
             $result = $this->siswa->update($where, $data);
