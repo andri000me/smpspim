@@ -30,6 +30,9 @@ $this->generate->generate_panel_content("Tambah Absen Siswa Bulanan", "Form tamb
                         </div>
                     </form>
                 </div>
+                <div class="panel-footer text-center">
+                    <h3>Info! Harap memuat ulang halaman ini jika ingin memuat tabel baru atau pada saat halaman terasa berat.</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -136,33 +139,14 @@ $this->generate->datatables($id_datatables, $title, $columns);
         var success_simpan = function (data) {
             $("." + classAbsen).removeAttr('checked');
 
-            if (data.status) {
-                $("#" + classAbsen + "-" + ALASAN_AKH).prop('checked', "true");
-                $("." + classAbsen).data("awal", ALASAN_AKH);
-                $("." + classAbsen).data("id", data.status);
-
-                var jumlahTagAfter = $("#jumlah-" + SISWA_AKH + "-" + ALASAN_AKH);
-                var jumlahAfter = parseInt(jumlahTagAfter.data("jumlah"));
-                jumlahAfter++;
-                jumlahTagAfter.html(ALASAN_AKH + ": " + jumlahAfter);
-                jumlahTagAfter.data('jumlah', jumlahAfter);
-
-                var jumlahTagBefore = $("#jumlah-" + SISWA_AKH + "-" + asalAbsen);
-                var jumlahBefore = parseInt(jumlahTagBefore.data("jumlah"));
-                jumlahBefore--;
-                jumlahTagBefore.html(asalAbsen + ": " + jumlahBefore);
-                jumlahTagBefore.data('jumlah', jumlahBefore);
-
-                create_homer_success("Siswa " + NAMA_SISWA + " tanggal " + TANGGAL_AKH + " berhasil disimpan");
-            } else {
-                $("#" + classAbsen + "-" + asalAbsen).prop('checked', "true");
-
-                create_homer_error("Gagal menyimpan ketidakhadiran siswa");
-            }
+            callbackSuccessSimpan(data, classAbsen, asalAbsen, SISWA_AKH, ALASAN_AKH, NAMA_SISWA, TANGGAL_AKH);
         };
         var success_hapus = function (data) {
-            if (data.status && (ALASAN_AKH !== 'HADIR')) {
-                create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=&ALASAN_AKH=' + ALASAN_AKH + '&JENIS_AKH=' + JENIS_FILTER, success_simpan);
+            if (data.status) {
+                if (ALASAN_AKH === 'HADIR')
+                    callbackSuccessSimpan(data, classAbsen, asalAbsen, SISWA_AKH, ALASAN_AKH, NAMA_SISWA, TANGGAL_AKH);
+                else
+                    create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=&ALASAN_AKH=' + ALASAN_AKH + '&JENIS_AKH=' + JENIS_FILTER, success_simpan);
             }
         };
 
@@ -170,6 +154,32 @@ $this->generate->datatables($id_datatables, $title, $columns);
             create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=&ALASAN_AKH=' + ALASAN_AKH + '&JENIS_AKH=' + JENIS_FILTER, success_simpan);
         } else {
             create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_delete'); ?>', 'ID=' + idPresensi, success_hapus);
+        }
+    }
+
+    function callbackSuccessSimpan(data, classAbsen, asalAbsen, SISWA_AKH, ALASAN_AKH, NAMA_SISWA, TANGGAL_AKH) {
+        if (data.status) {
+            $("#" + classAbsen + "-" + ALASAN_AKH).prop('checked', "true");
+            $("." + classAbsen).data("awal", ALASAN_AKH);
+            $("." + classAbsen).data("id", data.status);
+
+            var jumlahTagAfter = $("#jumlah-" + SISWA_AKH + "-" + ALASAN_AKH);
+            var jumlahAfter = parseInt(jumlahTagAfter.data("jumlah"));
+            jumlahAfter++;
+            jumlahTagAfter.html(ALASAN_AKH + ": " + jumlahAfter);
+            jumlahTagAfter.data('jumlah', jumlahAfter);
+
+            var jumlahTagBefore = $("#jumlah-" + SISWA_AKH + "-" + asalAbsen);
+            var jumlahBefore = parseInt(jumlahTagBefore.data("jumlah"));
+            jumlahBefore--;
+            jumlahTagBefore.html(asalAbsen + ": " + jumlahBefore);
+            jumlahTagBefore.data('jumlah', jumlahBefore);
+
+            create_homer_success("Siswa " + NAMA_SISWA + " tanggal " + TANGGAL_AKH + " berhasil disimpan");
+        } else {
+            $("#" + classAbsen + "-" + asalAbsen).prop('checked', "true");
+
+            create_homer_error("Gagal menyimpan ketidakhadiran siswa");
         }
     }
 
