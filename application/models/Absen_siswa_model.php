@@ -106,10 +106,10 @@ class Absen_siswa_model extends CI_Model {
         $this->db->where(array(
             'TA_AKH' => $this->session->userdata('ID_TA_ACTIVE'),
             'SISWA_AKH' => $SISWA_AKH,
-            'LEFT(TANGGAL_AKH, 7)' => $TAHUN.'-'.$BULAN,
+            'LEFT(TANGGAL_AKH, 7)=' => $TAHUN.'-'.$BULAN,
             'JENIS_AKH' => $JENIS_AKH
         ));
-        $this->db->order_by('TANGGAL_AKH');
+        $this->db->order_by('TANGGAL_AKH', 'ASC');
         $query = $this->db->get();
 
         return $query->result();

@@ -65,6 +65,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var functionAddData = function (e, dt, node, config) {
 
     };
+    var reqScroll = true;
 
     $(function () {
         $(".js-source-states-KELAS_FILTER").on("change", "", function () {
@@ -116,7 +117,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             $(".table-datatable1").attr('style', 'margin-top: -60px;');
 
-            table = initialize_datatables(id_table, '<?php echo site_url('akademik/kehadiran/ajax_form_bulanan'); ?>/' + KELAS_FILTER + '/' + JENIS_FILTER + '/' + BULAN_FILTER + '/' + TAHUN_FILTER + '/' + jumlah_hari, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+            table = initialize_datatables(id_table, '<?php echo site_url('akademik/kehadiran/ajax_form_bulanan'); ?>/' + KELAS_FILTER + '/' + JENIS_FILTER + '/' + BULAN_FILTER + '/' + TAHUN_FILTER + '/' + jumlah_hari, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport, reqScroll);
 
             remove_splash();
 
@@ -125,6 +126,50 @@ $this->generate->datatables($id_datatables, $title, $columns);
             $(".table-datatable1").slideDown();
 
             $("#datatable1_length").children().children().val('-1').trigger('change');
+        }
+    }
+
+    function simpan_absen(that, TANGGAL_AKH, SISWA_AKH, ALASAN_AKH, JENIS_FILTER, NAMA_SISWA) {
+        var classAbsen = TANGGAL_AKH + "-" + SISWA_AKH;
+        var asalAbsen = $(that).data("awal");
+        var idPresensi = $(that).data("id");
+        var success_simpan = function (data) {
+            $("." + classAbsen).removeAttr('checked');
+
+            if (data.status) {
+                $("#" + classAbsen + "-" + ALASAN_AKH).prop('checked', "true");
+                $("." + classAbsen).data("awal", ALASAN_AKH);
+                $("." + classAbsen).data("id", data.status);
+
+                var jumlahTagAfter = $("#jumlah-" + SISWA_AKH + "-" + ALASAN_AKH);
+                var jumlahAfter = parseInt(jumlahTagAfter.data("jumlah"));
+                jumlahAfter++;
+                jumlahTagAfter.html(ALASAN_AKH + ": " + jumlahAfter);
+                jumlahTagAfter.data('jumlah', jumlahAfter);
+
+                var jumlahTagBefore = $("#jumlah-" + SISWA_AKH + "-" + asalAbsen);
+                var jumlahBefore = parseInt(jumlahTagBefore.data("jumlah"));
+                jumlahBefore--;
+                jumlahTagBefore.html(asalAbsen + ": " + jumlahBefore);
+                jumlahTagBefore.data('jumlah', jumlahBefore);
+
+                create_homer_success("Siswa " + NAMA_SISWA + " tanggal " + TANGGAL_AKH + " berhasil disimpan");
+            } else {
+                $("#" + classAbsen + "-" + asalAbsen).prop('checked', "true");
+
+                create_homer_error("Gagal menyimpan ketidakhadiran siswa");
+            }
+        };
+        var success_hapus = function (data) {
+            if (data.status && (ALASAN_AKH !== 'HADIR')) {
+                create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=&ALASAN_AKH=' + ALASAN_AKH + '&JENIS_AKH=' + JENIS_FILTER, success_simpan);
+            }
+        };
+
+        if (asalAbsen === 'HADIR') {
+            create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_add'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&SISWA_AKH=' + SISWA_AKH + '&KETERANGAN_AKH=&ALASAN_AKH=' + ALASAN_AKH + '&JENIS_AKH=' + JENIS_FILTER, success_simpan);
+        } else {
+            create_ajax('<?php echo site_url('akademik/kehadiran/ajax_form_delete'); ?>', 'ID=' + idPresensi, success_hapus);
         }
     }
 

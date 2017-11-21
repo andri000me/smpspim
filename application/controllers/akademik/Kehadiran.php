@@ -25,6 +25,7 @@ class Kehadiran extends CI_Controller {
             'pelanggaran_model' => 'pelanggaran',
             'pelanggaran_header_model' => 'pelanggaran_header',
             'kelas_model' => 'kelas',
+            'hari_model' => 'hari',
             'akad_siswa_model' => 'kelas_siswa',
             'absen_siswa_model' => 'absen_siswa',
             'jenis_absensi_model' => 'jenis_absensi',
@@ -409,6 +410,9 @@ class Kehadiran extends CI_Controller {
     public function ajax_form_bulanan($ID_KELAS, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER, $JUMLAH_HARI) {
         $this->generate->set_header_JSON();
 
+        $data_hari_libur = $this->hari->get_row(array('LIBUR_HARI' => 1));
+        $hari_libur = $data_hari_libur->NAMA_HARI;
+
         $id_datatables = 'datatable1';
         $list = $this->absen_siswa->get_datatables($ID_KELAS);
         $data = array();
@@ -420,13 +424,50 @@ class Kehadiran extends CI_Controller {
             $row[] = $item->NIS_SISWA_SHOW;
             $row[] = $item->NAMA_SISWA;
 
-            for ($i = 1; $i <= $JUMLAH_HARI; $i++) {
-//                $row[] = '<select class="form-control input-sm option-presensi" style="width:10%" id="' . $i . '-' . $item->ID_SISWA . '" onchange="change_presensi(' . $item->ID_SISWA . ', ' . $i . ');"><option value=""></option><option value="SAKIT">SAKIT</option><option value="IZIN">IZIN</option><option value="ALPHA">LARI</option></select>';
-                $name = $i . '-' . $item->ID_SISWA;
-                $row[] = '<input type="radio" id="'.$name.'" name="' . $name . '" checked="" /><input type="radio"  name="' . $name . '"/><input type="radio" name="' . $name . '" /><input type="radio" name="' . $name . '" />';
+            $data_presensi = $this->absen_siswa->get_kehadiran($item->ID_SISWA, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER);
+            $detail_presensi = array();
+            foreach ($data_presensi as $detail) {
+                $detail_presensi[$detail->TANGGAL_AKH] = $detail->ALASAN_AKH;
+                $id_presensi[$detail->TANGGAL_AKH] = $detail->ID_AKH;
             }
 
-            $row[] = '0';
+            $count_alasan = [
+                'HADIR' => 0,
+                'SAKIT' => 0,
+                'IZIN' => 0,
+                'ALPHA' => 0,
+            ];
+            for ($i = 1; $i <= $JUMLAH_HARI; $i++) {
+//                $row[] = '<select class="form-control input-sm option-presensi" style="width:10%" id="' . $i . '-' . $item->ID_SISWA . '" onchange="change_presensi(' . $item->ID_SISWA . ', ' . $i . ');"><option value=""></option><option value="SAKIT">SAKIT</option><option value="IZIN">IZIN</option><option value="ALPHA">LARI</option></select>';
+                $checkbox = '';
+                $tanggal = $TAHUN_FILTER . '-' . $BULAN_FILTER . '-' . ($i < 10 ? '0' . $i : $i);
+                if (strtoupper($hari_libur) != strtoupper($this->date_format->get_day($tanggal))) {
+                    if (isset($detail_presensi[$tanggal])) {
+                        $alasan = $detail_presensi[$tanggal];
+                        $id = $id_presensi[$tanggal];
+                        $count_alasan[$alasan] ++;
+                    } else {
+                        $alasan = 'HADIR';
+                        $id = "";
+                        $count_alasan['HADIR'] ++;
+                    }
+
+                    $name = $tanggal . '-' . $item->ID_SISWA;
+                    foreach ($count_alasan as $key => $detail) {
+                        $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="'.$id.'" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" />';
+                    }
+                }
+
+                $row[] = $checkbox;
+            }
+
+            $name = 'jumlah-' . $item->ID_SISWA;
+            $alasan_text = '';
+            foreach ($count_alasan as $alasan => $jumlah) {
+                $alasan_text .= '<font id="' . $name . '-' . $alasan . '" data-jumlah="' . $jumlah . '">' . $alasan . ': ' . $jumlah . '</font><br>';
+            }
+
+            $row[] = $alasan_text;
 
             $data[] = $row;
         }
@@ -439,12 +480,6 @@ class Kehadiran extends CI_Controller {
         );
 
         $this->generate->output_JSON($output);
-    }
-
-    public function get_kehadiran_bulanan($JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER) {
-        $BULAN_FILTER = (strlen($BULAN_FILTER) == 1 ? '0' . $BULAN_FILTER : $BULAN_FILTER);
-
-        $data_presensi = $this->absen_siswa->get_kehadiran($item->ID_SISWA, $JENIS_AKH, $BULAN_FILTER, $TAHUN_FILTER);
     }
 
 }

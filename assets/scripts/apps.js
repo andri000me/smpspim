@@ -8,7 +8,7 @@
 var option_datatables_yes_no = {'': 'Pilih Opsi', '1': 'YA', '0': 'TIDAK'};
 
 $(function () {
-    $('#side-menu').click(function() {
+    $('#side-menu').click(function () {
         $("#menu").animate({
             scrollTop: $("#menu").height()
         }, 500);
@@ -735,7 +735,7 @@ function initialize_datatables_pipeline(id_table, site, columns, orders, functio
     return table;
 }
 
-function initialize_datatables(id_table, site, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport) {
+function initialize_datatables(id_table, site, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport, reqScroll) {
     var buttonsExport = "";
 
 //    jQuery.fn.DataTable.Api.register('buttons.exportData()', function (options) {
@@ -754,7 +754,6 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
 //                }).get()};
 //        }
 //    });
-
 
     if (requestExport) {
         buttonsExport = [
@@ -822,33 +821,66 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
             $(this).html('<input type="text" placeholder="Search ' + title + '" class="form-control input-sm datatables-search datatables-search-' + title.replace(" ", "-") + '" style="width:100%">');
     });
 
-    var table = $('#' + id_table).DataTable({
-        "bDestroy": true,
-        "processing": true,
-        "serverSide": true,
-        "order": orders,
+    var table = null;
+    if (typeof reqScroll === "undefined") {
+        table = $('#' + id_table).DataTable({
+            "bDestroy": true,
+            "processing": true,
+            "serverSide": true,
+            "order": orders,
+            //        "pagingType": "input",
+            //        "sPaginationType": "extStyle",
+            //        "sPaginationType": "listbox",
+            "columnDefs": columns,
+            "initComplete": functionInitComplete,
+            "drawCallback": functionDrawCallback,
+            "ajax": {
+                "url": site,
+                "type": "POST",
+                "pages": 5
+            },
+            "search": {
+                "regex": true
+            },
+            dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3 text-right'f>>t<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            buttons: buttonsExport,
+            language: {
+                processing: create_splash("Sedang memuat data ...")
+            },
+            processing: true
+        });
+    } else {
+        table = $('#' + id_table).DataTable({
+            "scrollY": window.innerHeight,
+            "scrollCollapse": true,
+            "bDestroy": true,
+            "processing": true,
+            "serverSide": true,
+            "order": orders,
 //        "pagingType": "input",
 //        "sPaginationType": "extStyle",
 //        "sPaginationType": "listbox",
-        "columnDefs": columns,
-        "initComplete": functionInitComplete,
-        "drawCallback": functionDrawCallback,
-        "ajax": {
-            "url": site,
-            "type": "POST",
-            "pages": 5
-        },
-        "search": {
-            "regex": true
-        },
-        dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3 text-right'f>>t<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        buttons: buttonsExport,
-        language: {
-            processing: create_splash("Sedang memuat data ...")
-        },
-        processing: true
-    });
+            "columnDefs": columns,
+            "initComplete": functionInitComplete,
+            "drawCallback": functionDrawCallback,
+            "ajax": {
+                "url": site,
+                "type": "POST",
+                "pages": 5
+            },
+            "search": {
+                "regex": true
+            },
+            dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3 text-right'f>>t<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            buttons: buttonsExport,
+            language: {
+                processing: create_splash("Sedang memuat data ...")
+            },
+            processing: true
+        });
+    }
 
     $(".dt-buttons").addClass('btn-group');
     $(".dataTables_filter").children().children().attr('style', 'width: 150px;');
