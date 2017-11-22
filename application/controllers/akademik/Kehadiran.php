@@ -446,7 +446,9 @@ class Kehadiran extends CI_Controller {
                     if (isset($detail_presensi[$tanggal])) {
                         $alasan = $detail_presensi[$tanggal];
                         $id = $id_presensi[$tanggal];
-                        $count_alasan[$alasan] ++;
+                        
+                        if(isset($count_alasan[$alasan])) 
+                            $count_alasan[$alasan]++;
                     } else {
                         $alasan = 'HADIR';
                         $id = "";
