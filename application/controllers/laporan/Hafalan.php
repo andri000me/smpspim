@@ -67,6 +67,7 @@ class Hafalan extends CI_Controller {
 
         $jumlah_siswa = $this->hafalan->get_data('Jumlah Siswa', $ta, $tingkat, $jenjang, $jk);
         $jumlah_siswa_setoran = $this->hafalan->get_data('Jumlah Siswa Setoran', $ta, $tingkat, $jenjang, $jk);
+        $jumlah_siswa_belum_setoran = $this->hafalan->get_data('Jumlah Siswa Belum Setoran', $ta, $tingkat, $jenjang, $jk);
         $jumlah_siswa_hafal = $this->hafalan->get_data('Jumlah Siswa Hafal', $ta, $tingkat, $jenjang, $jk);
         $jumlah_siswa_tidak_hafal = $this->hafalan->get_data('Jumlah Siswa Tidak Hafal', $ta, $tingkat, $jenjang, $jk);
         $jumlah_siswa_gugur = $this->hafalan->get_data('Jumlah Siswa Gugur', $ta, $tingkat, $jenjang, $jk);
@@ -76,6 +77,7 @@ class Hafalan extends CI_Controller {
         $data_source = array(
             $jumlah_siswa,
             $jumlah_siswa_setoran,
+            $jumlah_siswa_belum_setoran,
             $jumlah_siswa_hafal,
             $jumlah_siswa_tidak_hafal,
             $jumlah_siswa_gugur,
@@ -85,10 +87,11 @@ class Hafalan extends CI_Controller {
         $names = array(
             'data0' => 'Jumlah Siswa',
             'data1' => 'Jumlah Siswa Setoran',
-            'data2' => 'Jumlah Siswa Hafal',
-            'data3' => 'Jumlah Siswa Tidak Hafal',
-            'data4' => 'Jumlah Siswa Gugur',
-            'data5' => 'Jumlah Siswa Keluar',
+            'data2' => 'Jumlah Siswa Belum Setoran',
+            'data3' => 'Jumlah Siswa Hafal',
+            'data4' => 'Jumlah Siswa Tidak Hafal',
+            'data5' => 'Jumlah Siswa Gugur',
+            'data6' => 'Jumlah Siswa Keluar',
         );
         $data = $this->chart_handler->format_output_multiple($data_source, $nama_kelas, 'Kelas', 'Jumlah Siswa', $names);
 

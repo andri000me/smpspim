@@ -80,11 +80,12 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Ln(1);
 
     for ($i = 0; $i <= 12; $i++) {
-        $pdf->Cell(10, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'No' : $i, 1, 0, 'C');
-        $pdf->Cell(37, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Nama Kitab' : '', 1, 0, 'C');
-        $pdf->Cell(49, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Uraian' : '', 1, 0, 'C');
+        $pdf->Cell(7, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'No' : $i, 1, 0, 'C');
+        $pdf->Cell(17, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Tanggal' : '', 1, 0, 'C');
+        $pdf->Cell(35, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Nama Kitab' : '', 1, 0, 'C');
+        $pdf->Cell(45, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Uraian' : '', 1, 0, 'C');
         $pdf->Cell(28, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Ttd Wali Kelas' : '', 1, 0, 'C');
-        $pdf->Cell(33, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Keterangan' : '', 1, 0, 'C');
+        $pdf->Cell(27, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Keterangan' : '', 1, 0, 'C');
         $pdf->Cell(39, ($i == 0) ? 5 : 6.5, ($i == 0) ? 'Nama & Ttd Penyemak' : '', 1, 0, 'C');
         $pdf->Ln();
     }

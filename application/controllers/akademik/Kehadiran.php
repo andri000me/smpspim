@@ -455,7 +455,7 @@ class Kehadiran extends CI_Controller {
 
                     $name = $tanggal . '-' . $item->ID_SISWA;
                     foreach ($count_alasan as $key => $detail) {
-                        $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="'.$id.'" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" />';
+                        $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="'.$id.'" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" title="' . $key . '" '.($item->NIS_SISWA_SHOW == 'KELUAR' ? 'disabled' : '').' />';
                     }
                 }
 
