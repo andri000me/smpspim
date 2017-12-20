@@ -356,7 +356,7 @@ class Kehadiran extends CI_Controller {
         $data = $this->kehadiran->get_by_id($id);
 
         $status = TRUE;
-        
+
         if ($data->ALASAN_AKH == 'ALPHA' || $data->ALASAN_AKH == 'TERLAMBAT')
             $status = $this->pelanggaran_handler->hapus($id, TRUE, $data->ALASAN_AKH, $data->JENIS_AKH);
 
@@ -418,6 +418,23 @@ class Kehadiran extends CI_Controller {
         $list = $this->absen_siswa->get_datatables($ID_KELAS);
         $data = array();
         $no = $_POST['start'];
+
+        $status_validasi_tanggal = array();
+        $row = array();
+        $row[] = '#';
+        $row[] = '#';
+        $row[] = '<strong>VALIDASI</strong>';
+        for ($i = 1; $i <= $JUMLAH_HARI; $i++) {
+            $tanggal = $TAHUN_FILTER . '-' . $BULAN_FILTER . '-' . ($i < 10 ? '0' . $i : $i);
+            $status = $this->kehadiran->absen_divalidasi($tanggal, $ID_KELAS);
+
+            $row[] = '<input type="checkbox" class="form-control" ' . ($status ? 'checked' : '') . ' ' . ($JENIS_AKH > 1 ? 'disabled' : '') . ' onclick="validasi_kelas(this);" data-tanggal="' . $tanggal . '" data-status="' . $status . '"/>';
+
+            $status_validasi_tanggal[$i] = $status;
+        }
+        $row[] = '<strong>VALIDASI</strong>';
+        $data[] = $row;
+
         foreach ($list as $item) {
             $no++;
             $row = array();
@@ -446,9 +463,9 @@ class Kehadiran extends CI_Controller {
                     if (isset($detail_presensi[$tanggal])) {
                         $alasan = $detail_presensi[$tanggal];
                         $id = $id_presensi[$tanggal];
-                        
-                        if(isset($count_alasan[$alasan])) 
-                            $count_alasan[$alasan]++;
+
+                        if (isset($count_alasan[$alasan]))
+                            $count_alasan[$alasan] ++;
                     } else {
                         $alasan = 'HADIR';
                         $id = "";
@@ -456,19 +473,22 @@ class Kehadiran extends CI_Controller {
                     }
 
                     $name = $tanggal . '-' . $item->ID_SISWA;
+                    $checkbox .= '<div class="radio-presensi">';
                     foreach ($count_alasan as $key => $detail) {
-                        $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="'.$id.'" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" title="' . $key . '" '.($item->NIS_SISWA_SHOW == 'KELUAR' ? 'disabled' : '').' />';
+                        $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="' . $id . '" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" title="' . $key . '" ' . ($item->NIS_SISWA_SHOW == 'KELUAR' ? 'disabled' : '') . ' ' . (($status_validasi_tanggal[$i] && ($JENIS_AKH > 1)) ? 'disabled' : '') . '/>';
                     }
+                    $checkbox .= "</div><div class='text-presensi'>" . (substr($alasan, 0, -1 * (strlen($alasan) - 1))) . "</div>";
                 }
 
                 $row[] = $checkbox;
             }
 
             $name = 'jumlah-' . $item->ID_SISWA;
-            $alasan_text = '';
+            $alasan_text = '<div class="radio-presensi">';
             foreach ($count_alasan as $alasan => $jumlah) {
                 $alasan_text .= '<font id="' . $name . '-' . $alasan . '" data-jumlah="' . $jumlah . '">' . $alasan . ': ' . $jumlah . '</font><br>';
             }
+            $alasan_text .= '</div><div class="text-presensi"></div>';
 
             $row[] = $alasan_text;
 

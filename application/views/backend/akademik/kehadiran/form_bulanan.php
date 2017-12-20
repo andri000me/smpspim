@@ -60,7 +60,9 @@ $this->generate->datatables($id_datatables, $title, $columns);
     var orders = [[0, "ASC"]];
     var requestExport = true;
     var functionInitComplete = function (settings, json) {
-
+        show_text();
+        $("td").attr("ondblclick", "show_option(this);");
+        $("td").attr("onclick", "show_text();");
     };
     var functionDrawCallback = function (settings) {
 
@@ -90,6 +92,16 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
         $("body").addClass('hide-sidebar');
     });
+
+    function show_text() {
+        $(".radio-presensi").slideUp();
+        $(".text-presensi").slideDown();
+    }
+
+    function show_option(that) {
+        $(that).children(".text-presensi").slideUp();
+        $(that).children(".radio-presensi").slideDown();
+    }
 
     function date_changed() {
         $(".table-datatable1").slideUp();
@@ -158,7 +170,11 @@ $this->generate->datatables($id_datatables, $title, $columns);
     }
 
     function callbackSuccessSimpan(data, classAbsen, asalAbsen, SISWA_AKH, ALASAN_AKH, NAMA_SISWA, TANGGAL_AKH) {
+        var alasan = '';
+        
         if (data.status) {
+            alasan = ALASAN_AKH;
+            
             $("#" + classAbsen + "-" + ALASAN_AKH).prop('checked', "true");
             $("." + classAbsen).data("awal", ALASAN_AKH);
             $("." + classAbsen).data("id", data.status);
@@ -177,9 +193,46 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
             create_homer_success("Siswa " + NAMA_SISWA + " tanggal " + TANGGAL_AKH + " berhasil disimpan");
         } else {
+            alasan = asalAbsen;
+            
             $("#" + classAbsen + "-" + asalAbsen).prop('checked', "true");
-
+            
             create_homer_error("Gagal menyimpan ketidakhadiran siswa");
+        }
+        
+        $("." + classAbsen).parent().next().html(alasan.substring(0, 1));
+    }
+
+    function validasi_kelas(that) {
+        var TANGGAL_AKH = $(that).data('tanggal');
+        var STATUS_VALIDASI = $(that).data('status');
+        
+        var success_check = function(data) {
+            $(that).data("status", data.status);
+            
+            if(data.status) {
+                $(that).prop('checked', 'true');
+            } else {
+                $(that).removeAttr('checked');
+            }
+        };
+        var success = function (data) {
+            create_ajax('<?php echo site_url('akademik/kehadiran/cek_status_validasi'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success_check);
+
+            remove_splash();
+        };
+        var action = function (isConfirm) {
+            if (isConfirm) {
+                create_splash('Sistem sedang memvalidasi absensi KBM');
+                create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
+            }
+        };
+
+        if (STATUS_VALIDASI) {
+            create_swal_option('Peringatan', 'Menghapus validasi mengakibatkan absensi selain KBM tidak valid. Pastikan perubahan yang dilakukan di KBM juga melihat jenis kegiatan yang lain.', action);
+        } else {
+            create_splash('Sistem sedang memvalidasi absensi KBM');
+            create_ajax('<?php echo site_url('akademik/kehadiran/validasi_kelas'); ?>', 'TANGGAL_AKH=' + TANGGAL_AKH + '&KELAS_FILTER=' + KELAS_FILTER, success);
         }
     }
 
