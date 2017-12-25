@@ -12,7 +12,6 @@
 $pdf = $this->fpdf;
 
 // ========================================== NON SYARIAH ===============================
-
 if (isset($data['NON-SYARIAH'])) {
     $pdf->AddPage("P", "A4");
 //	$pdf->SetMargins(6, 0);

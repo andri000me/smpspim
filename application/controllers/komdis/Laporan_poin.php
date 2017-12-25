@@ -379,7 +379,7 @@ class Laporan_poin extends CI_Controller {
                     $data['data'] = array();
 
                     $data_siswa = $this->tindakan->get_detail_kolektif($data_tindakan['ID_KJT'], $data_tindakan['NOMOR_SURAT_KT']);
-                    if ($data_tindakan['POIN_KSH'] >= 100) {
+                    if ($data_tindakan['TINDAKAN_KT'] == 5) {
                         foreach ($data_siswa as $data_kolektif) {
                             $data_syariah = $this->pelanggaran_handler->cek_pelanggaran_syariah($data_kolektif['ID_SISWA']);
 
