@@ -431,10 +431,10 @@ class Laporan_poin extends CI_Controller {
                 $data['tanggal'] = $this->date_format->to_view($data_tindakan['TANGGAL_KT']);
                 $data['nomor_surat'] = $this->pengaturan->getFormatSurat($data_tindakan['NOMOR_SURAT_KT'], $data_tindakan['URL_KJT'], $data_tindakan['TANGGAL_KT'], 'KOMDIS');
 
-//                $where_update = array('NOMOR_SURAT_KT' => $data_tindakan['NOMOR_SURAT_KT'], 'TINDAKAN_KT' => $TINDAKAN_KT);
-//                $data_update = array('DATA_KT' => json_encode($data));
-//
-//                $this->tindakan->update($where_update, $data_update);
+                $where_update = array('NOMOR_SURAT_KT' => $data_tindakan['NOMOR_SURAT_KT'], 'TINDAKAN_KT' => $TINDAKAN_KT);
+                $data_update = array('DATA_KT' => json_encode($data));
+
+                $this->tindakan->update($where_update, $data_update);
             } else {
                 $data = json_decode($data_tindakan['DATA_KT'], TRUE);
             }
