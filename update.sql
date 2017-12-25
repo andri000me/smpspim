@@ -1,2 +1,2 @@
-UPDATE `md_hari` SET `NAMA_HARI` = 'Jum''at' WHERE `md_hari`.`ID_HARI` = 1;
-ALTER TABLE `md_siswa` DROP `STATUS_KK_SANTRI`;
+ALTER TABLE `akad_kehadiran` DROP INDEX `TA_AKH_2` ;
+ALTER IGNORE TABLE `akad_kehadiran` ADD UNIQUE( `TA_AKH`, `SISWA_AKH`, `TANGGAL_AKH`, `JENIS_AKH`);

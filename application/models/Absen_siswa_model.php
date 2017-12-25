@@ -25,7 +25,7 @@ class Absen_siswa_model extends CI_Model {
         $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
         $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
         if (($JENIS_AKH != NULL) && ($TANGGAL_AKH != NULL))
-            $this->db->join('akad_kehadiran akh', $this->table . '.SISWA_AS=akh.SISWA_AKH AND akh.TA_AKH=' . $this->session->userdata('ID_TA_ACTIVE') . ' AND akh.CAWU_AKH=' . $this->session->userdata('ID_CAWU_ACTIVE') . ' AND (akh.JENIS_AKH=' . $JENIS_AKH . ' OR akh.JENIS_AKH=1) AND akh.TANGGAL_AKH="' . $this->date_format->to_store_db($TANGGAL_AKH) . '"', 'LEFT');
+            $this->db->join('akad_kehadiran akh', $this->table . '.SISWA_AS=akh.SISWA_AKH AND akh.TA_AKH=' . $this->session->userdata('ID_TA_ACTIVE') . ' (akh.JENIS_AKH=' . $JENIS_AKH . ' OR akh.JENIS_AKH=1) AND akh.TANGGAL_AKH="' . $this->date_format->to_store_db($TANGGAL_AKH) . '"', 'LEFT'); //  AND akh.CAWU_AKH=' . $this->session->userdata('ID_CAWU_ACTIVE') . ' AND
         $this->db->where(array(
             'TA_AS' => $this->session->userdata('ID_TA_ACTIVE'),
             'KONVERSI_AS' => 0,

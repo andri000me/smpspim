@@ -249,6 +249,7 @@ class Laporan_tindakan_model extends CI_Model {
         ));
         $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         $this->db->order_by('ID_TINGK', 'ASC');
+        $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->order_by('NAMA_SISWA', 'ASC');
         $this->db->group_by('SISWA_KSH');
 
