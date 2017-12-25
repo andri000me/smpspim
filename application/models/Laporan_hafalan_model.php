@@ -30,6 +30,7 @@ class Laporan_hafalan_model extends CI_Model {
         } elseif ($group == 'Jumlah Siswa Setoran') {
             $this->db->select('COUNT(ID_PNH) AS data, NAMA_KELAS AS x_label');
             $this->db->where('ID_PNH IS NOT NULL');
+            $this->db->where('STATUS_PNH <> ', 'KELUAR');
         } elseif ($group == 'Jumlah Siswa Belum Setoran') {
             $this->db->select('(COUNT(ID_AS) - COUNT(ID_PNH)) AS data, NAMA_KELAS AS x_label');
         } elseif ($group == 'Jumlah Siswa Hafal') {

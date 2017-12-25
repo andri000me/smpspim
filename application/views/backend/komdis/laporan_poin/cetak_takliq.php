@@ -267,14 +267,16 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
 //        $pdf->SetLineWidth(130);
 //        $pdf->Line(0, 240, 200, 240);
 
-        $pdf->SetY(100);
+        $pdf->SetY(2);
+        $pdf->SetX(2);
         $pdf->SetFont('Arial', 'B', 24);
-        $pdf->Cell(0, 5, strtoupper($siswa['NAMA_KELAS']), 0, 0, 'C');
+        $pdf->Cell(0, 5, strtoupper($siswa['NAMA_KELAS']), 0, 0, 'L');
         $pdf->Ln();
 
-        $pdf->SetY(110);
+        $pdf->SetY(10);
+        $pdf->SetX(2);
         $pdf->SetFont('Arial', 'B', 20);
-        $pdf->Cell(0, 5, $this->cetak->nama_peg_print_short($siswa['WALI_KELAS']), 0, 0, 'C');
+        $pdf->Cell(0, 5, $this->cetak->nama_peg_print_short($siswa['WALI_KELAS']), 0, 0, 'L');
         $pdf->Ln();
 
         $temp_kelas = $siswa['NAMA_KELAS'];

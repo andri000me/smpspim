@@ -13,6 +13,88 @@ foreach ($data as $detail) {
     $PONDOK = $detail['PONDOK'];
     $DATA = $detail['DATA'];
     $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
+
+    $pdf = $this->cetak->header_yayasan($pdf, 0, 'F4');
+
+    $pdf->Ln(5);
+    
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(15, 4, 'Nomor');
+    $pdf->Cell(0, 4, ': KM/       /A-II/PIM/' . (date('Y') - $this->pengaturan->getTahunBerdiri()) . '/' . $this->date_format->toRomawi(date('n')) . '/' . date('Y'));
+    $pdf->Ln(5);
+
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(15, 4, 'Hal');
+    $pdf->SetFont('Times', 'BI', 12);
+    $pdf->Cell(90, 4, ': Pemberitahuan');
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(0, 4, 'Kepada Yang Terhormat;');
+    $pdf->Ln(5);
+
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(15, 4, 'Sifat');
+    $pdf->Cell(90, 4, ': Sangat Penting');
+    $pdf->SetFont('Times', 'B', 12);
+    $pdf->Cell(0, 4, 'Bapak/Ibu Pengasuh ');
+    $pdf->Ln(5);
+
+    $pdf->SetFont('Times', 'B', 12);
+    $pdf->Cell(105);
+    $pdf->Cell(0, 4, $PONDOK->NAMA_PONDOK_MPS);
+    $pdf->Ln(5);
+
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(105);
+    $pdf->Cell(0, 5, 'di tempat.');
+    $pdf->Ln(15);
+
+    $pdf->SetFont('Times', 'I', 12);
+    $pdf->Cell(0, 4, 'Assalamu\'alaikum Warahmatullahi Wabarakatuh');
+    $pdf->Ln(8);
+    
+    $pdf->SetFont('Times', '', 12);
+    $pdf->MultiCell(0, 5, 'Puji dan syukur kehadirat Allah SWT. Atas segala nikmat yang diberikan-Nya kepada kita. Shalawat dan salam selalu tercurah kepada Nabi Muhammad SAW.');
+    $pdf->Ln();
+    
+    $pdf->MultiCell(0, 5, 'Sebagai upaya meletakkan nilai kepribadian dan kemampuan peserta didik, Perguruan Islam Mathali\'ul Falah senantiasa berkomitmen untuk mempersiapkan peserta didik menjadi "manusia yang sholih dan akrom". Selanjutnya berdasarkan laporan dan hasil pendataan Komisi Disiplin Siswa Perguruan Islam Mathali’ul Falah dalam keberlangsungannya proses pembelajaran dan pengajaran tahun ajaran 2017/2018, maka kami beritahukan kepada Bapak bahwa nama-nama terlampir telah melakukan pelanggar tata tertib dan peraturan Perguruan Islam Mathali\'ul Falah dengan akumulasi skor sebagaimana terlampir (data update perbulan).');
+    $pdf->Ln();
+    
+    $pdf->MultiCell(0, 5, 'Selanjutnya kami mohon dengan hormat, bila terdapat data santri yang tidak sesuai (pindah pondok atau tambahan) mohon untuk dapat konfirmasi ke nomor WA 082300024234 atau email: komdis@pim.sch.id.');
+    $pdf->Ln();
+    
+    $pdf->MultiCell(0, 5, 'Demikian surat ini dibuat, atas perhatian serta kerjasamanya dari Bapak/Ibu kami haturkan terima kasih.');
+    $pdf->Ln();
+    
+    $pdf->SetFont('Times', 'I', 12);
+    $pdf->MultiCell(0, 5, 'Wallahul Muwaffiq ila aqwamith Thariq.');
+    $pdf->Ln();
+
+    $pdf->Cell(0, 4, 'Wassalamu\'alaikum Warahmatullahi Wabarakatuh');
+    $pdf->Ln(15);
+    
+    $pdf->SetFont('Times', '', 12);
+    $pdf->Cell(110);
+    $pdf->Cell(0, 5, 'Kajen, '.$this->date_format->to_print_text(date('d-m-Y')));
+    $pdf->Ln();
+    
+    $pdf->Cell(110);
+    $pdf->Cell(0, 5, 'A/n. Direktur,');
+    $pdf->Ln();
+    
+    $pdf->Cell(110);
+    $pdf->Cell(0, 5, 'Pembantu Direktur Bidang Kesiswaan');
+    $pdf->Ln(20);
+    
+    $pdf->Image(base_url('files/aplikasi/ttd_h_muhammad_mulin_niam.png'), 120, 200, 60);
+    
+    $pdf->SetFont('Times', 'BU', 12);
+    $pdf->Cell(110);
+    $pdf->Cell(0, 5, 'Muhammad Mulin Ni\'am, MA');
+    $pdf->Ln();
+    
+
+
+    $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
 //	$pdf->SetMargins(6, 0);
     $pdf->SetAutoPageBreak(true, 0);
 
@@ -119,7 +201,7 @@ foreach ($data as $detail) {
         $jumlah = $DETAIL->CAWU_1 + $DETAIL->CAWU_2 + $DETAIL->CAWU_3;
         $pdf->Cell(7, 4, $jumlah == 0 ? '' : $jumlah, 1, 0, 'C', TRUE);
         $pdf->Ln();
-        
+
         $jumlah_siswa++;
     }
     $pdf->Cell(0, 4, 'NB.');

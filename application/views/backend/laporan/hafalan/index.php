@@ -101,9 +101,9 @@ $this->generate->chart($id, 'Grafik Hafalan', $single);
             create_homer_error('Silahkan tampilkan grafik terlebih dahulu sebelum mengunduh data');
         } else {
             xls_content += '<table>';
-            xls_content += '<tr><td>Tanggal</td><td>Jumlah Siswa</td><td>Jumlah Siswa Setoran</td><td>Jumlah Siswa Hafal</td><td>Jumlah Siswa Tidak Hafal</td><td>Jumlah Siswa Gugur</td><td>Jumlah Siswa Keluar</td></tr>';
+            xls_content += '<tr><td>Tanggal</td><td>Jumlah Siswa</td><td>Jumlah Siswa Setoran</td><td>Jumlah Siswa Belum Setoran</td><td>Jumlah Siswa Hafal</td><td>Jumlah Siswa Tidak Hafal</td><td>Jumlah Siswa Gugur</td><td>Jumlah Siswa Keluar</td></tr>';
             $.each(data_response.data.x_label, function (key, value) {
-                xls_content += '<tr><td>' + value + '</td><td>' + data_response.data.data0[key] + '</td><td>' + data_response.data.data1[key] + '</td><td>' + data_response.data.data2[key] + '</td><td>' + data_response.data.data3[key] + '</td><td>' + data_response.data.data4[key] + '</td><td>' + data_response.data.data5[key] + '</td></tr>';
+                xls_content += '<tr><td>' + value + '</td><td>' + data_response.data.data0[key] + '</td><td>' + data_response.data.data1[key] + '</td><td>' + data_response.data.data2[key] + '</td><td>' + data_response.data.data3[key] + '</td><td>' + data_response.data.data4[key] + '</td><td>' + data_response.data.data5[key] + '</td><td>' + data_response.data.data6[key] + '</td></tr>';
             });
             xls_content += '</table>';
 
