@@ -78,7 +78,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 //        window.open('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/show_denah' : 'pu/denah_us/show_denah'); ?>', '_blank');
     }
 
-    function hapus_denah(id) {
+    function hapus_denah(hapus_denah) {
         var action = function (isConfirm) {
             if (isConfirm) {
                 var success = function (data) {
@@ -92,7 +92,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                     reload_datatables(table);
                 };
                 create_splash("Sistem sedang menghapus denah Tahun Ajaran dan CAWU yang aktif.");
-                create_ajax('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/hapus_denah' : 'pu/denah_us/hapus_denah'); ?>', '', success);
+                create_ajax('<?php echo site_url($MODE == 'UM' ? 'pu/denah_um/hapus_denah' : 'pu/denah_us/hapus_denah'); ?>', 'HAPUS_DENAH=' + hapus_denah, success);
             }
         };
 

@@ -100,4 +100,14 @@ class Denah_us_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    public function delete() {
+        $where = array(
+            'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
+            'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
+        );
+        $this->db->delete($this->table, $where);
+        
+        return $this->db->affected_rows();
+    }
+
 }
