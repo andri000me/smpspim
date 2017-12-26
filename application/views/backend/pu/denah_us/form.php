@@ -134,18 +134,18 @@
         var data_lk = data.lk;
         var id_lk = 'lk';
 
-        $("#" + id_lk + " #table_jenjang").html(build_tag_html(data_lk.jenjang, 'jenjang', 'Jenjang', null, null, id_lk));
-        $("#" + id_lk + " #table_tingkat").html(build_tag_html(data_lk.tingkat, 'tingkat', 'Tingkat', null, null, id_lk));
+        $("#" + id_lk + " #table_jenjang").html(build_tag_html(data_lk.jenjang, 'jenjang', 'Jenjang', null, id_lk, id_lk));
+        $("#" + id_lk + " #table_tingkat").html(build_tag_html(data_lk.tingkat, 'tingkat', 'Tingkat', null, id_lk, id_lk));
         $("#" + id_lk + " #table_denah").html(create_tag_html(data_lk, id_lk));
-        $("#" + id_lk + " #table_jumlah").html(build_tag_html(data_lk.jumlah, 'jumlah', 'Jumlah', null, null, id_lk));
+        $("#" + id_lk + " #table_jumlah").html(build_tag_html(data_lk.jumlah, 'jumlah', 'Jumlah', null, id_lk, id_lk));
 
         var data_pr = data.pr;
         var id_pr = 'pr';
 
-        $("#" + id_pr + " #table_jenjang").html(build_tag_html(data_pr.jenjang, 'jenjang', 'Jenjang', null, null, id_pr));
-        $("#" + id_pr + " #table_tingkat").html(build_tag_html(data_pr.tingkat, 'tingkat', 'Tingkat', null, null, id_pr));
+        $("#" + id_pr + " #table_jenjang").html(build_tag_html(data_pr.jenjang, 'jenjang', 'Jenjang', null, id_pr, id_pr));
+        $("#" + id_pr + " #table_tingkat").html(build_tag_html(data_pr.tingkat, 'tingkat', 'Tingkat', null, id_pr, id_pr));
         $("#" + id_pr + " #table_denah").html(create_tag_html(data_pr, id_pr));
-        $("#" + id_pr + " #table_jumlah").html(build_tag_html(data_pr.jumlah, 'jumlah', 'Jumlah', null, null, id_pr));
+        $("#" + id_pr + " #table_jumlah").html(build_tag_html(data_pr.jumlah, 'jumlah', 'Jumlah', null, id_pr, id_pr));
 
         remove_splash();
     }
