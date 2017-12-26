@@ -57,6 +57,12 @@ class Denah_us extends CI_Controller {
             if (!$item->READY_DENAH) { 
                 $aksi .= '<li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Denah</a></li>';
             }
+//            if (!$item->VALIDASI_DENAH && ($item->ATURAN_RUANG_PUD != NULL) && ($item->DATA_DENAH == NULL)) { 
+//                $aksi .= '<li><a href="javascript:void()" title="Hapus Aturan" onclick="hapus_aturan(\'' . $item->ID_PUD . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Aturan</a></li>';
+//            }
+            if (!$item->VALIDASI_DENAH && ($item->DATA_DENAH != NULL)) { 
+                $aksi .= '<li><a href="javascript:void()" title="Hapus Denah" onclick="hapus_denah(\'' . $item->ID_PUD . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Denah</a></li>';
+            }
             
             $row[] = '
                 <div class="btn-group">
@@ -76,6 +82,26 @@ class Denah_us extends CI_Controller {
         );
 
         $this->generate->output_JSON($output);
+    }
+    
+    public function hapus_aturan() {
+        $this->generate->set_header_JSON();
+        
+        $status = $this->denah_us->update(array(
+            'ATURAN_RUANG_PUD' => NULL
+        ));
+        
+        $this->generate->output_JSON(array('status' => $status));
+    }
+    
+    public function hapus_denah() {
+        $this->generate->set_header_JSON();
+        
+        $status = $this->denah_us->update(array(
+            'DATA_DENAH' => NULL
+        ));
+        
+        $this->generate->output_JSON(array('status' => $status));
     }
     
     public function cek_denah() {
