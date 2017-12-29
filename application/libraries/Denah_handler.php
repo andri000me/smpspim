@@ -454,7 +454,7 @@ class Denah_handler {
     }
 
     // MENGECEK JUMLAH SISWA HASIL GENERATE
-    private function cek_jumlah_siswa_aturan($mode, $data) {
+    private function cek_jumlah_siswa_aturan($mode, $data, $debug = false) {
         $temp = array();
         foreach ($data['ATURAN_DENAH'] as $key => $detail) {
             foreach ($detail as $index => $item) {
@@ -473,10 +473,12 @@ class Denah_handler {
             }
         }
 
-//        echo '<hr>$temp<br>' . json_encode($temp);
-//        echo '<hr>JUMLAH<br>' . json_encode($data['JUMLAH']);
-//        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
-//        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+        if ($debug) {
+            echo '<hr>$temp<br>' . json_encode($temp);
+            echo '<hr>JUMLAH<br>' . json_encode($data['JUMLAH']);
+            echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
+            echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
+        }
 
         foreach ($temp as $index => $detail) {
             if ($data['JUMLAH'][$index] != $detail) {
@@ -884,7 +886,6 @@ class Denah_handler {
             'L' => $this->buat_denah($mode, $data_lk, $data_sisa['L']),
             'P' => $this->buat_denah($mode, $data_pr, $data_sisa['P'])
         );
-
         $data_save = array(
             'DATA_DENAH' => json_encode($result),
         );
@@ -1185,7 +1186,7 @@ class Denah_handler {
         $result_aturan_denah = array();
         $jumlah_sisa = array();
         $temp_ruang = 0;
-        $maks_loop_ruang = 5;
+        $maks_loop_ruang = 10;
 //        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
 //        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
 //        echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($data['JUMLAH_PESERTA_PERRUANG']);
@@ -1218,6 +1219,7 @@ class Denah_handler {
             // LOOPING SETIAP TINGKAT
             $count_loop_ruang = 0;
             $data_looping = $data_urut;
+            $temp_kode_ruang_cek = "";
             while (TRUE) {
                 $cek_bangku_kosong = 0;
                 foreach ($data_looping['DATA'] as $index => $item) {
@@ -1235,7 +1237,7 @@ class Denah_handler {
                             // MENENTUKAN POSISI KURSI SISWA
 //                        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$index_aturan . ' | ' . $cek_bangku_kosong.' <><><> ';
                             while ($bangku_kosong) {
-//                            echo $cek_bangku_kosong . ' | ' . $i . ' # ';
+//                                echo $cek_bangku_kosong . ' | ' . $i . " | ";
                                 // JIKA LOOPING MELEBIHI KAPASISTAS MAKA DIMULAI DARI AWAL
                                 if ($cek_bangku_kosong > ($jumlah_peruang - 1)) {
                                     $cek_bangku_kosong = 0;
@@ -1249,6 +1251,20 @@ class Denah_handler {
                                     break;
                                 }
 
+//                                if (($data['KODE_RUANG'][$key] == 'A1-07') && $count_loop_ruang == 8) {
+//                                    echo '#######################################################################################<br>';
+//                                    echo 'INDEX = ' . $index_aturan . '<br>';
+//                                    echo 'KURSI = ' . $cek_bangku_kosong . '<br>';
+//                                    echo 'KURSI +1 = ' . var_dump(isset($result_denah[$key][$cek_bangku_kosong + 1])) . '<br>';
+//                                    echo 'KURSI +1 = ' . (($cek_bangku_kosong + 1) % $jumlah_perbaris) . '<br>';
+//                                    echo 'KURSI +1 = ' . (isset($result_denah[$key][$cek_bangku_kosong + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 1]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 0)) . '<br>';
+//                                    echo 'KURSI +2 = ' . var_dump(isset($result_denah[$key][$cek_bangku_kosong + 2])) . '<br>';
+//                                    echo 'KURSI +2 = ' . (($cek_bangku_kosong + 2) % $jumlah_perbaris) . '<br>';
+//                                    echo 'KURSI -1 = ' . var_dump(isset($result_denah[$key][$cek_bangku_kosong - 1])) . '<br>';
+//                                    echo 'KURSI -1 = ' . ($cek_bangku_kosong % $jumlah_perbaris) . '<br>';
+//                                    echo 'KURSI -2 = ' . var_dump(isset($result_denah[$key][$cek_bangku_kosong - 2])) . '<br>';
+//                                    echo 'KURSI -2 = ' . (($cek_bangku_kosong - 1) % $jumlah_perbaris) . '<br>';
+//                                }
                                 // LEWATI JIKA KURSI TELAH ADA YANG PUNYA
                                 if (isset($result_denah[$key][$cek_bangku_kosong])) {
                                     $cek_bangku_kosong++;
@@ -1273,16 +1289,38 @@ class Denah_handler {
                                             ($mode == 'US') &&
                                             ($data['STATUS_ACAK_RUANG'][$key]) &&
                                             (
+                                            // CEK KANAN
                                             (isset($result_denah[$key][$cek_bangku_kosong + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 1]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 0)) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong + 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 2]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 1)) ||
+                                            // CEK KANAN JAUH
+                                            (isset($result_denah[$key][$cek_bangku_kosong + 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + 2]) && ((($cek_bangku_kosong + 2) % $jumlah_perbaris) != 1)) ||
+                                            // CEK KIRI
                                             (isset($result_denah[$key][$cek_bangku_kosong - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - 1]) && (($cek_bangku_kosong % $jumlah_perbaris) != 0)) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong - 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - 2]) && (($cek_bangku_kosong % $jumlah_perbaris) != 1)) ||
+                                            // CEK KIRI JAUH
+                                            (isset($result_denah[$key][$cek_bangku_kosong - 2]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - 2]) && ((($cek_bangku_kosong - 1) % $jumlah_perbaris) != ($jumlah_perbaris - 1))) ||
+                                            // CEK BAWAH
                                             (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris])) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1])) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1])) ||
+                                            // CEK BAWAH KANAN
+                                            (
+                                            (($count_loop_ruang >= 5) && (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 0))) ||
+                                            (($count_loop_ruang < 5) && (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris + 1])))
+                                            ) ||
+                                            // CEK BAWAH KIRI
+                                            (
+                                            (($count_loop_ruang >= 5) && (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1]) && (($cek_bangku_kosong % $jumlah_perbaris) != 0))) ||
+                                            (($count_loop_ruang < 5) && (isset($result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong + $jumlah_perbaris - 1])))
+                                            ) ||
+                                            // CEK ATAS
                                             (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris])) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1])) ||
-                                            (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1]))
+                                            // CEK ATAS KANAN
+                                            (
+                                            (($count_loop_ruang >= 5) && (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1]) && ((($cek_bangku_kosong + 1) % $jumlah_perbaris) != 0))) ||
+                                            (($count_loop_ruang < 5) && (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris + 1])))
+                                            ) ||
+                                            // CEK ATAS KIRI
+                                            (
+                                            (($count_loop_ruang >= 5) && (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1]) && (($cek_bangku_kosong % $jumlah_perbaris) != 0))) ||
+                                            (($count_loop_ruang < 5) && (isset($result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1]) && $this->dalam_satu_tingkat($index_aturan, $result_denah[$key][$cek_bangku_kosong - $jumlah_perbaris - 1])))
+                                            )
                                             )
                                             )
                                     ) {
@@ -1296,15 +1334,17 @@ class Denah_handler {
                                         $bangku_kosong = false;
                                     }
                                 }
-//                            echo ' >>> ';
+//                                echo ' >>> ';
                             }
 
                             $i = ($cek_bangku_kosong >= ($jumlah_peruang - 1)) ? 0 : $cek_bangku_kosong;
                             $iterasi++;
 
-//                        echo '<br>';
-//                        echo $index_aturan . ' | ' . $cek_bangku_kosong . ' # ' . $cek_bangku_kosong . ' | ' . $i.' # '.$iterasi .' | '. $item;
-//                        echo '<br>';
+//                            if($data['KODE_RUANG'][$key] == 'A1-07') {
+//                            echo '<br>';
+//                            echo $index_aturan . ' | ' . $cek_bangku_kosong . ' # ' . $cek_bangku_kosong . ' | ' . $i . ' # ' . $iterasi . ' | ' . $item;
+//                            echo '<br>';
+//                            }
 
                             if ($iterasi == $item) {
 //                            echo ' Z ';
@@ -1322,7 +1362,10 @@ class Denah_handler {
                     $jumlah_peserta_sisa = $this->jumlah_peserta_ruang($result_denah_sisa[$key]);
                     $jumlah_sisa[$key] = $total_peserta;
 
-//            if ($data['KODE_RUANG'][$key] == 'B1-05') {
+//            if ($data['KODE_RUANG'][$key] == 'A1-07') {
+//                    echo '<br><br><br><br>';
+//                    echo '<hr><hr><hr>LOOP ' . $count_loop_ruang;
+//                    echo '<hr>RUANG = ' . $data['KODE_RUANG'][$key];
 //                    for ($i = 0; $i < $jumlah_peruang; $i++) {
 //                        if (($i % $jumlah_perbaris) == 0)
 //                            echo '<br>';
@@ -1334,6 +1377,8 @@ class Denah_handler {
 //                    echo '<hr>$temp_data_urut<br>' . json_encode($temp_data_urut);
 //                    echo '<hr>$result_denah_urut<br>' . json_encode($result_denah_urut[$key]);
 //                    echo '<hr>$result_denah_sisa<br>' . json_encode($result_denah_sisa[$key]);
+//                    echo '<hr>$jumlah_peserta_sisa<br>' . json_encode($jumlah_peserta_sisa);
+//                    echo '<br><br><br><br>';
 //            }
                 }
 
@@ -1352,12 +1397,17 @@ class Denah_handler {
 
             $z++;
         }
+//            exit();
 
         $jumlah_sisa_siswa_pertingkat = array_fill(0, count($data['NAMA_DEPT']), 0);
         foreach ($result_denah_sisa as $value) {
             foreach ($value as $index_tingkat => $item) {
                 $jumlah_sisa_siswa_pertingkat[$index_tingkat] += $item;
             }
+        }
+        
+        foreach ($data['JUMLAH_SISA_SISWA_PERTINGKAT'] as $index_tingkat => $item) {
+            $jumlah_sisa_siswa_pertingkat[$index_tingkat] += $item;
         }
 
         $return = array(
@@ -1377,15 +1427,18 @@ class Denah_handler {
             'JUMLAH_SISA' => $jumlah_sisa,
         );
 
-        $this->cek_jumlah_siswa_aturan($mode, $return);
-
 //        echo '<hr>ATURAN_DENAH<br>' . json_encode($data['ATURAN_DENAH']);
-//        echo '<hr>ATURAN_DENAH<br>' . json_encode((object)$return['ATURAN_DENAH']);
-//        echo '<hr>RUANG<br>' . json_encode((object)$return['RUANG']);
+//        echo '<hr>ATURAN_DENAH<br>' . json_encode((object) $return['ATURAN_DENAH']);
+////        echo '<hr>RUANG<br>' . json_encode((object)$return['RUANG']);
 //        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($data['JUMLAH_SISA_SISWA_PERTINGKAT']);
 //        echo '<hr>JUMLAH_SISA_SISWA_PERTINGKAT<br>' . json_encode($return['JUMLAH_SISA_SISWA_PERTINGKAT']);
 //        echo '<hr>JUMLAH_PESERTA_PERRUANG<br>' . json_encode($return['JUMLAH_PESERTA_PERRUANG']);
+//        echo '<hr>SISA<br>' . json_encode($return['SISA']);
+////        echo '<hr>DATA<br>' . json_encode($data);
 //        echo '<hr>RUANG_UJIAN_DEPT<br>' . json_encode($data['RUANG_UJIAN_DEPT']);
+
+        $this->cek_jumlah_siswa_aturan($mode, $return);
+
 //        exit();
 
         return $return;

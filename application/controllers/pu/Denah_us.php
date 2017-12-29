@@ -56,7 +56,7 @@ class Denah_us extends CI_Controller {
                 $aksi .= '<li><a href="javascript:void()" title="Lihat Denah" onclick="view_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Denah</a></li>';
             }
             if (!$item->READY_DENAH) {
-                $aksi .= '<li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Denah</a></li>';
+                $aksi .= '<li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Aturan Denah</a></li>';
             }
             if (!$item->VALIDASI_DENAH && ($item->ATURAN_RUANG_PUD != NULL)) {
                 $aksi .= '<li><a href="javascript:void()" title="Hapus Aturan" onclick="hapus_denah(0)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus Aturan</a></li>';
@@ -139,7 +139,7 @@ class Denah_us extends CI_Controller {
     }
 
     public function simpan_denah() {
-        $this->generate->set_header_JSON();
+//        $this->generate->set_header_JSON();
 
         if ($this->status_validasi)
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
