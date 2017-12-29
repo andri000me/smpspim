@@ -139,7 +139,7 @@ class Denah_us extends CI_Controller {
     }
 
     public function simpan_denah() {
-//        $this->generate->set_header_JSON();
+        $this->generate->set_header_JSON();
 
         if ($this->status_validasi)
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
@@ -178,7 +178,7 @@ class Denah_us extends CI_Controller {
     }
 
     public function proses_sisa() {
-//        $this->generate->set_header_JSON();
+        $this->generate->set_header_JSON();
 
         if ($this->status_validasi)
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
