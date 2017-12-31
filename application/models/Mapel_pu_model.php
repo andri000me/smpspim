@@ -71,7 +71,7 @@ class Mapel_pu_model extends CI_Model {
         $this->db->select("ID_MAPEL as id, CONCAT(NAMA_DEPT,' - ',NAMA_MAPEL) as text");
         $this->db->from('md_mapel');
         $this->db->join('md_departemen', 'DEPT_MAPEL=ID_DEPT');
-        $this->db->join('(SELECT * FROM pu_mapel JOIN md_tingkat ON ID_TINGK=TINGKAT_PUM JOIN pu_jadwal ON ID_PUJ=JADWAL_PUM WHERE JK_PUJ="'.$jk.'" AND DEPT_TINGK="' . $dept . '" AND NAMA_TINGK=' . $tingk . ') pu_mapel', 'MAPEL_PUM=ID_MAPEL AND DEPT_TINGK=ID_DEPT', 'LEFT');
+        $this->db->join('(SELECT * FROM pu_mapel JOIN md_tingkat ON ID_TINGK=TINGKAT_PUM JOIN pu_jadwal ON ID_PUJ=JADWAL_PUM WHERE JK_PUJ="'.$jk.'" AND DEPT_TINGK="' . $dept . '" AND NAMA_TINGK=' . $tingk . ' AND TA_PUJ='.$this->session->userdata('ID_TA_ACTIVE').' AND CAWU_PUJ='.$this->session->userdata('ID_CAWU_ACTIVE').') pu_mapel', 'MAPEL_PUM=ID_MAPEL AND DEPT_TINGK=ID_DEPT', 'LEFT');
         $this->db->like('NAMA_MAPEL', $search);
         $this->db->where('ID_DEPT', $dept);
         $this->db->where('JADWAL_PUM', NULL);
