@@ -119,17 +119,19 @@ foreach ($data as $detail) {
             $pdf->Cell(0, 4, 'JAM: ' . $this->time_format->jam_menit($detail['JAM_MULAI']) . ' - ' . $this->time_format->jam_menit($detail['JAM_SELESAI']) . ' WIS', 0, 0, 'C');
             $pdf->Ln(10);
 
-            $pdf->SetFont('Arial', 'B', $size_font + 1);
+            $pdf->SetFont('Arial', 'B', $size_font + 2);
             foreach ($data_denah["JENJANG"] as $index => $jenjang) {
                 $data_relasi = $this->jadwal->relasi_jenjang_departemen($ID, $jenjang, $data_denah["TINGKAT"][$index]);
                 if ($data_relasi == NULL) {
-                    $pdf->Cell(35, 7, $data_denah["KODE_JENJANG"][$index] . ' KELAS ' . $data_denah["TINGKAT"][$index], 1, 0, 'L');
-                    $pdf->Cell(110, 7, 'MAPEL: -', 1, 0, 'L');
-                    $pdf->Cell(45, 7, 'JUMLAH: - ORANG', 1, 0, 'L');
+                    $pdf->Cell(35, 8, $data_denah["KODE_JENJANG"][$index] . ' KELAS ' . $data_denah["TINGKAT"][$index], 1, 0, 'L');
+                    $pdf->Cell(110, 8, 'MAPEL: -', 1, 0, 'L');
+                    $pdf->Cell(45, 8, 'JUMLAH: - ORANG', 1, 0, 'L');
                 } else {
-                    $pdf->Cell(35, 7, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
-                    $pdf->Cell(110, 7, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
-                    $pdf->Cell(45, 7, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                    if($data_denah['ATURAN_DENAH'][$ruang][$index] > 0) {
+                        $pdf->Cell(35, 8, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
+                        $pdf->Cell(110, 8, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
+                        $pdf->Cell(45, 8, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                    }
                 }
                 $pdf->Ln();
             }
