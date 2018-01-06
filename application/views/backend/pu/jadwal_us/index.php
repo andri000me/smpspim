@@ -4,7 +4,7 @@ $subtitle = "Daftar semua Jadwal Ujian Sekolah";
 $id_datatables = 'datatable1';
 
 $columns = array(
-    'ID',
+//    'ID',
     'TA',
     'CAWU',
     'JK',

@@ -13,7 +13,7 @@ class Jadwal_pu_model extends CI_Model {
     var $table = 'pu_jadwal';
     var $column = array(
         'UM' => array('ID_PUJ', 'NAMA_TA', 'TANGGAL_PUJ', 'JAM_MULAI_PUJ', 'JAM_SELESAI_PUJ', 'ID_PUJ'),
-        'US' => array('ID_PUJ', 'NAMA_TA', 'NAMA_CAWU', 'JK_PUJ', 'TANGGAL_PUJ', 'JAM_MULAI_PUJ', 'JAM_SELESAI_PUJ', 'ID_PUJ')
+        'US' => array('NAMA_TA', 'NAMA_CAWU', 'JK_PUJ', 'TANGGAL_PUJ', 'JAM_MULAI_PUJ', 'JAM_SELESAI_PUJ', 'ID_PUJ')
     );
     var $primary_key = "ID_PUJ";
     var $order = array("ID_PUJ" => 'ASC');

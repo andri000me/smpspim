@@ -54,7 +54,7 @@ class Jadwal_us extends CI_Controller {
         foreach ($list as $item) {
             $no++;
             $row = array();
-            $row[] = $item->ID_PUJ;
+//            $row[] = $item->ID_PUJ;
             $row[] = $item->NAMA_TA;
             $row[] = $item->NAMA_CAWU;
             $row[] = $item->JK_PUJ;
