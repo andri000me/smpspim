@@ -1625,6 +1625,8 @@ class Denah_handler {
         $result['L'] = $this->proses_generate_siswa($mode, $denah['L'], $aturan_denah['L']);
         $result['P'] = $this->proses_generate_siswa($mode, $denah['P'], $aturan_denah['P']);
 
+//        echo json_encode($result).'<hr>';
+//        exit();
         return $result;
     }
 
@@ -1639,6 +1641,10 @@ class Denah_handler {
         $result['JUMLAH_SISWA'] = $aturan_denah['JUMLAH'];
         $result['RUANG'] = $denah['RUANG'];
 
+//        echo 'JENJANG'.json_encode($result['JENJANG']).'<hr>';
+//        echo 'TINGKAT'.json_encode($result['TINGKAT']).'<hr>';
+//        echo 'ATURAN_DENAH'.json_encode($result['ATURAN_DENAH']).'<hr>';
+//        echo 'JUMLAH_SISWA'.json_encode($result['JUMLAH_SISWA']).'<hr>';
         // MENDAPATKAN ID TINGKAT
         foreach ($result['TINGKAT'] as $key => $value) {
             $result['ID_TINGKAT'][] = intval($this->CI->tingkat->get_id_jenjang($result['JENJANG'][$key], $value));
@@ -1667,7 +1673,24 @@ class Denah_handler {
         }
 
         $result['DENAH'] = $denah['DATA'];
-
+//        echo '=========================================================================================================================<br>';
+//        $data_ruang = array();
+//        foreach ($result['ATURAN_DENAH'] as $index_ruang => $data_jumlah_siswa) {
+//            $data_ruang[$index_ruang] = 0;
+//            foreach ($data_jumlah_siswa as $value) {
+//                $data_ruang[$index_ruang] += $value;
+//            }
+//        }
+//        echo 'JUMLAH ATURAN_DENAH '.json_encode($data_ruang[0]).'<hr>';
+//        echo 'ATURAN_DENAH'.json_encode($result['ATURAN_DENAH'][0]).'<hr>';
+//        echo 'JUMLAH DATA '.json_encode(count($result['DENAH'][0])).'<hr>';
+//        echo 'DATA'.json_encode($result['DENAH'][0]).'<hr>';
+//        echo 'JUMLAH DATA_SISWA_RANDOM '.count($result['DATA_SISWA_RANDOM'][12]).'<hr>';
+//        echo 'DATA_SISWA_RANDOM'.json_encode($result['DATA_SISWA_RANDOM'][12]).'<hr>';
+//        echo '=========================================================================================================================<br>';
+//        echo 'DATA'.json_encode($result['DENAH']).'<hr>';
+//        echo 'DATA_SISWA_RANDOM'.json_encode($result['DATA_SISWA_RANDOM']).'<hr>';
+//        exit();
         return $result;
     }
 

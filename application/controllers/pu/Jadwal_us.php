@@ -138,6 +138,10 @@ class Jadwal_us extends CI_Controller {
             $this->denah->save($data);
         }
     }
+    
+//    public function cek_generate_denah_siswa() {
+//        $this->denah_handler->generate_denah_siswa($this->tipe);
+//    }
 
     private function cek_pengawas($data, $jk) {
         foreach ($data as $key => $value) {
@@ -367,6 +371,7 @@ class Jadwal_us extends CI_Controller {
 //        $test_denah = array();
 //        $test_susun = array();
         $a = 0;
+        $hari_ke = 0;
         foreach ($data_denah as $detail_denah) { // LOOPING PERTANGGAL DENAH
             $denah = json_decode($detail_denah['SISWA_DENAH'], TRUE);
             $jadwal_denah = $detail_denah['JADWAL_DENAH'];
@@ -430,7 +435,7 @@ class Jadwal_us extends CI_Controller {
                                     $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
                                     $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
 
-                                    $data_siswa[$id_siswa][] = array(
+                                    $data_siswa[$id_siswa][$hari_ke] = array(
                                         'TANGGAL' => $jadwal_denah,
                                         'DEPT' => $id_dept,
                                         'JENJANG' => $id_jenjang,
@@ -485,7 +490,9 @@ class Jadwal_us extends CI_Controller {
 //                echo '<hr>DENAH<br>' . json_encode($data_denah['DENAH']);
 //                exit();
             }
+            $hari_ke++;
         }
+        
         if ($id_kelas != null)
             $wherekelas = array('KELAS_AS' => $id_kelas);
         else {
