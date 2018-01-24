@@ -16,8 +16,12 @@ if (is_array($siswa)) {
         exit();
     }
     foreach ($siswa as $detail) {
-        $pdf = cetak($pdf, $detail, 'KARTU PELAJAR');
-        $pdf = cetak($pdf, $detail, 'KARTU SHOLAT JAMAAH');
+        if (isset($title)) {
+            $pdf = cetak($pdf, $detail, $title);
+        } else {
+            $pdf = cetak($pdf, $detail, 'KARTU PELAJAR');
+            $pdf = cetak($pdf, $detail, 'KARTU SHOLAT JAMAAH');
+        }
     }
 } else {
     $pdf = cetak($pdf, $siswa);
@@ -127,23 +131,32 @@ function cetak($pdf, $data, $title) {
     $pdf->Image(base_url('files/barcode/' . $data->ID_SISWA . '.png'), $posisi_x + 40, $posisi_y + 39, 40);
 
     if ($title == 'KARTU SHOLAT JAMAAH') {
+
+        $pdf->Cell($header_content - 4, 3, 'TA', 0, 0, 'L');
+        $pdf->Cell($length, 3, ': ' . $CI->session->userdata('NAMA_TA_ACTIVE'), 0, 0, 'L');
+        $pdf->Ln();
+
+        $pdf->Cell($header_content - 4, 3, 'Kelas', 0, 0, 'L');
+        $pdf->Cell($length, 3, ': ' . $data->NAMA_KELAS, 0, 0, 'L');
+        $pdf->Ln();
+
         $pdf->SetLineWidth(0.30);
         $pdf->Line($posisi_x, $posisi_y + 18, $posisi_x, $posisi_y + 18 + 20);
         $pdf->Line($posisi_x, $posisi_y + 18 + 5, $posisi_x + 20, $posisi_y + 18 + 5);
         $pdf->Line($posisi_x + 20, $posisi_y + 18, $posisi_x + 20, $posisi_y + 18 + 20);
         $pdf->Line($posisi_x, $posisi_y + 18, $posisi_x + 20, $posisi_y + 18);
         $pdf->Line($posisi_x, $posisi_y + 18 + 20, $posisi_x + 20, $posisi_y + 18 + 20);
-        
+
         $pdf->SetXY($posisi_x, $posisi_y + 18);
-        
+
         $pdf->SetFont('Arial', 'B', $font + 1);
         $pdf->Cell(20, 5, 'NO. ABSEN', 0, 0, 'C');
         $pdf->Ln();
-        
+
         $pdf->SetFont('Arial', 'B', $font + 20);
         $pdf->Cell(20, 15, $data->NO_ABSEN_AS, 0, 0, 'C');
     } else {
-        if(file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg'))
+        if (file_exists('files/siswa/' . $data->NIS_SISWA . '.jpg'))
             $pdf->Image(base_url('files/siswa/' . $data->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y + 15, 20, 26.6, '', '');
         elseif (file_exists('files/siswa/' . $data->ID_SISWA . '.png'))
             $pdf->Image(base_url('files/siswa/' . $data->ID_SISWA . '.png'), $posisi_x, $posisi_y + 18, 20, 26.6, '', '');

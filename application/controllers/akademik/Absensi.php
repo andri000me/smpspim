@@ -49,7 +49,15 @@ class Absensi extends CI_Controller {
             'data2' => array(
                 array(
                     'url' => site_url('akademik/siswa/cetak_kartu_kelas')."/' + ID_KELAS + '",
+                    'title' => 'Cetak Kartu Siswa dan Jamaah',
+                ),
+                array(
+                    'url' => site_url('akademik/siswa/cetak_kartu_siswa')."/' + ID_KELAS + '",
                     'title' => 'Cetak Kartu Siswa',
+                ),
+                array(
+                    'url' => site_url('akademik/siswa/cetak_kartu_jamaah')."/' + ID_KELAS + '",
+                    'title' => 'Cetak Kartu Jamaah',
                 ),
                 array(
                     'url' => site_url('keuangan/assign_tagihan/cetak_kartu')."/' + ID_KELAS + '",
