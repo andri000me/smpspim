@@ -45,6 +45,10 @@ class Absensi extends CI_Controller {
                     'url' => site_url('akademik/kehadiran/cetak_absen')."/' + ID_KELAS + '/8",
                     'title' => 'Cetak Rekapitulasi Absen',
                 ),
+                array(
+                    'url' => site_url('pencarian/cetak_untuk_pemotretan')."/' + ID_KELAS + '",
+                    'title' => 'Cetak Barcode Siswa',
+                ),
             ),
             'data2' => array(
                 array(
