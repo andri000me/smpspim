@@ -42,6 +42,23 @@ class Aturan_denah_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    public function save_us_active($data) {
+        $data['TA_PUD'] = $this->session->userdata('ID_TA_ACTIVE');
+        $data['CAWU_PUD'] = $this->session->userdata('ID_CAWU_ACTIVE');
+        $this->db->insert($this->table, $data);
+
+        return $this->db->insert_id();
+    }
+
+    public function update_us_active($data) {
+        $this->db->update($this->table, $data, array(
+            'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
+            'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
+        ));
+
+        return $this->db->affected_rows();
+    }
+
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
@@ -161,6 +178,16 @@ class Aturan_denah_model extends CI_Model {
         ));
         
         return $this->db->get()->row()->DATA_DENAH;
+    }
+    
+    public function get_aturan_cawu() {
+        $this->db->from($this->table);
+        $this->db->where(array(
+            'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
+            'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
+        ));
+        
+        return $this->db->get()->row()->ATURAN_RUANG_PUD;
     }
     
     public function validasi_denah_psb() {

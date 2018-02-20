@@ -148,6 +148,17 @@ class Tingkat_model extends CI_Model {
 
         return $this->db->get()->result();
     }
+
+    public function get_for_ujian() {
+        $this->db->select("ID_TINGK , NAMA_TINGK, DEPT_TINGK, WARNA_JS");
+        $this->_get_table();
+        $this->db->join('md_jenjang_departemen mjd', 'DEPT_TINGK=mjd.DEPT_MJD');
+        $this->db->join('md_jenjang_sekolah mjs', 'mjd.JENJANG_MJD=mjs.ID_JS');
+//        $this->db->where('DEPT_TINGK <> "MI"');
+        $this->db->order_by('ID_TINGK', 'ASC');
+
+        return $this->db->get()->result_array();
+    }
     
     public function get_all_urut() {
         $this->_get_table();

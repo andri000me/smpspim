@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Ruang_model extends CI_Model {
 
     var $table = 'md_ruang';
-    var $column = array('KODE_RUANG', 'NAMA_RUANG', 'KAPASITAS_RUANG', 'UJIAN_RUANG','KAPASITAS_UJIAN_RUANG','KODE_RUANG');
+    var $column = array('KODE_RUANG', 'NAMA_RUANG', 'KAPASITAS_RUANG', 'UJIAN_RUANG', 'KAPASITAS_UJIAN_RUANG', 'KODE_RUANG');
     var $primary_key = "KODE_RUANG";
     var $order = array("KODE_RUANG" => 'ASC');
 
@@ -90,7 +91,8 @@ class Ruang_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("KODE_RUANG as value, NAMA_RUANG as label");
+        if ($for_html)
+            $this->db->select("KODE_RUANG as value, NAMA_RUANG as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -118,23 +120,35 @@ class Ruang_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
-    public function get_ruang_ujian($jk) {
+
+    public function get_ruang_ujian($jk, $kapasitas = NULL) {
         $this->db->select('KODE_RUANG, NAMA_RUANG, KAPASITAS_RUANG, KAPASITAS_UJIAN_RUANG, ID_KELAS, ID_TINGK, DEPT_TINGK, NAMA_TINGK');
         $this->_get_table();
-        $this->db->join('akad_kelas', 'KODE_RUANG = RUANG_KELAS AND TA_KELAS='.$this->session->userdata('ID_TA_ACTIVE').' AND JK_KELAS="'.$jk.'"', 'LEFT');
+        $this->db->join('akad_kelas', 'KODE_RUANG = RUANG_KELAS AND TA_KELAS=' . $this->session->userdata('ID_TA_ACTIVE') . ' AND JK_KELAS="' . $jk . '"', 'LEFT');
         $this->db->join('md_tingkat', 'ID_TINGK = TINGKAT_KELAS', 'LEFT');
         $this->db->where('UJIAN_RUANG', 1);
+        if ($kapasitas != null)
+            $this->db->where('KAPASITAS_RUANG', $kapasitas);
+        $this->db->order_by('KODE_RUANG');
+        $this->db->group_by('KODE_RUANG');
+
+        return $this->db->get()->result_array();
+    }
+
+    public function get_ruang_ujian_baru($kapasitas) {
+        $this->_get_table();
+        $this->db->where('UJIAN_RUANG', 1);
+        $this->db->where('KAPASITAS_RUANG', $kapasitas);
         $this->db->order_by('KODE_RUANG');
         $this->db->group_by('KODE_RUANG');
 

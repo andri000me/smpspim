@@ -237,4 +237,16 @@ class Peserta_us_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_peserta_ujian($jk) {
+        $this->db->select('COUNT(ID_AS) AS JUMLAH_SISWA, ID_TINGK, DEPT_TINGK, NAMA_TINGK, WARNA_JS');
+        $this->_get_table();
+        $this->db->where(array(
+            'JK_SISWA' => $jk,
+        ));
+        $this->db->group_by('ID_TINGK');
+        $this->db->order_by('ID_TINGK');
+
+        return $this->db->get()->result_array();
+    }
+
 }
