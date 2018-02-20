@@ -220,7 +220,7 @@ class Pencarian_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function cetak_untuk_pemotretan() {
+    public function cetak_untuk_pemotretan($ID_KELAS) {
         $this->db->from('akad_siswa as');
         $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_siswa md', 'md.ID_SISWA=as.SISWA_AS');
@@ -229,6 +229,9 @@ class Pencarian_model extends CI_Model {
         $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->order_by('NAMA_KELAS', 'ASC');
         $this->db->order_by('NO_ABSEN_AS', 'ASC');
+
+        if ($ID_KELAS != NULL)
+            $this->db->where('KELAS_AS', $ID_KELAS);
 
         return $this->db->get()->result();
     }
@@ -276,7 +279,7 @@ class Pencarian_model extends CI_Model {
         ));
         $result = $this->db->get()->row_array();
 
-        return $result[$BULAN_TFW.'_TFW'];
+        return $result[$BULAN_TFW . '_TFW'];
     }
 
 }
