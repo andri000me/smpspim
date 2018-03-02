@@ -88,6 +88,27 @@ class Denah_us extends CI_Controller {
         $this->generate->output_JSON($output);
     }
 
+    public function validasi_denah() {
+        $this->generate->set_header_JSON();
+
+        if ($this->status_validasi)
+            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+
+        $result = 1; //$this->denah_handler->validasi_denah($this->mode);
+
+        if ($this->aturan_denah->validasi_denah_us() && $result) {
+            $status = 1;
+            $msg = 'Berhasil memvalidasi denah. Anda akan diarahkan pada menu jadwal ujian sekolah';
+            $link = site_url('pu/jadwal_us');
+        } else {
+            $status = 0;
+            $msg = 'Denah gagal divalidasi';
+            $link = '';
+        }
+
+        $this->generate->output_JSON(array('status' => $status, 'msg' => $msg, 'link' => $link));
+    }
+
     public function cek_denah() {
         $this->generate->set_header_JSON();
 
@@ -172,44 +193,39 @@ class Denah_us extends CI_Controller {
         $this->generate->backend_view('pu/denah_us_manual/form', $data);
     }
 
-    public function check_data() {
-//        $this->generate->set_header_JSON();
-
-        $data = $this->aturan_denah->get_by_id(11);
-        $denah = json_decode($data->DATA_DENAH, TRUE);
-
-//        echo json_encode($denah['L']['DATA'][7]);
-//        echo '<hr>';
-//        exit();
+//    public function check_data() {
+////        $this->generate->set_header_JSON();
 //
-//        foreach ($denah['L']['DATA'] as $key => $value) {
-//            echo json_encode($value);
-//            echo '<hr>';
+//        $data = $this->aturan_denah->get_by_id(11);
+//        $denah = json_decode($data->DATA_DENAH, TRUE);
+//
+////        echo json_encode($denah['L']['DATA'][7]);
+////        echo '<hr>';
+////        exit();
+////
+////        foreach ($denah['L']['DATA'] as $key => $value) {
+////            echo json_encode($value);
+////            echo '<hr>';
+////        }
+//
+//        foreach ($denah as $key => $value) {
+//            foreach ($value as $key1 => $value1) {
+////                foreach ($value1 as $key2 => $value2) {
+//                echo json_encode($key1);
+//                echo '<br>';
+//                echo json_encode($value1);
+//                echo '<hr>';
+////                }
+//            }
+//            break;
 //        }
-
-        foreach ($denah as $key => $value) {
-            foreach ($value as $key1 => $value1) {
-//                foreach ($value1 as $key2 => $value2) {
-                echo json_encode($key1);
-                echo '<br>';
-                echo json_encode($value1);
-                echo '<hr>';
-//                }
-            }
-            break;
-        }
-
-//        $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah telah dibuat. Anda tidak boleh membuat denah baru pada tahun ajaran aktif.'));
-    }
+//
+////        $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah telah dibuat. Anda tidak boleh membuat denah baru pada tahun ajaran aktif.'));
+//    }
 
     public function simpan_denah() {
-//        $this->generate->set_header_JSON();
+        $this->generate->set_header_JSON();
         $data_form = $this->get_data_denah();
-//        $jk = 'L';
-//        $denah = explode(',', "7,8,9,10,7,7,9,10,9,10,7,7,9,10,7,8,7,8,9,10,7,8,9,10,9,10,7,8,9,8,7,8,7,8,9,10,7,8,9,10,7,8,7,8,7,8,7,8,7,8,7,8,7,8,7,7,7,7,7,7,7,7,7,9,10,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,9,10,10,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,11,12,13,14,15,16,11,12,13,14,15,15,11,12,13,14,15,16,11,12,11,14,15,16,11,12,11,14,15,16,11,12,13,14,14,16,11,15,14,16,11,14,12,,14,12,,14,12,15,11,16,,14,12,12,15,14,12,,11,12,,16,12,13,14,,16,,11,12,16,14,12,11,14,12,,14,12,14,,12,14,,12,14,,13,,,,13,,,12,14,,12,14,,12,14,,,,,,,,,12,14,,12,14,,12,14,12,,,,12,,,,,,14,,,,14,,,,,,,,,,12,,,,12,,,,,,,,,,,14");
-//        $jumlah_ruang = explode(',', "11,1,1,20,1,1,1");
-//        $ruangan = explode(',', "A1-01,A1-02,A1-03,A1-04,A1-05,A1-06,A1-07,A2-06,A2-08,A2-09,A2-10,A2-11,A3-01,A3-02,A3-03,A3-04,A3-06,A3-07,A3-09,A3-10,B1-01,B1-02,B1-03,B1-04,B1-05,B1-06,B1-07,B1-08,B1-09,B1-10,B1-11,B1-12,C1-01,C1-02,C1-03,D2-01");
-//        $model = explode(',', "1,1,1,1,1,1,1,1,2,1,1,1,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,6,7");
 
         $jk = $this->input->post('jk');
         $denah = explode(',', $this->input->post('denah'));
@@ -242,8 +258,8 @@ class Denah_us extends CI_Controller {
             $status = $this->aturan_denah->save_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_save)));
         }
 
-        if (!$status)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 901: Gagal menyimpan data logging'));
+//        if (!$status)
+//            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 901: Gagal menyimpan data logging'));
 
         $data = array();
         $data['JUMLAH_PERBARIS'] = 8;
@@ -266,7 +282,7 @@ class Denah_us extends CI_Controller {
         $model_ke = 0;
         $start = true;
         foreach ($denah as $key => $value) {
-            if ((($key % $data_form['JUMLAH_KURSI']) == 0) && !$start) {
+            if ((($key % ($data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI'])) == 0) && !$start) {
                 $ruangan_ke++;
                 $model_ke++;
             }

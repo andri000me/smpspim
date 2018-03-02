@@ -1,15 +1,17 @@
 <div class="small-header transition animated fadeIn">
     <div class="hpanel">
         <div class="panel-body">
-            <a class="small-header-action" href="">
-                <div class="clip-header">
-                    <i class="fa fa-arrow-up"></i>
+            <div class="row">
+                <div class="col-md-11">
+                    <h2 class="font-light m-b-xs">
+                        PROSES PEMBUATAN DENAH <?php echo strtoupper($TITLE); ?>
+                    </h2>
+                    <small>Pembuatan denah <?php echo strtolower($TITLE); ?> pada tahun ajaran dan catur wulan aktif</small>
                 </div>
-            </a>
-            <h2 class="font-light m-b-xs">
-                PROSES PEMBUATAN DENAH <?php echo strtoupper($TITLE); ?>
-            </h2>
-            <small>Pembuatan denah <?php echo strtolower($TITLE); ?> pada tahun ajaran dan catur wulan aktif</small>
+                <div class="col-md-1">
+                    <button class="btn btn-primary btn-block btn-validasi" onclick="valiadasi_denah();">VALIDASI</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -44,7 +46,7 @@
                                                     <tr>
                                                         <td id="jenjang-<?php echo $jk . '-' . $detail['ID_TINGK']; ?>"><?php echo $detail['NAMA_TINGK'] . ' ' . $detail['DEPT_TINGK']; ?></td>
                                                         <td id="jumlah-<?php echo $jk . '-' . $detail['ID_TINGK']; ?>"><?php echo $detail['JUMLAH_SISWA']; ?></td>
-                                                        <td class="sisa-<?php echo $jk ?>" id="sisa-<?php echo $jk . '-' . $detail['ID_TINGK']; ?>"><?php echo $detail['JUMLAH_SISWA']; ?></td>
+                                                        <td class="sisa sisa-<?php echo $jk ?>" id="sisa-<?php echo $jk . '-' . $detail['ID_TINGK']; ?>"><?php echo $detail['JUMLAH_SISWA']; ?></td>
                                                     </tr>
                                                 <?php } ?>
                                             </tbody>
@@ -139,6 +141,30 @@
         create_model();
     });
 
+    function valiadasi_denah() {
+        var siap_validasi = true;
+        $(".sisa").each(function () {
+            var val = $(this).val();
+            if (parseInt(val) !== 0)
+                siap_validasi = false;
+        });
+        var action = function (isConfirm) {
+            if (isConfirm) {
+                create_ajax('<?php echo site_url('pu/denah_us/validasi_denah'); ?>', '', function (data) {
+                    if (data.status)
+                        create_homer_success(data.msg);
+                    else
+                        create_homer_error(data.msg);
+                });
+            }
+        };
+
+        if (siap_validasi)
+            create_swal_option('Apakah Anda yakin?', 'Denah yang sudah divalidasi tidak dapat dirubah lagi. Pastikan denah yang Anda buat telah benar.', action);
+        else
+            create_homer_error('Denah tidak dapat divalidasi karena ada sisa yang tidak nol');
+    }
+
     function set_panel(jk) {
         var tinggiModel = $("#panel-" + jk).height();
         var tinggiPanel = (tinggiModel / 2) - 65;
@@ -155,7 +181,7 @@
                 var temp_id = id[jk] - 1;
                 $('#jumlah-ruang-' + jk + '-' + temp_id).val(item['jumlah_ruang'][index]);
                 $.each(detail, function (kursi, tingkat) {
-                    if (tingkat !== "") 
+                    if (tingkat !== "")
                         $("#" + jk + '-' + temp_id + '-' + kursi).val(tingkat).trigger('change');
                 });
             });
@@ -335,9 +361,10 @@
                     }
                 });
                 create_ajax('<?php echo site_url('pu/denah_us/simpan_denah'); ?>', 'jk=' + jk + '&denah=' + denah + '&jumlah_ruang=' + jumlah_ruang + '&ruangan=' + ruangan + '&model=' + model, function (data) {
-                    if (data.status)
+                    if (data.status) {
                         create_homer_success(data.msg);
-                    else
+                        window.location.reload();
+                    } else
                         create_homer_error(data.msg);
                 });
             } else {
