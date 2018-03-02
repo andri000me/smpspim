@@ -84,7 +84,7 @@
                                         foreach ($RUANG[$jk] as $detail) {
                                             if (!$right)
                                                 echo '<tr>';
-                                            echo '<td>' . $detail['KODE_RUANG'] . '</td><td><select class="form-control input-sm model-ruang-' . $jk . '" id="model-ruang-' . $jk . '-' . $detail['KODE_RUANG'] . '" data-ruang="' . $detail['KODE_RUANG'] . '"><option value="">-</option></select></td>';
+                                            echo '<td>' . $detail['KODE_RUANG'] . ' [' . $detail['KAPASITAS_RUANG'] . ']</td><td><select class="form-control input-sm model-ruang-' . $jk . '" id="model-ruang-' . $jk . '-' . $detail['KODE_RUANG'] . '" data-ruang="' . $detail['KODE_RUANG'] . '"><option value="">-</option></select></td>';
                                             // <input type="checkbox" class="ruang-' . $jk . '" id="ruang-' . $jk . '-' . $detail['KODE_RUANG'] . '" value="' . $detail['KODE_RUANG'] . '"/>&nbsp;&nbsp;
 
                                             if ($right)
@@ -124,7 +124,7 @@
         'L': 1,
         'P': 1,
     };
-    var jumlah_kusi = <?php echo $JUMLAH_KURSI; ?>;
+    var jumlah_kusi = <?php echo ($JUMLAH_KURSI == NULL ? 40 : $JUMLAH_KURSI); ?>;
     var jenjang = <?php echo json_encode($TINGKAT); ?>;
     var color = {<?php
     foreach ($TINGKAT as $detail) {
@@ -148,15 +148,20 @@
 
     function create_model() {
         $.each(model, function (jk, item) {
-            $.each(item.data, function (index, detail) {
+            $.each(item.denah, function (index, detail) {
                 console.log('CREATE MODEL ' + jk + ' ON INDEX ' + index);
 
                 create_tab(jk);
                 var temp_id = id[jk] - 1;
                 $('#jumlah-ruang-' + jk + '-' + temp_id).val(item['jumlah_ruang'][index]);
                 $.each(detail, function (kursi, tingkat) {
-                    $("#" + jk + '-' + temp_id + '-' + kursi).val(tingkat).trigger('change');
+                    if (tingkat !== "") 
+                        $("#" + jk + '-' + temp_id + '-' + kursi).val(tingkat).trigger('change');
                 });
+            });
+            $(".model-ruang-" + jk).val("").trigger('change');
+            $.each(item.ruangan, function (index, detail) {
+                $("#model-ruang-" + jk + "-" + detail).val(item['model'][index]).trigger('change');
             });
         });
     }
