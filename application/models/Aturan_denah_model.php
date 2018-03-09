@@ -207,12 +207,12 @@ class Aturan_denah_model extends CI_Model {
     
     public function validasi_denah_us() {
         $data = array(
-            'VALIDASI_DENAH' => 1
+            'VALIDASI_DENAH' => 1,
+            'READY_DENAH' => 1
         );
         $where = array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
-            'READY_DENAH' => 1
         );
         
         $this->db->update($this->table, $data, $where);

@@ -2,14 +2,14 @@
     <div class="hpanel">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-9">
                     <h2 class="font-light m-b-xs">
                         PROSES PEMBUATAN DENAH <?php echo strtoupper($TITLE); ?>
                     </h2>
                     <small>Pembuatan denah <?php echo strtolower($TITLE); ?> pada tahun ajaran dan catur wulan aktif</small>
                 </div>
-                <div class="col-md-1">
-                    <button class="btn btn-primary btn-block btn-validasi" onclick="valiadasi_denah();">VALIDASI</button>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block btn-validasi" onclick="valiadasi_denah();" <?php if($VALIDASI) echo 'disabled'; ?>><?php if($VALIDASI) echo 'DENAH TELAH DI'; ?>VALIDASI</button>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                             <div class="panel-footer">
                                 <div class="row">
                                     <div class="col-md-12 text-center">
-                                        <button class="btn btn-primary" data-jk="<?php echo $jk; ?>" onclick="simpan_denah(this)">SIMPAN DENAH</button>
+                                        <button class="btn btn-primary" data-jk="<?php echo $jk; ?>" onclick="simpan_denah(this)" <?php if($VALIDASI) echo 'disabled'; ?>>SIMPAN DENAH</button>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
     var jenjang = <?php echo json_encode($TINGKAT); ?>;
     var color = {<?php
     foreach ($TINGKAT as $detail) {
-        echo $detail['ID_TINGK'] . ':"' . $detail['WARNA_JS'] . '",';
+        echo $detail['ID_TINGK'] . ':"#' . $this->crypt->randomColor() . '",';
     }
     ?>};
     var ruang = <?php echo json_encode($RUANG); ?>;
@@ -139,28 +139,30 @@
     $(document).ready(function () {
         $("body").addClass('hide-sidebar');
         create_model();
+        <?php if($VALIDASI) echo '$(".form-control").prop("disabled", true);'; ?>
     });
 
     function valiadasi_denah() {
         var siap_validasi = true;
         $(".sisa").each(function () {
-            var val = $(this).val();
+            var val = $(this).html();
             if (parseInt(val) !== 0)
                 siap_validasi = false;
         });
         var action = function (isConfirm) {
             if (isConfirm) {
                 create_ajax('<?php echo site_url('pu/denah_us/validasi_denah'); ?>', '', function (data) {
-                    if (data.status)
+                    if (data.status) {
                         create_homer_success(data.msg);
-                    else
+                        window.location = data.link;
+                    } else
                         create_homer_error(data.msg);
                 });
             }
         };
 
         if (siap_validasi)
-            create_swal_option('Apakah Anda yakin?', 'Denah yang sudah divalidasi tidak dapat dirubah lagi. Pastikan denah yang Anda buat telah benar.', action);
+            create_swal_option('Apakah Anda yakin?', 'Denah harus disimpan terlebih dahulu sebelum divalidasi. Denah yang sudah divalidasi tidak dapat dirubah lagi. Pastikan denah yang Anda buat telah benar.', action);
         else
             create_homer_error('Denah tidak dapat divalidasi karena ada sisa yang tidak nol');
     }
@@ -239,7 +241,7 @@
             $('#tab-' + jk + '-' + id[jk]).find(".denah").append('<div class="col-md-6"><div class="row denah-kursi"></div></div>');
         }
 
-        $('#tab-' + jk + '-' + id[jk]).find(".denah-kursi").append('<div class="col-md-3"><div class="hpanel panel-kursi"><div class="panel-body border text-center kursi" data-kursi="' + kursi + '" style="border-top: 1px solid #e4e5e7"><p>' + kursi + '</p>' + create_option_jenjang(jk, kursi) + '</div></div></div>');
+        $('#tab-' + jk + '-' + id[jk]).find(".denah-kursi").append('<div class="col-md-3"><div class="hpanel panel-kursi"><div class="panel-body border text-center kursi" data-kursi="' + kursi + '" style="border-top: 1px solid #e4e5e7"><p style="text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">' + kursi + '</p>' + create_option_jenjang(jk, kursi) + '</div></div></div>');
     }
 
     function create_option_jenjang(jk, kursi) {
@@ -256,9 +258,9 @@
         var key = $(that).val();
 
         if (key === '') {
-            $(that).parent().parent().removeClass().addClass('panel-kursi hpanel');
+            $(that).parent().css('background', '#fff');
         } else {
-            $(that).parent().parent().removeClass().addClass('panel-kursi hpanel ' + color[parseInt(key)]);
+            $(that).parent().css('background', color[parseInt(key)]);
         }
 
         proses_sisa(that);

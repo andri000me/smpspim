@@ -88,6 +88,10 @@ class Denah_us extends CI_Controller {
         $this->generate->output_JSON($output);
     }
 
+    public function show_denah() {
+        $this->buat_denah();
+    }
+
     public function validasi_denah() {
         $this->generate->set_header_JSON();
 
@@ -165,10 +169,8 @@ class Denah_us extends CI_Controller {
     }
 
     public function buat_denah() {
-        if ($this->status_validasi)
-            redirect('pu/denah_us/show_denah');
-
         $data = $this->get_data_denah();
+        $data['VALIDASI'] = $this->status_validasi;
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
 
@@ -187,9 +189,9 @@ class Denah_us extends CI_Controller {
             }
             $aturan_denah[$jk]['denah'] = array_values($denah);
         }
-        
+
         $data['MODEL'] = $aturan_denah;
-        
+
         $this->generate->backend_view('pu/denah_us_manual/form', $data);
     }
 
@@ -225,6 +227,10 @@ class Denah_us extends CI_Controller {
 
     public function simpan_denah() {
         $this->generate->set_header_JSON();
+        
+        if ($this->status_validasi)
+            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 912: Denah telah divalidasi'));
+        
         $data_form = $this->get_data_denah();
 
         $jk = $this->input->post('jk');
@@ -261,9 +267,16 @@ class Denah_us extends CI_Controller {
 //        if (!$status)
 //            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 901: Gagal menyimpan data logging'));
 
+        $denah_db_cawu = $this->aturan_denah->get_denah_cawu();
+
+        if ($denah_db_cawu == NULL)
+            $denah_db = array();
+        else
+            $denah_db = json_decode($this->aturan_denah->get_denah_cawu(), true);
+
         $data = array();
         $data['JUMLAH_PERBARIS'] = 8;
-        $data['JUMLAH_PERUANG'] = $data_form['JUMLAH_KURSI'];
+        $data['JUMLAH_PERUANG'] = $data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI'];
         foreach ($data_form['RUANG'][$jk] as $value) {
             $data['JUMLAH_KAPASITAS_PERUANG'][] = $value['KAPASITAS_UJIAN_RUANG'];
         }
@@ -377,7 +390,8 @@ class Denah_us extends CI_Controller {
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 902: Data siswa form dengan database berbeda'));
         }
 
-        $status = $this->aturan_denah->update_us_active(array('DATA_DENAH' => json_encode(array($jk => $data))));
+        $denah_db[$jk] = $data;
+        $status = $this->aturan_denah->update_us_active(array('DATA_DENAH' => json_encode($denah_db)));
 
 //        foreach ($data as $key1 => $value1) {
 //            var_dump($key1);
