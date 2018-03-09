@@ -137,7 +137,7 @@ class Denah_us extends CI_Controller {
             'P' => $this->peserta_us->get_peserta_ujian('P'),
         );
         $data['RUANG'] = array(
-            'L' => (!isset($denah['P']) ? $this->ruang->get_ruang_ujian('L', $data['JUMLAH_KURSI']) : $denah['L']['RUANG']),
+            'L' => (!isset($denah['L']) ? $this->ruang->get_ruang_ujian('L', $data['JUMLAH_KURSI']) : $denah['L']['RUANG']),
             'P' => (!isset($denah['P']) ? $this->ruang->get_ruang_ujian('P', $data['JUMLAH_KURSI']) : $denah['P']['RUANG']),
         );
         $data['MODEL'] = array(
