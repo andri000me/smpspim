@@ -51,7 +51,7 @@ class Matapelajaran_model extends CI_Model {
                 if ($i === 0)
                     $this->db->group_start();
                 if ($i < 10)
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like("ifnull(".$item.", '')", $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
