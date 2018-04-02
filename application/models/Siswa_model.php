@@ -231,8 +231,8 @@ class Siswa_model extends CI_Model {
     public function get_ac_pembayaran($where) {
         $this->db->select("ID_SISWA as id, CONCAT(IF(NIS_SISWA IS NULL, 'BELUM ADA NIS' , NIS_SISWA), ' - ', NAMA_SISWA) as text");
         $this->db->from($this->table);
-        $this->db->join('akad_siswa as', $this->table . '.ID_SISWA=as.SISWA_AS');
-        $this->db->join('md_tingkat mt', 'as.TINGKAT_AS=mt.ID_TINGK');
+        $this->db->join('akad_siswa as', $this->table . '.ID_SISWA=as.SISWA_AS', 'LEFT');
+        $this->db->join('md_tingkat mt', 'as.TINGKAT_AS=mt.ID_TINGK', 'LEFT');
         $this->db->like('CONCAT(IF(NIS_SISWA IS NULL, \'\' , NIS_SISWA)," ",NAMA_SISWA)', $where);
         $this->db->where(array(
             'STATUS_MUTASI_SISWA' => NULL,
