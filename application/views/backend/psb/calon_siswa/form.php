@@ -106,7 +106,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             $this->generate->input_hidden('TEMP_NO_UM_SISWA', $data->NO_UM_SISWA);
                         }
                         ?>
-                        <?php $this->generate->input_select2('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'url' => site_url('psb/calon_siswa/ac_asal_sekolah')), TRUE, 8, TRUE, $mode_edit ? array('id' => $data->ASAL_SEKOLAH_SISWA, 'text' => $data->NAMA_AS) : array('id' => '1', 'text' => 'Belum sekolah'), '<div class="col-sm-1"><a href="' . site_url('master_data/asal_sekolah') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
+                        <?php $this->generate->input_select2('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'url' => site_url('psb/calon_siswa/ac_asal_sekolah')), FALSE, 8, FALSE, $mode_edit ? array('id' => $data->ASAL_SEKOLAH_SISWA, 'text' => $data->NAMA_AS) : array('id' => '1', 'text' => 'Belum sekolah'), '<div class="col-sm-1"><a href="' . site_url('master_data/asal_sekolah') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
                         <?php $this->generate->input_select2('Masuk kejenjang', array('name' => 'MASUK_JENJANG_SISWA', 'url' => site_url('psb/calon_siswa/ac_jenjang_sekolah')), TRUE, 2, FALSE, $mode_edit ? array('id' => $data->MASUK_JENJANG_SISWA, 'text' => $data->NAMA_JS) : NULL); ?>
                         <?php
                         $this->generate->input_dropdown('Masuk ketingkat', 'MASUK_TINGKAT_SISWA', array(
