@@ -72,7 +72,7 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $pdf->Ln();
 
     $pdf->SetX(120);
-    $pdf->Cell(0, 5, 'sdr. ' . $this->cetak->nama_wali_siswa($siswa));
+    $pdf->Cell(0, 5, '' . $this->cetak->nama_wali_siswa($siswa));
     $pdf->Ln();
 
     $pdf->SetFont('Arial', '', 10);
@@ -323,7 +323,7 @@ function cetak($pdf, $siswa, $data, $nomor_surat) {
     $pdf->Ln();
 
     $pdf->Cell($penerima_margin);
-    $pdf->Cell(0, 5, 'sdr. ' . $CI->cetak->nama_wali_siswa($siswa));
+    $pdf->Cell(0, 5, '' . $CI->cetak->nama_wali_siswa($siswa));
     $pdf->Ln();
 
     $pdf->Cell($penerima_margin);

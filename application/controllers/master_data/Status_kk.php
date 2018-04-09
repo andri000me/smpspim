@@ -20,7 +20,7 @@ class Status_kk extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('status_kk_model', 'status_kk');
-        $this->auth->validation(array(11, 2));
+        $this->auth->validation(array(11, 2, 3));
     }
 
     public function index() {

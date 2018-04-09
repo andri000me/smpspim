@@ -44,12 +44,15 @@ $this->generate->generate_panel_content($title, $subtitle);
                         INFORMASI PRIBADI
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIK_SISWA : '', 'value' => $mode_edit ? $data->NIK_SISWA : '', 'id' => 'NIK_SISWA', 'onchange' => 'return check_data(\'NIK_SISWA\');'), TRUE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'NIK_SISWA', 'data-inputmask' => "'mask': '9999 9999 9999 9999'", 'maxlength' => 19, 'value' => $mode_edit ? $data->NIK_SISWA : '', 'value' => $mode_edit ? $data->NIK_SISWA : '', 'id' => 'NIK_SISWA', 'onchange' => 'return check_data(\'NIK_SISWA\');'), TRUE, 4); ?>
+                        <?php $this->generate->input_text('NISN', array('name' => 'NISN_SISWA', 'data-inputmask' => "'mask': '999 999 999 9'", 'maxlength' => 13, 'value' => $mode_edit ? $data->NISN_SISWA : '', 'value' => $mode_edit ? $data->NISN_SISWA : '', 'id' => 'NISN_SISWA', 'onchange' => 'return check_data(\'NISN_SISWA\');'), TRUE, 4); ?>
+                        <?php $this->generate->input_text('NO. KK', array('name' => 'KK_SISWA', 'data-inputmask' => "'mask': '9999 9999 9999 9999'", 'maxlength' => 19, 'value' => $mode_edit ? $data->KK_SISWA : ''), TRUE, 4); ?>
+                        <?php $this->generate->input_select2('Status KK', array('name' => 'STATUS_KK_SISWA', 'url' => site_url('master_data/status_kk/auto_complete')), TRUE, 3, FALSE, $mode_edit ? array('id' => $data->STATUS_KK_SISWA, 'text' => $data->NAMA_SKK) : NULL); ?>
                         <?php $this->generate->input_text('Nama Lengkap', array('name' => 'NAMA_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_text('Nama Panggilan', array('name' => 'PANGGILAN_SISWA', 'maxlength' => 50, 'value' => $mode_edit ? $data->PANGGILAN_SISWA : ''), FALSE, 4); ?>
                         <?php $this->generate->input_select2('Jenis Kelamin', array('name' => 'JK_SISWA', 'url' => site_url('psb/calon_siswa/ac_jk')), TRUE, 3, FALSE, $mode_edit ? array('id' => $data->JK_SISWA, 'text' => $data->NAMA_JK) : NULL); ?>
                         <?php $this->generate->input_text('Tempat Lahir', array('name' => 'TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->TEMPAT_LAHIR_SISWA : ''), TRUE, 4); ?>
-                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'TANGGAL_LAHIR_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_LAHIR_SISWA) : ''), TRUE, 2); ?>
+                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'TANGGAL_LAHIR_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_LAHIR_SISWA) : ''), TRUE, 2); ?>
                         <?php $this->generate->input_select2('Suku', array('name' => 'SUKU_SISWA', 'url' => site_url('psb/calon_siswa/ac_suku')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->SUKU_SISWA, 'text' => $data->NAMA_SUKU) : NULL); ?>
                         <?php $this->generate->input_select2('Agama', array('name' => 'AGAMA_SISWA', 'url' => site_url('psb/calon_siswa/ac_agama')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AGAMA_SISWA, 'text' => $data->NAMA_AGAMA) : NULL); ?>
                         <?php $this->generate->input_select2('Kondisi', array('name' => 'KONDISI_SISWA', 'url' => site_url('psb/calon_siswa/ac_kondisi')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->KONDISI_SISWA, 'text' => $data->NAMA_KONDISI) : NULL); ?>
@@ -106,7 +109,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             $this->generate->input_hidden('TEMP_NO_UM_SISWA', $data->NO_UM_SISWA);
                         }
                         ?>
-                        <?php $this->generate->input_select2('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'url' => site_url('psb/calon_siswa/ac_asal_sekolah')), FALSE, 8, FALSE, $mode_edit ? array('id' => $data->ASAL_SEKOLAH_SISWA, 'text' => $data->NAMA_AS) : array('id' => '1', 'text' => 'Belum sekolah'), '<div class="col-sm-1"><a href="' . site_url('master_data/asal_sekolah') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
+                        <?php $this->generate->input_select2('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'url' => site_url('psb/calon_siswa/ac_asal_sekolah')), FALSE, 8, TRUE, $mode_edit ? array('id' => $data->ASAL_SEKOLAH_SISWA, 'text' => $data->NAMA_AS) : array('id' => '1', 'text' => 'Belum sekolah'), '<div class="col-sm-1"><a href="' . site_url('master_data/asal_sekolah') . '" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i></a></div>'); ?>
                         <?php $this->generate->input_select2('Masuk kejenjang', array('name' => 'MASUK_JENJANG_SISWA', 'url' => site_url('psb/calon_siswa/ac_jenjang_sekolah')), TRUE, 2, FALSE, $mode_edit ? array('id' => $data->MASUK_JENJANG_SISWA, 'text' => $data->NAMA_JS) : NULL); ?>
                         <?php
                         $this->generate->input_dropdown('Masuk ketingkat', 'MASUK_TINGKAT_SISWA', array(
@@ -120,7 +123,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                 ), TRUE, 4);
                         ?>
                         <?php $this->generate->input_text('No. Ijasah', array('name' => 'NO_IJASAH_SISWA', 'maxlength' => 40, 'value' => $mode_edit ? $data->NO_IJASAH_SISWA : ''), FALSE, 3); ?>
-                        <?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
+                        <?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
                     </div>
                 </div>
             </div>
@@ -272,6 +275,8 @@ $this->generate->generate_panel_content($title, $subtitle);
     } else {
         ?>
     $(function () {
+        $(":input").inputmask();
+        
         $("#UPLOAD_FOTO_SISWA").change(function(){
             $('#from_upload').val(1);
         });

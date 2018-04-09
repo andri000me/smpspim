@@ -72,7 +72,7 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $pdf->Ln();
 
     $pdf->SetX(120);
-    $pdf->Cell(0, 5, 'sdr. ' . $this->cetak->nama_wali_siswa($siswa));
+    $pdf->Cell(0, 5, '' . $this->cetak->nama_wali_siswa($siswa));
     $pdf->Ln();
 
     $pdf->SetFont('Arial', '', 10);
@@ -174,6 +174,13 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $pdf->Cell(0, 5, $post['TTD_SURAT']);
     $pdf->Ln(12);
 
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, 'Tembusan disampaikan kepada yth:');
+    $pdf->Ln();
+    
+    $pdf->Cell(0, 5, 'Wali kelas '.$siswa['NAMA_KELAS'].': '.$this->cetak->nama_peg_print_title($siswa['GELAR_AWAL_WALI_KELAS'], $siswa['WALI_KELAS'], $siswa['GELAR_AKHIR_WALI_KELAS']));
+    $pdf->Ln();
+    
     // =================================== DETAIL =================================== 
 
     $pdf->SetMargins(13, 10);
@@ -316,7 +323,7 @@ function cetak($pdf, $siswa, $data, $nomor_surat) {
     $pdf->Ln();
 
     $pdf->Cell($penerima_margin);
-    $pdf->Cell(0, 5, 'sdr. ' . $CI->cetak->nama_wali_siswa($siswa));
+    $pdf->Cell(0, 5, '' . $CI->cetak->nama_wali_siswa($siswa));
     $pdf->Ln();
 
     $pdf->Cell($penerima_margin);

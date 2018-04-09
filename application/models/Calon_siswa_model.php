@@ -22,6 +22,7 @@ class Calon_siswa_model extends CI_Model {
         $this->db->select('*, moha.NAMA_SO AS NAMA_SO_AYAH, mohi.NAMA_SO AS NAMA_SO_IBU, mjpa.NAMA_JP AS NAMA_JP_AYAH, mjpi.NAMA_JP AS NAMA_JP_IBU, , mjpw.NAMA_JP AS NAMA_JP_WALI, mpka.NAMA_JENPEK AS NAMA_JENPEK_AYAH, mpki.NAMA_JENPEK AS NAMA_JENPEK_IBU, mpkw.NAMA_JENPEK AS NAMA_JENPEK_WALI, kec.NAMA_KEC AS NAMA_KEC_SISWA, kab.NAMA_KAB AS NAMA_KAB_SISWA, prov.NAMA_PROV AS NAMA_PROV_SISWA, keco.NAMA_KEC AS NAMA_KEC_ORTU, kabo.NAMA_KAB AS NAMA_KAB_ORTU, provo.NAMA_PROV AS NAMA_PROV_ORTU');
         $this->db->from($this->table);
         $this->db->join('md_asal_sekolah as', $this->table.'.ASAL_SEKOLAH_SISWA=as.ID_AS', 'LEFT');
+        $this->db->join('md_status_kk skk', $this->table.'.STATUS_KK_SISWA=skk.ID_SKK', 'LEFT');
         $this->db->join('md_suku msk', $this->table.'.SUKU_SISWA=msk.ID_SUKU', 'LEFT');
         $this->db->join('md_agama mag', $this->table.'.AGAMA_SISWA=mag.ID_AGAMA', 'LEFT');
         $this->db->join('md_kondisi mkd', $this->table.'.KONDISI_SISWA=mkd.ID_KONDISI', 'LEFT');

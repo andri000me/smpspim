@@ -8,6 +8,11 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+/vendor/
 
 # IDE Files
 #-------------------------
@@ -20,27 +25,3 @@ application/logs/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-/assets/vendor/*
-/assets/api/*
-/assets/icons/*
-/assets/images/*
-/assets/fonts/*
-/system/
-/files/barcode/*
-/files/datatabase/*
-/files/pegawai/*
-/files/siswa/*
-/files/xml/*
-/updated.sql
-/AFE.xml
-/NOTE
-/readme.proc
-/export_timetables.xml
-/log_db.log
-/note.html
-/tes.xml
-/check_tagihan.sql
-/readme.rst
-/application/config/database.php
-/application/libraries/tcpdf/
-/note

@@ -61,6 +61,10 @@
         <script src="<?php echo base_url(); ?>assets/vendor/pace/pace.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/d3/d3.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/vendor/c3/c3.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/jquery.inputmask.bundle.js"></script>
+        <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone.js"></script>
+        <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-be.js"></script>
+        <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-ru.js"></script>
 
         <!-- App scripts -->
         <script src="<?php echo base_url(); ?>assets/scripts/homer.js"></script>

@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pondok_siswa_model extends CI_Model {
 
     var $table = 'md_pondok_siswa';
-    var $column = array('NAMA_PONDOK_MPS','PENGASUH_MPS','ALAMAT_MPS','JARAK_MPS','TELP_MPS','EMAIL_MPS', 'ID_MPS', 'ID_MPS');
+    var $column = array('NAMA_PONDOK_MPS','JK_MPS','PENGASUH_MPS','ALAMAT_MPS','JARAK_MPS','TELP_MPS','EMAIL_MPS', 'ID_MPS', 'ID_MPS');
     var $primary_key = "ID_MPS";
     var $order = array("ID_MPS" => 'ASC');
 
@@ -20,6 +20,7 @@ class Pondok_siswa_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
+        $this->db->join('md_jenis_kelamin', 'JK_MPS=ID_JK', 'LEFT');
     }
 
     private function _get_datatables_query() {
@@ -48,7 +49,7 @@ class Pondok_siswa_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like('IFNULL('.$item.', "")', $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
@@ -99,6 +100,7 @@ class Pondok_siswa_model extends CI_Model {
     public function get_all_ac($where) {
         $this->db->select("ID_MPS as id, NAMA_PONDOK_MPS as text");
         $this->_get_table();
+        $this->db->order_by('JK_MPS');
         if($where != 'null') $this->db->like('NAMA_PONDOK_MPS', $where);
 
         return $this->db->get()->result();
