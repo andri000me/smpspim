@@ -319,7 +319,7 @@ class Siswa_model extends CI_Model {
     }
 
     public function get_all_data_simple($jenjang, $tingkat, $kelas) {
-        $this->db->select($this->table . '.*');
+        $this->db->select($this->table . '.*, asw.NO_ABSEN_AS, ak.NAMA_KELAS');
         $this->_get_table_simple(FALSE, FALSE);
         $this->db->join('md_tingkat mting', 'ak.TINGKAT_KELAS=mting.ID_TINGK', 'LEFT');
 
