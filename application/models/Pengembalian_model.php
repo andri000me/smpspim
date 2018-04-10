@@ -29,9 +29,10 @@ class Pengembalian_model extends CI_Model {
         $this->db->join('md_user mu',$this->table.'.USER_BAYAR=mu.ID_USER');
         $this->db->join('md_pegawai mp','mu.PEGAWAI_USER=mp.ID_PEG');
         $this->db->where(array(
-            'ID_TA' => $this->session->userdata('ID_TA_ACTIVE'),
+//            'ID_TA' => $this->session->userdata('ID_TA_ACTIVE'),
             'USER_BAYAR' => $this->session->userdata('ID_USER')
         ));
+        $this->db->where('(ID_TA='.$this->session->userdata('ID_TA_ACTIVE').' OR ID_TA='.$this->session->userdata('ID_PSB_ACTIVE').')');
     }
     
     public function get_siswa($where) {
