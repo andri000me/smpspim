@@ -1,0 +1,247 @@
+FOR GENERATE FORM
+
+            // ================================================================================== HIDDEN =====================================================
+            $output_id = array(
+                'hidden' => TRUE,                                               
+                'data' => array(
+                    'name' => 'ID_MM',                                          
+                    'value' => $data->ID_MM                                     
+                )
+            );
+
+        $output = array(
+            // ================================================================================== TEXT =====================================================
+            array(
+                'label' => 'Nama Model',                                        
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type' => 'text',                                           
+                    'name' => 'NAMA_MM',                                        
+                    $data == NULL ? '' : 'readonly' => 'true',
+                    "placeholder" => "ex. Cotton 10%",
+                    'value' => $data == NULL ? "" : $data->NAMA_MM
+                )
+            ),
+            // ================================================================================== TEXTAREA =====================================================
+            array(
+                'label' => 'Nama Model',                                        
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type' => 'textarea',                                           
+                    'name' => 'NAMA_MM',                                        
+                    $data == NULL ? '' : 'readonly' => 'true',
+                    "placeholder" => "ex. Cotton 10%",
+                    'value' => $data == NULL ? "" : $data->NAMA_MM
+                )
+            ),
+            // ================================================================================== DATETIME =====================================================
+            array(
+                'label' => 'Nama Model',                                        
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type' => 'datetimepicker',                                    ex clockpicker, datepicker, datetimepicker
+                    'name' => 'NAMA_MM',                                        
+//                    $data == NULL ? '' : 'readonly' => 'true',
+                    "placeholder" => "ex. Cotton 10%",
+                    'value' => $data == NULL ? "" : $data->NAMA_MM
+                )
+            ),
+            // ================================================================================== DROPDOWN =====================================================
+            array(
+                'label' => 'Nama Kelompok',                                     
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type'  => 'dropdown',                                      
+                    'name'  => 'MDJENIS_MM',                                    
+                    'value' => $data == NULL ? "" : $data->ID_MJ,
+                    'value_blank'  => '-- Pilih Kelompok --',
+                    'data'  => $this->kelompok->get_all()                       
+                )
+            ),
+
+
+                    'data'  => array(
+                        array('id' => '#FFFFFF', 'text' => "Putih"),
+                        array('id' => '#FF0000', 'text' => "Merah"),
+                        array('id' => '#00FF00', 'text' => "Hijau"),
+                        array('id' => '#0000FF', 'text' => "Biru"),
+                    )
+
+            // ================================================================================== CHECKBOX =====================================================
+            array(
+                'label' => 'Nama Kelompok',                                     
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type'  => 'checkbox',                                      , ex checkbox, radio
+                    'name'  => 'MDJENIS_MM',                                    
+                    'inline'=> true,                                           
+                    'value' => $data == NULL ? "" : $data->ID_MJ,
+                    'data'  => $this->kelompok->get_all()                       
+                )
+            ),
+
+                    array(
+                        array('value' => 1, 'label' => "YA"),
+                        array('value' => 0, 'label' => "TIDAK"),
+                    )      
+
+public function get_all($for_html = true) {
+        if ($for_html) $this->db->select("ID_MJ as id, NAMA_MJ as text");
+        $this->_get_table();
+
+        return $this->db->get()->result();
+    }
+
+
+            // ================================================================================== CHECKBOX =====================================================
+            array(
+                'label' => 'Nama Kelompok',                                     
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type'  => 'radio',                                      , ex checkbox, radio
+                    'name'  => 'MDJENIS_MM',                                    
+                    'inline'=> true,                                           
+                    'value' => $data == NULL ? "" : $data->ID_MJ,
+                    'data'  => $this->kelompok->get_all()                       
+                )
+            ),
+
+
+
+
+    
+
+            // ================================================================================== AUTOCOMPLETE =====================================================
+            array(
+                'label' => 'Nama Kelompok',                                     
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 7,
+                'data' => array(
+                    'type'  => 'autocomplete',                                  
+                    'name'  => 'MDJENIS_MM',                                    
+                    'multiple'  => FALSE,                                       
+                    'minimum'  => 1,                                       
+                    'value' => $data == NULL ? "" : $data->ID_MJ,
+                    'label' => $data == NULL ? "" : $data->NAMA_MJ,
+//                    'data'  => $this->kelompok->get_all(),                       
+//                    'url'   => NULL
+                    'data'  => NULL,                                            
+                    'url'   => base_url('model/ac_kelompok')                      
+                )
+            )
+
+
+    public function ac_kelompok() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->kelompok->get_all_ac($this->input->post('q'));
+        
+        $this->generate->output_JSON($data);
+    }
+
+
+    public function get_all_ac($where) {
+        $this->db->select("ID_MJ as id, NAMA_MJ as text");
+        $this->_get_table();
+        $this->db->like('NAMA_MJ', $where);
+
+        return $this->db->get()->result();
+    }
+
+        );
+
+
+
+
+
+
+<?php $this->generate->input_radio('Almarhum', array('name'=>'AYAH_ALMARHUM_SISWA', 'checked' => '1' ,'value' => array(
+    array('label' => 'Tidak', 'value' => '0'),
+    array('label' => 'Ya', 'value' => '1'),
+)), TRUE, 4); ?>
+
+var functionDrawCallback_pembayaran = function(settings) {
+        var api = this.api();
+        var json = api.ajax.json();
+        
+        console.log(json);
+    };
+
+
+
+<?php $this->generate->input_text('NIK', array('name' => 'NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIK_SISWA : '', 'value' => $mode_edit ? $data->NIK_SISWA : '', 'id' => 'NIK_SISWA', 'onchange' => 'return check_data(\'NIK_SISWA\');'), TRUE, 4); ?>
+<?php $this->generate->input_select2('Jenis Kelamin', array('name' => 'JK_SISWA', 'url' => site_url('psb/calon_siswa/ac_jk')), TRUE, 3, FALSE, $mode_edit ? array('id' => $data->JK_SISWA, 'text' => $data->NAMA_JK) : NULL); ?>
+
+<?php $this->generate->input_date('Tanggal Lahir', array('name' => 'TANGGAL_LAHIR_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_LAHIR_SISWA) : ''), TRUE, 2); ?>
+<?php
+$this->generate->input_dropdown('Masuk ketingkat', 'MASUK_TINGKAT_SISWA', array(
+    array('id' => 0, 'text' => "Pilih jenjang terlebih dahulu", 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 1 ? TRUE : FALSE) : FALSE),
+    array('id' => 1, 'text' => 1, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 1 ? TRUE : FALSE) : FALSE),
+    array('id' => 2, 'text' => 2, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 2 ? TRUE : FALSE) : FALSE),
+    array('id' => 3, 'text' => 3, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 3 ? TRUE : FALSE) : FALSE),
+    array('id' => 4, 'text' => 4, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 4 ? TRUE : FALSE) : FALSE),
+    array('id' => 5, 'text' => 5, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 5 ? TRUE : FALSE) : FALSE),
+    array('id' => 6, 'text' => 6, 'selected' => $mode_edit ? ($data->MASUK_TINGKAT_SISWA == 6 ? TRUE : FALSE) : FALSE),
+        ), TRUE, 4);
+?>
+<?php $this->generate->input_time('Jam Mulai', array('name' => 'MULAI_TW', 'value' => $ADD ? '' : $data->MULAI_TW), TRUE, 2); ?>
+<?php $this->generate->input_hidden('ID_TW', $EDIT ? $DETAIL_WAKTU->ID_TW : ''); ?>
+
+
+
+
+$data = array(
+    'data' => array(
+        'x_label' => array(
+            'Pertama', 'Kedua', 'Ketiga', 'Keempat', 'Kelima'
+        ),
+        'data1' => array(
+            220, 110, 400, 500, 320
+        ),
+        'data2' => array(
+            100, 231, 431, 542, 542
+        ),
+        'data3' => array(
+            342, 634, 123, 657, 533
+        )
+    ),
+    'colors' => array(
+        'data1' => '#'.$this->crypt->randomColor(),
+        'data2' => '#'.$this->crypt->randomColor(),
+        'data3' => '#'.$this->crypt->randomColor(),
+    ),
+    'label_x' => 'Bulan',
+    'label_y' => 'Jumlah',
+    'names' => array(
+        'data1' => 'Pembayaran',
+        'data2' => 'Pengembalian',
+        'data3' => 'Total',
+    ),
+);
+
+if(!$STATUS) {
+    $data['data']['data3'] = array(989, 213, 544, 765, 878);
+    $data['colors']['data3'] = '#'.$this->crypt->randomColor();
+    $data['names']['data3'] = 'Saldo';
+//            $data['unload'] = array('data1');
+}
+
+$this->generate->output_JSON($data);
+
+
+
+dropdown_searching_yes_no('PMB', 5);
+dropdown_searching('PMB', 5, {1: 'YA'});
