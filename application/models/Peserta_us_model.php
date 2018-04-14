@@ -245,6 +245,8 @@ class Peserta_us_model extends CI_Model {
         ));
         $this->db->group_by('ID_TINGK');
         $this->db->order_by('ID_TINGK');
+//        $this->db->order_by('ID_JS');
+//        $this->db->order_by('NAMA_TINGK');
 
         return $this->db->get()->result_array();
     }

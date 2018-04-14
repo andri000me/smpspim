@@ -155,7 +155,8 @@ class Tingkat_model extends CI_Model {
         $this->db->join('md_jenjang_departemen mjd', 'DEPT_TINGK=mjd.DEPT_MJD');
         $this->db->join('md_jenjang_sekolah mjs', 'mjd.JENJANG_MJD=mjs.ID_JS');
 //        $this->db->where('DEPT_TINGK <> "MI"');
-        $this->db->order_by('ID_TINGK', 'ASC');
+        $this->db->order_by('ID_JS', 'ASC');
+        $this->db->order_by('NAMA_TINGK', 'ASC');
 
         return $this->db->get()->result_array();
     }

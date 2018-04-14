@@ -217,15 +217,17 @@ class Jenjang_sekolah_model extends CI_Model {
         return $this->db->get()->result_array();
     }
     
-    public function relasi_jenjang_departemen_tingkat($jenjang, $tingkat = NULL) {
+    public function relasi_jenjang_departemen_tingkat($jenjang = NULL, $tingkat = NULL) {
         $this->db->from('md_jenjang_departemen mjd');
         $this->db->join('md_jenjang_sekolah mjs', 'mjs.ID_JS=mjd.JENJANG_MJD');
         $this->db->join('md_tingkat mt', 'mt.DEPT_TINGK=mjd.DEPT_MJD');
-        if ($tingkat == NULL) {
+        if ($tingkat == NULL && $jenjang != NULL) {
             $this->db->where(array(
                 'ID_JS' => $jenjang,
             ));
             
+            return $this->db->get()->result();
+        } elseif($jenjang == NULL) {  
             return $this->db->get()->result();
         } else {  
             $this->db->where(array(

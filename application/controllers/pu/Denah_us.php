@@ -28,6 +28,7 @@ class Denah_us extends CI_Controller {
             'peserta_us_model' => 'peserta_us',
             'ruang_model' => 'ruang',
             'tingkat_model' => 'tingkat',
+            'jenjang_sekolah_model' => 'jenjang_sekolah',
         ));
         $this->load->library('denah_handler');
         $this->auth->validation(6);
@@ -174,7 +175,7 @@ class Denah_us extends CI_Controller {
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
 
-        $aturan_denah = json_decode($this->aturan_denah->get_aturan_cawu(), true);
+        $aturan_denah = json_decode($this->aturan_denah->get_denah_plan(), true);
         foreach ($aturan_denah as $jk => $detail) {
             $count_model = 0;
             $count_kursi = 1;
@@ -227,10 +228,10 @@ class Denah_us extends CI_Controller {
 
     public function simpan_denah() {
         $this->generate->set_header_JSON();
-        
+
         if ($this->status_validasi)
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 912: Denah telah divalidasi'));
-        
+
         $data_form = $this->get_data_denah();
 
         $jk = $this->input->post('jk');
@@ -257,11 +258,11 @@ class Denah_us extends CI_Controller {
             )
         );
         if ($this->aturan_denah->is_us_dibuat()) {
-            $data_denah_lama = json_decode($this->aturan_denah->get_aturan_cawu(), true);
+            $data_denah_lama = json_decode($this->aturan_denah->get_denah_plan(), true);
             $data_denah_lama[$jk] = $data_save[$jk];
-            $status = $this->aturan_denah->update_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_denah_lama)));
+            $status = $this->aturan_denah->update_us_active(array('DENAH_PLAN_DENAH' => json_encode($data_denah_lama)));
         } else {
-            $status = $this->aturan_denah->save_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_save)));
+            $status = $this->aturan_denah->save_us_active(array('DENAH_PLAN_DENAH' => json_encode($data_save)));
         }
 
 //        if (!$status)
@@ -288,24 +289,48 @@ class Denah_us extends CI_Controller {
             $data['JUMLAH'][] = $data_form['JUMLAH_SISWA'][$jk][$index]['JUMLAH_SISWA'];
             $temp_jumlah_siswa_form += $data_form['JUMLAH_SISWA'][$jk][$index]['JUMLAH_SISWA'];
         }
+//        echo '<hr>' . json_encode($data);
+//        exit();
 
         // MENATA MODEL DENAH
         $denah_model = array();
         $ruangan_ke = 0;
         $model_ke = 0;
         $start = true;
+        $temp_tingkat = array_fill(0, count($data['TINGKAT']), 0);
+        $change_id_tingkat = array(
+            1 => 0,
+            2 => 1,
+            3 => 2,
+            4 => 3,
+            5 => 4,
+            6 => 5,
+            11 => 6,
+            12 => 7,
+            13 => 8,
+            14 => 9,
+            15 => 10,
+            16 => 11,
+            7 => 12,
+            8 => 13,
+            9 => 14,
+            10 => 15,
+        );
         foreach ($denah as $key => $value) {
             if ((($key % ($data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI'])) == 0) && !$start) {
+//                echo '<hr>' . json_encode($denah_model[$ruangan_ke]);
                 $ruangan_ke++;
                 $model_ke++;
             }
 
             if ($value != '') {
-                $denah_model[$ruangan_ke][$key - ($ruangan_ke * $data_form['JUMLAH_KURSI'])] = $value - 1;
+//                echo '<br>' . $ruangan_ke . ' >>> ' . $key . ' >>> ' . $ruangan_ke . ' >>> ' . ($data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI']) . ' >>> ' . ($key - ($ruangan_ke * ($data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI'])));
+                $denah_model[$ruangan_ke][$key - ($ruangan_ke * ($data_form['JUMLAH_KURSI'] == NULL ? 40 : $data_form['JUMLAH_KURSI']))] = $change_id_tingkat[intval($value)];
             }
 
             $start = false;
         }
+
 
         $temp_ruang = $data_form['RUANG'][$jk];
         $data['RUANG'] = array();
@@ -322,12 +347,22 @@ class Denah_us extends CI_Controller {
                                 $data['SISA'][$index] = array_fill(0, 16, 0);
                                 $data['JUMLAH_SISA'][$index] = 0;
                                 unset($temp_ruang[$index_ruang]);
+                                
+//                                foreach ($data['DATA'][$index] as $kursi => $tingkat) {
+//                                    $temp_tingkat[$tingkat]++;
+//                                }
                             }
                         }
                     }
                 }
             }
         }
+        
+//        echo '<hr>' . json_encode($data['JUMLAH']);
+//        echo '<hr>' . json_encode($temp_tingkat);
+//        echo '<hr>' . json_encode($denah_model);
+//        echo '<hr>' . count($denah_model);
+//        exit();
 
         ksort($data['RUANG']);
         ksort($data['DATA']);
@@ -391,7 +426,12 @@ class Denah_us extends CI_Controller {
         }
 
         $denah_db[$jk] = $data;
+
+//echo '<hr>$denah_db<br>' . json_encode($denah_db);
+//exit();
         $status = $this->aturan_denah->update_us_active(array('DATA_DENAH' => json_encode($denah_db)));
+
+        $this->update_aturan_denah($jk);
 
 //        foreach ($data as $key1 => $value1) {
 //            var_dump($key1);
@@ -401,6 +441,30 @@ class Denah_us extends CI_Controller {
 //        }
 
         $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah ' . ($status ? 'berhasil' : 'gagal') . ' disimpan'));
+    }
+
+    public function update_aturan_denah($jk) {
+        $data = array();
+
+        $jenjang_sekolah = $this->jenjang_sekolah->relasi_jenjang_departemen_tingkat();
+        $data_peserta_obj = $this->peserta_us->get_all_denah($jk);
+        $data_peserta_json = json_encode($data_peserta_obj);
+        $data_peserta = json_decode($data_peserta_json, TRUE);
+
+        foreach ($jenjang_sekolah as $detail) {
+            $data['JENJANG'][] = $detail->ID_JS;
+            $data['NAMA_JENJANG'][] = $detail->ID_JS;
+            $data['DATA'][] = $data_peserta['DATA'][$detail->ID_JS][$detail->NAMA_TINGK];
+            $data['JUMLAH'][] = $data_peserta['COUNT'][$detail->ID_JS][$detail->NAMA_TINGK];
+        }
+
+        $data_plan = $this->aturan_denah->get_aturan_us();
+        if ($data_plan != NULL)
+            $data_db = json_decode($data_plan, true);
+
+        $data_db[$jk] = $data;
+
+        $status = $this->aturan_denah->update_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_db)));
     }
 
 }

@@ -190,6 +190,16 @@ class Aturan_denah_model extends CI_Model {
         return $this->db->get()->row()->ATURAN_RUANG_PUD;
     }
     
+    public function get_denah_plan() {
+        $this->db->from($this->table);
+        $this->db->where(array(
+            'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
+            'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
+        ));
+        
+        return $this->db->get()->row()->DENAH_PLAN_DENAH;
+    }
+    
     public function validasi_denah_psb() {
         $data = array(
             'VALIDASI_DENAH' => 1
