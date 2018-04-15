@@ -341,7 +341,7 @@ class Denah_us extends CI_Controller {
                     if ($id_model_ke == ($model_ke + 1)) {
                         $kode_ruang = $ruangan[$index];
                         foreach ($temp_ruang as $index_ruang => $item) {
-                            if (in_array($kode_ruang, $item)) {
+                            if (in_array($kode_ruang, $item) && isset($denah_model[$id_model_ke - 1])) {
                                 $data['RUANG'][$index] = $item;
                                 $data['DATA'][$index] = $denah_model[$id_model_ke - 1];
                                 $data['SISA'][$index] = array_fill(0, 16, 0);
