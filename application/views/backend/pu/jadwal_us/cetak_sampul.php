@@ -129,8 +129,9 @@ foreach ($data as $detail) {
 //                } else {
                     if(($data_denah['ATURAN_DENAH'][$ruang][$index] > 0) && ($data_relasi != NULL)) {
                         $pdf->Cell(35, 8, $data_relasi->DEPT_TINGK . ' KELAS ' . $data_relasi->NAMA_TINGK, 1, 0, 'L');
-                        $pdf->Cell(110, 8, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
+                        $pdf->Cell(80, 8, 'MAPEL: ' . $data_relasi->NAMA_MAPEL, 1, 0, 'L');
                         $pdf->Cell(45, 8, 'JUMLAH: ' . $data_denah['ATURAN_DENAH'][$ruang][$index] . ' ORANG', 1, 0, 'L');
+                        $pdf->Cell(30, 8, '', 1);
                         $pdf->Ln();
                     }
 //                }
