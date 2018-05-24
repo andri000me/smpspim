@@ -341,8 +341,8 @@ class Kehadiran extends CI_Controller {
 
         $insert = $this->kehadiran->save($data);
 
-        if ($insert && ($data['ALASAN_AKH'] == 'ALPHA' || $data['ALASAN_AKH'] == 'TERLAMBAT'))
-            $this->pelanggaran_handler->tambah($data['TA_AKH'], $data['CAWU_AKH'], $data['SISWA_AKH'], $this->jenis_absensi->get_id_pelanggaran($data['JENIS_AKH'], $data['ALASAN_AKH']), $data['TANGGAL_AKH'], $this->session->userdata('ID_PEG'), $data['KETERANGAN_AKH'], $insert, $data['ALASAN_AKH'], $data['JENIS_AKH']);
+//        if ($insert && ($data['ALASAN_AKH'] == 'ALPHA' || $data['ALASAN_AKH'] == 'TERLAMBAT'))
+//            $this->pelanggaran_handler->tambah($data['TA_AKH'], $data['CAWU_AKH'], $data['SISWA_AKH'], $this->jenis_absensi->get_id_pelanggaran($data['JENIS_AKH'], $data['ALASAN_AKH']), $data['TANGGAL_AKH'], $this->session->userdata('ID_PEG'), $data['KETERANGAN_AKH'], $insert, $data['ALASAN_AKH'], $data['JENIS_AKH']);
 
         $this->generate->output_JSON(array("status" => $insert));
     }
@@ -357,8 +357,8 @@ class Kehadiran extends CI_Controller {
 
         $status = TRUE;
 
-        if ($data->ALASAN_AKH == 'ALPHA' || $data->ALASAN_AKH == 'TERLAMBAT')
-            $status = $this->pelanggaran_handler->hapus($id, TRUE, $data->ALASAN_AKH, $data->JENIS_AKH);
+//        if ($data->ALASAN_AKH == 'ALPHA' || $data->ALASAN_AKH == 'TERLAMBAT')
+//            $status = $this->pelanggaran_handler->hapus($id, TRUE, $data->ALASAN_AKH, $data->JENIS_AKH);
 
         if ($status && ($HAPUS_POIN == NULL || !$HAPUS_POIN))
             $affected_row = $this->kehadiran->delete_by_id($id);
