@@ -23,21 +23,20 @@ foreach ($SISWA as $DETAIL) {
     $pdf->SetAutoPageBreak(true, 0);
 
     $pdf->SetFont('dejavusans', '', 12);
-    $pdf->Cell(0, 5, 'PANITIA PELAKSANAAN DAN PENYEMAAN HAFALAN', 0, 0, 'L');
+    $pdf->Cell(0, 5, 'PANITIA PELAKSANAAN DAN PENYEMAAN HAFALAN TA ' . $this->session->userdata("NAMA_TA_ACTIVE"), 0, 0, 'L');
     $pdf->Ln();
 
     $pdf->SetFont('dejavusans', 'B', 14);
     $pdf->Cell(0, 5, strtoupper($this->pengaturan->getNamaLembaga()), 0, 0, 'L');
-    $pdf->Ln();
-
-    $pdf->SetFont('dejavusans', '', 10);
-    $pdf->Cell(0, 5, strtoupper($this->pengaturan->getDesa() . ' - ' . $this->pengaturan->getKecamatan() . ' - ' . $this->pengaturan->getKabupaten() . ' ' . $this->pengaturan->getKodepos()) . ' TELP. ' . $this->pengaturan->getTelp() . ' FAX. ' . $this->pengaturan->getFax(), 0, 0, 'L');
     $pdf->Ln(8);
 
+//    $pdf->SetFont('dejavusans', '', 10);
+//    $pdf->Cell(0, 5, strtoupper($this->pengaturan->getDesa() . ' - ' . $this->pengaturan->getKecamatan() . ' - ' . $this->pengaturan->getKabupaten() . ' ' . $this->pengaturan->getKodepos()) . ' TELP. ' . $this->pengaturan->getTelp() . ' FAX. ' . $this->pengaturan->getFax(), 0, 0, 'L');
+
     $pdf->SetLineWidth(0.50);
-    $pdf->Line(6, 22, 204, 22);
+    $pdf->Line(6, 17, 204, 17);
     $pdf->SetLineWidth(0.30);
-    $pdf->Line(6, 23, 204, 23);
+    $pdf->Line(6, 18, 204, 18);
 
     $pdf->SetFont('dejavusans', 'B', 12);
     $pdf->Cell(0, 5, 'BUKTI PENYEMAAN HAFALAN', 0, 0, 'C');
@@ -107,17 +106,19 @@ foreach ($SISWA as $DETAIL) {
     }
 
     if ($DETAIL['TINGKAT_KELAS'] != 14) {
-        $pdf->Cell(23, 5, '', 1, 0, 'C');
-        $pdf->Cell(23, 5, '', 1, 0, 'C');
-        for ($i = 10; $i > 0; $i--) {
-            $pdf->setFillColor(255, 255, 255);
-            $pdf->Cell(7, 5, '', 1, 0, 'C', TRUE);
+        for ($row = 0; $row < 2; $row++) {
+            $pdf->Cell(23, 5, '', 1, 0, 'C');
+            $pdf->Cell(23, 5, '', 1, 0, 'C');
+            for ($i = 10; $i > 0; $i--) {
+                $pdf->setFillColor(255, 255, 255);
+                $pdf->Cell(7, 5, '', 1, 0, 'C', TRUE);
+            }
+            $pdf->Cell(45, 5, '', 1, 0, 'C');
+            $pdf->Cell(30, 5, '', 1, 0, 'C');
+            $pdf->Cell(7, 5, $no++, 1, 0, 'C');
+            $pdf->Ln();
+//            $no--;
         }
-        $pdf->Cell(45, 5, '', 1, 0, 'C');
-        $pdf->Cell(30, 5, '', 1, 0, 'C');
-        $pdf->Cell(7, 5, $no++, 1, 0, 'C');
-        $pdf->Ln();
-        $no--;
     }
 
     $pdf->setRTL(false);
@@ -127,24 +128,19 @@ foreach ($SISWA as $DETAIL) {
     for ($ttd = 1; $ttd < $no; $ttd++) {
         $pdf->Cell(40, 5, $this->pengaturan->getDesa() . ', ............. 20....', 0, 0, 'L');
     }
-    $pdf->SetX(165);
-    $pdf->Cell(40, 5, $this->pengaturan->getDesa() . ', ............. 20....', 0, 0, 'L');
     $pdf->Ln();
 
     for ($ttd = 1; $ttd < $no; $ttd++) {
         $pdf->Cell(40, 5, 'Penyemak ' . $ttd, 0, 0, 'L');
     }
-    $pdf->SetX(165);
-    $pdf->Cell(40, 5, 'Ketua P3H', 0, 0, 'L');
     $pdf->Ln(14);
 
     for ($ttd = 1; $ttd < $no; $ttd++) {
-        $pdf->Cell(40, 5, 'TTD & Nama Terang', 0, 0, 'L');
+        $pdf->Cell(40, 5, '(..........................)', 0, 0, 'L');
     }
-    $pdf->SetX(165);
-    $pdf->Cell(40, 5, $this->pengaturan->getDataKetuaP3H($DETAIL['JK_KELAS'])->NAMA_PEG, 0, 0, 'L');
-    $pdf->Ln(7);
-
+    $pdf->Ln(20);
+    
+    $pdf->SetY(125);
     $pdf->Cell(20, 5, 'Perhatian:', 0, 0, 'L');
     $pdf->Cell(0, 5, '1. Lembar 1 untuk siswa/i (warna putih)', 0, 0, 'L');
     $pdf->Ln();
@@ -156,6 +152,13 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Cell(20);
     $pdf->Cell(0, 5, '3. Lembar 3 untuk P3H (warna kuning)', 0, 0, 'L');
     $pdf->Ln();
+    
+    $pdf->SetXY(160, 115);
+    $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ', ............. 20....', 0, 0, 'L');
+    $pdf->SetXY(160, 120);
+    $pdf->Cell(0, 5, 'Ketua P3H', 0, 0, 'L');
+    $pdf->SetXY(160, 135);
+    $pdf->Cell(0, 5, $this->pengaturan->getDataKetuaP3H($DETAIL['JK_KELAS'])->NAMA_PEG, 0, 0, 'L');
 }
 
 $pdf->Output();
