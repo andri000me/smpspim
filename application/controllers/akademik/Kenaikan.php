@@ -156,8 +156,9 @@ class Kenaikan extends CI_Controller {
             $rata = ($rata_agama_1 + $rata_agama_2 + $rata_agama_3 + $rata_umum_1 + $rata_umum_2 + $rata_umum_3)/6;
             $naik = $naik_agama * $naik_umum;
             
-            $row[] = '<select class="form-control"><option value="1" '.($naik ? 'selected' : '').'>Naik</option><option value="0" '.($naik ? '' : 'selected').'>Tidak Naik</option></select>';
-            $row[] = '<button class="ladda-button btn btn-'.($naik ? 'success' : 'danger').' btn-sm" data-style="zoom-in" onclick="proses_naik(this);" data-id="'.$item->ID_AS.'" data-siswa="'.$item->NIS_SISWA.' - '.$item->NAMA_SISWA.'" data-rata="'.($naik ? 1 : 0).'"><i class="fa fa-check-circle"></i></button>';
+            $row[] = '<select class="form-control"><option value="1" selected>Naik</option><option value="0">Tidak Naik</option></select>';
+//            $row[] = '<select class="form-control"><option value="1" '.($naik ? 'selected' : '').'>Naik</option><option value="0" '.($naik ? '' : 'selected').'>Tidak Naik</option></select>';
+            $row[] = '<button class="ladda-button btn-proses btn btn-'.($naik ? 'success' : 'danger').' btn-sm" data-style="zoom-in" data-all="0" onclick="proses_naik(this);" data-id="'.$item->ID_AS.'" data-siswa="'.$item->NIS_SISWA.' - '.$item->NAMA_SISWA.'" data-rata="'.($naik ? 1 : 0).'"><i class="fa fa-check-circle"></i></button>';
 
             $data[] = $row;
         }
@@ -194,8 +195,9 @@ class Kenaikan extends CI_Controller {
         $ID_AS = $this->input->post('ID_AS');
         $TA = $this->input->post('NEXT_TA_FILTER');
         $STATUS_KENAIKAN = $this->input->post('STATUS_KENAIKAN');
+        $STATUS_TAG = $this->input->post('STATUS_TAG');
         
-        $status = $this->kenaikan_handler->proses($ID_AS, $TA, $STATUS_KENAIKAN);
+        $status = $this->kenaikan_handler->proses($ID_AS, $TA, $STATUS_KENAIKAN, NULL, $STATUS_TAG);
         
         $this->generate->output_JSON(array('status' => $status));
     }

@@ -16,24 +16,26 @@ class Kenaikan_handler {
         ));
     }
 
-    public function proses($ID_AS, $TA, $STATUS_KENAIKAN, $TINGKAT = NULL) {
+    public function proses($ID_AS, $TA, $STATUS_KENAIKAN, $TINGKAT = NULL, $STATUS_TAG = NULL) {
         $data_siswa = $this->CI->akad_siswa->get_by_id($ID_AS);
-        $this->cek_tagihan($data_siswa->ID_SISWA);
 
-        if($TINGKAT == NULL) 
+        if ($STATUS_TAG != 0)
+            $this->cek_tagihan($data_siswa->ID_SISWA);
+
+        if ($TINGKAT == NULL)
             $TINGKAT = ($STATUS_KENAIKAN) ? ($data_siswa->ID_TINGK + 1) : $data_siswa->ID_TINGK;
-        
+
         $data = array(
             'TA_AS' => $TA,
             'SISWA_AS' => $data_siswa->ID_SISWA,
             'TINGKAT_AS' => $TINGKAT,
             'USER_AS' => $this->CI->session->userdata('ID_USER')
         );
-        
+
         $insert = $this->CI->akad_siswa->save($data);
         if ($insert) {
             $this->CI->tagihan_handler->assign_tagihan($data_siswa->DEPT_TINGK, $data_siswa->ID_SISWA, $TA);
-            
+
             $data_update = array(
                 'NAIK_AS' => $STATUS_KENAIKAN
             );
@@ -41,7 +43,7 @@ class Kenaikan_handler {
                 'ID_AS' => $ID_AS
             );
             $this->CI->akad_siswa->update($where_update, $data_update);
-            
+
             $this->CI->pelanggaran_handler->proses_poin_tahun_lalu($data_siswa->ID_SISWA, $TA);
         }
 

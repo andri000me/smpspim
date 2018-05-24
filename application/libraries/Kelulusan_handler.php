@@ -14,9 +14,11 @@ class kelulusan_handler {
         $this->CI->load->library('mutasi_handler');
     }
 
-    public function proses($ID_AS, $TA, $STATUS_KELULUSAN) {
+    public function proses($ID_AS, $TA, $STATUS_KELULUSAN, $STATUS_TAG = null) {
         $data_siswa = $this->CI->akad_siswa->get_by_id($ID_AS);
-        $this->cek_tagihan($data_siswa->ID_SISWA);
+
+        if ($STATUS_TAG != 0)
+            $this->cek_tagihan($data_siswa->ID_SISWA);
 
         $data_akad = array(
             'LULUS_AS' => $STATUS_KELULUSAN,
@@ -24,7 +26,7 @@ class kelulusan_handler {
         $where_akad = array(
             'ID_AS' => $ID_AS,
         );
-        
+
         $status = $this->CI->akad_siswa->update($where_akad, $data_akad);
         if ($status && ($STATUS_KELULUSAN == 'L')) {
             $this->CI->mutasi_handler->update_status_masterdata($data_siswa->ID_SISWA, 99);

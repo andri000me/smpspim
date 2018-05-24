@@ -140,7 +140,7 @@ class Kelulusan extends CI_Controller {
             
             $row[] = ($item->LULUS_AS == NULL) ? '<select class="form-control">'
                     . '<option value=""> - </option>'
-                    . '<option value="L">L</option>'
+                    . '<option value="L" selected>L</option>'
 //                    . '<option value="T">T</option>'
 //                    . '<option value="TT">TT</option>'
                     . '<option value="TQ">TQ</option>'
@@ -190,8 +190,9 @@ class Kelulusan extends CI_Controller {
         $ID_AS = $this->input->post('ID_AS');
         $TA = $this->input->post('NEXT_TA_FILTER');
         $STATUS_KELULUSAN = $this->input->post('STATUS_KELULUSAN');
+        $STATUS_TAG = $this->input->post('STATUS_TAG');
         
-        $status = $this->kelulusan_handler->proses($ID_AS, $TA, $STATUS_KELULUSAN);
+        $status = $this->kelulusan_handler->proses($ID_AS, $TA, $STATUS_KELULUSAN, $STATUS_TAG);
         
         $this->generate->output_JSON(array('status' => $status));
     }

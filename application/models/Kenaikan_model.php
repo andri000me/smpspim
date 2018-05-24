@@ -109,9 +109,9 @@ class Kenaikan_model extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function get_all($for_html = true) {
+    public function get_all($for_html = true, $kelas = NULL) {
         if ($for_html) $this->db->select("ID_AGM as value, NAMA_AGAMA as label");
-        $this->_get_table();
+        $this->_get_table($kelas);
 
         return $this->db->get()->result();
     }

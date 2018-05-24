@@ -66,7 +66,7 @@ class Lanjut_jenjang_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like("IFNULL(".$item.", '')", $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
@@ -89,7 +89,7 @@ class Lanjut_jenjang_model extends CI_Model {
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
-//        var_dump($this->db->last_query());
+//        echo $this->db->last_query();
 
         return $query->result();
     }

@@ -139,7 +139,7 @@ class Pelanggaran_handler {
                 'TA_KSH' => $TA,
                 'CAWU_KSH' => $cawu,
                 'SISWA_KSH' => $ID_SISWA,
-                'POIN_TAHUN_LALU_KSH' => $poin,
+                'POIN_TAHUN_LALU_KSH' => ($poin == NULL ? 0 : $poin),
                 'USER_KSH' => $this->CI->session->userdata('ID_USER')
             );
             $this->CI->pelanggaran_header->save($data_pelanggaran);
