@@ -13,6 +13,8 @@ $(function () {
             scrollTop: $("#menu").height()
         }, 500);
     });
+    
+    $(":input").inputmask();
 });
 
 function start_generate() {

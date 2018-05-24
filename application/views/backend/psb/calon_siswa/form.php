@@ -275,7 +275,6 @@ $this->generate->generate_panel_content($title, $subtitle);
     } else {
         ?>
     $(function () {
-        $(":input").inputmask();
         
         $("#UPLOAD_FOTO_SISWA").change(function(){
             $('#from_upload').val(1);

@@ -5,88 +5,239 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  * 
-  $this->CoreFonts = array('courier', 'helvetica', 'times', 'symbol', 'zapfdingbats');
+  $this->CoreFonts = array('Arial', 'helvetica', 'times', 'symbol', 'zapfdingbats');
  * 
  */
 
-$pdf = $this->fpdf;
+class PDF_Rotate extends FPDF {
 
-$pdf->AddPage("L", array(241.3, 279.4));
-//$pdf->AddPage("L", "A5");
-//	$pdf->SetMargins(6, 0);
-$pdf->SetAutoPageBreak(true, 0);
+    var $angle = 0;
 
-$pdf = $this->cetak->header_yayasan_dotmartrix($pdf);
-$pdf->Ln(2);
+    function Rotate($angle, $x = -1, $y = -1) {
+        if ($x == -1)
+            $x = $this->x;
+        if ($y == -1)
+            $y = $this->y;
+        if ($this->angle != 0)
+            $this->_out('Q');
+        $this->angle = $angle;
+        if ($angle != 0) {
+            $angle *= M_PI / 180;
+            $c = cos($angle);
+            $s = sin($angle);
+            $cx = $x * $this->k;
+            $cy = ($this->h - $y) * $this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+        }
+    }
 
-$pdf->SetFont('courier', 'B', 16);
-$pdf->Cell(0, 5, 'KWITANSI PENGEMBALIAN TAGIHAN', 0, 0, 'C');
-$pdf->Ln(10);
+    function _endpage() {
+        if ($this->angle != 0) {
+            $this->angle = 0;
+            $this->_out('Q');
+        }
+        parent::_endpage();
+    }
 
-$pdf->SetFont('courier', '', 11);
-
-$pdf->Cell(25, 5, 'NIS', 0, 0, 'L');
-$pdf->Cell(140, 5, ': ' . ($SISWA->NIS_SISWA == NULL ? '-' : $SISWA->NIS_SISWA), 0, 0, 'L');
-$pdf->Cell(25, 5, 'TA', 0, 0, 'L');
-$pdf->Cell(0, 5, ': -', 0, 0, 'L');
-$pdf->Ln();
-$pdf->Cell(25, 5, 'NAMA', 0, 0, 'L');
-$pdf->Cell(140, 5, ': ' . $SISWA->NAMA_SISWA, 0, 0, 'L');
-$pdf->Cell(25, 5, 'TINGKAT', 0, 0, 'L');
-$pdf->Cell(0, 5, ': -', 0, 0, 'L');
-$pdf->Ln();
-$pdf->Cell(25, 5, 'WALI KELAS', 0, 0, 'L');
-$pdf->Cell(140, 5, ': -', 0, 0, 'L');
-$pdf->Cell(25, 5, 'KELAS', 0, 0, 'L');
-$pdf->Cell(0, 5, ': ' . ($SISWA->KELAS_SISWA == NULL ? '-' : $SISWA->KELAS_SISWA), 0, 0, 'L');
-$pdf->Ln();
-
-$pdf->SetLineWidth(0.20);
-$pdf->Line(11, 68, 268, 68);
-
-$pdf->Cell(10, 5, '#', 0, 0, 'L');
-$pdf->Cell(32, 5, 'TA', 0, 0, 'L');
-$pdf->Cell(60, 5, 'TAGIHAN', 0, 0, 'L');
-$pdf->Cell(103, 5, 'DETAIL', 0, 0, 'L');
-$pdf->Cell(59, 5, 'NOMINAL', 0, 0, 'L');
-$pdf->Ln();
-
-$pdf->Line(11, 63, 268, 63);
-
-$no = 1;
-$total = 0;
-foreach ($PEMBAYARAN as $detail) {
-    $total += $detail->NOMINAL_BAYAR;
-    $pdf->Cell(10, 5, $no++, 0, 0, 'L');
-    $pdf->Cell(32, 5, $detail->NAMA_TA, 0, 0, 'L');
-    $pdf->Cell(60, 5, $detail->NAMA_TAG, 0, 0, 'L');
-    $pdf->Cell(95, 5, $detail->NAMA_DT, 0, 0, 'L');
-    $pdf->Cell(59, 5, $this->money->format($detail->NOMINAL_BAYAR), 0, 0, 'R');
-    $pdf->Ln();
 }
 
-$pdf->SetY(165);
-$pdf->Line(11, 165, 268, 165);
+class AlphaPDF extends PDF_Rotate {
 
-$pdf->Cell(197, 5, 'TOTAL', 0, 0, 'R');
-$pdf->Cell(59, 5, $this->money->format($total), 0, 0, 'R');
-$pdf->Ln(10);
+    var $extgstates = array();
 
-$pdf->Line(11, 170, 268, 170);
+    // alpha: real value from 0 (transparent) to 1 (opaque)
+    // bm:    blend mode, one of the following:
+    //          Normal, Multiply, Screen, Overlay, Darken, Lighten, ColorDodge, ColorBurn,
+    //          HardLight, SoftLight, Difference, Exclusion, Hue, Saturation, Color, Luminosity
+    function SetAlpha($alpha, $bm = 'Normal') {
+        // set alpha for stroking (CA) and non-stroking (ca) operations
+        $gs = $this->AddExtGState(array('ca' => $alpha, 'CA' => $alpha, 'BM' => '/' . $bm));
+        $this->SetExtGState($gs);
+    }
 
-$pdf->Cell(197, 5, 'KETERANGAN:', 0, 0, 'L');
-$pdf->Cell(0, 5, 'PETUGAS', 0, 0, 'L');
-$pdf->Ln();
-$pdf->Cell(140, 5, $KETERANGAN, 0, 0, 'L');
-$pdf->Ln(10);
+    function AddExtGState($parms) {
+        $n = count($this->extgstates) + 1;
+        $this->extgstates[$n]['parms'] = $parms;
+        return $n;
+    }
 
-$pdf->SetFont('courier', 'B', 12);
-$pdf->Cell(197);
-$pdf->SetFont('courier', '', 11);
-$pdf->Cell(0, 5, $this->session->userdata('FULLNAME_USER'), 0, 0, 'L');
-$pdf->Ln(15);
+    function SetExtGState($gs) {
+        $this->_out(sprintf('/GS%d gs', $gs));
+    }
 
-$pdf->SetFont('Arial', 'I', 8);
-$pdf->Cell(0, 5, 'Kode: '.$NOTA->KODE_NOTA.' Dibuat: ' . $NOTA->CREATED_NOTA.' Dicetak: '. date('Y-m-d H:i:s'), 0, 0, 'L');
+    function _enddoc() {
+        if (!empty($this->extgstates) && $this->PDFVersion < '1.4')
+            $this->PDFVersion = '1.4';
+        parent::_enddoc();
+    }
+
+    function _putextgstates() {
+        for ($i = 1; $i <= count($this->extgstates); $i++) {
+            $this->_newobj();
+            $this->extgstates[$i]['n'] = $this->n;
+            $this->_out('<</Type /ExtGState');
+            $parms = $this->extgstates[$i]['parms'];
+            $this->_out(sprintf('/ca %.3F', $parms['ca']));
+            $this->_out(sprintf('/CA %.3F', $parms['CA']));
+            $this->_out('/BM ' . $parms['BM']);
+            $this->_out('>>');
+            $this->_out('endobj');
+        }
+    }
+
+    function _putresourcedict() {
+        parent::_putresourcedict();
+        $this->_out('/ExtGState <<');
+        foreach ($this->extgstates as $k => $extgstate)
+            $this->_out('/GS' . $k . ' ' . $extgstate['n'] . ' 0 R');
+        $this->_out('>>');
+    }
+
+    function _putresources() {
+        $this->_putextgstates();
+        parent::_putresources();
+    }
+
+}
+
+class PDF extends AlphaPDF {
+
+    var $req_watermark;
+
+    function Header() {
+        //Put the watermark
+        if ($this->req_watermark) {
+            $this->SetAlpha(0.5);
+            $this->SetFont('Arial', 'B', 80);
+            $this->SetTextColor(80, 80, 255);
+            $this->RotatedText(60, 100, 'C O P Y', 25);
+            $this->SetAlpha(1);
+        }
+    }
+
+    function SetWatermark($req_watermark) {
+        $this->req_watermark = $req_watermark;
+    }
+
+    function RotatedText($x, $y, $txt, $angle) {
+        //Text rotated around its origin
+        $this->Rotate($angle, $x, $y);
+        $this->Text($x, $y, $txt);
+        $this->Rotate(0);
+    }
+
+    function RotatedImage($file, $x, $y, $w, $h, $angle) {
+        //Image rotated around its upper-left corner
+        $this->Rotate($angle, $x, $y);
+        $this->Image($file, $x, $y, $w, $h);
+        $this->Rotate(0);
+    }
+
+}
+
+$pdf = new PDF();
+
+for ($i = 0; $i < 2; $i++) {
+    $pdf->SetWatermark($i);
+
+    $pdf->SetMargins(7, 10);
+    $pdf->AddPage("L", array(215, 165));
+//$pdf->AddPage("L", "A5");
+//	$pdf->SetMargins(6, 0);
+    $pdf->SetAutoPageBreak(true, 0);
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 5, strtoupper($this->pengaturan->getNamaLembaga()), 0, 0, 'C');
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 5, 'BIDANG KEUANGAN', 0, 0, 'C');
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, $this->pengaturan->getDesa() . ' - ' . $this->pengaturan->getKecamatan() . ' - ' . $this->pengaturan->getKabupaten() . ' ' . $this->pengaturan->getKodepos() . ' Telp. ' . $this->pengaturan->getTelp() . ' Fax. ' . $this->pengaturan->getFax(), 0, 0, 'C');
+    $pdf->Ln(8);
+
+    $pdf->SetLineWidth(0.40);
+    $pdf->Line(7, 25, 208, 25);
+
+    $pdf->SetLineWidth(0.20);
+    $pdf->Line(7, 26, 208, 26);
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 5, 'KWITANSI PENGEMBALIAN TAGIHAN', 0, 0, 'C');
+    $pdf->Ln(9);
+
+    $pdf->SetFont('Arial', '', 10);
+
+    $pdf->Cell(25, 5, 'NIS', 0, 0, 'L');
+    $pdf->Cell(90, 5, ': ' . ($SISWA->NIS_SISWA == NULL ? '-' : $SISWA->NIS_SISWA), 0, 0, 'L');
+    $pdf->Cell(25, 5, 'TA', 0, 0, 'L');
+    $pdf->Cell(0, 5, ': -', 0, 0, 'L');
+    $pdf->Ln();
+    $pdf->Cell(25, 5, 'NAMA', 0, 0, 'L');
+    $pdf->Cell(90, 5, ': ' . $SISWA->NAMA_SISWA, 0, 0, 'L');
+    $pdf->Cell(25, 5, 'TINGKAT', 0, 0, 'L');
+    $pdf->Cell(0, 5, ': -', 0, 0, 'L');
+    $pdf->Ln();
+    $pdf->Cell(25, 5, 'WALI KELAS', 0, 0, 'L');
+    $pdf->Cell(90, 5, ': -', 0, 0, 'L');
+    $pdf->Cell(25, 5, 'KELAS', 0, 0, 'L');
+    $pdf->Cell(0, 5, ': ' . ($SISWA->KELAS_SISWA == NULL ? '-' : $SISWA->KELAS_SISWA), 0, 0, 'L');
+    $pdf->Ln();
+
+    $pdf->SetLineWidth(0.20);
+    $pdf->Line(7, 52, 208, 52);
+
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(5, 5, '#', 0, 0, 'L');
+    $pdf->Cell(22, 5, 'TA', 0, 0, 'L');
+    $pdf->Cell(50, 5, 'TAGIHAN', 0, 0, 'L');
+    $pdf->Cell(83, 5, 'DETAIL', 0, 0, 'L');
+    $pdf->Cell(37, 5, 'NOMINAL', 0, 0, 'L');
+    $pdf->Ln();
+
+    $pdf->Line(7, 57, 208, 57);
+
+    $pdf->SetFont('Arial', '', 10);
+    $no = 1;
+    $total = 0;
+    foreach ($PEMBAYARAN as $detail) {
+        $total += $detail->NOMINAL_BAYAR;
+        $pdf->Cell(10, 5, $no++, 0, 0, 'L');
+        $pdf->Cell(22, 5, $detail->NAMA_TA, 0, 0, 'L');
+        $pdf->Cell(50, 5, $detail->NAMA_TAG, 0, 0, 'L');
+        $pdf->Cell(83, 5, $detail->NAMA_DT, 0, 0, 'L');
+        $pdf->Cell(37, 5, $this->money->format($detail->NOMINAL_BAYAR), 0, 0, 'R');
+        $pdf->Ln();
+    }
+
+    $pdf->SetY(115);
+    $pdf->Line(7, 115, 208, 115);
+
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(160, 5, 'TOTAL', 0, 0, 'R');
+    $pdf->Cell(37, 5, $this->money->format($total), 0, 0, 'R');
+    $pdf->Ln(8);
+
+    $pdf->Line(7, 120, 208, 120);
+
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(140, 5, 'KETERANGAN:', 0, 0, 'L');
+    $pdf->Cell(0, 5, 'PETUGAS', 0, 0, 'L');
+    $pdf->Ln();
+    $pdf->MultiCell(130, 5, $KETERANGAN);
+    $pdf->Ln(2);
+
+    $pdf->SetY(140);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(140);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, $this->session->userdata('FULLNAME_USER'), 0, 0, 'L');
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', 'I', 8);
+    $pdf->Cell(0, 5, 'Kode: ' . $NOTA->KODE_NOTA . ' Dibuat: ' . $NOTA->CREATED_NOTA . ' Dicetak: ' . date('Y-m-d H:i:s'), 0, 0, 'L');
+}
 
 $pdf->Output();

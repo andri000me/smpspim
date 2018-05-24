@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<timetable>
+  <daysdefs options="canadd" columns="id,days,name,short">
+    <daysdef name="Sabtu" short="2" days="100000" id="2"/>
+    <daysdef name="Ahad" short="3" days="010000" id="3"/>
+    <daysdef name="Senin" short="4" days="001000" id="4"/>
+    <daysdef name="Selasa" short="5" days="000100" id="5"/>
+    <daysdef name="Rabu" short="6" days="000010" id="6"/>
+    <daysdef name="Kamis" short="7" days="000001" id="7"/>
+  </daysdefs>
+  <periods options="canadd" columns="period,starttime,endtime">
+    <period period="1" short="1" starttime="07:30:00" endtime="08:10:00"/>
+    <period period="2" short="2" starttime="08:10:00" endtime="08:50:00"/>
+    <period period="3" short="3" starttime="08:50:00" endtime="09:30:00"/>
+    <period period="4" short="4" starttime="09:30:00" endtime="10:10:00"/>
+    <period period="5" short="5" starttime="10:30:00" endtime="11:10:00"/>
+    <period period="6" short="6" starttime="11:10:00" endtime="11:50:00"/>
+    <period period="7" short="7" starttime="11:50:00" endtime="12:30:00"/>
+  </periods>
+  <teachers options="canadd" columns="id,name,short,gender,color">
+    <teacher id="*1" name="Ainur Rofiq" short="1" gender="L" color="#2C1EB8"/>
+    <teacher id="*2" name="Ahmad Ma'shum" short="2" gender="L" color="#297CB7"/>
+    <teacher id="*4" name="Muhammadun" short="4" gender="L" color="#A9BA31"/>
+    <teacher id="*5" name="Moh. In'am Muhlisin" short="5" gender="L" color="#B86386"/>
+    <teacher id="*9" name="Rozin" short="9" gender="L" color="#E6C0D6"/>
+    <teacher id="*11" name="Muhammad Abbad" short="11" gender="L" color="#1B4916"/>
+    <teacher id="*14" name="Abdul Ghoffar Rozin" short="14" gender="L" color="#DD4429"/>
+    <teacher id="*15" name="Ah. Su'udi Romli" short="15" gender="L" color="#D600EB"/>
+    <teacher id="*16" name="Ahmad Yasir" short="16" gender="L" color="#E3CE08"/>
+    <teacher id="*17" name="Ah. Subhan Salim" short="17" gender="L" color="#96687E"/>
+    <teacher id="*18" name="Sidqon Famulaqih" short="18" gender="L" color="#9CD7CF"/>
+    <teacher id="*19" name="Ah. Mu'adz Thohir" short="19" gender="L" color="#6991D8"/>
+    <teacher id="*20" name="Asnawi Rohmat" short="20" gender="L" color="#4BE14A"/>
+    <teacher id="*21" name="Ah. Junaidi Muhammadun" short="21" gender="L" color="#23E080"/>
+    <teacher id="*22" name="Ahmad Nadlif" short="22" gender="L" color="#03BBA2"/>
+    <teacher id="*23" name="Ahmad Nailul Faiz" short="23" gender="L" color="#884D92"/>
+    <teacher id="*24" name="Saifurrohman" short="24" gender="L" color="#57422E"/>
+    <teacher id="*25" name="Ubaidurrohman" short="25" gender="L" color="#86F53A"/>
+    <teacher id="*26" name="Ahmad Isma'il" short="26" gender="L" color="#89D579"/>
+    <teacher id="*27" name="Muhammad Mulin Ni'am" short="27" gender="L" color="#343110"/>
+    <teacher id="*28" name="Muh. Ulin Nuha" short="28" gender="L" color="#103AC1"/>
+    <teacher id="*29" name="Muh. Wahib Asnawi" short="29" gender="L" color="#42B5B2"/>
+    <teacher id="*30" name="Abu Hamid" short="30" gender="L" color="#786D4E"/>
+    <teacher id="*31" name="Ah. Irham" short="31" gender="L" color="#05F45F"/>
+    <teacher id="*32" name="Ah. Nurchafid" short="32" gender="L" color="#090C0E"/>
+    <teacher id="*33" name="Ah. Sudar" short="33" gender="L" color="#CA9B6A"/>
+    <teacher id="*34" name="Ah. Syaerozi" short="34" gender="L" color="#432FF8"/>
+    <teacher id="*35" name="Ahmad Mahfudh" short="35" gender="L" color="#29D031"/>
+    <teacher id="*36" name="Ahmad Syamsul Ridlwan" short="36" gender="L" color="#367BFC"/>
+    <teacher id="*37" name="Alaika Muttaqin" short="37" gender="L" color="#AC5CB3"/>
+    <teacher id="*39" name="Ali Ikhwan" short="39" gender="L" color="#DBBEA8"/>
+    <teacher id="*40" name="Arif Rahman" short="40" gender="L" color="#F04683"/>
+    <teacher id="*41" name="Faiqotun Nihlah" short="41" gender="P" color="#BB46FD"/>
+    <teacher id="*42" name="Choiruddin" short="42" gender="L" color="#EABFFA"/>
+    <teacher id="*43" name="Arlina Fithroh" short="43" gender="P" color="#0C94A1"/>
+    <teacher id="*44" name="Ali Subhan" short="44" gender="L" color="#27C89C"/>
+    <teacher id="*45" name="Asnunik" short="45" gender="P" color="#33AE7E"/>
+    <teacher id="*47" name="Nafisah Sahal" short="47" gender="P" color="#0B84CA"/>
+    <teacher id="*48" name="Durroh Muhassonah" short="48" gender="P" color="#BAEC78"/>
+    <teacher id="*49" name="Emi Auniyah" short="49" gender="P" color="#E8F5DC"/>
+    <teacher id="*50" name="Eny Lutfiyana" short="50" gender="P" color="#07206B"/>
+    <teacher id="*51" name="Faiqotul Hikmah" short="51" gender="P" color="#E5A48C"/>
+    <teacher id="*52" name="Fatihuddin" short="52" gender="L" color="#79CDA6"/>
+    <teacher id="*53" name="Fauqiyyatul Husna" short="53" gender="P" color="#A0ECD5"/>
+    <teacher id="*54" name="Fu'adisshobur" short="54" gender="L" color="#2C85A9"/>
+    <teacher id="*55" name="Hindun" short="55" gender="P" color="#915659"/>
+    <teacher id="*56" name="Fuad Hasan" short="56" gender="L" color="#AA30E4"/>
+    <teacher id="*57" name="Asruhah" short="57" gender="P" color="#EFB5B0"/>
+    <teacher id="*58" name="Abd. Afif" short="58" gender="L" color="#92816B"/>
+    <teacher id="*59" name="Hanifah" short="59" gender="P" color="#B2E35E"/>
+    <teacher id="*60" name="Khodijah" short="60" gender="P" color="#BC4472"/>
+    <teacher id="*61" name="Abd. Baqi" short="61" gender="L" color="#5262E5"/>
+    <teacher id="*62" name="Mahmudah Nafi'" short="62" gender="P" color="#DBCD7B"/>
+    <teacher id="*63" name="Abd. Rozaq" short="63" gender="L" color="#73FFCF"/>
+    <teacher id="*64" name="Ah. Hadziq" short="64" gender="L" color="#48DCB5"/>
+    <teacher id="*65" name="Masruroh" short="65" gender="P" color="#FBF974"/>
+    <teacher id="*66" name="Ah. Ni'am Tamyiz" short="66" gender="L" color="#FE035C"/>
+    <teacher id="*68" name="Ah. Sahal Ali" short="68" gender="L" color="#B505F2"/>
+    <teacher id="*69" name="Musri'ah" short="69" gender="P" color="#C93720"/>
+    <teacher id="*70" name="Muzdalifah " short="70" gender="P" color="#D1F4E5"/>
+    <teacher id="*71" name="Sholihah Muhtar" short="71" gender="P" color="#F55777"/>
+    <teacher id="*72" name="Ahmad Husnan Basuni" short="72" gender="L" color="#03BFAC"/>
+    <teacher id="*73" name="Ummu Aiman" short="73" gender="P" color="#4A4AC7"/>
+    <teacher id="*74" name="Ahmad Manhajussidad" short="74" gender="L" color="#274B54"/>
+    <teacher id="*75" name="Zulaihah" short="75" gender="P" color="#02C09B"/>
+    <teacher id="*76" name="Ahmad Mudhofir" short="76" gender="L" color="#9EE399"/>
+    <teacher id="*77" name="Ifiq Shofiyatina" short="77" gender="P" color="#868DFB"/>
+    <teacher id="*78" name="Ali Musyafak" short="78" gender="L" color="#BF2DFA"/>
+    <teacher id="*79" name="Intifa'ah" short="79" gender="P" color="#012681"/>
+    <teacher id="*80" name="Farid Ma'ruf Sidiq" short="80" gender="L" color="#C86521"/>
+    <teacher id="*81" name="Fauzan Kholili" short="81" gender="L" color="#65F3FF"/>
+    <teacher id="*82" name="Islahiyah" short="82" gender="P" color="#1457C0"/>
+    <teacher id="*83" name="Mas'adah" short="83" gender="P" color="#680901"/>
+    <teacher id="*84" name="Khoirul Asyhar" short="84" gender="L" color="#CAAA8E"/>
+    <teacher id="*85" name="Masyrifah" short="85" gender="P" color="#930A95"/>
+    <teacher id="*86" name="Mulyanah" short="86" gender="P" color="#B6BA52"/>
+    <teacher id="*87" name="Khotibul Umam" short="87" gender="L" color="#45F782"/>
+    <teacher id="*88" name="Munifah" short="88" gender="P" color="#C2FC2B"/>
+    <teacher id="*89" name="Muyassarotul Maisyah" short="89" gender="P" color="#9215AA"/>
+    <teacher id="*90" name="Nailin Ni'mah" short="90" gender="P" color="#473022"/>
+    <teacher id="*91" name="Najichatin Niswah" short="91" gender="P" color="#41C99F"/>
+    <teacher id="*92" name="Nasihah" short="92" gender="P" color="#97AD01"/>
+    <teacher id="*93" name="Noor Azizah" short="93" gender="P" color="#AF7EE3"/>
+    <teacher id="*94" name="Nor Maziyah" short="94" gender="P" color="#9E0CC9"/>
+    <teacher id="*95" name="Salmah" short="95" gender="P" color="#3EB899"/>
+    <teacher id="*96" name="Siti Fatimatuz Zahro'" short="96" gender="P" color="#E03A5E"/>
+    <teacher id="*97" name="Siti Khoiriyah" short="97" gender="P" color="#41634A"/>
+    <teacher id="*98" name="Siti Maftuhah Syaerozi" short="98" gender="P" color="#D06E6E"/>
+    <teacher id="*99" name="Siti Makhmudah" short="99" gender="P" color="#D1834E"/>
+    <teacher id="*100" name="M. Amiruddin" short="100" gender="L" color="#3216FE"/>
+    <teacher id="*101" name="Umi Lailatul Maimunah" short="101" gender="P" color="#6FD025"/>
+    <teacher id="*102" name="M. Ghufron Wahid" short="102" gender="L" color="#0EECAF"/>
+    <teacher id="*105" name="M. Hasyim Ridlwan" short="105" gender="L" color="#176798"/>
+    <teacher id="*106" name="Laila Fathiyyah" short="106" gender="P" color="#12E101"/>
+    <teacher id="*107" name="Maslihan M. Ali" short="107" gender="L" color="#B8CB21"/>
+    <teacher id="*108" name="Milhatin Syirfah" short="108" gender="P" color="#E23550"/>
+    <teacher id="*109" name="Masrukhan Selamet" short="109" gender="L" color="#9B1EBC"/>
+    <teacher id="*110" name="Mu'nisatin Kamilah" short="110" gender="P" color="#A833AA"/>
+    <teacher id="*111" name="Mohammad Agus Jauhari" short="111" gender="L" color="#686B56"/>
+    <teacher id="*112" name="Muhammad Zaim" short="112" gender="L" color="#55012A"/>
+    <teacher id="*113" name="Muslikhatul Ummah" short="113" gender="P" color="#5D97E6"/>
+    <teacher id="*114" name="Noor Chudriyatin" short="114" gender="P" color="#79A966"/>
+    <teacher id="*115" name="Muhammadun" short="115" gender="L" color="#B214E1"/>
+    <teacher id="*116" name="Siti Munawaroh" short="116" gender="P" color="#BCAA03"/>
+    <teacher id="*117" name="Muharror Afif" short="117" gender="L" color="#696ABF"/>
+    <teacher id="*118" name="Nur Dihyah" short="118" gender="L" color="#E78D80"/>
+    <teacher id="*119" name="Saiful Akhyar" short="119" gender="L" color="#BF4552"/>
+    <teacher id="*120" name="Santoso" short="120" gender="L" color="#5E71E0"/>
+    <teacher id="*121" name="Sholihul Hadi" short="121" gender="L" color="#E0B97C"/>
+    <teacher id="*122" name="Sulkan" short="122" gender="L" color="#4DD95E"/>
+    <teacher id="*123" name="Syafi'I Abdan" short="123" gender="L" color="#03C1CF"/>
+    <teacher id="*124" name="Wakhrodi" short="124" gender="L" color="#3BF5F0"/>
+    <teacher id="*125" name="Ibrohim Ms" short="125" gender="L" color="#E0572A"/>
+    <teacher id="*126" name="Khotibul Umam Zainuddin" short="126" gender="L" color="#83D3C1"/>
+    <teacher id="*127" name="M. Alauddin Lutfi" short="127" gender="L" color="#3B5415"/>
+    <teacher id="*128" name="Marzuqi Abdul Bari" short="128" gender="L" color="#D9AF1E"/>
+    <teacher id="*129" name="Maskur" short="129" gender="L" color="#B7B779"/>
+    <teacher id="*130" name="Miftakhul Munif" short="130" gender="L" color="#31A369"/>
+    <teacher id="*131" name="Isfanda" short="131" gender="L" color="#821F7C"/>
+    <teacher id="*132" name="Moh. Lutfi" short="132" gender="L" color="#B8A21D"/>
+    <teacher id="*133" name="Moh. Ulil Albab" short="133" gender="L" color="#C6554F"/>
+    <teacher id="*134" name="Mu'adz Syam" short="134" gender="L" color="#3F52D9"/>
+    <teacher id="*135" name="Mohammad Alex Fawzi" short="135" gender="L" color="#4DAEA7"/>
+    <teacher id="*136" name="Muhammad Fatah" short="136" gender="L" color="#6B7186"/>
+    <teacher id="*137" name="Muhammad Faiq" short="137" gender="L" color="#FB617D"/>
+    <teacher id="*138" name="Muhammad Misbah Munir" short="138" gender="L" color="#EB8237"/>
+    <teacher id="*139" name="Ahmad Lutfi" short="139" gender="L" color="#3B70AF"/>
+    <teacher id="*144" name="Muhammad Riza Nor Rohman" short="144" gender="L" color="#E33D23"/>
+    <teacher id="*145" name="Muhammad Sabiq" short="145" gender="L" color="#FE9816"/>
+    <teacher id="*146" name="Muhammad Zaenuri" short="146" gender="L" color="#70A2FB"/>
+    <teacher id="*147" name="Ahmad Miftahus Syifa`" short="147" gender="L" color="#BBC7B3"/>
+    <teacher id="*148" name="Muhtadi" short="148" gender="L" color="#824F29"/>
+    <teacher id="*149" name="Muhammad Sulton" short="149" gender="L" color="#730086"/>
+    <teacher id="*150" name="Saifur Rosyid" short="150" gender="L" color="#A717A9"/>
+    <teacher id="*151" name="Taufiqur Rohman" short="151" gender="L" color="#291AA3"/>
+    <teacher id="*152" name="Ali Widiantoro" short="152" gender="L" color="#6812DE"/>
+    <teacher id="*153" name="Ainur Rofiq" short="153" gender="L" color="#E181C6"/>
+    <teacher id="*155" name="Ahmad Ma'shum" short="155" gender="L" color="#1F7E71"/>
+    <teacher id="*158" name="Sukardi" short="158" gender="L" color="#50546E"/>
+    <teacher id="*159" name="Hasyim" short="159" gender="L" color="#1DE40F"/>
+    <teacher id="*160" name="Tarwiji" short="160" gender="L" color="#39A6C2"/>
+    <teacher id="*161" name="Zainuri" short="161" gender="L" color="#2D5069"/>
+    <teacher id="*165" name="Muhammadun " short="165" gender="L" color="#191DA1"/>
+    <teacher id="*166" name="Masrukhan" short="166" gender="L" color="#57C742"/>
+    <teacher id="*167" name="Mohammad Azwar Anas" short="167" gender="L" color="#11BC04"/>
+    <teacher id="*169" name="Moch Syams El Ma'arif" short="169" gender="L" color="#93975D"/>
+    <teacher id="*170" name="Noor Hakim" short="170" gender="L" color="#4F629A"/>
+    <teacher id="*171" name="Jamaluddin Nur" short="171" gender="L" color="#66BDAC"/>
+    <teacher id="*173" name="Muh. In'am Muhlisin" short="173" gender="L" color="#2827E6"/>
+    <teacher id="*175" name="M. Dian Arifuddin" short="175" gender="L" color="#C68180"/>
+    <teacher id="*176" name="Rozin" short="176" gender="L" color="#7C275F"/>
+    <teacher id="*177" name="Ahmad Fathi Nashih" short="177" gender="L" color="#420651"/>
+    <teacher id="*178" name="Fachrur Rozi" short="178" gender="L" color="#B00069"/>
+    <teacher id="*179" name="Moh. Ulin Nuha Annabil" short="179" gender="L" color="#363B68"/>
+  </teachers>
+  <classes options="canadd" columns="id,name,short,classroomids,teacherid,grade">
+    <class id="*14" name="1 Aliyah E Banin" short="14" teacherid="" classroomids="" grade=""/>
+    <class id="*15" name="1 Aliyah D Banin" short="15" teacherid="" classroomids="" grade=""/>
+    <class id="*16" name="1 Aliyah C Banin" short="16" teacherid="" classroomids="" grade=""/>
+    <class id="*17" name="1 Aliyah B Banin" short="17" teacherid="" classroomids="" grade=""/>
+    <class id="*18" name="1 Aliyah A Banin" short="18" teacherid="" classroomids="" grade=""/>
+    <class id="*6" name="2 Aliyah A Banin" short="6" teacherid="" classroomids="" grade=""/>
+    <class id="*7" name="2 Aliyah B Banin" short="7" teacherid="" classroomids="" grade=""/>
+    <class id="*8" name="2 Aliyah C Banin" short="8" teacherid="" classroomids="" grade=""/>
+    <class id="*19" name="2 Aliyah D Banin" short="19" teacherid="" classroomids="" grade=""/>
+    <class id="*2" name="3 Aliyah A Banin" short="2" teacherid="" classroomids="" grade=""/>
+    <class id="*3" name="3 Aliyah B Banin" short="3" teacherid="" classroomids="" grade=""/>
+    <class id="*4" name="3 Aliyah C Banin" short="4" teacherid="" classroomids="" grade=""/>
+    <class id="*5" name="3 Aliyah D Banin" short="5" teacherid="" classroomids="" grade=""/>
+  </classes>
+  <subjects options="canadd" columns="id,name,short">
+    <subject id="*AL-ADMIN" name="Administrasi" short="AL-ADMIN"/>
+    <subject id="*AL-B.INDO" name="Bhs. Indonesia" short="AL-B.INDO"/>
+    <subject id="*AL-Biologi" name="Biologi" short="AL-Biologi"/>
+    <subject id="*AL-ENGLISH" name="B. Inggris" short="AL-ENGLISH"/>
+    <subject id="*AL-Fisika" name="Fisika" short="AL-Fisika"/>
+    <subject id="*AL-Ilmu Ji" name="Ilmu Jiwa" short="AL-Ilmu Ji"/>
+    <subject id="*AL-IPS" name="IPS" short="AL-IPS"/>
+    <subject id="*AL-Matemat" name="Matematika" short="AL-Matemat"/>
+    <subject id="*AL-PKn" name="PKn" short="AL-PKn"/>
+    <subject id="*AL-Sosiolo" name="Sosiologi" short="AL-Sosiolo"/>
+    <subject id="*AL-ARAB" name="Bhs. Arab" short="AL-ARAB"/>
+    <subject id="*AL-Arudl" name="Arudl" short="AL-Arudl"/>
+    <subject id="*AL-Balagho" name="Balaghoh" short="AL-Balagho"/>
+    <subject id="*AL-FQiH" name="Fiqih Tahrir" short="AL-FQiH"/>
+    <subject id="*AL-FSLTN" name="FASHOLATAN" short="AL-FSLTN"/>
+    <subject id="*AL-Hadits" name="Hadits" short="AL-Hadits"/>
+    <subject id="*AL-Ilmu Ta" name="Ilmu Tafsir" short="AL-Ilmu Ta"/>
+    <subject id="*AL-Insya'" name="Insya'" short="AL-Insya'"/>
+    <subject id="*AL-Istilah" name="Istilahul Fuqoha'" short="AL-Istilah"/>
+    <subject id="*AL-Makhori" name="Makhorijul Huruf" short="AL-Makhori"/>
+    <subject id="*AL-Mantiq" name="Mantiq" short="AL-Mantiq"/>
+    <subject id="*AL-Muqoron" name="Muqoronatul Madzahib" short="AL-Muqoron"/>
+    <subject id="*AL-Musthol" name="Mustholahul Hadits" short="AL-Musthol"/>
+    <subject id="*AL-NHW" name="Nahwu Alfiyah" short="AL-NHW"/>
+    <subject id="*AL-Qiroah" name="Qiroatul Kutub" short="AL-Qiroah"/>
+    <subject id="*AL-Qowaid" name="Qowaid Fiqh" short="AL-Qowaid"/>
+    <subject id="*AL-SKI" name="SKI" short="AL-SKI"/>
+    <subject id="*AL-Tafsir " name="Tafsir Al Qur'an" short="AL-Tafsir "/>
+    <subject id="*AL-Tarikh " name="Tarikh Tasyri'" short="AL-Tarikh "/>
+    <subject id="*AL-Tasawwu" name="Tasawwuf" short="AL-Tasawwu"/>
+    <subject id="*AL-Ushul F" name="Ushul Fiqh" short="AL-Ushul F"/>
+    <subject id="*AL-QUR'AN" name="Qiroatul Qur'an" short="AL-QUR'AN"/>
+    <subject id="*AL-TQRIB" name="TAQRIB" short="AL-TQRIB"/>
+  </subjects>
+</timetable>

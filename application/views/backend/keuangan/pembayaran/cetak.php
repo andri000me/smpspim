@@ -140,8 +140,9 @@ $pdf = new PDF();
 for ($i = 0; $i < 2; $i++) {
     $pdf->SetWatermark($i);
     
-    $pdf->SetMargins(5, 10);
-    $pdf->AddPage("L", "A5");
+    $pdf->SetMargins(7, 10);
+//    $pdf->AddPage("L", "A5");
+    $pdf->AddPage("L", array(215, 165));
     $pdf->SetAutoPageBreak(true, 0);
 
     $pdf->SetFont('Arial', 'B', 12);
@@ -157,10 +158,10 @@ for ($i = 0; $i < 2; $i++) {
     $pdf->Ln(8);
 
     $pdf->SetLineWidth(0.40);
-    $pdf->Line(6, 25, 202, 25);
+    $pdf->Line(7, 25, 208, 25);
 
     $pdf->SetLineWidth(0.20);
-    $pdf->Line(6, 26, 202, 26);
+    $pdf->Line(7, 26, 208, 26);
 
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(0, 5, 'KWITANSI PEMBAYARAN', 0, 0, 'C');
@@ -185,7 +186,7 @@ for ($i = 0; $i < 2; $i++) {
     $pdf->Ln(6);
 
     $pdf->SetLineWidth(0.20);
-    $pdf->Line(6, 52, 202, 52);
+    $pdf->Line(7, 52, 208, 52);
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(5, 5, '#', 0, 0, 'L');
@@ -195,7 +196,7 @@ for ($i = 0; $i < 2; $i++) {
     $pdf->Cell(37, 5, 'NOMINAL', 0, 0, 'L');
     $pdf->Ln();
 
-    $pdf->Line(6, 57, 202, 57);
+    $pdf->Line(7, 57, 208, 57);
 
     $pdf->SetFont('Arial', '', 10);
     $no = 1;
@@ -210,15 +211,15 @@ for ($i = 0; $i < 2; $i++) {
         $pdf->Ln();
     }
 
-    $pdf->SetY(90);
-    $pdf->Line(6, 90, 202, 90);
+    $pdf->SetY(115);
+    $pdf->Line(7, 115, 208, 115);
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(160, 5, 'TOTAL', 0, 0, 'R');
     $pdf->Cell(37, 5, $this->money->format($total), 0, 0, 'R');
     $pdf->Ln(8);
 
-    $pdf->Line(6, 95, 202, 95);
+    $pdf->Line(7, 120, 208, 120);
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(140, 5, 'KETERANGAN:', 0, 0, 'L');
@@ -234,7 +235,7 @@ for ($i = 0; $i < 2; $i++) {
         $pdf->Ln();
     }
 
-    $pdf->SetY(120);
+    $pdf->SetY(140);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(140, 5, $STATUS_PSB ? 'PEMBAYARAN PSB: ' . ($STATUS_LUNAS ? 'LUNAS' : 'BELUM LUNAS') : '', 0, 0, 'L');
     $pdf->SetFont('Arial', '', 10);
