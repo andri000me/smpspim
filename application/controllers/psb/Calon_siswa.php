@@ -133,6 +133,15 @@ class Calon_siswa extends CI_Controller {
         if (!isset($data['TANGGAL_IJASAH_SISWA']))
             $data['TANGGAL_IJASAH_SISWA'] = date('Y-m-d');
 
+        if (isset($data['NIK_SISWA']))
+            $data['NIK_SISWA'] = (int) filter_var($data['NIK_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+        if (isset($data['KK_SISWA']))
+            $data['KK_SISWA'] = (int) filter_var($data['KK_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+        if (isset($data['NISN_SISWA']))
+            $data['NISN_SISWA'] = (int) filter_var($data['NISN_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+        if (isset($data['NOHP_SISWA']))
+            $data['NOHP_SISWA'] = (int) filter_var($data['NOHP_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+
         $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_LAHIR_SISWA']);
         $data['AYAH_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['AYAH_TANGGAL_LAHIR_SISWA']);
         $data['IBU_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['IBU_TANGGAL_LAHIR_SISWA']);

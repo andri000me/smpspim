@@ -87,7 +87,7 @@ class Denah_us extends CI_Controller {
 
     public function hapus_denah() {
         $this->generate->set_header_JSON();
-        
+
         $hapus_denah = $this->input->post('HAPUS_DENAH');
 
         if ($this->status_validasi) {
@@ -117,13 +117,12 @@ class Denah_us extends CI_Controller {
 
     public function buat_denah() {
         if ($this->status_validasi)
-
-        $this->generate->backend_view('pu/denah_us/form', $data);
-    }
             redirect('pu/denah_us/show_denah');
 
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
+        $this->generate->backend_view('pu/denah_us/form', $data);
+    }
 
     public function proses_aturan() {
         $this->generate->set_header_JSON();

@@ -8,6 +8,8 @@
 
 $pdf = $this->fpdf;
 
+$GLOBALS['check_kartu'] = array();
+
 if (is_array($siswa)) {
     if (count($siswa) == 0) {
         echo "<h1>TIDAK ADA DATA YANG AKAN DICETAK</h1>";
@@ -127,6 +129,11 @@ function cetak($pdf, $data, $title) {
     $pdf->Cell(14, 3, 'VI', 1, 0, 'C');
     $pdf->Ln();
 
+    for ($aaa=0; $aaa < 6; $aaa++) { 
+        if(!isset($data['DENAH'][$aaa]))
+            $GLOBALS['check_kartu'][$data['AKAD_SISWA']['NAMA_KELAS']][$aaa][] = $data['AKAD_SISWA']['NIS_SISWA'].' - '.$data['AKAD_SISWA']['NAMA_SISWA'];
+    }
+
     $pdf->Cell(1.5);
     $pdf->Cell(14, 4, isset($data['DENAH'][0]) ? $data['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $data['DENAH'][0]['RUANG']['ID'] : '', 1, 0, 'C');
     $pdf->Cell(14, 4, isset($data['DENAH'][1]) ? $data['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $data['DENAH'][1]['RUANG']['ID'] : '', 1, 0, 'C');
@@ -155,4 +162,15 @@ function cetak($pdf, $data, $title) {
     return $pdf;
 }
 
+// foreach ($GLOBALS['check_kartu'] as $kelas => $detail1) {
+//     echo 'KELAS: '.$kelas.'<br>';
+//     foreach ($detail1 as $hari => $detail2) {
+//         echo '&nbsp;&nbsp;&nbsp;&nbsp;HARI KE-'.($hari+1).'<br>';
+//         foreach ($detail2 as $siswa) {
+//             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SISWA: '.$siswa.'<br>';
+//         }
+//     }
+//     echo "<hr>";
+// }
+// exit();
 $pdf->Output();
