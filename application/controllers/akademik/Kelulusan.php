@@ -153,7 +153,7 @@ class Kelulusan extends CI_Controller {
                     . '<option value="TTQTTK">TTQ+TTK</option>'
                     . '</select>' : '<strong>'.$item->LULUS_AS.'</strong>';
             
-            $row[] = ($item->LULUS_AS == NULL) ? '<button class="ladda-button btn-sm btn-primary" data-style="zoom-in" onclick="proses_lulus(this);" data-id="'.$item->ID_AS.'" data-siswa="'.$item->NIS_SISWA.' - '.$item->NAMA_SISWA.'"><i class="fa fa-check-circle"></i></button>' : '-';
+            $row[] = ($item->LULUS_AS == NULL) ? '<button class="ladda-button btn-proses btn-sm btn-primary" data-style="zoom-in" onclick="proses_lulus(this);" data-id="'.$item->ID_AS.'" data-siswa="'.$item->NIS_SISWA.' - '.$item->NAMA_SISWA.'"><i class="fa fa-check-circle"></i></button>' : '-';
 
             $data[] = $row;
         }

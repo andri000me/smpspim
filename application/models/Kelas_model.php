@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Kelas_model extends CI_Model {
 
     var $table = 'akad_kelas';
-    var $column = array('KETERANGAN_TINGK','KODE_RUANG','NAMA_RUANG', 'NAMA_PEG','NAMA_KELAS','KAPASITAS_RUANG','JUMLAH_SISWA_KELAS', 'AKTIF_KELAS','ID_KELAS');
+    var $column = array('KETERANGAN_TINGK', 'KODE_RUANG', 'NAMA_RUANG', 'NAMA_PEG', 'NAMA_KELAS', 'KAPASITAS_RUANG', 'JUMLAH_SISWA_KELAS', 'AKTIF_KELAS', 'ID_KELAS');
     var $primary_key = "ID_KELAS";
     var $order = array("ID_KELAS" => 'ASC');
 
@@ -20,13 +21,13 @@ class Kelas_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('md_tahun_ajaran mta',$this->table.'.TA_KELAS=mta.ID_TA');
-        $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_KELAS=mt.ID_TINGK');
-        $this->db->join('md_departemen md','mt.DEPT_TINGK=md.ID_DEPT');
-        $this->db->join('md_ruang mr',$this->table.'.RUANG_KELAS=mr.KODE_RUANG');
+        $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_KELAS=mta.ID_TA');
+        $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_KELAS=mt.ID_TINGK');
+        $this->db->join('md_departemen md', 'mt.DEPT_TINGK=md.ID_DEPT');
+        $this->db->join('md_ruang mr', $this->table . '.RUANG_KELAS=mr.KODE_RUANG');
 //        $this->db->join('md_jurusan mj',$this->table.'.JURUSAN_KELAS=mj.ID_JURUSAN');
-        $this->db->join('md_pegawai mp',$this->table.'.WALI_KELAS=mp.ID_PEG');
-        $this->db->join('md_jenis_kelamin mjp',$this->table.'.JK_KELAS=mjp.ID_JK');
+        $this->db->join('md_pegawai mp', $this->table . '.WALI_KELAS=mp.ID_PEG');
+        $this->db->join('md_jenis_kelamin mjp', $this->table . '.JK_KELAS=mjp.ID_JK');
         $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
@@ -126,6 +127,18 @@ class Kelas_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+    public function get_kelas_lanjut_jenjang($ID_KELAS, $ID_TA) {
+        $sql = "SELECT `kn`.*
+            FROM `akad_kelas` `kn`
+            JOIN `akad_kelas` `ka` ON `ka`.`ID_KELAS`=45
+            WHERE `kn`.`TA_KELAS` = '3'
+            AND kn.JK_KELAS=ka.JK_KELAS
+            AND `kn`.`TINGKAT_KELAS` = CASE ka.TINGKAT_KELAS WHEN 6 THEN 11 WHEN 8 THEN 11 WHEN 10 THEN 14 WHEN 13 THEN 14 END";
+        $result = $this->db->query($sql);
+        
+        return $result->result();
+    }
+
     public function get_kelas($ID_PEG) {
         $where = array(
             'TA_KELAS' => $this->session->userdata('ID_TA_ACTIVE'),
@@ -145,7 +158,7 @@ class Kelas_model extends CI_Model {
         $this->_get_table();
         $this->db->join('md_jenjang_departemen mjd', 'mt.DEPT_TINGK=mjd.DEPT_MJD');
         $this->db->join('md_jenjang_sekolah mjs', 'mjd.JENJANG_MJD=mjs.ID_JS AND mt.NAMA_TINGK<>mjs.JUMLAH_KELAS_JS');
-        
+
         $this->db->where($where);
 
         return $this->db->get()->result();
@@ -159,7 +172,7 @@ class Kelas_model extends CI_Model {
         $this->_get_table();
         $this->db->join('md_jenjang_departemen mjd', 'mt.DEPT_TINGK=mjd.DEPT_MJD');
         $this->db->join('md_jenjang_sekolah mjs', 'mjd.JENJANG_MJD=mjs.ID_JS AND mt.NAMA_TINGK=mjs.JUMLAH_KELAS_JS');
-        
+
         $this->db->where($where);
 
         return $this->db->get()->result();
@@ -172,14 +185,16 @@ class Kelas_model extends CI_Model {
         $this->db->select("WALI_KELAS as id, NAMA_PEG as text");
         $this->_get_table();
         $this->db->where($where);
-        if($q != '') $this->db->like('NAMA_PEG', $q);
+        if ($q != '')
+            $this->db->like('NAMA_PEG', $q);
         $this->db->group_by('WALI_KELAS');
 
         return $this->db->get()->result();
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_KELAS as value, NAMA_KELAS as label");
+        if ($for_html)
+            $this->db->select("ID_KELAS as value, NAMA_KELAS as label");
         $this->_get_table();
         $this->db->order_by('NAMA_KELAS', 'ASC');
 
@@ -209,31 +224,31 @@ class Kelas_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function get_kapasitas_kelas() {
         $this->db->select('IF(SUM(KAPASITAS_RUANG) IS NULL, 0, SUM(KAPASITAS_RUANG)) AS JUMLAH_KAPASITAS, mt.*');
         $this->db->from('md_tingkat mt');
-        $this->db->join('akad_kelas ak', 'ak.TINGKAT_KELAS=mt.ID_TINGK AND ak.TA_KELAS='.$this->session->userdata('ID_TA_ACTIVE'), 'LEFT');
+        $this->db->join('akad_kelas ak', 'ak.TINGKAT_KELAS=mt.ID_TINGK AND ak.TA_KELAS=' . $this->session->userdata('ID_TA_ACTIVE'), 'LEFT');
         $this->db->join('md_ruang mr', 'ak.RUANG_KELAS=mr.KODE_RUANG', 'LEFT');
         $this->db->group_by('ID_TINGK');
 
         return $this->db->get()->result_array();
     }
-    
+
     public function fix_jumlah_siswa() {
         $sql = 'UPDATE akad_kelas INNER JOIN (SELECT *, COUNT(ID_AS) AS JUMLAH_SISWA FROM akad_siswa INNER JOIN md_siswa ON SISWA_AS=ID_SISWA AND AKTIF_SISWA=1 WHERE AKTIF_AS=1 AND KONVERSI_AS=0 GROUP BY KELAS_AS) akad_siswa ON KELAS_AS=ID_KELAS SET JUMLAH_SISWA_KELAS=JUMLAH_SISWA WHERE KELAS_AS=ID_KELAS';
         $this->db->query($sql);
-        
+
         return $this->db->affected_rows();
     }
 

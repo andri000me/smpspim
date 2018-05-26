@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Lanjut_jenjang_model extends CI_Model {
 
     var $table = 'akad_siswa';
-    var $column = array('NIS_SISWA', 'NO_ABSEN_AS', 'NAMA_SISWA', 'JK_SISWA', 'KETERANGAN_TINGK', 'NAMA_KELAS', 'NAMA_PEG', 'ID_AS', 'ID_AS');
+    var $column = array('NIS_NIS', 'NO_ABSEN_AS', 'NAMA_SISWA', 'JK_SISWA', 'ID_AS', 'ID_AS', 'ID_AS');
     var $primary_key = "ID_AS";
     var $order = array("ID_AS" => 'ASC');
 
@@ -19,18 +19,22 @@ class Lanjut_jenjang_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table() {
+    private function _get_table($ID_KELAS = NULL) {
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
         $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA AND ms.AKTIF_SISWA=0');
-        $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
-        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
+//        $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
+//        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
+//        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
+        $this->db->join('md_nis mn', 'SISWA_NIS=SISWA_AS AND TA_NIS=TA_AS');
         $this->db->where('KONVERSI_AS', 0);
         $this->db->where('AKTIF_AS', 1);
         $this->db->where('LULUS_AS', 'L');
 //        $this->db->where('NAIK_AS', NULL);
         $this->db->where('TA_AS', $this->session->userdata('ID_TA_ACTIVE'));
+
+        if ($ID_KELAS != NULL)
+            $this->db->where('KELAS_AS', $ID_KELAS);
 
         $this->db->group_start();
         $this->db->where('TINGKAT_AS', 6);
@@ -40,8 +44,8 @@ class Lanjut_jenjang_model extends CI_Model {
         $this->db->group_end();
     }
 
-    private function _get_datatables_query() {
-        $this->_get_table();
+    private function _get_datatables_query($ID_KELAS) {
+        $this->_get_table($ID_KELAS);
         $i = 0;
         $search_value = $_POST['search']['value'];
         $search_columns = $_POST['columns'];
@@ -66,7 +70,7 @@ class Lanjut_jenjang_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like("IFNULL(".$item.", '')", $search_columns[$i]['search']['value']);
+                $this->db->like("IFNULL(" . $item . ", '')", $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
@@ -84,8 +88,8 @@ class Lanjut_jenjang_model extends CI_Model {
         }
     }
 
-    function get_datatables() {
-        $this->_get_datatables_query();
+    function get_datatables($ID_KELAS) {
+        $this->_get_datatables_query($ID_KELAS);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -94,8 +98,8 @@ class Lanjut_jenjang_model extends CI_Model {
         return $query->result();
     }
 
-    function count_filtered() {
-        $this->_get_datatables_query();
+    function count_filtered($ID_KELAS) {
+        $this->_get_datatables_query($ID_KELAS);
         $query = $this->db->get();
 
         return $query->num_rows();
@@ -124,8 +128,8 @@ class Lanjut_jenjang_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function count_all() {
-        $this->_get_table();
+    public function count_all($ID_KELAS) {
+        $this->_get_table($ID_KELAS);
 
         return $this->db->count_all_results();
     }
@@ -181,6 +185,14 @@ class Lanjut_jenjang_model extends CI_Model {
         $this->db->delete('lpba_nilai', $where);
 
         return $this->db->affected_rows();
+    }
+
+    public function get_data_kelas($ID_KELAS) {
+        $this->db->from('akad_kelas');
+        $this->db->join('md_ruang', 'RUANG_KELAS=KODE_RUANG');
+        $this->db->where('ID_KELAS', $ID_KELAS);
+        
+        return $this->db->get()->row();
     }
 
 }
