@@ -11,7 +11,7 @@ class Kenaikan_model extends CI_Model {
 
     var $table = 'akad_siswa';
     var $table_crud = 'akad_nilai';
-    var $column = array('NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS');
+    var $column = array('NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'ID_AS', 'TINGKAT_AS');
     var $primary_key = "NAMA_SISWA";
     var $order = array("NAMA_SISWA" => 'ASC');
 
