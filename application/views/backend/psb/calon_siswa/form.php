@@ -159,11 +159,11 @@ $this->generate->generate_panel_content($title, $subtitle);
                         DATA AYAH
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'AYAH_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->AYAH_NIK_SISWA : '', 'id' => 'AYAH_NIK_SISWA', 'onchange' => 'return check_data(\'AYAH_NIK_SISWA\');'), FALSE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'AYAH_NIK_SISWA', 'data-inputmask' => "'mask': '9999 9999 9999 9999'", 'maxlength' => 19, 'value' => $mode_edit ? $data->AYAH_NIK_SISWA : '', 'id' => 'AYAH_NIK_SISWA', 'onchange' => 'return check_data(\'AYAH_NIK_SISWA\');'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama', array('name' => 'AYAH_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->AYAH_NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_select2('Status Hidup', array('name' => 'AYAH_HIDUP_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_hidup')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AYAH_HIDUP_SISWA, 'text' => $data->NAMA_SO_AYAH) : NULL); ?>
                         <?php $this->generate->input_text('Tempat Lahir', array('name' => 'AYAH_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->AYAH_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
-                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'AYAH_TANGGAL_LAHIR_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->AYAH_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
+                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'AYAH_TANGGAL_LAHIR_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->AYAH_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
                         <?php $this->generate->input_select2('Pendidikan', array('name' => 'AYAH_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AYAH_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_AYAH) : NULL); ?>
                         <?php $this->generate->input_select2('Pekerjaan', array('name' => 'AYAH_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->AYAH_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_AYAH) : NULL); ?>
                     </div>
@@ -181,11 +181,11 @@ $this->generate->generate_panel_content($title, $subtitle);
                         DATA IBU
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'IBU_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->IBU_NIK_SISWA : '', 'id' => 'IBU_NIK_SISWA', 'onchange' => 'return check_data(\'IBU_NIK_SISWA\');'), FALSE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'IBU_NIK_SISWA', 'data-inputmask' => "'mask': '9999 9999 9999 9999'", 'maxlength' => 19, 'value' => $mode_edit ? $data->IBU_NIK_SISWA : '', 'id' => 'IBU_NIK_SISWA', 'onchange' => 'return check_data(\'IBU_NIK_SISWA\');'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama', array('name' => 'IBU_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->IBU_NAMA_SISWA : ''), TRUE); ?>
                         <?php $this->generate->input_select2('Status Hidup', array('name' => 'IBU_HIDUP_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_hidup')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->IBU_HIDUP_SISWA, 'text' => $data->NAMA_SO_IBU) : NULL); ?>
                         <?php $this->generate->input_text('Tempat Lahir', array('name' => 'IBU_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->IBU_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
-                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'IBU_TANGGAL_LAHIR_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->IBU_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
+                        <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'IBU_TANGGAL_LAHIR_SISWA',  'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->IBU_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
                         <?php $this->generate->input_select2('Pendidikan', array('name' => 'IBU_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->IBU_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_IBU) : NULL); ?>
                         <?php $this->generate->input_select2('Pekerjaan', array('name' => 'IBU_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->IBU_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_IBU) : NULL); ?>
                     </div>
@@ -203,7 +203,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                         DATA WALI
                     </div>
                     <div class="panel-body">
-                        <?php $this->generate->input_text('NIK', array('name' => 'WALI_NIK_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->WALI_NIK_SISWA : '', 'id' => 'WALI_NIK_SISWA', 'onchange' => 'return check_data(\'WALI_NIK_SISWA\');'), FALSE, 4); ?>
+                        <?php $this->generate->input_text('NIK', array('name' => 'WALI_NIK_SISWA', 'data-inputmask' => "'mask': '9999 9999 9999 9999'", 'maxlength' => 19, 'value' => $mode_edit ? $data->WALI_NIK_SISWA : '', 'id' => 'WALI_NIK_SISWA', 'onchange' => 'return check_data(\'WALI_NIK_SISWA\');'), FALSE, 4); ?>
                         <?php $this->generate->input_text('Nama', array('name' => 'WALI_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->WALI_NAMA_SISWA : ''), FALSE); ?>
                         <?php $this->generate->input_select2('Hubungan', array('name' => 'WALI_HUBUNGAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_wali_hubungan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_HUBUNGAN_SISWA, 'text' => $data->NAMA_HUB) : NULL); ?>
                         <?php $this->generate->input_select2('Pendidikan', array('name' => 'WALI_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_WALI) : NULL); ?>
