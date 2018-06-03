@@ -27,7 +27,7 @@ if ($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
                                 array('id' => 0, 'text' => "TIDAK CEK TAGIHAN", 'selected' => FALSE),
                                     ), TRUE, 5);
                             ?>
-                            <?php //$this->generate->input_select2('Tahun Ajaran berikutnya', array('name' => 'NEXT_TA_FILTER', 'url' => site_url('master_data/tahun_ajaran/auto_complete')), TRUE, 4, FALSE, NULL); ?>
+                            <?php $this->generate->input_select2('Tahun Ajaran berikutnya', array('name' => 'NEXT_TA_FILTER', 'url' => site_url('master_data/tahun_ajaran/auto_complete_no_active')), TRUE, 4, FALSE, NULL); ?>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">&nbsp;</label>
                                 <div class="col-md-2">
@@ -85,7 +85,8 @@ if ($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
             if (!(KELAS_FILTER === null))
                 window.open('<?php echo site_url('akademik/rapor'); ?>/');
         };
-        var ID_PEG = <?php if ($this->session->userdata('ID_HAKAKSES') == 2)
+        var ID_PEG = <?php
+    if ($this->session->userdata('ID_HAKAKSES') == 2)
         echo 'null';
     else
         echo $this->session->userdata('ID_USER');
@@ -144,7 +145,7 @@ if ($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
             var KELAS_FILTER = $("#KELAS_FILTER").val();
             $(".table-datatable1").slideUp();
 
-            if (KELAS_FILTER === '' || ID_PEG === null) {
+            if (KELAS_FILTER === '' || ID_PEG === null || NEXT_TA_FILTER === null) {
                 create_homer_error("Silahkan lengkapi kolom terlebih dahulu.");
             } else {
                 KELAS_FILTER_GLOBAL = KELAS_FILTER;
@@ -202,7 +203,7 @@ if ($this->session->userdata('ID_CAWU_ACTIVE') == 3) {
             else if (parseInt(STATUS_TAG) === 1)
                 create_swal_option('Apakah Anda yakin melanjutkan?', '', action);
             else if (parseInt(STATUS_TAG) === 0)
-                    create_ajax('<?php echo site_url('akademik/kelulusan/proses_lulus'); ?>', 'ID_AS=' + ID_AS + '&STATUS_KELULUSAN=' + STATUS_KELULUSAN + '&NEXT_TA_FILTER=' + NEXT_TA_FILTER + '&STATUS_TAG=' + STATUS_TAG, success);
+                create_ajax('<?php echo site_url('akademik/kelulusan/proses_lulus'); ?>', 'ID_AS=' + ID_AS + '&STATUS_KELULUSAN=' + STATUS_KELULUSAN + '&NEXT_TA_FILTER=' + NEXT_TA_FILTER + '&STATUS_TAG=' + STATUS_TAG, success);
         }
 
         function simpan_nilai_kta(that) {

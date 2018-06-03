@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Tahun_ajaran_model extends CI_Model {
 
     var $table = 'md_tahun_ajaran';
-    var $column = array('ID_TA', 'NAMA_TA', 'TANGGAL_MULAI_TA', 'TANGGAL_AKHIR_TA','AKTIF_TA', 'KETERANGAN_TA', 'PSB_TA','ID_TA');
+    var $column = array('ID_TA', 'NAMA_TA', 'TANGGAL_MULAI_TA', 'TANGGAL_AKHIR_TA', 'AKTIF_TA', 'KETERANGAN_TA', 'PSB_TA', 'ID_TA');
     var $primary_key = "ID_TA";
     var $order = array("ID_TA" => 'ASC');
 
@@ -97,7 +98,8 @@ class Tahun_ajaran_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_TA as id, NAMA_TA as text");
+        if ($for_html)
+            $this->db->select("ID_TA as id, NAMA_TA as text");
         $this->_get_table();
         $this->db->order_by('ID_TA', 'ASC');
 
@@ -107,6 +109,15 @@ class Tahun_ajaran_model extends CI_Model {
     public function get_all_ac($where) {
         $this->db->select("ID_TA as id, NAMA_TA as text");
         $this->_get_table();
+        $this->db->like('NAMA_TA', $where);
+
+        return $this->db->get()->result();
+    }
+
+    public function get_all_ac_no_active($where) {
+        $this->db->select("ID_TA as id, NAMA_TA as text");
+        $this->_get_table();
+        $this->db->where('ID_TA <> ', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->like('NAMA_TA', $where);
 
         return $this->db->get()->result();
@@ -126,56 +137,56 @@ class Tahun_ajaran_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function set_ta_deactive() {
         $data['AKTIF_TA'] = 0;
         $this->db->update($this->table, $data);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function set_ta_active($where) {
         $data['AKTIF_TA'] = 1;
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function set_psb_deactive() {
         $data['PSB_TA'] = 0;
         $this->db->update($this->table, $data);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function set_psb_active($where) {
         $data['PSB_TA'] = 1;
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function get_ta_active() {
         $this->_get_table();
         $this->db->where('AKTIF_TA', 1);
-        
+
         return $this->db->get()->row();
     }
-    
+
     public function get_psb_active() {
         $this->_get_table();
         $this->db->where('PSB_TA', 1);
-        
+
         return $this->db->get()->row();
     }
 

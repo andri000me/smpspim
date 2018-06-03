@@ -199,6 +199,14 @@ class Tahun_ajaran extends CI_Controller {
         $this->generate->output_JSON($data);
     }
     
+    public function auto_complete_no_active() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->tahun_ajaran->get_all_ac_no_active($this->input->post('q'));
+        
+        $this->generate->output_JSON($data);
+    }
+    
     function change_active() {
         $this->generate->set_header_JSON();
         
