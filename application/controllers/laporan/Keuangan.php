@@ -63,6 +63,8 @@ class Keuangan extends CI_Controller {
 
 //        $pie_donut = $this->input->post('pie_donut');
         $ta = $this->input->post('ta');
+        $tagihan = $this->input->post('tagihan');
+        $detail_tagihan = $this->input->post('detail_tagihan');
         $jenjang = $this->input->post('jenjang');
         $tingkat = $this->input->post('tingkat');
         $kelas = $this->input->post('kelas');
@@ -70,8 +72,8 @@ class Keuangan extends CI_Controller {
         $mulai_tanggal = $this->input->post('mulai_tanggal');
         $pegawai = $this->input->post('pegawai');
         
-        $pembayaran = $this->keuangan->get_data('Pembayaran', $ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
-        $pengembalian = $this->keuangan->get_data('Pengembalian', $ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $pembayaran = $this->keuangan->get_data('Pembayaran', $ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $pengembalian = $this->keuangan->get_data('Pengembalian', $ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         
         $data_source = array(
             $pembayaran,
@@ -122,6 +124,8 @@ class Keuangan extends CI_Controller {
 
     public function export() {
         $ta = $this->input->get('ta');
+        $tagihan = $this->input->get('tagihan');
+        $detail_tagihan = $this->input->get('detail_tagihan');
         $jenjang = $this->input->get('jenjang');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
@@ -132,13 +136,15 @@ class Keuangan extends CI_Controller {
         header("Content-type: application/vnd-ms-excel");
         header("Content-Disposition: attachment; filename=data_keuangan_" . date('Y-m-d_H-i-s') . ".csv");
 
-        echo $this->keuangan->export_data($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        echo $this->keuangan->export_data($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
     }
     
     public function ajax_list() {
         $this->generate->set_header_JSON();
         
         $ta = $this->input->get('ta');
+        $tagihan = $this->input->get('tagihan');
+        $detail_tagihan = $this->input->get('detail_tagihan');
         $jenjang = $this->input->get('jenjang');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
@@ -147,7 +153,7 @@ class Keuangan extends CI_Controller {
         $pegawai = $this->input->get('pegawai');
 
         $id_datatables = 'datatable1';
-        $list = $this->keuangan->get_datatables($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $list = $this->keuangan->get_datatables($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $item) {
@@ -169,8 +175,8 @@ class Keuangan extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->keuangan->count_all($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
-            "recordsFiltered" => $this->keuangan->count_filtered($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
+            "recordsTotal" => $this->keuangan->count_all($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
+            "recordsFiltered" => $this->keuangan->count_filtered($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai),
             "data" => $data,
         );
 

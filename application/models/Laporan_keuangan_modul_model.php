@@ -20,7 +20,7 @@ class Laporan_keuangan_modul_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+    private function _get_table($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
         // $this->db->select('*, IF(NAMA_KELAS IS NULL, "", NAMA_KELAS) AS NAMA_KELAS_SHOW, IF(NIS_SISWA IS NULL, "", NIS_SISWA) AS NIS_SISWA_SHOW ');
         $this->db->from($this->table);
         $this->db->join('keu_setup ds',$this->table.'.SETUP_BAYAR=ds.ID_SETUP');
@@ -37,6 +37,10 @@ class Laporan_keuangan_modul_model extends CI_Model {
 
         if ($ta != "")
             $this->db->where('ID_TA', $ta);
+        if ($tagihan != "")
+            $this->db->where('ID_TAG', $tagihan);
+        if ($detail_tagihan != "")
+            $this->db->where('ID_DT', $detail_tagihan);
         if ($jenjang != "")
             $this->db->where('DEPT_TINGK', $jenjang);
         if ($tingkat != "")
@@ -51,11 +55,11 @@ class Laporan_keuangan_modul_model extends CI_Model {
             $this->db->where('mpk.ID_PEG', $pegawai);
     }
 
-    public function get_data($label, $ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+    public function get_data($label, $ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
         if($label == 'Pembayaran') $this->db->select('SUM(NOMINAL_BAYAR) AS data, '.$this->batasan.' AS x_label');
         elseif($label == 'Pengembalian') $this->db->select('SUM(NOMINAL_BAYAR) AS data, '.$this->batasan.' AS x_label');
         
-        $this->_get_table($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $this->_get_table($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         
         if ($label == 'Pembayaran') 
             $this->db->where('JENIS_BAYAR', 'PEMBAYARAN');
@@ -71,7 +75,7 @@ class Laporan_keuangan_modul_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function export_data($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+    public function export_data($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
         $this->load->dbutil();
 
         $this->db->select(''
@@ -88,7 +92,7 @@ class Laporan_keuangan_modul_model extends CI_Model {
                 . ', mpk.NAMA_PEG AS USER_INPUT'
                 . '');
         
-        $this->_get_table($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $this->_get_table($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         
         $this->db->order_by('CREATED_BAYAR', 'ASC');
         
@@ -97,9 +101,9 @@ class Laporan_keuangan_modul_model extends CI_Model {
         return $this->dbutil->csv_from_result($sql);
     }
 
-    private function _get_datatables_query($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+    private function _get_datatables_query($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
         $this->db->select('*, IF(NAMA_KELAS IS NULL, "", NAMA_KELAS) AS NAMA_KELAS_SHOW, IF(NIS_SISWA IS NULL, "", NIS_SISWA) AS NIS_SISWA_SHOW, mpk.NAMA_PEG AS NAMA_PEG_SHOW');
-        $this->_get_table($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $this->_get_table($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         $i = 0;
         $search_value = $_POST['search']['value'];
         $search_columns = $_POST['columns'];
@@ -142,8 +146,8 @@ class Laporan_keuangan_modul_model extends CI_Model {
         }
     }
 
-    function get_datatables($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
-        $this->_get_datatables_query($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+    function get_datatables($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+        $this->_get_datatables_query($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
@@ -152,16 +156,16 @@ class Laporan_keuangan_modul_model extends CI_Model {
         return $query->result();
     }
 
-    function count_filtered($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
-        $this->_get_datatables_query($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+    function count_filtered($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+        $this->_get_datatables_query($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         $query = $this->db->get();
 
         return $query->num_rows();
     }
 
-    public function count_all($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
+    public function count_all($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai) {
         $this->db->select('*, IF(NAMA_KELAS IS NULL, "", NAMA_KELAS) AS NAMA_KELAS_SHOW, IF(NIS_SISWA IS NULL, "", NIS_SISWA) AS NIS_SISWA_SHOW, mpk.NAMA_PEG AS NAMA_PEG_SHOW');
-        $this->_get_table($ta, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
+        $this->_get_table($ta, $tagihan, $detail_tagihan, $jenjang, $tingkat, $kelas, $akhir_tanggal, $mulai_tanggal, $pegawai);
         
         return $this->db->count_all_results();
     }
