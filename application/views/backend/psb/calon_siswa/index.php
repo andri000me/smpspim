@@ -85,7 +85,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     
     function mengundurkan_diri(ID_SISWA) {
         var action = function(isConfirm) {
-            if(isConfirm) proses_mengundurkan_diri(ID_SISWA, 0);
+            if(isConfirm) proses_mengundurkan_diri(ID_SISWA, 1);
         };
         
         create_swal_option("Apakah Anda yakin?", "Calon siswa akan dikeluarkan dari Proses PSB. Proses ini tidak dapat diulang.", action);

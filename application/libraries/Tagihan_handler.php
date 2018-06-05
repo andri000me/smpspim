@@ -38,7 +38,7 @@ class Tagihan_handler {
         }
     }
     
-    private function siswa_dari_kajen($ID_SISWA) {
+    public function siswa_dari_kajen($ID_SISWA) {
         $data_siswa = $this->CI->siswa->get_by_id($ID_SISWA, TRUE);
         
         if($data_siswa->ALAMAT_SISWA == NULL) return FALSE;
@@ -46,7 +46,7 @@ class Tagihan_handler {
         $id_kecamatan_margoyoso = 1172;
         $alamat_siswa = strtoupper($data_siswa->ALAMAT_SISWA);
         
-        if(strpos($alamat_siswa, 'KAJEN') !== FALSE)
+        if((strpos($alamat_siswa, 'KAJEN') !== FALSE) && ($data_siswa->KECAMATAN_SISWA == $id_kecamatan_margoyoso)) 
             return TRUE;
         else
             return FALSE;

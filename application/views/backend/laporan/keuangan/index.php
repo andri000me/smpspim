@@ -272,6 +272,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
     function request_chart_<?php echo $id; ?>(type) {
 //        var kelompok = $("#kelompok").val();
         var ta = $("#ta").val();
+        var tagihan = $("#tagihan").val();
+        var detail_tagihan = $("#detail_tagihan").val();
         var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
@@ -295,7 +297,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         $(".table-datatable1").slideUp();
 
 //        if(kelompok !== '')
-        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai, success);
+        create_ajax(url, "pie_donut=" + pie_donut + "&ta=" + ta + "&tagihan=" + tagihan + "&detail_tagihan=" + detail_tagihan + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai, success);
 //        else {
 //            $("#" + id).html(" ");
 //            
@@ -305,13 +307,15 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
     function export_data() {
         var ta = $("#ta").val();
+        var tagihan = $("#tagihan").val();
+        var detail_tagihan = $("#detail_tagihan").val();
         var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
         var akhir_tanggal = $("#akhir_tanggal").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
 
-        var req = "&ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
+        var req = "&ta=" + ta + "&tagihan=" + tagihan + "&detail_tagihan=" + detail_tagihan + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
 
         window.open("<?php echo site_url('laporan/keuangan/export'); ?>?detail=detail" + req);
     }
@@ -374,13 +378,15 @@ $this->generate->datatables($id_datatables, $title, $columns);
 
     function datatables_data() {
         var ta = $("#ta").val();
+        var tagihan = $("#tagihan").val();
+        var detail_tagihan = $("#detail_tagihan").val();
         var jenjang = $("#jenjang").val();
         var tingkat = $("#tingkat").val();
         var kelas = $("#kelas").val();
         var akhir_tanggal = $("#akhir_tanggal").val();
         var mulai_tanggal = $("#mulai_tanggal").val();
 
-        var req = "?ta=" + ta + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
+        var req = "?ta=" + ta + "&tagihan=" + tagihan + "&detail_tagihan=" + detail_tagihan + "&jenjang=" + jenjang + "&tingkat=" + tingkat + "&kelas=" + kelas + "&akhir_tanggal=" + akhir_tanggal + "&mulai_tanggal=" + mulai_tanggal + "&pegawai=" + pegawai;
 
         table = initialize_datatables(id_table, '<?php echo site_url('laporan/keuangan/ajax_list'); ?>' + req, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         remove_splash();
