@@ -130,8 +130,8 @@ class Kelas_model extends CI_Model {
     public function get_kelas_lanjut_jenjang($ID_KELAS, $ID_TA) {
         $sql = "SELECT `kn`.*
             FROM `akad_kelas` `kn`
-            JOIN `akad_kelas` `ka` ON `ka`.`ID_KELAS`=45
-            WHERE `kn`.`TA_KELAS` = '3'
+            JOIN `akad_kelas` `ka` ON `ka`.`ID_KELAS`=".$ID_KELAS."
+            WHERE `kn`.`TA_KELAS` = ".$ID_TA."
             AND kn.JK_KELAS=ka.JK_KELAS
             AND `kn`.`TINGKAT_KELAS` = CASE ka.TINGKAT_KELAS WHEN 6 THEN 11 WHEN 8 THEN 11 WHEN 10 THEN 14 WHEN 13 THEN 14 END";
         $result = $this->db->query($sql);
