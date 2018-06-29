@@ -26,7 +26,7 @@ class Denah_um extends CI_Controller {
             'denah_um_model' => 'denah_um',
             'psb_validasi_model' => 'psb_validasi'
         ));
-        $this->load->library('denah_um_handler');
+        $this->load->library('denah_handler');
         $this->auth->validation(6);
         $this->status_validasi = $this->aturan_denah->is_um_validasi();
     }
@@ -105,7 +105,7 @@ class Denah_um extends CI_Controller {
         
         $status = $this->aturan_denah->is_um_dibuat();
         
-        $output = $this->denah_um_handler->proses_aturan($status, $this->mode);
+        $output = $this->denah_handler->proses_aturan($status, $this->mode);
             
         $this->generate->output_JSON($output);
     }
@@ -115,7 +115,7 @@ class Denah_um extends CI_Controller {
         
         if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
         
-        $result = $this->denah_um_handler->proses_buat_denah($this->mode);
+        $result = $this->denah_handler->proses_buat_denah($this->mode);
         
         $this->generate->output_JSON(array('status' => 1, 'data' => 'Berhasil membuat denah'));
     }
@@ -135,7 +135,7 @@ class Denah_um extends CI_Controller {
     public function atur_ulang_denah() {
         $this->generate->set_header_JSON();
         
-        $result = $this->denah_um_handler->atur_ulang_denah($this->mode);
+        $result = $this->denah_handler->atur_ulang_denah($this->mode);
         
         $this->generate->output_JSON(array('status' => $result, 'msg' => 'Gagal memproses data. Denah tidak dapat disimpan. Halaman akan dimuat ulang otomatis.'));
     }
@@ -143,7 +143,7 @@ class Denah_um extends CI_Controller {
     public function request_denah() {
         $this->generate->set_header_JSON();
         
-        $result = $this->denah_um_handler->show_denah($this->mode);
+        $result = $this->denah_handler->show_denah($this->mode);
         
         $this->generate->output_JSON(array('status' => 1, 'data' => $result));
     }
@@ -153,7 +153,7 @@ class Denah_um extends CI_Controller {
         
         if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
         
-        $result = $this->denah_um_handler->proses_buat_denah($this->mode, TRUE);
+        $result = $this->denah_handler->proses_buat_denah($this->mode, TRUE);
         
         $this->generate->output_JSON(array('status' => 1, 'data' => $result));
     }
