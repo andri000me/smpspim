@@ -421,8 +421,8 @@ class Denah_um_handler{
             // PROSES PENGELOMPOKAN SISWA SISA KE RUANGAN YANG LAIN
             $data_sisa = ($mode == 'UM') ? json_decode($this->CI->aturan_denah->get_denah_psb(), TRUE) : json_decode($this->CI->aturan_denah->get_denah_cawu(), TRUE);
             
-            $data_lk['ATURAN_DENAH_FINAL'] = $this->susun_data_sisa($data_sisa['L'], $data_lk);
-            $data_pr['ATURAN_DENAH_FINAL'] = $this->susun_data_sisa($data_sisa['P'], $data_pr);
+            $data_lk['ATURAN_DENAH_FINAL'] = $this->susun_data_sisa($data_sisa['L'], $data_lk, 'L');
+            $data_pr['ATURAN_DENAH_FINAL'] = $this->susun_data_sisa($data_sisa['P'], $data_pr, 'P');
         } else {
             // MENGAMBIL DATA DARI PERUBAHAN PENGGUNA
             $data_lk['ATURAN_DENAH_FINAL'] = $this->CI->input->post("aturan_lk");
@@ -466,7 +466,7 @@ class Denah_um_handler{
         return $result;
     }
     
-    private function susun_data_sisa($sisa, $data) {
+    private function susun_data_sisa($sisa, $data, $jk) {
         $tingkat = $data['TINGKAT'];
         $jenjang = $data['JENJANG'];
         
