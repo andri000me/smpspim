@@ -76,18 +76,18 @@
                                         <?php
                                         $TA = $DETAIL['TA'];
                                         $NIS = $DETAIL['NIS'];
-                                        $AKADEMIK = $DETAIL['AKADEMIK'];
+                                        $AKADEMIK_DETAIL = $DETAIL['AKADEMIK'];
                                         ?>
                                         <div class="col-md-12">
                                             <h3>Data Akademik TA: <?php echo $TA->NAMA_TA; ?></h3>
                                         </div>
                                         <div class="col-md-6">
                                             <?php list_detail('NIS', $NIS); ?>
-                                            <?php list_detail('KELAS', $AKADEMIK->NAMA_KELAS); ?>
+                                            <?php list_detail('KELAS', $AKADEMIK_DETAIL->NAMA_KELAS); ?>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <?php list_detail('JENJANG TINGKAT', $AKADEMIK->NAMA_TINGK . ' ' . $AKADEMIK->DEPT_TINGK); ?>
-                                            <?php list_detail('WALI KELAS', $AKADEMIK->NAMA_PEG); ?>
+                                            <?php list_detail('JENJANG TINGKAT', $AKADEMIK_DETAIL->NAMA_TINGK . ' ' . $AKADEMIK_DETAIL->DEPT_TINGK); ?>
+                                            <?php list_detail('WALI KELAS', $AKADEMIK_DETAIL->NAMA_PEG); ?>
                                         </div>                                    
                                     <?php } ?>
                                 </div>
