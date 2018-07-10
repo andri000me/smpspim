@@ -31,16 +31,18 @@ class Nis_handler {
             else $siswa_lama[] = $detail;
         }
         
+        $tahun = $this->CI->pengaturan->getTahunTAAwal();
+        
         // MEMBUAT NIS UNTUK SISWA LULUSAN DARI PIM
         foreach ($siswa_lama as $detail) {
-            $status_proses = $this->buat_nis($detail['ID_SISWA'], $detail['ANGKATAN_SISWA'], $detail['TINGKAT_AS']);
+            $status_proses = $this->buat_nis($detail['ID_SISWA'], $tahun, $detail['TINGKAT_AS']);
             
             if ($status_proses) $count++;
         }
         
         // MEMBUAT NIS UNTUK SISWA BARU
         foreach ($siswa_baru as $detail) {
-            $status_proses = $this->buat_nis($detail['ID_SISWA'], $detail['ANGKATAN_SISWA'], $detail['TINGKAT_AS']);
+            $status_proses = $this->buat_nis($detail['ID_SISWA'], $tahun, $detail['TINGKAT_AS']);
             
             if ($status_proses) $count++;
         }
