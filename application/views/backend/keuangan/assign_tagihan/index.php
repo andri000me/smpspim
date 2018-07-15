@@ -10,9 +10,7 @@ $columns = array(
     'JK',
     'JENJANG',
     'KELAS',
-    
     'WALI KELAS',
-    
     'AKSI',
 );
 
@@ -46,6 +44,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     </div>
 </div>
 <script type="text/javascript">
+    var loading_bar = '<img src="<?php echo base_url('assets/images/loading-bars.svg'); ?>" width="31px" class="loading_bar"/>';
     var ID_KELAS = 0;
     var table;
     var url_delete = '<?php echo site_url('keuangan/assign_tagihan/ajax_delete'); ?>/';
@@ -71,23 +70,23 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('keuangan/assign_tagihan/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
-        
-        $('<a class="btn btn-default btn-sm buttons-khoirot" tabindex="0" aria-controls="datatable1" data-vivaldi-spatnav-clickable="1" data-toggle="modal" data-target="#cetak_modal"><span>Cetak Kartu Khoirot</span></a>').insertAfter('.buttons-add');
+
+        $('<a class="btn btn-default btn-sm buttons-khoirot" tabindex="0" aria-controls="datatable1" data-vivaldi-spatnav-clickable="1" data-toggle="modal" data-target="#cetak_modal"><span>Cetak Kartu Khoirot</span></a><a class="btn btn-default btn-sm buttons-proses-assign" tabindex="0" aria-controls="datatable1" href="#" onclick="proses_all_assign();"><span>Proses Assign Semua</span></a>').insertAfter('.buttons-add');
         $(".buttons-pdf, .buttons-print, .buttons-add").remove();
 
-        $(".js-source-states-ID_KELAS").on("change", "", function(){
+        $(".js-source-states-ID_KELAS").on("change", "", function () {
             var data = $(this).select2("data");
 
             ID_KELAS = data.id;
         });
     });
-    
-    function cetak(){
+
+    function cetak() {
         $("#cetak_modal").modal("hide");
         $(".js-source-states-ID_KELAS").select2('data', null);
 
         window.open('<?php echo site_url('keuangan/assign_tagihan/cetak_kartu'); ?>/' + ID_KELAS, '_blank');
-        
+
         ID_KELAS = 0;
     }
 
@@ -105,16 +104,17 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     }
 
     function proses_tagihan(that) {
-        var loading_bar = '<img src="<?php echo base_url('assets/images/loading-bars.svg'); ?>" width="31px" class="loading_bar"/>';
         var NAMA_SISWA = $(that).data('nama');
         var HAPUS_TAGIHAN = $(that).data('hapus');
         var action = function (isConfirm) {
             if (isConfirm) {
                 $(loading_bar).insertAfter(that);
                 $(that).hide();
-        
-                if(HAPUS_TAGIHAN) proses_unsign(that);
-                else proses_sign(that);
+
+                if (HAPUS_TAGIHAN)
+                    proses_unsign(that);
+                else
+                    proses_sign(that);
             }
         };
 
@@ -126,8 +126,16 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         var success = function (data) {
             reload_datatables(table);
         };
-        
+
         create_ajax('<?php echo site_url('keuangan/assign_tagihan/proses_unsign'); ?>', 'ID_SETUP=' + ID_SETUP, success);
+    }
+
+    function proses_all_assign() {
+        $(".btn-assign").each(function () {
+            $(loading_bar).insertAfter(this);
+            $(this).hide();
+            proses_sign(this);
+        });
     }
 
     function proses_sign(that) {
@@ -136,7 +144,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         var success = function (data) {
             reload_datatables(table);
         };
-        
+
         create_ajax('<?php echo site_url('keuangan/assign_tagihan/proses_sign'); ?>', 'DEPT_TINGK=' + DEPT_TINGK + '&ID_SISWA=' + ID_SISWA, success);
     }
 
