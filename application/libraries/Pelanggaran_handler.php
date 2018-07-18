@@ -72,9 +72,9 @@ class Pelanggaran_handler {
                 $catatan = TRUE;
             }
 
-            if ($data == NULL)  {
+            if ($data == NULL) {
                 $this->CI->pelanggaran_header->fix_kehadiran_komdis();
-                
+
                 $data = $this->CI->pelanggaran->get_pelanggaran_siswa(array('KEHADIRAN_KS' => $id));
             }
 
@@ -132,7 +132,7 @@ class Pelanggaran_handler {
     }
 
     public function proses_poin_tahun_lalu($ID_SISWA, $TA) {
-        $poin = $this->CI->pelanggaran_header->get_total_poin_siswa($TA, $ID_SISWA);
+        $poin = $this->CI->pelanggaran_header->get_total_poin_siswa($this->CI->session->userdata('ID_TA_ACTIVE'), $ID_SISWA);
 
         for ($cawu = 1; $cawu <= 3; $cawu++) {
             $data_pelanggaran = array(

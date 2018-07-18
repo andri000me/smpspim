@@ -32,7 +32,10 @@ class Lanjut_jenjang extends CI_Controller {
             'kelas_model' => 'kelas',
             'siswa_model' => 'siswa'
         ));
-        $this->load->library('kenaikan_handler');
+        $this->load->library(array(
+            'pelanggaran_handler',
+            'kenaikan_handler'
+        ));
         $this->auth->validation(2);
     }
 
@@ -116,6 +119,7 @@ class Lanjut_jenjang extends CI_Controller {
             if ($result) {
                 $result = $this->proses_kelas($ID_KELAS, $ID_AS, $ID_TINGK, $kelas);
                 if ($result) {
+                    $this->pelanggaran_handler->proses_poin_tahun_lalu($ID_SISWA, $ID_TA);
                     $msg = 'Berhasil memasukan siswa kekelas';
                 } else {
                     $msg = 'Gagal memasukan siswa kekelas';
