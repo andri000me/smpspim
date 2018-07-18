@@ -62,7 +62,7 @@ $pdf->Cell(0, 7, ': ' . $siswa->ALAMAT_SISWA);
 $pdf->Ln();
 
 $pdf->Cell(52);
-$pdf->Cell(0, 7, 'Kec. ' . $siswa->NAMA_KEC . ', ' . $siswa->NAMA_KAB . ', ' . $siswa->NAMA_PROV);
+$pdf->Cell(0, 7, 'Kec. ' . $siswa->NAMA_KEC_SISWA . ', ' . $siswa->NAMA_KAB_SISWA . ', ' . $siswa->NAMA_PROV_SISWA);
 $pdf->Ln();
 
 $pdf->Cell(20);
