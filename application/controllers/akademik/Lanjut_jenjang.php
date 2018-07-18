@@ -110,7 +110,13 @@ class Lanjut_jenjang extends CI_Controller {
             $data = array(
                 'AKTIF_SISWA' => 1,
                 'ALUMNI_SISWA' => 0,
-                'STATUS_ASAL_SISWA' => 1
+                'STATUS_ASAL_SISWA' => 1,
+                'STATUS_MUTASI_SISWA' => NULL,
+                'TANGGAL_MUTASI_SISWA' => NULL,
+                'NO_SURAT_MUTASI_SISWA' => NULL,
+                'NOMOR_IJASAH_SISWA' => NULL,
+                'NOMOR_SYAHADAH_SISWA' => NULL,
+                'USER_MUTASI_SISWA' => NULL, 
             );
             $where = array(
                 'ID_SISWA' => $ID_SISWA
