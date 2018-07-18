@@ -21,8 +21,8 @@ if (!isset($DATA)) {
 }
 
 foreach ($DATA as $DETAIL) {
-    $pdf->SetLeftMargin(10);
-    $pdf->SetRightMargin(6);
+    $pdf->SetLeftMargin(15);
+    $pdf->SetRightMargin(5);
     $pdf->SetTopMargin(6);
     $pdf->AddPage("P", array(215, 330));
     $pdf->SetAutoPageBreak(true, 0);
