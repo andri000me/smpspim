@@ -443,7 +443,7 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/cetak_' . $data_tindakan['URL_KJT'], $data);
     }
 
-    public function cetak_perkelas($ID_KELAS) {
+    public function cetak_perkelas() {
         $input_kelas = $this->input->get('KELAS');
         $data = array();
 

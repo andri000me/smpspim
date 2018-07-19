@@ -262,19 +262,20 @@ FROM
         WHERE " . $where_kelas . " TA_AS=" . $this->session->userdata('ID_TA_ACTIVE') . " AND KONVERSI_AS=0
         GROUP BY SISWA_AS, BULAN 
     ) AS tabel_komdis
-LEFT OUTER JOIN md_siswa ON ID_SISWA=SISWA_AS 
-LEFT OUTER JOIN (SELECT *, SUM(LARI_KSH) AS TOTAL_LARI FROM komdis_siswa_header WHERE TA_KSH=" . $this->session->userdata('ID_TA_ACTIVE') . " GROUP BY SISWA_KSH) komdis_header ON TA_KSH=TA_KS AND SISWA_KS=komdis_header.SISWA_KSH
-LEFT OUTER JOIN (SELECT SISWA_KSH, NAMA_KJT, ID_KJT FROM komdis_tindakan
-INNER JOIN (
-SELECT komdis_siswa_header.*, MAX(ID_KT) AS ID_KT_MAX FROM komdis_tindakan 
-INNER JOIN komdis_siswa_header ON ID_KSH=PELANGGARAN_HEADER_KT
-GROUP BY SISWA_KSH
-) ktt ON ktt.ID_KT_MAX=ID_KT
-INNER JOIN komdis_jenis_tindakan ON ID_KJT=TINDAKAN_KT) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
-LEFT OUTER JOIN md_pondok_siswa ON ID_MPS=PONDOK_SISWA
-" . $where_pondok . "
-GROUP BY SISWA_AS
-" . $order;
+    LEFT OUTER JOIN md_siswa ON ID_SISWA=SISWA_AS 
+    LEFT OUTER JOIN (SELECT *, SUM(LARI_KSH) AS TOTAL_LARI FROM komdis_siswa_header WHERE TA_KSH=" . $this->session->userdata('ID_TA_ACTIVE') . " GROUP BY SISWA_KSH) komdis_header ON SISWA_AS=komdis_header.SISWA_KSH
+    LEFT OUTER JOIN (SELECT SISWA_KSH, NAMA_KJT, ID_KJT FROM komdis_tindakan
+    INNER JOIN (
+    SELECT komdis_siswa_header.*, MAX(ID_KT) AS ID_KT_MAX FROM komdis_tindakan 
+    INNER JOIN komdis_siswa_header ON ID_KSH=PELANGGARAN_HEADER_KT
+    WHERE TA_KSH=" . $this->session->userdata('ID_TA_ACTIVE') . " 
+    GROUP BY SISWA_KSH
+    ) ktt ON ktt.ID_KT_MAX=ID_KT
+    INNER JOIN komdis_jenis_tindakan ON ID_KJT=TINDAKAN_KT) komdis_tindak ON komdis_tindak.SISWA_KSH=SISWA_AS
+    LEFT OUTER JOIN md_pondok_siswa ON ID_MPS=PONDOK_SISWA
+    " . $where_pondok . "
+    GROUP BY SISWA_AS
+    " . $order;
         $query = $this->db->query($sql);
 
         return $query->result();
