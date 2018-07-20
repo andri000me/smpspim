@@ -57,7 +57,7 @@
                                 <hr>
                             </div>
                             <div class="col-md-6 text-center">
-                                <h1 id="jam" class="font-light text-primary" style="font-size: 150px;"></h1>
+                                <h1 id="jam" class="font-light text-primary" style="font-size: 120px;"></h1>
                             </div>
                         </div>
                         <div class="row">
@@ -88,6 +88,10 @@
     <script src="<?php echo base_url(); ?>assets/vendor/ladda/dist/ladda.jquery.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url(); ?>assets/vendor/toastr/build/toastr.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendor/pace/pace.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/jquery.inputmask.bundle.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-be.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-ru.js"></script>
 
     <!-- App scripts -->
     <script src="<?php echo base_url(); ?>assets/scripts/homer.js"></script>
@@ -110,14 +114,14 @@
                                                 $("#tanggal").html(data.tanggal);
                                                 DATE_SERVER = data.date;
                                                 TAFAWUT = data.tafawut;
-                                                
+
                                                 jam_server = data.jam.toString();
-                                                
+
                                                 if ($.inArray(jam_server, ALARM) !== -1) {
                                                     FILE_RINGING = FILE_ALARM[ALARM.indexOf(jam_server)];
                                                     alarm_ringing();
                                                 }
-                                                
+
                                                 $(".error-response").remove();
                                             });
                                         }, 1000);
@@ -125,7 +129,7 @@
 
                                     function alarm_ringing() {
                                         var audio = new Audio('../files/aplikasi/' + FILE_RINGING);
-                                        
+
                                         console.log('ALARM IS RINGING NOW');
                                         flag_alarm(true);
                                         audio.play();
