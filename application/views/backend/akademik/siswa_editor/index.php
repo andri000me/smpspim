@@ -226,13 +226,13 @@ $this->generate->input_dropdown('JK', 'JK_SISWA', NULL, TRUE, 4);
         $("#detail_siswa").append('<?php $this->generate->input_text('Nama Ibu', array('name' => 'IBU_NAMA_SISWA', 'id' => 'IBU_NAMA_SISWA', 'maxlength' => 200, 'value' => ''), TRUE, 5); ?>');
         $("#detail_siswa").append('<?php $this->generate->input_text('Pondok', array('name' => 'PONDOK_SISWA', 'id' => 'PONDOK_SISWA', 'maxlength' => 100, 'value' => ''), TRUE, 8); ?>');
         $("#detail_siswa").append('<?php $this->generate->input_text('Asal Sekolah', array('name' => 'ASAL_SEKOLAH_SISWA', 'id' => 'ASAL_SEKOLAH_SISWA', 'maxlength' => 100, 'value' => ''), FALSE, 8); ?>');
-        $("#detail_siswa").append('<?php $this->generate->input_text('No HP', array('name' => 'ORTU_NOHP1_SISWA', 'id' => 'ORTU_NOHP1_SISWA', 'maxlength' => 15, 'value' => ''), FALSE, 5); ?>');
+        $("#detail_siswa").append('<?php $this->generate->input_text('No HP', array('name' => 'NOHP_SISWA', 'id' => 'NOHP_SISWA', 'maxlength' => 15, 'value' => ''), FALSE, 5); ?>');
         $("#detail_siswa").append('<button class="btn btn-info pull-right" type="submit"><i class="fa fa-save"></i>&nbsp;&nbsp;Simpan</button>');
         $(".control-label").addClass('col-sm-3').removeClass('col-sm-2');
         $(".help-block").remove();
         $("#NIK_SISWA").inputmask({"mask": "9999 9999 9999 9999"});
         $("#TANGGAL_LAHIR_SISWA").inputmask({"mask": "9999-99-99"});
-        $("#ORTU_NOHP1_SISWA").inputmask({"mask": "999 999 999 999"});
+        $("#NOHP_SISWA").inputmask({"mask": "999 999 999 999"});
     }
 
     function save_data() {
