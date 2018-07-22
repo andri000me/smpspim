@@ -22,6 +22,7 @@ class Jenis_pelanggaran_model extends CI_Model {
         $this->db->select('*, CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP)) AS NO_KJP');
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta',$this->table.'.TA_KJP=mta.ID_TA');
+        $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
     private function _get_datatables_query() {
