@@ -258,6 +258,7 @@ class Siswa_model extends CI_Model {
             }
         }
         $this->db->order_by('NAMA_SISWA', 'ASC');
+        $this->db->group_by('ID_SISWA');
         $result = $this->db->get();
 
         return $result->result();
