@@ -73,7 +73,7 @@ $alasan = array(
     $pdf->Cell(0, 7, ': ' . ($siswa->NAMA_KELAS == NULL ? '-' : $siswa->NAMA_KELAS));
     $pdf->Ln(10);
 
-    $pdf->MultiCell(0, 7, 'adalah benar-benar belajar ' . ($siswa->NAMA_TINGK == NULL ? 'pelajar di' : ('di kelas ' . $siswa->NAMA_TINGK . ' (' . trim($this->money->terbilang($siswa->NAMA_TINGK)) . ') ' . ucwords(strtolower($siswa->NAMA_DEPT)))) . ' Perguruan Islam Mathali\'ul Falah Kajen Margoyoso Pati Jawa Tengah pada tahun ajaran ' . $this->session->userdata('NAMA_TA_ACTIVE') . '.');
+    $pdf->MultiCell(0, 7, 'adalah benar-benar belajar di kelas ' . $this->date_format->toRomawi($siswa->NAMA_TINGK) . ' (' . trim($this->money->terbilang($siswa->NAMA_TINGK)) . ') ' . ucwords(strtolower($siswa->NAMA_DEPT)) . ' Perguruan Islam Mathali\'ul Falah Kajen Margoyoso Pati Jawa Tengah pada tahun ajaran ' . $this->session->userdata('NAMA_TA_ACTIVE') . '.');
     $pdf->Ln();
 
     $pdf->MultiCell(0, 7, 'Siswa tersebut keluar sekolah pada tanggal ' . $this->date_format->to_print_text($siswa->TANGGAL_MUTASI_SISWA) . ' ' . (isset($alasan[$siswa->ID_MUTASI]) ? $alasan[$siswa->ID_MUTASI] : 'atas permintaan sendiri dan orang tua karena pindah sekolah') . '.');
