@@ -352,6 +352,10 @@ class Pengaturan {
         return $this->CI->data_pengaturan->update('xml_download', $value);
     }
     
+    public function getKomdisBulanMulai() {
+        return $this->CI->data_pengaturan->get_by_id('komdis_bulan_mulai');
+    }
+    
     public function getNomorPaketSP() {
         return $this->CI->data_pengaturan->get_by_id('no_paket_sp');
     }

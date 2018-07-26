@@ -47,18 +47,15 @@ foreach ($data as $detail) {
     $pdf->Cell(60);
     $pdf->Cell(7, 4, 'Lalu', 'LBR', 0, 'C');
     $pdf->Cell(27);
-    $pdf->Cell(65 / 12, 4, '07', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '08', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '09', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '10', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '11', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '12', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '01', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '02', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '03', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '04', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '05', 1, 0, 'C');
-    $pdf->Cell(65 / 12, 4, '06', 1, 0, 'C');
+
+    $bulan_mulai = $this->pengaturan->getKomdisBulanMulai();
+    for ($aa = 1; $aa <= 12; $aa++) {
+        $pdf->Cell(65 / 12, 4, $bulan_mulai < 10 ? '0' . $bulan_mulai : $bulan_mulai, 1, 0, 'C');
+        if ($bulan_mulai == 12)
+            $bulan_mulai = 0;
+        $bulan_mulai++;
+    }
+    
     $pdf->Cell(6, 4, '1', 1, 0, 'C');
     $pdf->Cell(6, 4, '2', 1, 0, 'C');
     $pdf->Cell(6, 4, '3', 1, 0, 'C');
@@ -137,7 +134,7 @@ foreach ($data as $detail) {
     $pdf->Cell(5);
     $pdf->Cell(0, 4, 'Jumlah Ta\'liq: ' . $jumlah_takliq);
     $pdf->Ln();
-    
+
     $pdf->Cell(5);
     $pdf->Cell(0, 4, 'Jumlah Luar Batas: ' . $jumlah_mutasi);
     $pdf->Ln();
