@@ -161,6 +161,17 @@ class Nilai_hafalan_model extends CI_Model {
         return $this->db->get()->row();
     }
 
+    public function get_nilai_validasi($ID_SISWA) {
+        $this->db->select('NILAI_PHN, BATASAN_PHN');
+        $this->db->from('ph_nilai');
+        $this->db->where(array(
+            'TA_PHN' => $this->session->userdata('ID_TA_ACTIVE'),
+            'SISWA_PHN' => $ID_SISWA
+        ));
+
+        return $this->db->get()->result_array();
+    }
+
     public function get_batasan($ID_SISWA) {
         $this->db->from('akad_siswa as');
         $this->db->join('md_siswa ms', 'as.SISWA_AS=ms.ID_SISWA');
