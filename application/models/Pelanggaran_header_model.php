@@ -87,7 +87,7 @@ class Pelanggaran_header_model extends CI_Model {
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
-        
+
         return $query->result();
     }
 
@@ -220,38 +220,61 @@ class Pelanggaran_header_model extends CI_Model {
         else
             $where_pondok = 'WHERE PONDOK_SISWA=' . $ID_KELAS;
 
+        $temp_bulan_mulai = $this->pengaturan->getKomdisBulanMulai();
+
+        $q_s = "";
+        $q_t = "";
+        $bulan_mulai = $temp_bulan_mulai;
+        for ($aa = 1; $aa <= 12; $aa++) {
+            $q_s .= " MAX(CASE WHEN BULAN = " . $bulan_mulai . " THEN TOTAL_POIN END) AS 'B" . ($bulan_mulai < 10 ? '0' . $bulan_mulai : $bulan_mulai) . "', ";
+            if ($bulan_mulai == 12)
+                $bulan_mulai = 0;
+            $bulan_mulai++;
+        }
+
+        $bulan_mulai = $temp_bulan_mulai;
+        for ($ab = 1; $ab <= 3; $ab++) {
+            $bulan_1 = $bulan_mulai;
+            if ($bulan_1 > 12)
+                $bulan_1 = 1;
+            $bulan_2 = $bulan_1 + 1;
+            if ($bulan_2 > 12)
+                $bulan_2 = 1;
+            $bulan_3 = $bulan_2 + 1;
+            if ($bulan_3 > 12)
+                $bulan_3 = 1;
+            $bulan_4 = $bulan_3 + 1;
+            if ($bulan_4 > 12)
+                $bulan_4 = 1;
+
+            $q_t .= "(
+        IF(MAX(CASE WHEN BULAN = " . ($bulan_1) . " THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = " . ($bulan_1) . " THEN TOTAL_POIN END)) + 
+        IF(MAX(CASE WHEN BULAN = " . ($bulan_2) . " THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = " . ($bulan_2) . " THEN TOTAL_POIN END)) + 
+        IF(MAX(CASE WHEN BULAN = " . ($bulan_3) . " THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = " . ($bulan_3) . " THEN TOTAL_POIN END)) + 
+        IF(MAX(CASE WHEN BULAN = " . ($bulan_4) . " THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = " . ($bulan_4) . " THEN TOTAL_POIN END))
+    ) AS 'CAWU_" . $ab . "' ";
+            if ($ab < 3)
+                $q_t .= ",";
+            $bulan_mulai = $bulan_4 + 1;
+        }
+
+//    MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) AS 'B07',
+//    MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END) AS 'B08',
+//    MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END) AS 'B09',
+//    MAX(CASE WHEN BULAN = 10 THEN TOTAL_POIN END) AS 'B10',
+//    MAX(CASE WHEN BULAN = 11 THEN TOTAL_POIN END) AS 'B11',
+//    MAX(CASE WHEN BULAN = 12 THEN TOTAL_POIN END) AS 'B12',
+//    MAX(CASE WHEN BULAN = 1 THEN TOTAL_POIN END) AS 'B01',
+//    MAX(CASE WHEN BULAN = 2 THEN TOTAL_POIN END) AS 'B02',
+//    MAX(CASE WHEN BULAN = 3 THEN TOTAL_POIN END) AS 'B03',
+//    MAX(CASE WHEN BULAN = 4 THEN TOTAL_POIN END) AS 'B04',
+//    MAX(CASE WHEN BULAN = 5 THEN TOTAL_POIN END) AS 'B05',
+//    MAX(CASE WHEN BULAN = 6 THEN TOTAL_POIN END) AS 'B06',
+
         $sql = "SELECT 
     NO_ABSEN_AS, NIS_SISWA, NAMA_SISWA, POIN_TAHUN_LALU_KSH, TOTAL_LARI, AKTIF_AS, NAMA_KJT, ID_KJT, NAMA_KELAS, ID_MPS, NAMA_PONDOK_MPS, ALAMAT_MPS,
-    MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) AS 'B07',
-    MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END) AS 'B08',
-    MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END) AS 'B09',
-    MAX(CASE WHEN BULAN = 10 THEN TOTAL_POIN END) AS 'B10',
-    MAX(CASE WHEN BULAN = 11 THEN TOTAL_POIN END) AS 'B11',
-    MAX(CASE WHEN BULAN = 12 THEN TOTAL_POIN END) AS 'B12',
-    MAX(CASE WHEN BULAN = 1 THEN TOTAL_POIN END) AS 'B01',
-    MAX(CASE WHEN BULAN = 2 THEN TOTAL_POIN END) AS 'B02',
-    MAX(CASE WHEN BULAN = 3 THEN TOTAL_POIN END) AS 'B03',
-    MAX(CASE WHEN BULAN = 4 THEN TOTAL_POIN END) AS 'B04',
-    MAX(CASE WHEN BULAN = 5 THEN TOTAL_POIN END) AS 'B05',
-    MAX(CASE WHEN BULAN = 6 THEN TOTAL_POIN END) AS 'B06',
-    (
-        IF(MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 7 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 8 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 9 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 10 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 10 THEN TOTAL_POIN END))
-    ) AS 'CAWU_1',
-    (
-        IF(MAX(CASE WHEN BULAN = 11 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 11 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 12 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 12 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 1 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 1 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 2 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 2 THEN TOTAL_POIN END))
-    ) AS 'CAWU_2',
-    (
-        IF(MAX(CASE WHEN BULAN = 3 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 3 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 4 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 4 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 5 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 5 THEN TOTAL_POIN END)) + 
-        IF(MAX(CASE WHEN BULAN = 6 THEN TOTAL_POIN END) IS NULL, 0, MAX(CASE WHEN BULAN = 6 THEN TOTAL_POIN END))
-    ) AS 'CAWU_3'
+    " . $q_s . " 
+    " . $q_t . " 
 FROM 
     (
         SELECT *, MONTH(TANGGAL_KS) AS BULAN, SUM(POIN_KJP) AS TOTAL_POIN
@@ -277,8 +300,9 @@ FROM
     GROUP BY SISWA_AS
     " . $order;
         $query = $this->db->query($sql);
+//        echo $this->db->last_query();
 
-        return $query->result();
+        return $query->result_array();
     }
 
     public function get_terakhir_input() {

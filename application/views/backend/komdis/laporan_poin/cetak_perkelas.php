@@ -48,14 +48,15 @@ foreach ($data as $detail) {
     $pdf->Cell(7, 4, 'Lalu', 'LBR', 0, 'C');
     $pdf->Cell(27);
 
-    $bulan_mulai = $this->pengaturan->getKomdisBulanMulai();
+    $temp_bulan_mulai = $this->pengaturan->getKomdisBulanMulai();
+    $bulan_mulai = $temp_bulan_mulai;
     for ($aa = 1; $aa <= 12; $aa++) {
         $pdf->Cell(65 / 12, 4, $bulan_mulai < 10 ? '0' . $bulan_mulai : $bulan_mulai, 1, 0, 'C');
         if ($bulan_mulai == 12)
             $bulan_mulai = 0;
         $bulan_mulai++;
     }
-    
+
     $pdf->Cell(6, 4, '1', 1, 0, 'C');
     $pdf->Cell(6, 4, '2', 1, 0, 'C');
     $pdf->Cell(6, 4, '3', 1, 0, 'C');
@@ -67,44 +68,42 @@ foreach ($data as $detail) {
     $jumlah_takliq = 0;
     $jumlah_mutasi = 0;
     foreach ($DATA as $DETAIL) {
-        if ($DETAIL->ID_KJT == 1)
+        if ($DETAIL['ID_KJT'] == 1)
             $jumlah_sp++;
-        elseif ($DETAIL->ID_KJT == 2)
+        elseif ($DETAIL['ID_KJT'] == 2)
             $jumlah_po_1++;
-        elseif ($DETAIL->ID_KJT == 3)
+        elseif ($DETAIL['ID_KJT'] == 3)
             $jumlah_po_2++;
-        elseif ($DETAIL->ID_KJT == 4)
+        elseif ($DETAIL['ID_KJT'] == 4)
             $jumlah_takliq++;
-        elseif ($DETAIL->ID_KJT == 5)
+        elseif ($DETAIL['ID_KJT'] == 5)
             $jumlah_mutasi++;
 
-        if ($DETAIL->AKTIF_AS)
+        if ($DETAIL['AKTIF_AS'])
             $pdf->setFillColor(255, 255, 255);
         else
             $pdf->setFillColor(128, 128, 128);
 
-        $pdf->Cell(7, 4, $DETAIL->NO_ABSEN_AS, 1, 0, 'C', TRUE);
-        $pdf->Cell(20, 4, $DETAIL->NIS_SISWA == NULL ? 'KELUAR' : $DETAIL->NIS_SISWA, 1, 0, 'C', TRUE);
-        $pdf->Cell(40, 4, $DETAIL->NAMA_SISWA, 1, 0, 'L', TRUE);
-        $pdf->Cell(7, 4, ($DETAIL->POIN_TAHUN_LALU_KSH > 0 ? $DETAIL->POIN_TAHUN_LALU_KSH : ''), 1, 0, 'C', TRUE);
-        $pdf->Cell(7, 4, ($DETAIL->TOTAL_LARI > 0 ? $DETAIL->TOTAL_LARI : ''), 1, 0, 'C', TRUE);
-        $pdf->Cell(20, 4, $DETAIL->NAMA_KJT, 1, 0, 'L', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B07, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B08, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B09, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B10, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B11, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B12, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B01, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B02, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B03, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B04, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B05, 1, 0, 'C', TRUE);
-        $pdf->Cell(65 / 12, 4, $DETAIL->B06, 1, 0, 'C', TRUE);
-        $pdf->Cell(6, 4, $DETAIL->CAWU_1 == 0 ? '' : $DETAIL->CAWU_1, 1, 0, 'C', TRUE);
-        $pdf->Cell(6, 4, $DETAIL->CAWU_2 == 0 ? '' : $DETAIL->CAWU_2, 1, 0, 'C', TRUE);
-        $pdf->Cell(6, 4, $DETAIL->CAWU_3 == 0 ? '' : $DETAIL->CAWU_3, 1, 0, 'C', TRUE);
-        $jumlah = $DETAIL->CAWU_1 + $DETAIL->CAWU_2 + $DETAIL->CAWU_3;
+        $pdf->Cell(7, 4, $DETAIL['NO_ABSEN_AS'], 1, 0, 'C', TRUE);
+        $pdf->Cell(20, 4, $DETAIL['NIS_SISWA'] == NULL ? 'KELUAR' : $DETAIL['NIS_SISWA'], 1, 0, 'C', TRUE);
+        $pdf->Cell(40, 4, $DETAIL['NAMA_SISWA'], 1, 0, 'L', TRUE);
+        $pdf->Cell(7, 4, ($DETAIL['POIN_TAHUN_LALU_KSH'] > 0 ? $DETAIL['POIN_TAHUN_LALU_KSH'] : ''), 1, 0, 'C', TRUE);
+        $pdf->Cell(7, 4, ($DETAIL['TOTAL_LARI'] > 0 ? $DETAIL['TOTAL_LARI'] : ''), 1, 0, 'C', TRUE);
+        $pdf->Cell(20, 4, $DETAIL['NAMA_KJT'], 1, 0, 'L', TRUE);
+
+        $bulan_mulai = $temp_bulan_mulai;
+        for ($aa = 1; $aa <= 12; $aa++) {
+            $bulan_db = $bulan_mulai < 10 ? '0' . $bulan_mulai : $bulan_mulai;
+            $pdf->Cell(65 / 12, 4, $DETAIL['B' . $bulan_db], 1, 0, 'C', TRUE);
+            if ($bulan_mulai == 12)
+                $bulan_mulai = 0;
+            $bulan_mulai++;
+        }
+
+        $pdf->Cell(6, 4, $DETAIL['CAWU_1'] == 0 ? '' : $DETAIL['CAWU_1'], 1, 0, 'C', TRUE);
+        $pdf->Cell(6, 4, $DETAIL['CAWU_2'] == 0 ? '' : $DETAIL['CAWU_2'], 1, 0, 'C', TRUE);
+        $pdf->Cell(6, 4, $DETAIL['CAWU_3'] == 0 ? '' : $DETAIL['CAWU_3'], 1, 0, 'C', TRUE);
+        $jumlah = $DETAIL['CAWU_1'] + $DETAIL['CAWU_2'] + $DETAIL['CAWU_3'];
         $pdf->Cell(7, 4, $jumlah == 0 ? '' : $jumlah, 1, 0, 'C', TRUE);
         $pdf->Ln();
     }
