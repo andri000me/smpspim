@@ -6,7 +6,10 @@ class Login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('user_model', 'user');
+        $this->load->model(array(
+            'user_model' =>  'user',
+            'tahun_ajaran_model' =>  'ta',
+        ));
     }
 
     public function index() {
@@ -70,6 +73,7 @@ class Login extends CI_Controller {
         $this->load->model('hakakses_user_model', 'hakakses_user');
         $data['data'] = $this->hakakses_user->get_all(TRUE);
         $data['count'] = $this->hakakses_user->count_all();
+        $data['ta'] = $this->ta->get_all();
         
         $this->session->set_userdata('LIST_HAKAKSES', json_encode($data['data']));
 
@@ -178,6 +182,16 @@ class Login extends CI_Controller {
         $cawu = $this->input->post('ID_CAWU');
         $this->session->set_userdata('ID_CAWU_ACTIVE', $cawu);
         $this->session->set_userdata('NAMA_CAWU_ACTIVE', 'CAWU '.$cawu);
+        
+        $this->generate->output_JSON(array("status" => 1));
+    }
+    
+    public function change_ta() {
+        $this->generate->set_header_JSON();
+        
+        $id_ta = $this->input->post('ID_TA');
+        $this->session->set_userdata('ID_TA_ACTIVE', $id_ta);
+        $this->session->set_userdata('NAMA_TA_ACTIVE', $this->ta->get_nama($id_ta));
         
         $this->generate->output_JSON(array("status" => 1));
     }

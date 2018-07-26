@@ -29,11 +29,19 @@
             <div class="col-md-8 col-md-offset-2 text-center">
                 <h2>Selamat Datang</h2>
                 <h3><?php echo $this->session->userdata('FULLNAME_USER'); ?></h3>
-                <h4>TAHUN AJARAN <?php echo $this->session->userdata('NAMA_TA_ACTIVE'); ?> | PSB <?php echo $this->session->userdata('NAMA_PSB_ACTIVE'); ?></h4>
+                <h4>TAHUN AJARAN <select class="form-control" id="id-ta" style="width: 120px; display: unset;" onchange="change_ta(this)">
+                        <?php
+                        foreach ($ta as $detail) {
+                            ?>
+                        <option value="<?php echo $detail->id; ?>" <?php echo $this->session->userdata('ID_TA_ACTIVE') == $detail->id ? 'selected' : ''; ?>><?php echo $detail->text; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select> | PSB <?php echo $this->session->userdata('NAMA_PSB_ACTIVE'); ?></h4>
                 <div class="row" style="height: 40px;">
-                    <div class="col-md-2 col-md-offset-5" onmouseover="mouse_position(true)" onmouseout="mouse_position(false)">
-                        <h4 class="text-center" id="text-cawu"><?php echo $this->session->userdata('NAMA_CAWU_ACTIVE'); ?></h4>
-                        <select class="form-control" id="id-cawu" style="width: 100px;" onchange="change_cawu(this)"><option value="1" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 1 ? 'selected' : ''; ?>>CAWU 1</option><option value="2" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 2 ? 'selected' : ''; ?>>CAWU 2</option><option value="3" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 3 ? 'selected' : ''; ?>>CAWU 3</option></select>
+                    <div class="col-md-3 col-md-offset-4" onmouseover="mouse_position('cawu', true)" onmouseout="mouse_position('cawu', false)">
+                        <!--<h4 class="text-center" id="text-cawu"><?php echo $this->session->userdata('NAMA_CAWU_ACTIVE'); ?></h4>-->
+                        <select class="form-control" id="id-cawu" style="width: 120px;margin-left: 100px;" onchange="change_cawu(this)"><option value="1" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 1 ? 'selected' : ''; ?>>CAWU 1</option><option value="2" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 2 ? 'selected' : ''; ?>>CAWU 2</option><option value="3" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 3 ? 'selected' : ''; ?>>CAWU 3</option></select>
                     </div>
                 </div>
             </div>
@@ -117,18 +125,18 @@
                     var id_form = '<?php echo $id_form; ?>';
 
                     $(document).ready(function () {
-                        $("#id-cawu").hide();
+//                        $("#id-cawu").hide();
                     });
 
-                    function mouse_position(ontop) {
-                        if (ontop) {
-                            $("#text-cawu").hide();
-                            $("#id-cawu").show();
-                        } else {
-                            $("#text-cawu").show();
-                            $("#id-cawu").hide();
-                        }
-                    }
+//                    function mouse_position(id, ontop) {
+//                        if (ontop) {
+//                            $("#text-" + id).hide();
+//                            $("#id-" + id).show();
+//                        } else {
+//                            $("#text-" + id).show();
+//                            $("#id-" + id).hide();
+//                        }
+//                    }
 
                     function change_cawu(that) {
                         create_splash("Mohon tunggu sebentar, sistem sedang merubah cawu.");
@@ -140,6 +148,19 @@
                         };
 
                         create_ajax('<?php echo site_url('login/change_cawu'); ?>', 'ID_CAWU=' + $(that).val(), success);
+
+                    }
+
+                    function change_ta(that) {
+                        create_splash("Mohon tunggu sebentar, sistem sedang merubah TA.");
+                        var success = function (data) {
+                            if (data.status) {
+                                create_swal_success('Berhasil merubah TA. Halaman akan dimuat ulang');
+                                reload_window();
+                            }
+                        };
+
+                        create_ajax('<?php echo site_url('login/change_ta'); ?>', 'ID_TA=' + $(that).val(), success);
 
                     }
 
