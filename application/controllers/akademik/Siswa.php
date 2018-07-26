@@ -59,6 +59,7 @@ class Siswa extends CI_Controller {
         foreach ($list as $item) {
             $no++;
             $row = array();
+            $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->ANGKATAN_SISWA;

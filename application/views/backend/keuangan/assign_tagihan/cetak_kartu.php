@@ -121,7 +121,7 @@ function cetak($pdf, $data, $tagihan) {
 
     $pdf->Image(base_url('files/barcode/' . $data->ID_SISWA . '.png'), $posisi_x + 46, $posisi_y + 39, 40);
 
-    $pdf->SetY($posisi_y + 52);
+    $pdf->SetY($posisi_y + 51);
 
     $length_parsing = ($length / 3) - 2.5;
     $nominal = 0;
@@ -173,6 +173,11 @@ function cetak($pdf, $data, $tagihan) {
     $pdf->Ln(2);
     $pdf->SetFont('Arial', 'B', $font);
     $pdf->Cell($length, 3, 'Khoirot tiap bulan: Rp. ' . number_format($nominal, 0, '.', '.'), 0, 0, 'L');
+    $pdf->Ln();
+
+    $pdf->SetY($posisi_y + 99.5);
+    $pdf->SetFont('Arial', 'B', $font);
+    $pdf->Cell($length, 3, 'Pembayaran paling lambat tanggal 10 setiap bulan', 0, 0, 'C');
     $pdf->Ln();
 
     return $pdf;

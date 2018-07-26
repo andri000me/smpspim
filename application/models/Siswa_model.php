@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Siswa_model extends CI_Model {
 
     var $table = 'md_siswa';
-    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'ANGKATAN_SISWA', 'JK_SISWA', 'TEMPAT_LAHIR_SISWA', 'TANGGAL_LAHIR_SISWA', 'CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV)', 'IF(NAMA_PONDOK_MPS IS NULL, "-", NAMA_PONDOK_MPS)', 'IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS)', 'ID_SISWA');
+    var $column = array('NO_ABSEN_AS','NIS_SISWA', 'NAMA_SISWA', 'ANGKATAN_SISWA', 'JK_SISWA', 'TEMPAT_LAHIR_SISWA', 'TANGGAL_LAHIR_SISWA', 'CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV)', 'IF(NAMA_PONDOK_MPS IS NULL, "-", NAMA_PONDOK_MPS)', 'IF(NAMA_KELAS IS NULL, "-", NAMA_KELAS)', 'ID_SISWA');
     var $primary_key = "ID_SISWA";
     var $order = array("ID_SISWA" => 'ASC');
 

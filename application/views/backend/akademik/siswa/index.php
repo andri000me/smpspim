@@ -4,6 +4,7 @@ $subtitle = "Daftar semua siswa";
 $id_datatables = 'datatable1';
 
 $columns = array(
+    'ABS',
     'NIS',
     'NAMA',
     'ANGKATAN',
