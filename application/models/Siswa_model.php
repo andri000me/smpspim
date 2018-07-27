@@ -305,6 +305,18 @@ class Siswa_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_rows_aktif_simple($where, $sortir = NULL) {
+        $this->_get_table_simple();
+        $this->db->where($where);
+        if (is_array($sortir)) {
+            foreach ($sortir as $field => $value) {
+                $this->db->order_by($field, $value);
+            }
+        }
+
+        return $this->db->get()->result();
+    }
+
     public function ac_siswa_kelas($where) {
         $this->db->select("ID_SISWA as id, CONCAT('SISWA: ',NIS_SISWA, ' - ', NAMA_SISWA, ' | KELAS: ', NAMA_KELAS) as text");
         $this->db->from('md_siswa ms');

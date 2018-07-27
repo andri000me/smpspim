@@ -13,7 +13,7 @@ $(function () {
             scrollTop: $("#menu").height()
         }, 500);
     });
-    
+
     $(":input").inputmask();
 });
 
@@ -889,8 +889,16 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
 
     table.columns().every(function () {
         var that = this;
+        var temp_timeout = null;
         $('input', this.footer()).on('keyup change', function () {
-            that.search(this.value).draw();
+            var thot = this;
+            if (temp_timeout !== null)
+                clearTimeout(temp_timeout);
+
+            temp_timeout = setTimeout(function () {
+                temp_timeout = null;
+                that.search(thot.value).draw();
+            }, 1000);
         });
     });
 

@@ -24,6 +24,7 @@ class Batasan_kitab_model extends CI_Model {
         $this->db->join('ph_kitab pk',$this->table.'.KITAB_BATASAN=pk.ID_KITAB');
         $this->db->join('md_tingkat mt',$this->table.'.TINGKAT_BATASAN=mt.ID_TINGK');
         $this->db->join('md_jenis_kelamin mjk',$this->table.'.JK_BATASAN=mjk.ID_JK');
+        $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
     private function _get_datatables_query() {
@@ -112,6 +113,7 @@ class Batasan_kitab_model extends CI_Model {
         $this->db->join('akad_kelas kls',$this->table.'.TINGKAT_BATASAN=kls.TINGKAT_KELAS AND JK_KELAS=JK_BATASAN');
         $this->db->where($where);
         $this->db->order_by('ID_KITAB', 'ASC');
+//        $this->db->order_by('ID_KITAB');
 
         return $this->db->get()->result();
     }

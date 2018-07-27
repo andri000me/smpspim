@@ -123,8 +123,18 @@ $name_function = 'hafalan';
             var data = $(this).select2("data");
 
             ID_KELAS = data.id;
+            
+            if(TYPE === 3) {
+                get_data_siswa();
+            }
         });
     });
+    
+    function get_data_siswa() {
+        create_ajax('<?php echo site_url('ph/cetak_kartu/get_siswa_perkelas'); ?>', 'ID_KELAS=' + ID_KELAS, function(data) {
+            
+        });
+    }
 
     function set_type(TYPE_CETAK) {
         TYPE = TYPE_CETAK;

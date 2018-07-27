@@ -169,7 +169,14 @@ class Nilai_hafalan_model extends CI_Model {
             'SISWA_PHN' => $ID_SISWA
         ));
 
-        return $this->db->get()->result_array();
+        $data_nilai = $this->db->get()->result();
+        
+        $result = array();
+        foreach ($data_nilai as $detail) {
+            $result[$detail->BATASAN_PHN] = $detail->NILAI_PHN;
+        }
+        
+        return $result;
     }
 
     public function get_batasan($ID_SISWA) {

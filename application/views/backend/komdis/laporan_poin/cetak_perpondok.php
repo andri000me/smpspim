@@ -151,6 +151,9 @@ foreach ($data as $detail) {
     $jumlah_mutasi = 0;
     $jumlah_siswa = 0;
     foreach ($DATA as $DETAIL) {
+        if(!isset($DETAIL->NAMA_KELAS))
+            continue;
+        
         if ($temp_kelas != $DETAIL->NAMA_KELAS) {
             $no = 1;
             $pdf->SetFont('Arial', 'B', 9);

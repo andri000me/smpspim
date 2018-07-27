@@ -64,15 +64,18 @@ $pdf->SetFont('times', '', 11);
 $no = 1;
 foreach ($SISWA as $DETAIL) {
     $DATA_SISWA = $DETAIL['DETAIL'];
-    $DATA_KITAB = $DETAIL['NILAI'];
+//    $DATA_NILAI = $DETAIL['NILAI'];
 
     $pdf->Cell(8, 5, $no++, 1, 0, 'C');
     $pdf->Cell(10, 5, $DATA_SISWA->NO_ABSEN_AS, 1, 0, 'C');
     $pdf->Cell(25, 5, $DATA_SISWA->NIS_SISWA, 1, 0, 'L');
     $pdf->Cell(52, 5, $DATA_SISWA->NAMA_SISWA, 1, 0, 'L');
-    $pdf->Cell(30, 5, '', 1, 0, 'C');
+    foreach ($KITAB as $DETAIL_KITAB) {
+        $pdf->Cell(30 / count($KITAB), 5, '', 1, 0, 'C');
+    }
     $pdf->Cell(40, 5, '', 1, 0, 'C');
-    $pdf->Cell(34, 5, '', 1, 0, 'C');
+    $pdf->Cell(17, 5, '', 1, 0, 'C');
+    $pdf->Cell(17, 5, '', 1, 0, 'C');
     $pdf->Ln();
 }
 

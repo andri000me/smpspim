@@ -21,6 +21,7 @@ class Cetak_kartu extends CI_Controller {
             'kartu_hafalan_model' => 'kartu',
             'tahun_ajaran_model' => 'tahun_ajaran',
             'nilai_hafalan_model' => 'nilai_hafalan',
+            'siswa_model' => 'siswa',
         ));
         $this->auth->validation(array(5, 2));
     }
@@ -74,7 +75,7 @@ class Cetak_kartu extends CI_Controller {
                 'TINGKAT_KELAS' => isset($input['tingkat']) ? '-' : $detail_siswa->TINGKAT_KELAS,
                 'TA' => isset($input['ta']) ? $this->tahun_ajaran->get_nama($input['ta']) : $this->session->userdata('NAMA_TA_ACTIVE'),
                 'KITAB' => $input['blanko'] == 0 ? $this->kartu->get_batasan($this->session->userdata('ID_TA_ACTIVE'), $detail_siswa->TINGKAT_AS, $detail_siswa->JK_SISWA) : NULL,
-                'NILAI' => $input['blanko'] == 3 ? $this->nilai_hafalan->get_nilai_validasi($detail_siswa->ID_SISWA) : NULL,
+//                'NILAI' => $input['blanko'] == 3 ? $this->nilai_hafalan->get_nilai_validasi($detail_siswa->ID_SISWA) : NULL,
             );
         }
 
@@ -95,6 +96,16 @@ class Cetak_kartu extends CI_Controller {
 
         $data = $this->kartu->get_siswa($this->input->post('q'));
 
+        $this->generate->output_JSON($data);
+    }
+    
+    public function get_siswa_perkelas() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->siswa->get_rows_aktif_simple(array(
+            'ID_KELAS' => $this->input->post('ID_KELAS')
+        ));
+        
         $this->generate->output_JSON($data);
     }
 

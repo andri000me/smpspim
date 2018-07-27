@@ -22,6 +22,10 @@ class Absensi extends CI_Controller {
                     'title' => 'Cetak Kehadiran KBM',
                 ),
                 array(
+                    'url' => site_url('akademik/kehadiran/cetak_absen')."/' + ID_KELAS + '/9",
+                    'title' => 'Cetak Kehadiran Jamaah',
+                ),
+                array(
                     'url' => site_url('akademik/kehadiran/cetak_absen')."/' + ID_KELAS + '/1",
                     'title' => 'Cetak Kehadiran Dauroh Bhs Arab',
                 ),

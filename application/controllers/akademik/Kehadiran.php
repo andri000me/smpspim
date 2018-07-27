@@ -205,6 +205,7 @@ class Kehadiran extends CI_Controller {
 
     public function cetak_absen($ID_KELAS, $JENIS_CETAK) {
         $data = array();
+        $data['JENIS_CETAK'] = $JENIS_CETAK;
         $data['TA'] = $this->session->userdata('NAMA_TA_ACTIVE');
 
         $where_kelas = array(
@@ -253,6 +254,8 @@ class Kehadiran extends CI_Controller {
             $view = 'excel_daftar_nilai';
         elseif ($JENIS_CETAK == 8)
             $view = 'cetak_rekapitulasi_absen';
+        elseif ($JENIS_CETAK == 9)
+            $view = 'cetak';
 
         $this->load->view('backend/akademik/kehadiran/' . $view, $data);
     }
@@ -477,7 +480,8 @@ class Kehadiran extends CI_Controller {
                     foreach ($count_alasan as $key => $detail) {
                         $checkbox .= '<input type="radio" id="' . $name . '-' . $key . '" class="' . $name . '" name="' . $name . '" data-id="' . $id . '" data-awal="' . $alasan . '" ' . ($key == $alasan ? 'checked=""' : '') . ' onclick="simpan_absen(this, \'' . $tanggal . '\', ' . $item->ID_SISWA . ', \'' . $key . '\', \'' . $JENIS_AKH . '\', \'' . $item->NAMA_SISWA . '\')" title="' . $key . '" ' . ($item->NIS_SISWA_SHOW == 'KELUAR' ? 'disabled' : '') . ' ' . (($status_validasi_tanggal[$i] && ($JENIS_AKH > 1)) ? 'disabled' : '') . '/>';
                     }
-                    $checkbox .= "</div><div class='text-presensi'>" . (substr($alasan, 0, -1 * (strlen($alasan) - 1))) . "</div>";
+                    $text_pres = substr($alasan, 0, -1 * (strlen($alasan) - 1));
+                    $checkbox .= "</div><div class='text-presensi'>" . ($text_pres == 'H' ? '' : $text_pres) . "</div>";
                 }
 
                 $row[] = $checkbox;
