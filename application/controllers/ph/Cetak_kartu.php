@@ -59,6 +59,14 @@ class Cetak_kartu extends CI_Controller {
 
             if ($input['blanko'] == 2)
                 $bulan = json_decode($input['bulan'], TRUE);
+            if ($input['blanko'] == 3)
+                $siswa = json_decode($input['bulan'], TRUE);
+
+            foreach ($data_siswa as $key => $detail_siswa) {
+                if (!in_array($detail_siswa->ID_SISWA, $siswa)) {
+                    unset($data_siswa[$key]);
+                }
+            }
         } else {
             $data_siswa = $this->kartu->get_by_siswa($input['id_siswa']);
         }
@@ -98,14 +106,14 @@ class Cetak_kartu extends CI_Controller {
 
         $this->generate->output_JSON($data);
     }
-    
+
     public function get_siswa_perkelas() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->siswa->get_rows_aktif_simple(array(
             'ID_KELAS' => $this->input->post('ID_KELAS')
-        ));
-        
+                ), array('NAMA_SISWA' => 'ASC'));
+
         $this->generate->output_JSON($data);
     }
 

@@ -123,16 +123,20 @@ $name_function = 'hafalan';
             var data = $(this).select2("data");
 
             ID_KELAS = data.id;
-            
-            if(TYPE === 3) {
+
+            if (TYPE === 3) {
                 get_data_siswa();
             }
         });
     });
-    
+
     function get_data_siswa() {
-        create_ajax('<?php echo site_url('ph/cetak_kartu/get_siswa_perkelas'); ?>', 'ID_KELAS=' + ID_KELAS, function(data) {
-            
+        $(".list-siswa").remove();
+        create_ajax('<?php echo site_url('ph/cetak_kartu/get_siswa_perkelas'); ?>', 'ID_KELAS=' + ID_KELAS, function (data) {
+            $(".modal-body").append('<div class="row list-siswa"></div>');
+            $.each(data, function (index, item) {
+                $(".list-siswa").append('<div class="col-lg-6"><input type="checkbox" id="data-siswa" value="' + item.ID_SISWA + '"/>&nbsp;&nbsp;' + item.NAMA_SISWA + '</div>');
+            });
         });
     }
 
@@ -158,6 +162,10 @@ $name_function = 'hafalan';
             $('input[id="bulan"]:checked').each(function () {
                 val_bulan.push(this.value);
             });
+        } else if (parseInt(TYPE) === 3) {
+            $('input[id="data-siswa"]:checked').each(function () {
+                val_bulan.push(this.value);
+            });
         }
 
         if (ID_KELAS == 0)
@@ -166,6 +174,7 @@ $name_function = 'hafalan';
             window.open('<?php echo site_url('ph/cetak_kartu/cetak_all'); ?>?blanko=' + TYPE + '&kelas=' + ID_KELAS + '&bulan=' + encodeURIComponent(JSON.stringify(val_bulan)), '_blank');
 
         ID_KELAS = 0;
+        $(".list-siswa").remove();
     }
 
     function action_save_<?php echo $name_function; ?>(id) {
