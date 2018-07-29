@@ -340,7 +340,7 @@ class Kehadiran extends CI_Controller {
         $data['TA_AKH'] = $this->session->userdata('ID_TA_ACTIVE');
         $data['CAWU_AKH'] = $this->session->userdata('ID_CAWU_ACTIVE');
         $data['USER_AKH'] = $this->session->userdata('ID_USER');
-        $data['CREATED_AKH'] = date("Y-m-d H:i:s");
+        $data['CREATED_AKH'] = date("Y-m-d H:i:s");    
 
         $insert = $this->kehadiran->save($data);
 

@@ -59,12 +59,13 @@ class Cetak_kartu extends CI_Controller {
 
             if ($input['blanko'] == 2)
                 $bulan = json_decode($input['bulan'], TRUE);
-            if ($input['blanko'] == 3)
+            if ($input['blanko'] == 3) {
                 $siswa = json_decode($input['bulan'], TRUE);
 
-            foreach ($data_siswa as $key => $detail_siswa) {
-                if (!in_array($detail_siswa->ID_SISWA, $siswa)) {
-                    unset($data_siswa[$key]);
+                foreach ($data_siswa as $key => $detail_siswa) {
+                    if (!in_array($detail_siswa->ID_SISWA, $siswa)) {
+                        unset($data_siswa[$key]);
+                    }
                 }
             }
         } else {
