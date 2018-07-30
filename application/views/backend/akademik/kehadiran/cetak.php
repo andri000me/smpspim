@@ -94,7 +94,8 @@ foreach ($DATA as $DETAIL) {
             $pdf->setFillColor(255, 255, 255);
         else
             $pdf->setFillColor(128, 128, 128);
-
+        
+        $pdf->SetFont('Arial', 'B', 14);
         $pdf->Cell(74, 50, 'NAMA GURU JAM TERAKHIR', 1, 0, 'C', TRUE);
         for ($tanggal = 1; $tanggal <= 31; $tanggal++) {
             $pdf->Cell(4, 50, '', 1, 0, 'C', TRUE);
