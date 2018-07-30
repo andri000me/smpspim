@@ -124,6 +124,14 @@ class Mutasi_model extends CI_Model {
         return $this->db->get()->row();
     }
 
+    public function get_detail_mutasi_siswa($id) {
+        $this->_get_table_datatables();
+        $this->db->where('ID_SISWA', $id);
+        $this->db->where('TA_NIS', $this->session->userdata('ID_TA_ACTIVE'));
+
+        return $this->db->get()->row();
+    }
+
     public function get_all() {
         $this->_get_table();
 

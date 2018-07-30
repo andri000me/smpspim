@@ -113,7 +113,7 @@ class Mutasi extends CI_Controller {
     }
     
     public function cetak($ID_SISWA) {
-        $data['siswa'] = $this->mutasi->get_detail_siswa($ID_SISWA);
+        $data['siswa'] = $this->mutasi->get_detail_mutasi_siswa($ID_SISWA);
                 
         $this->load->view('backend/akademik/mutasi/cetak', $data);
     }
