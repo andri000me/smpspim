@@ -38,6 +38,7 @@ class Kitab extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->NAMA_KITAB;
+            $row[] = $item->URUTAN_KITAB;
 
             $row[] = '
                 <div class="btn-group">
@@ -80,6 +81,18 @@ class Kitab extends CI_Controller {
                     'value' => $data == NULL ? "" : $data->NAMA_KITAB
                 )
             ),
+            array(
+                'label' => 'Urutan',
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',
+                    'name' => 'URUTAN_KITAB',
+                    "placeholder" => " ",
+                    'value' => $data == NULL ? "0" : $data->URUTAN_KITAB
+                )
+            ),
         );
         
         $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
@@ -91,6 +104,7 @@ class Kitab extends CI_Controller {
 
         $data = array(
             'NAMA_KITAB' => $this->input->post('NAMA_KITAB'),
+            'URUTAN_KITAB' => $this->input->post('URUTAN_KITAB'),
             'USER_KITAB' => $this->session->userdata('ID_USER')
         );
         $insert = $this->kitab->save($data);
@@ -109,6 +123,7 @@ class Kitab extends CI_Controller {
         else $data = array();
         
         $data['NAMA_KITAB'] = $this->input->post('NAMA_KITAB');
+        $data['URUTAN_KITAB'] = $this->input->post('URUTAN_KITAB');
         
         $affected_row = $this->kitab->update($where, $data);
 

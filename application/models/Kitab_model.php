@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Kitab_model extends CI_Model {
 
     var $table = 'ph_kitab';
-    var $column = array('NAMA_KITAB', 'ID_KITAB');
+    var $column = array('NAMA_KITAB', 'NAMA_KITAB', 'URUTAN_KITAB', 'ID_KITAB');
     var $primary_key = "ID_KITAB";
     var $order = array("ID_KITAB" => 'ASC');
 

@@ -5,6 +5,7 @@ $id_datatables = 'datatable1';
 
 $columns = array(
     'NAMA KITAB',
+    'URUTAN',
     'AKSI',
 );
 

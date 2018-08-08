@@ -477,7 +477,32 @@ WHERE
         $this->fix_poin();
     }
 
-    public function fix_poin() {
+    public function fix_lari_dan_poin() {
+        $sql = "UPDATE komdis_siswa_header ksh
+                    INNER JOIN
+                (SELECT 
+                    komdis_siswa_header.*, COUNT(ID_KS) AS JUMLAH_LARI
+                FROM
+                    komdis_siswa
+                INNER JOIN komdis_siswa_header ON SISWA_KSH = SISWA_KS
+                    AND TA_KS = TA_KSH 
+                    AND CAWU_KS = CAWU_KSH
+                INNER JOIN akad_kehadiran ON KEHADIRAN_KS = ID_AKH
+                WHERE
+                    JENIS_AKH = 1 AND ALASAN_AKH = 'ALPHA'
+                GROUP BY SISWA_KSH , TA_KSH , CAWU_KSH) ks ON ks.SISWA_KSH = ksh.SISWA_KSH
+                    AND ks.TA_KSH = ksh.TA_KSH
+                    AND ks.CAWU_KSH = ksh.CAWU_KSH
+            SET 
+                ksh.LARI_KSH = ks.JUMLAH_LARI
+            WHERE
+                ks.SISWA_KSH = ksh.SISWA_KSH
+                    AND ks.TA_KSH = ksh.TA_KSH
+                    AND ks.CAWU_KSH = ksh.CAWU_KSH
+                    AND ksh.TA_KSH = " . $this->session->userdata('ID_TA_ACTIVE');
+
+        $this->db->query($sql);
+        
         $sql = "UPDATE komdis_siswa_header ksh
                 INNER JOIN
             (SELECT 

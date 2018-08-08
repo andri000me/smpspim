@@ -79,6 +79,8 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Ln();
 }
 
+$pdf->SetFont('times', 'I', 9);
+$pdf->Cell(0, 5, 'Dicetak tanggal: '.$this->date_format->to_print_text(date('Y-m-d')) . ' ' . date('H:i:s') . ' WIB', 0, 0, 'R');
 $pdf->Ln(5);
 
 $pdf->SetFont('aefurat', '', 11);

@@ -10,6 +10,7 @@ $columns = array(
     'JK',
     'BATASAN AWAL',
     'BATASAN AKHIR',
+    'URUTAN',
     'NILAI',
     'AKSI',
 );

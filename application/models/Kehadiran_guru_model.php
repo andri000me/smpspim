@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Kehadiran_guru_model extends CI_Model {
 
     var $table = 'akad_kehadiran_guru';
-    var $column = array('NAMA_CAWU', 'NIP_PEG', 'NAMA_PEG','TANGGAL_AKG','ALASAN_AKG','KETERANGAN_AKG','ID_AKG');
+    var $column = array('NAMA_CAWU', 'NIP_PEG', 'NAMA_PEG', 'TANGGAL_AKG', 'ALASAN_AKG', 'KETERANGAN_AKG', 'ID_AKG');
     var $primary_key = "ID_AKG";
     var $order = array("ID_AKG" => 'ASC');
 
@@ -20,8 +21,8 @@ class Kehadiran_guru_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_AKG=mcw.ID_CAWU');
-        $this->db->join('md_pegawai mp', $this->table.'.PEGAWAI_AKG=mp.ID_PEG');
+        $this->db->join('md_catur_wulan mcw', $this->table . '.CAWU_AKG=mcw.ID_CAWU');
+        $this->db->join('md_pegawai mp', $this->table . '.PEGAWAI_AKG=mp.ID_PEG');
         $this->db->where('TA_AKG', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
@@ -34,9 +35,9 @@ class Kehadiran_guru_model extends CI_Model {
             if ($search_value || $search_columns) {
                 if ($i === 0) {
                     $this->db->group_start();
-                    $this->db->like($item, $search_value);
+                    $this->db->like("IFNULL(" . $item . ", '')", $search_value);
                 } else {
-                    $this->db->or_like($item, $search_value);
+                    $this->db->or_like("IFNULL(" . $item . ", '')", $search_value);
                 }
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
@@ -51,7 +52,7 @@ class Kehadiran_guru_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like("IFNULL(" . $item . ", '')", $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
@@ -93,7 +94,8 @@ class Kehadiran_guru_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AKG as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AKG as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -121,14 +123,14 @@ class Kehadiran_guru_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 

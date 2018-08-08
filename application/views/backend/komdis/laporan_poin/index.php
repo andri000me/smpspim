@@ -69,7 +69,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
             var data = $(this).select2("data");
 
             $('.checkbox-kelas').removeAttr('checked');
-            
+
             ID_KELAS = data.id;
         });
 
@@ -77,7 +77,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
             var data = $(this).select2("data");
 
             $('.checkbox-pondok').removeAttr('checked');
-            
+
             ID_PONDOK = data.id;
         });
 
@@ -88,9 +88,15 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         });
 
         $(".buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_siswa_multi()">Pelanggaran Persiswa</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(2)">Pelanggaran Pondok Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li><li><a href="#" onclick="download_statistik(0)">Download Statistik Bulanan</a></li><li><a href="#" onclick="download_statistik(1)">Download Statistik Cawu dan Tahunan</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_siswa_multi()">Pelanggaran Persiswa</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(0)">Pelanggaran Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(2)">Pelanggaran Pondok Perkelas</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_pondok" >Pelanggaran Perpondok</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_tindakan" >Pelanggaran Pertindakan</a></li><li><a href="#" data-toggle="modal" data-target="#cetak_modal_kelas" onclick="set_type_kelas(1)">Pelanggaran Ringan Perkelas</a></li><li><a href="#" onclick="download_statistik(0)">Download Statistik Bulanan</a></li><li><a href="#" onclick="download_statistik(1)">Download Statistik Cawu dan Tahunan</a></li></ul></div><a class="dt-button btn btn-sm btn-default buttons-fix" tabindex="0" aria-controls="datatable1" href="#" onclick="fix_data()"><span>Fix Data</span></a>').insertAfter('.buttons-reload');
     });
-    
+
+    function fix_data() {
+        create_ajax('<?php echo site_url('komdis/laporan_poin/fix_lari_dan_poin'); ?>', '', function (data) {
+            create_homer_success('Data berhasil dibenahi');
+        });
+    }
+
     function download_statistik(status) {
         window.open('<?php echo site_url('komdis/laporan_poin/download_statistik'); ?>/' + status, '_blank');
     }

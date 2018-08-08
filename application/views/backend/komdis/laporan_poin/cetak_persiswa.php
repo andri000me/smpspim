@@ -36,9 +36,9 @@ foreach ($data as $detail) {
 //$pdf->Ln();
 
     $pdf->Cell(20, 5, 'Nama');
-    $pdf->Cell(100, 5, ': ' . $siswa->NAMA_SISWA);
-    $pdf->Cell(20, 5, 'N I S');
-    $pdf->Cell(0, 5, ': ' . $siswa->NIS_SISWA);
+    $pdf->Cell(100, 5, ': ' . $siswa->NIS_SISWA . ' - ' . $siswa->NAMA_SISWA);
+    $pdf->Cell(20, 5, 'Telp.');
+    $pdf->Cell(0, 5, ': ' . $siswa->NOHP_SISWA);
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Domisili');

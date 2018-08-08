@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Batasan_kitab_model extends CI_Model {
 
     var $table = 'ph_batasan';
-    var $column = array('NAMA_TA','NAMA_KITAB','KETERANGAN_TINGK','NAMA_JK','AWAL_BATASAN','AKHIR_BATASAN','NILAI_MAKS_BATASAN', 'ID_BATASAN');
+    var $column = array('NAMA_TA','NAMA_KITAB','KETERANGAN_TINGK','NAMA_JK','AWAL_BATASAN','AKHIR_BATASAN', 'URUTAN_BATASAN','NILAI_MAKS_BATASAN', 'ID_BATASAN');
     var $primary_key = "ID_BATASAN";
     var $order = array("ID_BATASAN" => 'ASC');
 
@@ -112,7 +112,8 @@ class Batasan_kitab_model extends CI_Model {
         $this->_get_table();
         $this->db->join('akad_kelas kls',$this->table.'.TINGKAT_BATASAN=kls.TINGKAT_KELAS AND JK_KELAS=JK_BATASAN');
         $this->db->where($where);
-        $this->db->order_by('ID_KITAB', 'ASC');
+        $this->db->order_by('URUTAN_KITAB', 'ASC');
+        $this->db->order_by('URUTAN_BATASAN', 'ASC');
 //        $this->db->order_by('ID_KITAB');
 
         return $this->db->get()->result();

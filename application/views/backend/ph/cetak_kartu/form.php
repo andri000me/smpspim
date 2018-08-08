@@ -130,12 +130,26 @@ $name_function = 'hafalan';
         });
     });
 
+    function roundUp(num, precision) {
+        precision = Math.pow(10, precision);
+
+        return Math.ceil(num * precision) / precision;
+    }
+
     function get_data_siswa() {
         $(".list-siswa").remove();
         create_ajax('<?php echo site_url('ph/cetak_kartu/get_siswa_perkelas'); ?>', 'ID_KELAS=' + ID_KELAS, function (data) {
-            $(".modal-body").append('<div class="row list-siswa"></div>');
+            $(".modal-body").append('<div class="row list-siswa"><div class="col-lg-6 column-kiri"></div><div class="col-lg-6 column-kanan"></div></div>');
+
+            var jumlah_baris = roundUp(data.length / 2, 0);
+            var kolom_baris = 'kiri';
+            var i = 0;
             $.each(data, function (index, item) {
-                $(".list-siswa").append('<div class="col-lg-6"><input type="checkbox" id="data-siswa" value="' + item.ID_SISWA + '"/>&nbsp;&nbsp;' + item.NAMA_SISWA + '</div>');
+                if (i >= jumlah_baris)
+                    kolom_baris = 'kanan';
+                
+                $(".column-" + kolom_baris).append('<div class="row"><div class="col-lg-12"><input type="checkbox" id="data-siswa" value="' + item.ID_SISWA + '"/>&nbsp;&nbsp;' + item.NO_ABSEN_AS + '.&nbsp;&nbsp;' + item.NAMA_SISWA + '</div></div>');
+                i++;
             });
         });
     }

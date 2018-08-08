@@ -38,6 +38,7 @@ class Pondok_siswa extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->NAMA_PONDOK_MPS;
+            $row[] = $item->JK_MPS;
             $row[] = $item->PENGASUH_MPS;
             $row[] = $item->ALAMAT_MPS;
             $row[] = $item->JARAK_MPS;

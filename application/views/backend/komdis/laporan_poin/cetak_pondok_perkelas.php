@@ -73,6 +73,9 @@ foreach ($data as $detail) {
     $start = TRUE;
     $jumlah_siswa = 0;
     foreach ($DATA as $DETAIL) {
+        if(is_array($DETAIL))
+            $DETAIL = json_decode (json_encode ($DETAIL));
+        
         if ((($temp_pondok != $DETAIL->ID_MPS) && !$start) || (($temp_pondok == NULL) && $start)) {
             $no = 1;
             $pdf->SetFont('Arial', 'B', 9);

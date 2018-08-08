@@ -215,11 +215,11 @@ class Siswa extends CI_Controller {
         if (isset($data['TANGGAL_IJASAH_SISWA']))
             $data['TANGGAL_IJASAH_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_IJASAH_SISWA']);
         if (isset($data['NOHP_SISWA']))
-            $data['NOHP_SISWA'] = str_replace(" ", "", trim(filter_var($data['NOHP_SISWA'], FILTER_SANITIZE_NUMBER_INT)));
+            $data['NOHP_SISWA'] = str_replace(" ", "", trim(filter_var($data['NOHP_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         if (isset($data['ORTU_NOHP1_SISWA']))
-            $data['ORTU_NOHP1_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP1_SISWA'], FILTER_SANITIZE_NUMBER_INT)));
+            $data['ORTU_NOHP1_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP1_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         if (isset($data['ORTU_NOHP2_SISWA']))
-            $data['ORTU_NOHP2_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP2_SISWA'], FILTER_SANITIZE_NUMBER_INT)));
+            $data['ORTU_NOHP2_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP2_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         unset($data['validasi']);
         foreach ($data as $key => $value) {
             if ($value == '')

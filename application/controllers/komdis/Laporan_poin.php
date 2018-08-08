@@ -113,7 +113,7 @@ class Laporan_poin extends CI_Controller {
 
         $nomor_surat = $this->pengaturan->getNomorSuratKomdis($data['URL_KJT']);
         $nomor_paket_sp = $this->pengaturan->getNomorPaketSP();
-        
+
         $input_kolektif = $data['KOLEKTIF_KJT'];
         $where_surat_segera = array(
             'ID_KJT' => $data['TINDAKAN_KT']
@@ -170,6 +170,14 @@ class Laporan_poin extends CI_Controller {
         $this->pengaturan->setNomorSuratKomdis($jenis_surat, $nomor_surat);
 
         redirect(site_url('komdis/laporan_poin/cetak_surat/' . $id . '/' . $data['TINDAKAN_KT']));
+    }
+
+    public function fix_lari_dan_poin() {
+        $this->generate->set_header_JSON();
+
+        $this->pelanggaran_header->fix_lari_dan_poin();
+
+        $this->generate->output_JSON(array('status' => true));
     }
 
     public function cetak($ID_KSH) {

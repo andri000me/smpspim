@@ -43,6 +43,7 @@ class Batasan_kitab extends CI_Controller {
             $row[] = $item->NAMA_JK;
             $row[] = $item->AWAL_BATASAN;
             $row[] = $item->AKHIR_BATASAN;
+            $row[] = $item->URUTAN_BATASAN;
             $row[] = $item->NILAI_MAKS_BATASAN;
 
             $row[] = '
@@ -163,6 +164,18 @@ class Batasan_kitab extends CI_Controller {
                 )
             ),
             array(
+                'label' => 'Urutan',
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',
+                    'name' => 'URUTAN_BATASAN',
+                    "placeholder" => " ",
+                    'value' => $data == NULL ? "0" : $data->URUTAN_BATASAN
+                )
+            ),
+            array(
                 'label' => 'Nilai Maksimal',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
@@ -191,6 +204,7 @@ class Batasan_kitab extends CI_Controller {
             'AWAL_BATASAN' => $this->input->post('AWAL_BATASAN'),
             'AKHIR_BATASAN' => $this->input->post('AKHIR_BATASAN'),
             'NILAI_MAKS_BATASAN' => $this->input->post('NILAI_MAKS_BATASAN'),
+            'URUTAN_BATASAN' => $this->input->post('URUTAN_BATASAN'),
             'USER_BATASAN' => $this->session->userdata('ID_USER')
         );
         $insert = $this->batasan_kitab->save($data);
@@ -215,6 +229,7 @@ class Batasan_kitab extends CI_Controller {
         $data['AWAL_BATASAN'] = $this->input->post('AWAL_BATASAN');
         $data['AKHIR_BATASAN'] = $this->input->post('AKHIR_BATASAN');
         $data['NILAI_MAKS_BATASAN'] = $this->input->post('NILAI_MAKS_BATASAN');
+        $data['URUTAN_BATASAN'] = $this->input->post('URUTAN_BATASAN');
         $data['USER_BATASAN'] = $this->session->userdata('ID_USER');
         
         $affected_row = $this->batasan_kitab->update($where, $data);
