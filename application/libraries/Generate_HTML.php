@@ -36,6 +36,25 @@ class Generate_HTML {
         $this->CI->load->view('backend/' . $file);
     }
 
+    public function datatables_view($data, $file = NULL) {
+        $file_view_datatables = 'layout/datatables';
+
+        if ($file == NULL) {
+            $file_view = $file_view_datatables;
+        } else {
+            if (is_array($file)) {
+                $file_view = array_merge($file, array($file_view_datatables));
+            } else {
+                $file_view = array(
+                    $file_view_datatables,
+                    $file,
+                );
+            }
+        }
+
+        $this->backend_view($file_view, $data);
+    }
+
     // ========================================= SETTING JSON ======================================================================================================
 
     public function set_header_JSON() {
@@ -59,16 +78,47 @@ class Generate_HTML {
         exit();
     }
 
-    public function set_header_form_JSON($model) {
+    public function set_header_form_JSON($table, $primary_key = NULL, $join = NULL) {
         $this->set_header_JSON();
 
         if ($this->CI->input->post("ID") === NULL) {
             return NULL;
         } else {
-            $id = $this->CI->input->post("ID");
+            $params = array(
+                'where' => array(
+                    $primary_key => $this->CI->input->post("ID")
+                )
+            );
 
-            return $model->get_by_id($id);
+            if ($primary_key == NULL)
+                return $table->get_by_id($this->CI->input->post("ID"));
+            else
+                return $this->CI->db_handler->get_row($table, $params, '*', $join);
         }
+    }
+
+//    public function set_header_form_JSON($model) {
+//        $this->set_header_JSON();
+//
+//        if ($this->CI->input->post("ID") === NULL) {
+//            return NULL;
+//        } else {
+//            $id = $this->CI->input->post("ID");
+//
+//            return $model->get_by_id($id);
+//        }
+//    }
+
+    public function clear_temp_post($posts, $primary_key) {
+        if (isset($posts['TEMP_' . $primary_key]))
+            unset($posts['TEMP_' . $primary_key]);
+
+        if (isset($posts[$primary_key]))
+            unset($posts[$primary_key]);
+
+        $posts = $this->clear_token($posts);
+
+        return $posts;
     }
 
     public function output_form_JSON($data, $field, $data_html, $input_id = FALSE, $show_id = FALSE, $edit_id = FALSE, $no_auth = FALSE) {

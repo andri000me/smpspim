@@ -1,5 +1,12 @@
 FOR GENERATE FORM
 
+
+        $(".js-source-states-ID_KELAS").on("change", "", function () {
+            var data = $(this).select2("data");
+            console.log('DATA', data);
+            ID_KELAS = data.id;
+        });
+
             // ================================================================================== HIDDEN =====================================================
             $output_id = array(
                 'hidden' => TRUE,                                               
@@ -245,3 +252,224 @@ $this->generate->output_JSON($data);
 
 dropdown_searching_yes_no('PMB', 5);
 dropdown_searching('PMB', 5, {1: 'YA'});
+
+
+class Matapelajaran extends CI_Controller {
+
+    var $table = 'md_mapel';
+    var $joins = array(
+        array('table' => 'md_departemen', 'param' => 'DEPT_MAPEL=ID_DEPT'),
+        array('table' => 'md_tipe_mapel', 'param' => 'TIPE_MAPEL=ID_MTM'),
+    );
+    var $params = array();
+    var $primary_key = "ID_MAPEL";
+    var $name_of_pk = "NAMA_MAPEL";
+    var $edit_id = FALSE;
+    var $id_datatables = 'datatable1';
+
+    public function __construct() {
+        parent::__construct();
+        
+        $this->url = 'backend/master_data/' . strtolower($this->router->fetch_class());
+        $this->url_action = $this->url . '/action';
+        
+        $this->auth->validation(5);
+    }
+
+    public function index() {
+        $data = array(
+            'title' => 'Mata Pelajaran',
+            'subtitle' => 'Daftar semua mata pelajaran',
+            'columns' => array(
+                'NO',
+                'KODE',
+                'DEPT',
+                'TIPE',
+                'NAMA',
+                'ARAB',
+                'STATUS AKTIF',
+                'AKSI',
+            ),
+            'id_modal' => "modal-data",
+            'title_form' => "Tambah Mata Pelajaran",
+            'id_form' => "form-data",
+            'id_datatables' => $this->id_datatables,
+            'url' => $this->url,
+            'url_action' => $this->url_action,
+            'datatables' => array(
+                'searching' => array(
+                    'simple' => array(
+                        'STATUS-AKTIF' => 6,
+                    ),
+                    'multiple' => array(
+                        array('id' => 'DEPT', 'target' => 2, 'options' => $this->db_handler->get_list('md_departemen', NULL, 'ID_DEPT', 'ID_DEPT', $join)),
+                        array('id' => 'TIPE', 'target' => 3, 'options' => $this->db_handler->get_list('md_tipe_mapel', NULL, 'ID_MTM', 'NAMA_MTM')),
+                    )
+                ),
+                'function' => array(
+                    array('name' => 'change_status', 'param' => 'field, status, id', 'data' => '"field=" + field + "&status=" + status + "&id=" + id', 'title' => "Apakah Anda yakin akan me' + (status ? 'ng' : 'non') + 'aktifkan?", 'message' => 'Perubahan akan memperngaruhi seluruh sistem.')
+                ),
+                'full' => TRUE,
+                'code_extra' => ''
+            )
+        );
+
+        $this->generate->datatables_view($data);
+    }
+
+    public function get_datatables() {
+        $this->generate->set_header_JSON();
+
+        $columns = array('ID_DEPT', 'ID_DEPT', 'NAMA_DEPT', 'CONCAT(NIP_PEG," - ",NAMA_PEG)', 'CONCAT(ALAMAT_DEPT, ", ", "Kec. ", NAMA_KEC, ", ", NAMA_KAB, ", ", NAMA_PROV)', 'TELP_DEPT', 'AKTIF_DEPT', 'ID_DEPT');
+        $select = array('ID_DEPT, ID_DEPT, NAMA_DEPT, CONCAT(NIP_PEG," - ",NAMA_PEG) AS KEPALA, CONCAT(ALAMAT_DEPT, ", ", "Kec. ", NAMA_KEC, ", ", NAMA_KAB, ", ", NAMA_PROV) AS WILAYAH, TELP_DEPT, AKTIF_DEPT, ID_DEPT');
+        $orders = array('ID_DEPT', 'ID_DEPT', 'NAMA_DEPT', 'KEPALA', 'WILAYAH', 'TELP_DEPT', 'AKTIF_DEPT', 'ID_DEPT');
+        $order = array("ID_DEPT" => 'ASC');
+        $datatables = $this->db_handler->get_data_tables($this->table, $this->input->post(), $columns, $orders, $order, $this->joins, $select);
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($datatables['data'] as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->KODE_MAPEL;
+            $row[] = $item->DEPT_MAPEL;
+            $row[] = $item->NAMA_MTM;
+            $row[] = $item->NAMA_MAPEL;
+            $row[] = $item->NAMA_ARAB_MAPEL;
+            $row[] = $item->AKTIF_MAPEL ? 
+                    '<i class="fa fa-check" style="cursor:pointer" onclick="change_status(\'AKTIF_MAPEL\', 0, ' . $item->ID_MAPEL . ')"></i>' : 
+                    '<i class="fa fa-close" style="cursor:pointer" onclick="change_status(\'AKTIF_MAPEL\', 1, ' . $item->ID_MAPEL . ')"></i>';
+
+            $row[] = '
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $this->id_datatables . '(\'' . $item->ID_MAPEL . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a></li>
+                        <li><a href="javascript:void()" title="Hapus" onclick="delete_data_' . $this->id_datatables . '(\'' . $item->ID_MAPEL . '\')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a></li>
+                    </ul>
+                </div>';
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $datatables['count_all'],
+            "recordsFiltered" => $datatables['count_filtered'],
+            "data" => $data,
+        );
+
+        $this->generate->output_JSON($output);
+    }
+
+    public function request_form($id = NULL) {
+        $data = array(
+            'form' => true,
+            'url' => $this->url,
+            'url_action' => $this->url_action,
+        );
+        
+        if ($id != NULL) {
+            $params = array(
+                'where' => array(
+                    $this->primary_key => $id
+                )
+            );
+
+            $data['data'] = $this->db_handler->get_row($this->table, $params, '*', $this->joins);
+        }
+
+        $this->generate->backend_view('master_data/pegawai/index', $data);
+    }
+
+    public function request_form() {
+        $data = $this->generate->set_header_form_JSON($this->table, $this->primary_key, $this->joins);
+
+        $input_id = FALSE;
+        $show_id = FALSE;
+
+        $data_html = array(
+            array(
+                'label' => 'Kode',
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 2,
+                'data' => array(
+                    'type' => 'text',
+                    'name' => 'KODE_MAPEL',
+                    "placeholder" => " ",
+                    'value' => $data == NULL ? "" : $data->KODE_MAPEL
+                )
+            ),
+        );
+
+        $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
+    }
+
+    public function action($action) {
+        $this->generate->set_header_JSON();
+        $this->generate->cek_validation_form($action);
+
+        $posts = $this->input->post();
+
+        if ($action == 'add')
+            $affected_row = $this->db_handler->insert_datatables($this->table, $posts);
+        elseif ($action == 'edit')
+            $affected_row = $this->db_handler->update_datatables($this->table, $this->primary_key, $posts, $this->edit_id);
+        elseif ($action == 'delete')
+            $affected_row = $this->db_handler->delete_datatables($this->table, $this->primary_key, $posts['ID']);
+
+        $this->generate->output_JSON(array("status" => $affected_row));
+    }
+
+    public function change_status() {
+        $where = array(
+            $this->primary_key => $this->input->post("id")
+        );
+        $data = array(
+            $this->input->post("field") => $this->input->post("status")
+        );
+
+        $affected_row = $this->db_handler->update($this->table, $where, $data);
+
+        $this->generate->output_JSON(array(
+            "notification" => array(
+                "status" => $affected_row,
+                "message" => "Data " . ($affected_row ? "berhasil" : "gagal") . ' disimpan'
+            )
+        ));
+    }
+
+    public function change_status() {
+        $field = $this->input->post("field");
+        $id = $this->input->post("id");
+
+        $affected_row = $this->db_handler->set_uniqe_value($this->table, $this->primary_key, $id, $field);
+
+        $this->generate->output_JSON(array(
+            "notification" => array(
+                "status" => $affected_row,
+                "message" => "Data " . ($affected_row ? "berhasil" : "gagal") . ' disimpan'
+            )
+        ));
+    }
+
+    public function auto_complete() {
+        $this->generate->set_header_JSON();
+
+        $as_text = array(
+            'NIP_PEG',
+            $this->db_handler->query_pegawai_nama_gelar(),
+        );
+        $param = array(
+            'where' => array(
+                'AKTIF_PEG' => 1
+            )
+        );
+        $data = $this->db_handler->get_auto_complete($this->table, $this->input->post('q'), $this->primary_key, $this->name_of_pk, $this->joins, $as_text, $param);
+
+        $this->generate->output_JSON($data);
+    }
+
+}

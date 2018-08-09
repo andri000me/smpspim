@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('session', 'auth', 'database', 'generate_HTML' => 'generate', 'menu_handler', 'crypt', 'money', 'pengaturan', 'date_format', 'fpdf/fpdf','tcpdf/tcpdf', 'cetak', 'time_format', 'pdf_handler', 'database_logging');
+$autoload['libraries'] = array('session', 'auth', 'database', 'generate_HTML' => 'generate', 'menu_handler', 'crypt', 'money', 'pengaturan', 'date_format', 'fpdf/fpdf','tcpdf/tcpdf', 'cetak', 'time_format', 'pdf_handler', 'database_logging', 'db_handler', 'query_handler');
 
 /*
 | -------------------------------------------------------------------

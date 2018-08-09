@@ -1295,7 +1295,11 @@ function form_save(url, id_form, table) {
         remove_ladda();
 
         if (data.status > 0) {
-            create_homer_success("Data berhasil disimpan");
+            if (typeof data.msg !== "undefined")
+                create_homer_success(data.msg);
+            else
+                create_homer_success("Data berhasil disimpan");
+
             $("#" + id_modal).modal('hide');
             reload_datatables(table);
 
