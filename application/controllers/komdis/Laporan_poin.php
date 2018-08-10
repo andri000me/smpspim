@@ -600,4 +600,69 @@ class Laporan_poin extends CI_Controller {
         $this->load->view('backend/komdis/laporan_poin/xls_rangking_kelas', $data);
     }
 
+    public function rekapitulasi() {
+        $this->generate->backend_view('komdis/laporan_poin/rekapitulasi');
+    }
+
+    public function datatables_rekapilutasi() {
+        $this->generate->set_header_JSON();
+
+        $kolom = $this->input->get('kolom');
+        $baris = $this->input->get('baris');
+        $field_header = json_decode($this->input->get('field_header'), false);
+        $data_kolom = $this->input->get('data_kolom');
+
+        $columns = array();
+        $select = array();
+        $orders = array();
+
+        if ($baris == 'siswa') {
+            $table = 'akad_siswa';
+            $joins = array(
+                array('md_siswa', 'ID_SISWA=SISWA_AS AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'))
+            );
+            $params = array(
+                'where' => array(
+                    
+                )
+            );
+        } elseif ($baris == 'kelas') {
+            
+        } elseif ($baris == 'bulan') {
+            
+        } elseif ($baris == 'jenis_pelanggaran') {
+            
+        }
+
+        $order = array("ID_TABUNGAN" => 'ASC');
+        $datatables = $this->db_handler->get_data_tables($table, $this->input->post(), $columns, $orders, $order, $joins, $select, $params);
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($datatables['data'] as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->NAMA_TA;
+            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NAMA_SISWA;
+            $row[] = $item->NAMA_KELAS;
+            $row[] = $item->NAMA_KITAB;
+            $row[] = $item->BATASAN;
+            $row[] = $item->NILAI_TABUNGAN;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $datatables['count_all'],
+            "recordsFiltered" => $datatables['count_filtered'],
+            "data" => $data,
+            "header" => $header
+        );
+
+        $this->generate->output_JSON($output);
+    }
+
 }

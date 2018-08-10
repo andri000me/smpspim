@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 /*
- * Aplikasi Sistem Informasi Akademik (SIAKAD)
- * MTS TBS KUDUS
+ * Aplikasi SIMAPES
+ * PIM KAJEN
  * Dibuat oleh Rohmad Eko Wahyudi 
  * Website: www.kertaskuning.com Email: rohmad.ew@gmail.com
  * 

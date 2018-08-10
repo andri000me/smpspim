@@ -62,10 +62,13 @@ class Generate_HTML {
             show_error("Your request is not valid", "403", "ERROR");
         } else {
             header('Content-Type: application/json');
+            $this->CI->db->trans_start();
         }
     }
 
     public function output_JSON($data) {
+        $this->CI->db->trans_complete();
+        
         if (is_array($data)) {
             if (isset($data['status']) && $data['status'] > 0)
                 $this->CI->session->unset_userdata('TOKEN');
