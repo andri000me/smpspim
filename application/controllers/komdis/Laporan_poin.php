@@ -30,7 +30,7 @@ class Laporan_poin extends CI_Controller {
             'tahun_ajaran_model' => 'ta',
         ));
         $this->load->library('pelanggaran_handler');
-        $this->auth->validation(array(2, 7));
+        $this->auth->validation(array(2, 7, 14));
     }
 
     public function index() {
@@ -59,14 +59,16 @@ class Laporan_poin extends CI_Controller {
             $row[] = $item->JUMLAH_LARI_KSH;
             $row[] = $item->SURAT;
 
+            if ($this->session->userdata('ID_HAKAKSES') == 7) {
 //            foreach ($tindakan as $detail) {
 //                if($this->tindakan->sudah_ditindak($item->ID_KSH, $detail->ID_KJT) AND $item->POIN_KSH $item $detail->POIN_KJT) { 
-            $row[] = '<input type="checkbox" class="checkbox" onchange="check_cetak_siswa(this)" value="' . $item->ID_KSH . '">';
-            $row[] = '<button type="button" class="btn btn-primary btn-sm" onclick="cetak(' . $item->ID_KSH . ');"><i class="fa fa-print"></i></button>&nbsp;';
+                $row[] = '<input type="checkbox" class="checkbox" onchange="check_cetak_siswa(this)" value="' . $item->ID_KSH . '">';
+                $row[] = '<button type="button" class="btn btn-primary btn-sm" onclick="cetak(' . $item->ID_KSH . ');"><i class="fa fa-print"></i></button>&nbsp;';
 //                }
 //            }
 //
 //            $row[] = $aksi;
+            }
 
             $data[] = $row;
         }
@@ -619,11 +621,10 @@ class Laporan_poin extends CI_Controller {
         if ($baris == 'siswa') {
             $table = 'akad_siswa';
             $joins = array(
-                array('md_siswa', 'ID_SISWA=SISWA_AS AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'))
+                array('md_siswa', 'ID_SISWA=SISWA_AS AND TA_AS=' . $this->session->userdata('ID_TA_ACTIVE'))
             );
             $params = array(
                 'where' => array(
-                    
                 )
             );
         } elseif ($baris == 'kelas') {
