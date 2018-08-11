@@ -13,9 +13,9 @@ $columns = array(
     'POIN',
     'LARI',
     'SURAT',
+    'AKSI',
 );
 if ($this->session->userdata('ID_HAKAKSES') == 7) {
-    $columns[] = 'AKSI';
     $columns[] = 'AKSI';
 }
 
@@ -187,10 +187,6 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
             return false;
         }
 
-        function cetak(ID_KSH) {
-            window.open('<?php echo site_url('komdis/laporan_poin/cetak'); ?>/' + ID_KSH, '_blank');
-        }
-
         function get_data_checkbox(title) {
             var success = function (data) {
                 var pembagi = (title === 'kelas') ? 4 : 3;
@@ -285,6 +281,10 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         }
 
 <?php } ?>
+
+        function cetak(ID_KSH) {
+            window.open('<?php echo site_url('komdis/laporan_poin/cetak'); ?>/' + ID_KSH, '_blank');
+        }
 </script>
 
 <?php if ($this->session->userdata('ID_HAKAKSES') == 7) { ?>
