@@ -124,6 +124,22 @@ class Pengaturan {
         return $this->CI->data_pengaturan->get_by_id('nilai_lulus_psb');
     }
 
+    public function getBkPoinMinimalDipanggil() {
+        return $this->CI->data_pengaturan->get_by_id('bk_poin_minimal_dipanggil');
+    }
+
+    public function getBkPoinKelipatanPemanggilan() {
+        return $this->CI->data_pengaturan->get_by_id('bk_poin_kelipatan_pemanggilan');
+    }
+
+    public function getBkNomorSuratPemanggilan() {
+        return $this->CI->data_pengaturan->get_by_id('bk_no_surat_pemanggilan');
+    }
+    
+    public function setBkNomorSuratPemanggilan($value) {
+        return $this->CI->data_pengaturan->update('bk_no_surat_pemanggilan', $value);
+    }
+
     public function getNomorInduk($dept) {
         $data = json_decode($this->CI->data_pengaturan->get_by_id('nomor_induk_terakhir'), TRUE);
         
