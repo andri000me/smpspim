@@ -149,12 +149,20 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
         $this->generate->output_JSON(array('no_surat' => $no_surat));
     }
 
-    public function cetak_surat($no_surat) {
-        $data_panggil = $this->db_handler->get_rows('bk_pemanggilan', array(
-            'where' => array(
-                'NO_SURAT_PANGGIL' => $no_surat
-            )
-        ));
+    public function cetak_surat($no_surat, $id_panggil = NULL) {
+        if ($id_panggil == NULL) {
+            $data_panggil = $this->db_handler->get_rows('bk_pemanggilan', array(
+                'where' => array(
+                    'NO_SURAT_PANGGIL' => $no_surat
+                )
+            ));
+        } else {
+            $data_panggil = $this->db_handler->get_rows('bk_pemanggilan', array(
+                'where' => array(
+                    'ID_PANGGIL' => $id_panggil
+                )
+            ));
+        }
 
         if ($data_panggil == NULL) {
             echo 'NO SURAT TIDAK DITEMUKAN';

@@ -207,3 +207,6 @@ ADD CONSTRAINT `bk_pemanggilan_ibfk_4`
   REFERENCES `simapes`.`md_catur_wulan` (`ID_CAWU`)
   ON DELETE RESTRICT
   ON UPDATE CASCADE;
+UPDATE `simapes`.`md_menu` SET `ID_MENU`='01406005000' WHERE `ID_MENU`='01406002000';
+INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('01406003000', 'PEMANGGILAN', 'bk/laporan_pemanggilan', 'index', '1', '2', '0');
+INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('01406003000', '14');
