@@ -50,7 +50,7 @@ class Soal extends CI_Controller {
             )
         );
 
-        $this->generate->datatables_view($data);
+        $this->generate->datatables_view($data, 'bk/soal/index');
     }
 
     public function get_datatables() {
@@ -170,6 +170,19 @@ class Soal extends CI_Controller {
         $data = $this->db_handler->get_auto_complete($this->table, $this->input->post('q'), $this->primary_key, $this->name_of_pk, $this->joins);
 
         $this->generate->output_JSON($data);
+    }
+
+    public function cetak() {
+        $data = array(
+            'data' => $this->db_handler->get_rows($this->table, array(
+                'order_by' => array(
+                    'URUTAN_BKKEL' => 'ASC',
+                    'URUTAN_BKKAT' => 'ASC',
+                )
+            ), '*', $this->joins)
+        );
+
+        $this->load->view('backend/bk/soal/cetak', $data);
     }
 
 }
