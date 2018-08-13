@@ -177,6 +177,17 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
                 'SISWA_KSH' => $detail->SISWA_PANGGIL
             );
             $siswa = $this->laporan_poin->get_full_by_id($where);
+            $data_komdis = json_decode($detail->DATA_KOMDIS_PANGGIL, TRUE);
+
+            $q = "";
+            $start = true;
+            foreach ($data_komdis as $field => $value) {
+                if (!$start)
+                    $q .= " OR ";
+                $q .= " ID_KS='" . $value['ID_KS'] . "' ";
+                $start = false;
+            }
+
 
             if (count($siswa) == 1) {
                 foreach ($siswa as $detail) {
@@ -184,7 +195,7 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
                         'TA_KS' => $detail->TA_KSH,
                         'SISWA_KS' => $detail->SISWA_KSH,
                     );
-                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($where);
+                    $pelanggaran = $this->pelanggaran->get_cetak_pelanggaran($q);
 
                     $data['pelanggaran'][]['data'][] = array(
                         'siswa' => $detail,

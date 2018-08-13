@@ -919,8 +919,8 @@ function dropdown_searching(id, target, data) {
     $.each(data, function (value, text) {
         html_option += '<option value="' + value + '">' + text + '</option>';
     });
-    console.log(data);
-    console.log(html_option);
+//    console.log(data);
+//    console.log(html_option);
     $(".datatables-search-" + id).replaceWith('<select class="form-control input-sm datatables-search datatables-search-' + id + '" style="width:100%" onchange="refresh_datatables(this, ' + target + ');">' + html_option + '</select>');
 }
 

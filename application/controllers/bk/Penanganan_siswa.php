@@ -31,11 +31,6 @@ class Penanganan_siswa extends CI_Controller {
         parent::__construct();
         $this->auth->validation(array(14));
 
-        $this->load->model(array(
-            'pelanggaran_header_model' => 'laporan_poin',
-            'pelanggaran_model' => 'pelanggaran',
-        ));
-
         $this->params = array(
             'where' => array(
                 'TA_PENANGANAN' => $this->session->userdata('ID_TA_ACTIVE'),

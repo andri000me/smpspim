@@ -59,6 +59,7 @@ if (isset($datatables['searching']['simple'])) {
 if (isset($datatables['searching']['multiple'])) {
     foreach ($datatables['searching']['multiple'] as $detail) {
         $options = "{";
+        $options .= "'': '-- Pilih Opsi --', ";
         foreach ($detail['options'] as $option_item) {
             $options .= "'" . $option_item['id'] . "': '" . $option_item['text'] . "', ";
         }
