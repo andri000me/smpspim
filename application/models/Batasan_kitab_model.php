@@ -130,6 +130,8 @@ class Batasan_kitab_model extends CI_Model {
         $this->db->select("ID_BATASAN as id, CONCAT('KITAB: ',NAMA_KITAB, '  BATASAN: ',AWAL_BATASAN,' - ',AKHIR_BATASAN) as text");
         $this->_get_table();
         $this->db->like("CONCAT('KITAB: ',NAMA_KITAB, '  BATASAN: ',AWAL_BATASAN,' - ',AKHIR_BATASAN)", $where);
+        $this->db->order_by('URUTAN_KITAB', 'ASC');
+        $this->db->order_by('URUTAN_BATASAN', 'ASC');
 
         return $this->db->get()->result();
     }
