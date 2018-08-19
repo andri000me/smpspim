@@ -57,7 +57,7 @@ class Jadwal extends CI_Controller {
             $row = array();
             $row[] = $item->NAMA_KELAS;
             
-            $row[] = $item->NAMA_PEG;
+            $row[] = $item->NAMA_MAPEL;
             
             $row[] = $item->NIP_PEG;
             $row[] = $item->NAMA_PEG;

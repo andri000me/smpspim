@@ -19,7 +19,7 @@ class Jadwal_model extends CI_Model {
     }
 
     private function _get_table() {
-        $this->db->select('*, CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIB") AS JAM_PELAJARAN');
+        $this->db->select('*, CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIS") AS JAM_PELAJARAN');
         $this->db->from($this->table);
         $this->db->join('akad_guru_mapel agm',$this->table.'.GURU_MAPEL_AJ=agm.ID_AGM');
         $this->db->join('md_tahun_ajaran mta','agm.TA_AGM=mta.ID_TA');

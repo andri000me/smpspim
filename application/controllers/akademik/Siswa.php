@@ -468,8 +468,9 @@ class Siswa extends CI_Controller {
         $jenjang = $this->input->get('jenjang');
         $tingkat = $this->input->get('tingkat');
         $kelas = $this->input->get('kelas');
+        $jk = $this->input->get('jk');
 
-        $data = $this->siswa->get_all_data_simple($jenjang, $tingkat, $kelas);
+        $data = $this->siswa->get_all_data_simple($jenjang, $tingkat, $kelas, $jk);
 
         if (isset($data[0]))
             $field_column = array_keys($data[0]);

@@ -19,7 +19,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <form action="#" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-import">
                         <div class="form-group">
                             <label class="col-md-1 control-label">Pilih Filter</label>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <select id="jenjang" class="form-control">
                                     <option value="">-- Pilih Jenjang --</option>
                                     <?php
@@ -29,7 +29,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                     ?>
                                 </select>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <select id="tingkat" class="form-control">
                                     <option value="">-- Pilih Tingkat --</option>
                                     <?php
@@ -39,7 +39,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                                     ?>
                                 </select>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <select id="kelas" class="form-control">
                                     <option value="">-- Pilih Kelas --</option>
                                     <?php
@@ -47,6 +47,13 @@ $this->generate->generate_panel_content($title, $subtitle);
                                         echo '<option value="' . $value->ID_KELAS . '">' . $value->NAMA_KELAS . '</option>';
                                     }
                                     ?>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select id="jk" class="form-control">
+                                    <option value="">-- Pilih JK --</option>
+                                    <option value="L">Banin</option>
+                                    <option value="P">Banat</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -91,7 +98,7 @@ $this->generate->generate_panel_content($title, $subtitle);
 <script type="text/javascript">
     function export_data() {
 
-        window.open('<?php echo site_url('akademik/siswa/export_data'); ?>?jenjang=' + $("#jenjang").val() + '&tingkat=' + $("#tingkat").val() + '&kelas=' + $("#kelas").val(), '_blank');
+        window.open('<?php echo site_url('akademik/siswa/export_data'); ?>?jenjang=' + $("#jenjang").val() + '&tingkat=' + $("#tingkat").val() + '&kelas=' + $("#kelas").val() + '&jk=' + $("#jk").val(), '_blank');
     }
 
     function import_data() {
