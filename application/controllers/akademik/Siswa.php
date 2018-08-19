@@ -215,6 +215,14 @@ class Siswa extends CI_Controller {
             $data['TANGGAL_IJASAH_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_IJASAH_SISWA']);
         if (isset($data['NOHP_SISWA']))
             $data['NOHP_SISWA'] = str_replace(" ", "", trim(filter_var($data['NOHP_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
+        if (isset($data['NIK_SISWA']))
+            $data['NIK_SISWA'] = str_replace(" ", "", trim(filter_var($data['NIK_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
+        if (isset($data['KK_SISWA']))
+            $data['KK_SISWA'] = str_replace(" ", "", trim(filter_var($data['KK_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
+        if (isset($data['AYAH_NIK_SISWA']))
+            $data['AYAH_NIK_SISWA'] = str_replace(" ", "", trim(filter_var($data['AYAH_NIK_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
+        if (isset($data['IBU_NIK_SISWA']))
+            $data['IBU_NIK_SISWA'] = str_replace(" ", "", trim(filter_var($data['IBU_NIK_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         if (isset($data['ORTU_NOHP1_SISWA']))
             $data['ORTU_NOHP1_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP1_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         if (isset($data['ORTU_NOHP2_SISWA']))
