@@ -80,8 +80,11 @@ class Laporan_akademik_model extends CI_Model {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
         $this->_get_table($label);
 
-        if ($ta != "")
+        if ($ta != "") {
             $this->db->where('TA_AS', $ta);
+            $this->db->where('KONVERSI_AS', 0);
+            $this->db->where('AKTIF_AS', 1);
+        }
         if ($tingkat != "")
             $this->db->where('TINGKAT_AS', $tingkat);
         if ($kelas != "")
@@ -96,9 +99,11 @@ class Laporan_akademik_model extends CI_Model {
         else
             $this->db->group_by($label);
 
-        $this->db->order_by('x_label', 'ASC');
 
-        return $this->db->get()->result();
+        $this->db->order_by('x_label', 'ASC');
+        $result = $this->db->get();
+
+        return $result->result();
     }
 
     public function export_data($ta, $tingkat, $kelas, $jk) {
@@ -223,7 +228,7 @@ class Laporan_akademik_model extends CI_Model {
         $this->db->join('md_kecamatan keco', 'ms.ORTU_KECAMATAN_SISWA=keco.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kabo', 'keco.KABUPATEN_KEC=kabo.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi provo', 'kabo.PROVINSI_KAB=provo.ID_PROV', 'LEFT');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
         if ($ta != "")
             $this->db->where('TA_AS', $ta);
         if ($tingkat != "")

@@ -133,6 +133,7 @@ class Pondok_siswa_model extends CI_Model {
 
     function count_siswa($id) {
         $this->db->from('md_siswa');
+        $this->db->join('akad_siswa', 'ID_SISWA=SISWA_AS AND KONVERSI_AS=0 AND AKTIF_AS=1 AND TA_AS='.$this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where('PONDOK_SISWA', $id);
         $query = $this->db->get();
 
