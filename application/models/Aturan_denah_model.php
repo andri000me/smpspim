@@ -65,44 +65,44 @@ class Aturan_denah_model extends CI_Model {
 
         return $this->db->affected_rows();
     }
-    
+
     public function get_aturan_um() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_PSB_ACTIVE'),
             'CAWU_PUD' => NULL,
         ));
-        
+
         return $this->db->get()->row()->ATURAN_RUANG_PUD;
     }
-    
+
     public function get_aturan_us() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         ));
-        
+
         return $this->db->get()->row()->ATURAN_RUANG_PUD;
     }
-    
+
     public function get_id_um() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_PSB_ACTIVE'),
             'CAWU_PUD' => NULL,
         ));
-        
+
         return $this->db->get()->row()->ID_PUD;
     }
-    
+
     public function get_id_us() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         ));
-        
+
         return $this->db->get()->row()->ID_PUD;
     }
 
@@ -159,47 +159,48 @@ class Aturan_denah_model extends CI_Model {
         else
             return FALSE;
     }
-    
+
     public function get_denah_psb() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_PSB_ACTIVE'),
             'CAWU_PUD' => NULL,
         ));
-        
+
         return $this->db->get()->row()->DATA_DENAH;
     }
-    
+
     public function get_denah_cawu() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         ));
-        
+
         return $this->db->get()->row()->DATA_DENAH;
     }
-    
+
     public function get_aturan_cawu() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         ));
-        
+
         return $this->db->get()->row()->ATURAN_RUANG_PUD;
     }
-    
+
     public function get_denah_plan() {
         $this->db->from($this->table);
         $this->db->where(array(
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         ));
-        
-        return $this->db->get()->row()->DENAH_PLAN_DENAH;
+        $result = $this->db->get()->row();
+
+        return $result == NULL ? NULL : $result->DENAH_PLAN_DENAH;
     }
-    
+
     public function validasi_denah_psb() {
         $data = array(
             'VALIDASI_DENAH' => 1
@@ -209,12 +210,12 @@ class Aturan_denah_model extends CI_Model {
             'CAWU_PUD' => NULL,
             'READY_DENAH' => 1
         );
-        
+
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function validasi_denah_us() {
         $data = array(
             'VALIDASI_DENAH' => 1,
@@ -224,12 +225,12 @@ class Aturan_denah_model extends CI_Model {
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         );
-        
+
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function ready_denah_psb() {
         $data = array(
             'READY_DENAH' => 1
@@ -238,12 +239,12 @@ class Aturan_denah_model extends CI_Model {
             'TA_PUD' => $this->session->userdata('ID_PSB_ACTIVE'),
             'CAWU_PUD' => NULL,
         );
-        
+
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function ready_denah_us() {
         $data = array(
             'READY_DENAH' => 1
@@ -252,9 +253,9 @@ class Aturan_denah_model extends CI_Model {
             'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
         );
-        
+
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
