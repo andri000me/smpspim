@@ -468,5 +468,11 @@ class Denah_us extends CI_Controller {
 
         $status = $this->aturan_denah->update_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_db)));
     }
+    
+    public function keep_up_session() {
+        $this->generate->set_header_JSON();
+            
+        $this->generate->output_JSON(array('status' => true, 'msg' => $this->input->post('check')));
+    }
 
 }

@@ -88,7 +88,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                         create_homer_success("Sistem berhasil menghapus denah");
                     else
                         create_homer_error("Sistem gagal menghapus denah");
-                    
+
                     reload_datatables(table);
                 };
                 create_splash("Sistem sedang menghapus denah Tahun Ajaran dan CAWU yang aktif.");

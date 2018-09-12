@@ -140,6 +140,10 @@
         $("body").addClass('hide-sidebar');
         create_model();
         <?php if($VALIDASI) echo '$(".form-control").prop("disabled", true);'; ?>
+
+        setInterval(function () {
+            keep_up_session();
+        }, 6000);
     });
 
     function valiadasi_denah() {
@@ -375,5 +379,11 @@
         } else {
             create_homer_error('Denah tidak dapat disimpan karena ada jenjang yang lebih dari 0');
         }
+    }
+
+    function keep_up_session() {
+        create_ajax('<?php echo site_url('pu/denah_us/keep_up_session'); ?>', 'check=on', function (data) {
+            console.log('Keeping session server is on');
+        });
     }
 </script>
