@@ -42,9 +42,10 @@ foreach ($data as $detail) {
 
         foreach ($data_denah['DENAH'] as $ruang => $value) {
 
-            $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
+   //         $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
+            $pdf->AddPage("L", "A5");
             $pdf->SetAutoPageBreak(true, 0);
-
+/*
             $pdf->Image(base_url($this->pengaturan->getLogo()), 88, 80, 40, 41, '', '');
 
             $pdf->Image(base_url('files/aplikasi/kop_1.png'), 130, 10, 55, 7, '', '');
@@ -91,12 +92,15 @@ foreach ($data as $detail) {
             $pdf->Ln();
             $pdf->Cell(0, 4, '', 'RLB', 0, 'C');
             $pdf->Ln(20);
-
+*/
             $pdf->SetFont('Arial', 'B', $size_font + 5);
             $pdf->Cell(0, 4, 'RUANG', 0, 0, 'C');
-            $pdf->Ln(7);
+            $pdf->Ln(10);
+            $pdf->SetFont('Arial', 'B', $size_font + 20);
+            $pdf->Cell(0, 4, $data_denah["RUANG"][$ruang]['KODE_RUANG'] , 0, 0, 'C');
+            $pdf->Ln(10);
             $pdf->SetFont('Arial', 'B', $size_font + 7);
-            $pdf->Cell(0, 4, $data_denah["RUANG"][$ruang]['KODE_RUANG'] . ' - ' . $data_denah["RUANG"][$ruang]['NAMA_RUANG'], 0, 0, 'C');
+            $pdf->Cell(0, 4, $data_denah["RUANG"][$ruang]['NAMA_RUANG'], 0, 0, 'C');
             $pdf->Ln(10);
 
 //            $data_pengawas = $this->pengawas->get_by_jadwal_ruang($ID, $jk, $data_denah["RUANG"][$ruang]['KODE_RUANG']);
