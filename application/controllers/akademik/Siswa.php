@@ -227,6 +227,8 @@ class Siswa extends CI_Controller {
             $data['ORTU_NOHP1_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP1_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         if (isset($data['ORTU_NOHP2_SISWA']))
             $data['ORTU_NOHP2_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP2_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
+        if (isset($data['ORTU_NOHP3_SISWA']))
+            $data['ORTU_NOHP3_SISWA'] = str_replace(" ", "", trim(filter_var($data['ORTU_NOHP3_SISWA'], FILTER_SANITIZE_NUMBER_FLOAT)));
         unset($data['validasi']);
         foreach ($data as $key => $value) {
             if ($value == '')

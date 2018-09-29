@@ -27,6 +27,8 @@ class Jadwal_pu_model extends CI_Model {
         $this->db->join('md_tahun_ajaran ta', $this->table . '.TA_PUJ=ta.ID_TA');
         $this->db->join('md_catur_wulan cw', $this->table . '.CAWU_PUJ=cw.ID_CAWU', 'LEFT');
         $this->db->where('TIPE_PUJ', $tipe);
+        $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->where('ID_CAWU', $this->session->userdata('ID_CAWU_ACTIVE'));
     }
 
     private function _get_datatables_query($tipe) {
