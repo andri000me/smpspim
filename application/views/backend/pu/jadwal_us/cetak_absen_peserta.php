@@ -80,8 +80,10 @@ foreach ($data as $detail) {
             $pdf->Cell(87, 5, 'TTD', 1, 0, 'C');
             $pdf->Ln();
             $pdf->Cell(110);
+            $jam_ke = 1;
             foreach ($data_jadwal as $item) {
-                $pdf->Cell(87 / count($data_jadwal), 5, $this->time_format->jam_menit($item['JAM_MULAI_PUJ']) . '-' . $this->time_format->jam_menit($item['JAM_SELESAI_PUJ']), 1, 0, 'C');
+                $pdf->Cell(87 / count($data_jadwal), 5, 'Jam ke-' . $jam_ke++, 1, 0, 'C');
+//                $pdf->Cell(87 / count($data_jadwal), 5, $this->time_format->jam_menit($item['JAM_MULAI_PUJ']) . '-' . $this->time_format->jam_menit($item['JAM_SELESAI_PUJ']), 1, 0, 'C');
             }
             $pdf->Ln();
 
