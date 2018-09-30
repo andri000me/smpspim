@@ -167,9 +167,9 @@ foreach ($data as $detail) {
                 $pdf->Cell(100);
                 $pdf->Cell(0, 4, '..............................................', 0, 0, 'C');
                 $pdf->Ln();
-                $pdf->SetFont('Arial', '', $size_font);
-                $pdf->Cell(100);
-                $pdf->Cell(0, 4, 'NIP. ..................................', 0, 0, 'C');
+//                $pdf->SetFont('Arial', '', $size_font);
+//                $pdf->Cell(100);
+//                $pdf->Cell(0, 4, 'NIP. ..................................', 0, 0, 'C');
 
                 $pdf->SetY($y_akhir);
 
