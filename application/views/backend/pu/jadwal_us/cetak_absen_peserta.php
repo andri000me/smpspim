@@ -44,12 +44,16 @@ foreach ($data as $detail) {
 
         $jumlah_siswa_test = 0;
         $id_tingkat_test = 15;
+        $iterasi_3 = 0;
         foreach ($data_denah['DENAH'] as $ruang => $value) {
-            foreach ($data_jadwal as $item) {
-                $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_UJIAN_RUANG'];
-                if (count($data_denah['DENAH'][$ruang]) > $jumlah_peruang)
-                    $jumlah_peruang = count($data_denah['DENAH'][$ruang]);
+            $iterasi_3++;
+            $jumlah_peruang = $data_denah['RUANG'][$ruang]['KAPASITAS_UJIAN_RUANG'];
+            if (count($data_denah['DENAH'][$ruang]) > $jumlah_peruang)
+                $jumlah_peruang = count($data_denah['DENAH'][$ruang]);
 
+            $ruang_baru = true;
+            $temp_data_denah = array();
+            foreach ($data_jadwal as $item) {
                 $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
                 $pdf->SetAutoPageBreak(true, 0);
 
@@ -90,11 +94,16 @@ foreach ($data as $detail) {
                 $jenjang = array();
                 for ($i = 0; $i < $jumlah_peruang; $i++) {
                     if (isset($data_denah['DENAH'][$ruang][$i])) {
-                        $id_tingkat = $data_denah['DENAH'][$ruang][$i];
-                        $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
-                        $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
-                        $data_siswa = $CI->siswa->get_by_id_simple($id_siswa);
-                        $temp_last_id[$id_tingkat] ++;
+                        if ($ruang_baru) {
+                            $id_tingkat = $data_denah['DENAH'][$ruang][$i];
+                            $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
+                            $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
+                            $data_siswa = $CI->siswa->get_by_id_simple($id_siswa);
+                            $temp_data_denah[$i] = $data_siswa;
+                            $temp_last_id[$id_tingkat] ++;
+                        } else {
+                            $data_siswa = $temp_data_denah[$i];
+                        }
 
 //                    if ($id_tingkat == $id_tingkat_test) {
 //                        $jumlah_siswa_test++;
@@ -167,9 +176,11 @@ foreach ($data as $detail) {
                 ksort($jenjang);
                 $pdf->SetFont('Arial', '', $size_font);
                 foreach ($jenjang as $nama_jenjang => $jumlah_siswa) {
-                    $pdf->Cell(30, 4, $nama_jenjang . ': ' . $jumlah_siswa.' siswa', 1, 0, 'L');
+                    $pdf->Cell(30, 4, $nama_jenjang . ': ' . $jumlah_siswa . ' siswa', 1, 0, 'L');
                     $pdf->Ln();
                 }
+
+                $ruang_baru = false;
             }
         }
 //        echo 'ID ' . $this->date_format->to_print_text($detail['TANGGAL']);
