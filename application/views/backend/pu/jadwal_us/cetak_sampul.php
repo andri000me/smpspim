@@ -93,7 +93,7 @@ foreach ($data as $detail) {
 //            $pdf->Cell(0, 4, '', 'RLB', 0, 'C');
 //            $pdf->Ln(20);
             
-            $pdf->SetY(100);
+//            $pdf->SetY(100);
 
             $pdf->SetFont('Arial', 'B', $size_font + 5);
             $pdf->Cell(0, 4, 'RUANG', 0, 0, 'C');
