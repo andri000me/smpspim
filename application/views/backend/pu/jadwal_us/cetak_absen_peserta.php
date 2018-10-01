@@ -54,6 +54,9 @@ foreach ($data as $detail) {
             $ruang_baru = true;
             $temp_data_denah = array();
             foreach ($data_jadwal as $item) {
+                if ($ID != $item['ID_PUJ'])
+                    continue;
+
                 $pdf->AddPage("P", $this->pengaturan->getUkuranF4());
                 $pdf->SetAutoPageBreak(true, 0);
 
@@ -182,7 +185,10 @@ foreach ($data as $detail) {
 
                 $ruang_baru = false;
             }
+//            if ($iterasi_3 == 4)
+//                break;
         }
+//        break;
 //        echo 'ID ' . $this->date_format->to_print_text($detail['TANGGAL']);
 //        echo '<br>';
 //        echo 'ID ' . $id_tingkat_test;
@@ -206,6 +212,7 @@ foreach ($data as $detail) {
 //            echo $data_siswa->NIS_SISWA . ',' . $data_siswa->NAMA_SISWA . ','.$data_siswa->NAMA_KELAS.';';
 //        }
     }
+//    break;
 }
 //exit();
 $pdf->Output();
