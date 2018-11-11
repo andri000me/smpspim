@@ -17,8 +17,8 @@ class Tabungan extends CI_Controller {
         array('md_siswa', 'ID_SISWA=SISWA_TABUNGAN'),
         array('akad_siswa', 'ID_SISWA=SISWA_AS AND TA_TABUNGAN=TA_AS'),
         array('akad_kelas', 'KELAS_AS=ID_KELAS'),
-        array('ph_batasan', 'ID_BATASAN=BATASAN_TABUNGAN'),
-        array('ph_kitab', 'ID_KITAB=KITAB_BATASAN'),
+//        array('ph_batasan', 'ID_BATASAN=BATASAN_TABUNGAN'),
+        array('ph_kitab', 'ID_KITAB=KITAB_TABUNGAN'),
     );
     var $params = array();
     var $primary_key = "ID_TABUNGAN";
@@ -42,7 +42,7 @@ class Tabungan extends CI_Controller {
                 'NAMA',
                 'KELAS',
                 'KITAB',
-                'BATASAN',
+//                'BATASAN',
                 'NILAI',
                 'AKSI',
             ),
@@ -63,9 +63,9 @@ class Tabungan extends CI_Controller {
     public function get_datatables() {
         $this->generate->set_header_JSON();
 
-        $columns = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', "CONCAT(AWAL_BATASAN, ' - ', AKHIR_BATASAN)", 'NILAI_TABUNGAN', 'ID_TABUNGAN');
-        $select = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', "CONCAT(AWAL_BATASAN, ' - ', AKHIR_BATASAN) AS BATASAN", 'NILAI_TABUNGAN', 'ID_TABUNGAN');
-        $orders = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', "BATASAN", 'NILAI_TABUNGAN', 'ID_TABUNGAN');
+        $columns = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', 'NILAI_TABUNGAN', 'ID_TABUNGAN');
+        $select = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', 'NILAI_TABUNGAN', 'ID_TABUNGAN');
+        $orders = array('ID_TABUNGAN', 'NAMA_TA', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_KITAB', 'NILAI_TABUNGAN', 'ID_TABUNGAN');
         $order = array("ID_TABUNGAN" => 'ASC');
         $datatables = $this->db_handler->get_data_tables($this->table, $this->input->post(), $columns, $orders, $order, $this->joins, $select);
 
@@ -80,7 +80,7 @@ class Tabungan extends CI_Controller {
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_KITAB;
-            $row[] = $item->BATASAN;
+//            $row[] = $item->BATASAN;
             $row[] = $item->NILAI_TABUNGAN;
 
             $row[] = '
@@ -130,19 +130,19 @@ class Tabungan extends CI_Controller {
                 )
             ),
             array(
-                'label' => 'Batasan Kitab',
+                'label' => 'Kitab',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 7,
                 'data' => array(
                     'type' => 'autocomplete',
-                    'name' => 'BATASAN_TABUNGAN',
+                    'name' => 'KITAB_TABUNGAN',
                     'multiple' => FALSE,
                     'minimum' => 0,
-                    'value' => $data == NULL ? "" : $data->BATASAN_TABUNGAN,
-                    'label' => $data == NULL ? "" : 'KITAB: ' . $data->AWAL_BATASAN . ' | BATASAN: ' . $data->AWAL_BATASAN . ' - ' . $data->AKHIR_BATASAN,
+                    'value' => $data == NULL ? "" : $data->KITAB_TABUNGAN,
+                    'label' => $data == NULL ? "" : $data->NAMA_KITAB,
                     'data' => NULL,
-                    'url' => base_url('ph/batasan_kitab/auto_complete')
+                    'url' => base_url('ph/kitab/auto_complete')
                 )
             ),
             array(
@@ -171,16 +171,16 @@ class Tabungan extends CI_Controller {
         $posts['TA_TABUNGAN'] = $this->session->userdata('ID_TA_ACTIVE');
         $posts['USER_TABUNGAN'] = $this->session->userdata('ID_USER');
 
-        if ($action != 'delete') {
-            $data_batasan = $this->db_handler->get_row('ph_batasan', array(
-                'where' => array(
-                    'ID_BATASAN' => $posts['BATASAN_TABUNGAN']
-                )
-            ));
-
-            if ($posts['NILAI_TABUNGAN'] > $data_batasan->NILAI_MAKS_BATASAN)
-                $this->generate->output_JSON(array("STATUS" => FALSE, "MESSAGE" => 'Nilai tidak boleh lebih dari ' . $data_batasan->NILAI_MAKS_BATASAN));
-        }
+//        if ($action != 'delete') {
+//            $data_batasan = $this->db_handler->get_row('ph_batasan', array(
+//                'where' => array(
+//                    'ID_BATASAN' => $posts['BATASAN_TABUNGAN']
+//                )
+//            ));
+//
+//            if ($posts['NILAI_TABUNGAN'] > $data_batasan->NILAI_MAKS_BATASAN)
+//                $this->generate->output_JSON(array("STATUS" => FALSE, "MESSAGE" => 'Nilai tidak boleh lebih dari ' . $data_batasan->NILAI_MAKS_BATASAN));
+//        }
 
         if ($action == 'add')
             $affected_row = $this->db_handler->insert_datatables($this->table, $posts);
