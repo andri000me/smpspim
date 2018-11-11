@@ -7,7 +7,7 @@ $columns = array(
     'NAMA TA',
     'NAMA TAGIHAN',
     'NAMA DETAIL',
-    'JENJANG',
+    'KELAS',
     'NIS',
     'SISWA',
 );

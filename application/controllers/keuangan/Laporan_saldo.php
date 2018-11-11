@@ -44,7 +44,7 @@ class Laporan_saldo extends CI_Controller {
             $row[] = $item->NAMA_TA;
             $row[] = $item->NAMA_TAG;
             $row[] = $item->NAMA_DT;
-            $row[] = $item->DEPT_DT;
+            $row[] = $item->NAMA_KELAS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $this->money->format($item->NOMINAL_DT);
@@ -90,7 +90,7 @@ class Laporan_saldo extends CI_Controller {
             $row[] = $item->NAMA_TA;
             $row[] = $item->NAMA_TAG;
             $row[] = $item->NAMA_DT;
-            $row[] = $item->DEPT_DT;
+            $row[] = $item->NAMA_KELAS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $this->money->format($item->NOMINAL_DT);

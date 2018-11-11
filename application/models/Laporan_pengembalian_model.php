@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_pengembalian_model extends CI_Model {
 
     var $table = 'keu_pembayaran';
-    var $column = array('NAMA_TA', 'NAMA_TAG','NAMA_DT', 'DEPT_DT','IF(NIS_SISWA IS NULL, "-", NIS_SISWA)','NAMA_SISWA','NOMINAL_BAYAR','KETERANGAN_BAYAR', 'NAMA_PEG','CREATED_BAYAR','ID_BAYAR');
+    var $column = array('NAMA_TA', 'NAMA_TAG','NAMA_DT', 'NAMA_KELAS','IF(NIS_SISWA IS NULL, "-", NIS_SISWA)','NAMA_SISWA','NOMINAL_BAYAR','KETERANGAN_BAYAR', 'NAMA_PEG','CREATED_BAYAR','ID_BAYAR');
     var $primary_key = "ID_BAYAR";
     var $order = array("ID_BAYAR" => 'ASC');
 
@@ -26,6 +26,8 @@ class Laporan_pengembalian_model extends CI_Model {
         $this->db->join('keu_tagihan t','dt.TAGIHAN_DT=t.ID_TAG');
         $this->db->join('md_tahun_ajaran ta','t.TA_TAG=ta.ID_TA');
         $this->db->join('md_siswa ms','ds.SISWA_SETUP=ms.ID_SISWA');
+        $this->db->join('akad_siswa as', 'TA_AS='.$this->session->userdata('ID_TA_ACTIVE').' AND SISWA_AS=ID_SISWA', 'LEFT');
+        $this->db->join('akad_kelas ak', 'KELAS_AS=ID_KELAS', 'LEFT');
         $this->db->join('md_user mu',$this->table.'.USER_BAYAR=mu.ID_USER');
         $this->db->join('md_pegawai mp','mu.PEGAWAI_USER=mp.ID_PEG');
         $this->db->where(array('JENIS_BAYAR' => 'PENGEMBALIAN'));

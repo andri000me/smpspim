@@ -8,7 +8,7 @@ $columns = array(
     'NAMA TA',
     'NAMA TAGIHAN',
     'NAMA DETAIL',
-    'JENJANG',
+    'KELAS',
     'NIS',
     'SISWA',
     'NOMINAL',
@@ -118,6 +118,7 @@ $this->generate->datatables($id_datatables2, 'Data Pengembalian Tagihan', $colum
 
         $(".table-datatable2, .table-datatable1").attr('style', 'margin-top: -65px;');
         $("tfoot, .table-datatable2, .table-datatable1, .calc-saldo").hide();
+        $("body").addClass('hide-sidebar');
 
     });
 

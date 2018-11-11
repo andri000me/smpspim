@@ -7,7 +7,7 @@ $columns = array(
     'NAMA TA',
     'NAMA TAGIHAN',
     'NAMA DETAIL',
-    'JENJANG',
+    'KELAS',
     'NIS',
     'SISWA',
     'NOMINAL',
@@ -60,6 +60,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('keuangan/laporan/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
+        $("body").addClass('hide-sidebar');
         $(".buttons-add").remove();
     });
     
