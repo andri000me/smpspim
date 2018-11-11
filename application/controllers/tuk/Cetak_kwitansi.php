@@ -18,6 +18,7 @@ class Cetak_kwitansi extends CI_Controller {
         parent::__construct();
         $this->load->model(array(
             'akad_siswa_model' => 'siswa',
+            'jurnal_model' => 'jurnal',
             'pegawai_model' => 'pegawai'
         ));
         $this->auth->validation(13);
@@ -40,5 +41,11 @@ class Cetak_kwitansi extends CI_Controller {
         );
         
         $this->load->view('backend/tuk/kwitansi/cetak', $data);
+    }
+    
+    public function cetak_individu($id) {
+        $data = $this->jurnal->get_by_id($id);
+        
+        $this->load->view('backend/tuk/kwitansi/cetak_individu', $data);
     }
 }

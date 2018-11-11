@@ -16,6 +16,7 @@ echo $this->generate->form_open($id_form, $name_function);
                     Form <?php echo $JENIS; ?>
                 </div>
                 <div class="panel-body">
+                    <?php $this->generate->input_text('Diterima dari', array('name' => 'NAMA_TJ'), TRUE, 6); ?>
                     <?php $this->generate->input_hidden('NOMINAL_TJ', ''); ?>
                     <?php $this->generate->input_select2('Jenis Kelompok', array('name' => 'KELOMPOK_TJ', 'url' => site_url('tuk/jenis_kelompok/auto_complete_'.$JENIS)), TRUE, 4, FALSE, NULL); ?>
                     <?php $this->generate->input_text('Nominal', array('name' => 'TEMP_NOMINAL_TJ', 'onblur' => 'display_nominal(this);', 'onclick' => 'show_nominal(this);'), TRUE, 3); ?>
@@ -62,6 +63,8 @@ echo $this->generate->form_open($id_form, $name_function);
             var success = function (data) {
                 if (data.status) {
                     create_homer_success('Berhasil menyimpan data. Halaman ini akan dimuat ulang.');
+                    
+                    window.open('<?php echo site_url('tuk/cetak_kwitansi/cetak_individu'); ?>/' + data.status, '_blank');
                     
                     reload_window();
                 } else {
