@@ -166,7 +166,7 @@ foreach ($data['DETAIL_PELANGGARAN'] as $detail) {
     $ttd = strtolower($post['TTD_SURAT']);
     $ttd = str_replace('.', '', $ttd);
     $ttd = str_replace(' ', '_', $ttd);
-    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 105, $pdf->GetY(), 75, 23, '', '');
+    $pdf->Image(base_url('files/aplikasi/ttd_'.$ttd.'.png'), 105, $pdf->GetY(), 50, 23, '', '');
     $pdf->Ln(18);
 
     $pdf->SetFont('Arial', 'UB', 10);
