@@ -106,31 +106,31 @@ foreach ($data_tindakan as $data) {
 //$pdf->Ln();
 
     $pdf->Cell(15, 4, 'Nama');
-    $pdf->Cell(75, 4, ': ' . $siswa['NAMA_SISWA']);
-    $pdf->Cell(15, 4, 'N I S');
-    $pdf->Cell(0, 4, ': ' . $siswa['NIS_SISWA']);
+    $pdf->Cell(100, 5, ': ' . $siswa['NIS_SISWA'] . ' - ' . $siswa['NAMA_SISWA']);
+    $pdf->Cell(20, 5, 'Telp.');
+    $pdf->Cell(0, 5, ': ' . (!isset($siswa['NOHP_SISWA']) ? '-' : $siswa['NOHP_SISWA']));
     $pdf->Ln();
 
     $pdf->Cell(15, 4, 'Domisili');
-    $pdf->Cell(75, 4, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa['ALAMAT_MPS'], 100));
+    $pdf->Cell(100, 4, ': ' . $this->pdf_handler->cut_text($pdf, ($siswa['PONDOK_SISWA'] == NULL || $siswa['PONDOK_SISWA'] == 1) ? 'Belum Mondok' : $siswa['NAMA_PONDOK_MPS'] . ' ' . $siswa['ALAMAT_MPS'], 100));
     $pdf->Cell(15, 4, 'Kelas');
     $pdf->Cell(0, 4, ': ' . $siswa['NAMA_KELAS']);
     $pdf->Ln();
 
     $pdf->Cell(15, 4, 'Alamat');
-    $pdf->Cell(75, 4, ': ' . $this->pdf_handler->cut_text($pdf, $siswa['ALAMAT_SISWA'] . ', Kec. ' . $siswa['NAMA_KEC'] . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa['NAMA_KAB'])), 100));
+    $pdf->Cell(100, 4, ': ' . $this->pdf_handler->cut_text($pdf, $siswa['ALAMAT_SISWA'] . ', Kec. ' . $siswa['NAMA_KEC'] . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa['NAMA_KAB'])), 100));
     $pdf->Cell(15, 4, 'Surat');
     $pdf->Cell(0, 4, ': ' . ($siswa['NAMA_KJT'] == NULL ? '-' : $siswa['NAMA_KJT']));
     $pdf->Ln();
 
     $pdf->Cell(15, 4, 'Wali Santri');
-    $pdf->Cell(75, 4, ': ' . $this->cetak->nama_wali_siswa($siswa));
+    $pdf->Cell(100, 4, ': ' . $this->cetak->nama_wali_siswa($siswa));
     $pdf->Cell(15, 4, 'Jumlah Poin');
     $pdf->Cell(0, 4, ': ' . $siswa['JUMLAH_POIN_KSH']);
     $pdf->Ln();
 
     $pdf->Cell(15, 4, 'Wali Kelas');
-    $pdf->Cell(75, 4, ': ' . $this->cetak->nama_peg_print_title($siswa['GELAR_AWAL_WALI_KELAS'], $siswa['WALI_KELAS'], $siswa['GELAR_AKHIR_WALI_KELAS']));
+    $pdf->Cell(100, 4, ': ' . $this->cetak->nama_peg_print_title($siswa['GELAR_AWAL_WALI_KELAS'], $siswa['WALI_KELAS'], $siswa['GELAR_AKHIR_WALI_KELAS']).' ('.(!isset($siswa['NOMOR_HP_WALI_KELAS']) ? '-' : $siswa['NOMOR_HP_WALI_KELAS']).')');
     $pdf->Cell(15, 4, 'Jumlah Lari');
     $pdf->Cell(0, 4, ': ' . $siswa['JUMLAH_LARI_KSH']);
     $pdf->Ln(5);

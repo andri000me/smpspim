@@ -69,7 +69,7 @@ class Laporan_pegawai_model extends CI_Model {
                 . ',SUKU_PEG AS KODE_SUKU'
                 . ',NAMA_SUKU AS NAMA_SUKU'
                 . ',MENIKAH_PEG AS STATUS_PERNIKAHAN'
-                . ',ALAMAT_PEG AS ALAMAT'
+//                . ',ALAMAT_PEG AS ALAMAT'
                 . ',KECAMATAN_PEG AS KODE_KECAMATAN'
                 . ',NAMA_KEC AS NAMA_KECAMATAN'
                 . ',ID_KAB AS KODE_KABUPATEN'

@@ -180,9 +180,9 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
 //$pdf->Ln();
 
     $pdf->Cell(20, 5, 'Nama');
-    $pdf->Cell(100, 5, ': ' . $siswa['NAMA_SISWA']);
-    $pdf->Cell(20, 5, 'N I S');
-    $pdf->Cell(0, 5, ': ' . $siswa['NIS_SISWA']);
+    $pdf->Cell(100, 5, ': ' . $siswa['NIS_SISWA'] . ' - ' . $siswa['NAMA_SISWA']);
+    $pdf->Cell(20, 5, 'Telp.');
+    $pdf->Cell(0, 5, ': ' . (!isset($siswa['NOHP_SISWA']) ? '-' : $siswa['NOHP_SISWA']));
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Domisili');
@@ -192,7 +192,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Alamat');
-    $pdf->Cell(100, 5, ': ' . $this->pdf_handler->cut_text($pdf, $siswa['ALAMAT_SISWA'] . ', Kec. ' . $siswa['NAMA_KEC'] . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa['NAMA_KAB'])), 100));
+    $pdf->Cell(100, 4, ': ' . $this->pdf_handler->cut_text($pdf, $siswa['ALAMAT_SISWA'] . ', Kec. ' . $siswa['NAMA_KEC'] . ', ' . str_replace('kabupaten', 'Kab.', strtolower($siswa['NAMA_KAB'])), 100));
     $pdf->Cell(20, 5, 'Surat');
     $pdf->Cell(0, 5, ': ' . ($siswa['NAMA_KJT'] == NULL ? '-' : $siswa['NAMA_KJT']));
     $pdf->Ln();
@@ -204,7 +204,7 @@ foreach ($DETAIL_PELANGGARAN as $detail) {
     $pdf->Ln();
 
     $pdf->Cell(20, 5, 'Wali Kelas');
-    $pdf->Cell(100, 5, ': ' . $this->cetak->nama_peg_print_title($siswa['GELAR_AWAL_WALI_KELAS'], $siswa['WALI_KELAS'], $siswa['GELAR_AKHIR_WALI_KELAS']));
+    $pdf->Cell(100, 4, ': ' . $this->cetak->nama_peg_print_title($siswa['GELAR_AWAL_WALI_KELAS'], $siswa['WALI_KELAS'], $siswa['GELAR_AKHIR_WALI_KELAS']).' ('.(!isset($siswa['NOMOR_HP_WALI_KELAS']) ? '-' : $siswa['NOMOR_HP_WALI_KELAS']).')');
     $pdf->Cell(20, 5, 'Jumlah Lari');
     $pdf->Cell(0, 5, ': ' . $siswa['JUMLAH_LARI_KSH']);
     $pdf->Ln();

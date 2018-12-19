@@ -353,6 +353,9 @@ class Laporan_poin extends CI_Controller {
                         'tanggal' => $this->date_format->to_view($detail['TANGGAL_KT'])
                     );
 
+                    if (isset($detail['NOHP_SISWA']))
+                        $data_array['NOHP_SISWA'] = $detail['NOHP_SISWA'];
+
                     $where = array(
                         'TA_KS' => $detail['TA_KSH'],
                         'SISWA_KS' => $detail['SISWA_KSH'],
