@@ -3,10 +3,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Nis_handler {
-    
+
     public function __construct() {
         $this->CI = & get_instance();
-        
+
         $this->CI->load->model(array(
             'tingkat_model' => 'tingkat',
             'siswa_model' => 'siswa',
@@ -18,60 +18,68 @@ class Nis_handler {
         ));
         $this->CI->load->library('tagihan_handler');
     }
-    
+
     public function proses() {
         $count = 0;
         $siswa = $this->CI->nis->get_nis_null();
-        
+
         $siswa_lama = array();
         $siswa_baru = array();
         // MEMILAH SISWA BARU DAN LAMA
         foreach ($siswa as $detail) {
-            if($detail['ID_NIS'] == NULL) $siswa_baru[] = $detail;
-            else $siswa_lama[] = $detail;
+            if ($detail['ID_NIS'] == NULL)
+                $siswa_baru[] = $detail;
+            else
+                $siswa_lama[] = $detail;
         }
-        
+
         $tahun = $this->CI->pengaturan->getTahunTAAwal();
-        
+
         // MEMBUAT NIS UNTUK SISWA LULUSAN DARI PIM
         foreach ($siswa_lama as $detail) {
             $status_proses = $this->buat_nis($detail['ID_SISWA'], $tahun, $detail['TINGKAT_AS']);
-            
-            if ($status_proses) $count++;
+
+            if ($status_proses)
+                $count++;
         }
-        
+
         // MEMBUAT NIS UNTUK SISWA BARU
         foreach ($siswa_baru as $detail) {
             $status_proses = $this->buat_nis($detail['ID_SISWA'], $tahun, $detail['TINGKAT_AS']);
-            
-            if ($status_proses) $count++;
+
+            if ($status_proses)
+                $count++;
         }
-        
+
         return $count;
     }
-    
+
     public function buat_nis($ID_SISWA, $ANGKATAN_SISWA, $ID_TINGK) {
 //        if(!$this->CI->nis->nisNULL()) 
 //            $this->CI->generate->output_JSON(array('status' => FALSE, 'msg' => 'Siswa dengan ID = '.$ID_SISWA.' telah mempunyai NIS.'));
-        
+
         $data_tingkat = $this->CI->tingkat->get_by_id($ID_TINGK);
         $no_urut = $this->CI->pengaturan->getNomorInduk($data_tingkat->DEPT_TINGK) + 1;
         $nomor_induk = $this->CI->pengaturan->getNomorPokok($data_tingkat->DEPT_TINGK, $ANGKATAN_SISWA, $no_urut);
-        
-        $data = array('NIS_SISWA' => $nomor_induk);
+        $nomor_induk_emis = NSPP[$data_tingkat->DEPT_TINGK]. substr($ANGKATAN_SISWA, -2).$no_urut;
+
+        $data = array(
+            'NIS_SISWA' => $nomor_induk,
+            'NIS_EMIS_SISWA' => $nomor_induk_emis   
+        );
         $where = array('ID_SISWA' => $ID_SISWA);
         $status = $this->CI->siswa->update($where, $data);
-        
-        if($status) {
+
+        if ($status) {
             $this->CI->pengaturan->setNomorTerakhir($data_tingkat->DEPT_TINGK, $no_urut);
-            
+
             // SET TAGIHAN SISWA
             $this->CI->tagihan_handler->assign_tagihan($data_tingkat->DEPT_TINGK, $ID_SISWA);
         }
-        
+
         return $status;
     }
-    
+
     public function hapus_nis($data_siswa) {
         $data_simpan = array(
             'NIS_NIS' => $data_siswa->NIS_SISWA,
@@ -93,47 +101,47 @@ class Nis_handler {
             'STATUS_ASAL_NIS' => $data_siswa->STATUS_ASAL_SISWA,
             'USER_NIS' => $this->CI->session->userdata('ID_USER'),
         );
-        
-        if($this->CI->nis->save($data_simpan)) {
+
+        if ($this->CI->nis->save($data_simpan)) {
             $data_update = array(
                 'NIS_SISWA' => NULL,
                 'NO_UM_SISWA' => NULL,
             );
             $where_update = array('ID_SISWA' => $data_siswa->ID_SISWA);
-            
+
             $this->CI->siswa->update($where_update, $data_update);
-            
+
             $this->CI->kelas->fix_jumlah_siswa();
         } else {
             $this->CI->generate->output_JSON(array('status' => FALSE, 'msg' => 'Gagal menyimpan data NIS Siswa.'));
         }
     }
-    
+
     public function konversi_nis_diperbolehkan($data_siswa, $ID_TINGKAT) {
         $data_tingkat = $this->CI->tingkat->get_by_id($ID_TINGKAT);
-        
-        if($data_siswa->DEPT_TINGK == $data_tingkat->DEPT_TINGK)
+
+        if ($data_siswa->DEPT_TINGK == $data_tingkat->DEPT_TINGK)
             return FALSE;
-        else 
+        else
             return TRUE;
     }
-    
+
     public function proses_absen() {
         $data_kelas = $this->CI->akad_siswa->get_kelas_absen_null();
-        
+
         $i = 0;
-        
+
         foreach ($data_kelas as $detail_kelas) {
             $where_as = array(
                 'TA_AS' => $this->CI->session->userdata('ID_TA_ACTIVE'),
                 'KELAS_AS' => $detail_kelas->KELAS_AS
             );
             $data_siswa = $this->CI->akad_siswa->get_rows($where_as);
-            
+
             $nomor_absen = 1;
             foreach ($data_siswa as $detail_siswa) {
                 $i++;
-                
+
                 $data_update = array(
                     'NO_ABSEN_AS' => $nomor_absen++
                 );
@@ -143,7 +151,8 @@ class Nis_handler {
                 $this->CI->akad_siswa->update($where_update, $data_update);
             }
         }
-        
+
         return $i;
     }
+
 }

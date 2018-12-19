@@ -119,6 +119,30 @@ class Pelanggaran_header_model extends CI_Model {
         return $result->result();
     }
 
+    public function get_data_pemanggilan($where) {
+        $this->table = '(SELECT *, IF(NAMA_KJT IS NULL, "", NAMA_KJT) AS SURAT FROM (SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN_KSH, SUM(LARI_KSH) AS JUMLAH_LARI_KSH FROM komdis_siswa_header WHERE TA_KSH=' . $this->session->userdata('ID_TA_ACTIVE') . ' GROUP BY SISWA_KSH) komdis_siswa_header LEFT OUTER JOIN komdis_jenis_tindakan ON JUMLAH_POIN_KSH >= POIN_KJT AND JUMLAH_POIN_KSH <= POIN_MAKS_KJT) komdis_siswa_header';
+
+        $this->db->from($this->table);
+        $this->db->join('md_tahun_ajaran mta', 'komdis_siswa_header.TA_KSH=mta.ID_TA');
+//        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
+        $this->db->join('md_siswa ms', 'komdis_siswa_header.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('akad_siswa as', 'komdis_siswa_header.SISWA_KSH=as.SISWA_AS AND komdis_siswa_header.TA_KSH=as.TA_AS');
+        $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mpw', 'ak.WALI_KELAS=mpw.ID_PEG');
+
+        $this->db->join('komdis_jenis_tindakan kjt', 'komdis_siswa_header.JUMLAH_POIN_KSH>=kjt.POIN_KJT AND komdis_siswa_header.JUMLAH_POIN_KSH<=kjt.POIN_MAKS_KJT', 'LEFT');
+        $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
+        $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
+        
+        $this->db->where($where);
+        $result = $this->db->get();
+//        echo $this->db->last_query();
+//        exit();
+
+        return $result->result();
+    }
+
     public function get_poin_siswa($TA_KSH, $CAWU_KSH, $SISWA_KSH) {
         $this->db->from($this->table);
         $this->db->where(array(
@@ -301,6 +325,7 @@ FROM
     " . $order;
         $query = $this->db->query($sql);
 //        echo $this->db->last_query();
+//        exit();
 
         return $query->result_array();
     }
@@ -478,6 +503,15 @@ WHERE
     }
 
     public function fix_lari_dan_poin() {
+        for ($cawu = 1; $cawu <= 3; $cawu++) {
+            $sql = "INSERT INTO komdis_siswa_header (TA_KSH, CAWU_KSH, SISWA_KSH, POIN_TAHUN_LALU_KSH, USER_KSH)
+SELECT " . $this->session->userdata('ID_TA_ACTIVE') . ", " . $cawu . ", ID_SISWA, (SELECT SUM(POIN_KSH) FROM komdis_siswa_header WHERE SISWA_KSH=ID_SISWA) AS JUMLAH_POIN_LALU, " . $this->session->userdata('ID_USER') . "
+FROM md_siswa
+LEFT JOIN (SELECT * FROM komdis_siswa_header WHERE TA_KSH=" . $this->session->userdata('ID_TA_ACTIVE') . " AND CAWU_KSH=" . $cawu . ") ksh ON SISWA_KSH=ID_SISWA
+WHERE TA_KSH IS NULL";
+            $this->db->query($sql);
+        }
+
         $sql = "UPDATE komdis_siswa_header ksh
                     INNER JOIN
                 (SELECT 
@@ -502,7 +536,7 @@ WHERE
                     AND ksh.TA_KSH = " . $this->session->userdata('ID_TA_ACTIVE');
 
         $this->db->query($sql);
-        
+
         $sql = "UPDATE komdis_siswa_header ksh
                 INNER JOIN
             (SELECT 

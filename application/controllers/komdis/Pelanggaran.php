@@ -45,6 +45,7 @@ class Pelanggaran extends CI_Controller {
         foreach ($list as $item) {
             $no++;
             $row = array();
+            $row[] = $item->CREATED_KS;
             $row[] = $item->NAMA_CAWU;
             $row[] = $item->TANGGAL_KS;
             $row[] = $item->NO_ABSEN_AS;

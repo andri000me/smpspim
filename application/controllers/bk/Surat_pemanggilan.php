@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Surat_pemanggilan extends CI_Controller {
 
-    var $table = 'komdis_siswa_header';
+    var $table = "(SELECT *, SUM(POIN_KSH) AS JUMLAH_POIN FROM `komdis_siswa_header` WHERE `TA_KSH` = '3' GROUP BY SISWA_KSH, TA_KSH) AS data_ksh";
     var $joins = array(
         array('md_siswa', 'SISWA_KSH=ID_SISWA'),
         array('akad_siswa', 'TA_KSH=TA_AS AND SISWA_AS=SISWA_KSH'),
@@ -22,12 +22,12 @@ bk_pemanggilan
 INNER JOIN
 (SELECT MAX(ID_PANGGIL) AS ID_BKP_MAX FROM
 bk_pemanggilan
-GROUP BY SISWA_PANGGIL, CAWU_PANGGIL, TA_PANGGIL) bkp
-ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND SISWA_KSH=SISWA_PANGGIL AND POIN_KSH<(POIN_PANGGIL + (SELECT NAMA_PENGATURAN FROM md_pengaturan WHERE ID_PENGATURAN="bk_poin_kelipatan_pemanggilan"))', 'LEFT'),
+GROUP BY SISWA_PANGGIL, TA_PANGGIL) bkp
+ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND SISWA_KSH=SISWA_PANGGIL AND JUMLAH_POIN<(POIN_PANGGIL + (SELECT NAMA_PENGATURAN FROM md_pengaturan WHERE ID_PENGATURAN="bk_poin_kelipatan_pemanggilan"))', 'LEFT'),
     );
     var $params = array();
     var $primary_key = "ID_KSH";
-    var $name_of_pk = "POIN_KSH";
+    var $name_of_pk = "JUMLAH_POIN";
     var $edit_id = FALSE;
     var $id_datatables = 'datatable1';
 
@@ -43,10 +43,10 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
         $this->params = array(
             'where' => array(
                 'TA_KSH' => $this->session->userdata('ID_TA_ACTIVE'),
-                'CAWU_KSH' => $this->session->userdata('ID_CAWU_ACTIVE'),
+//                'CAWU_KSH' => $this->session->userdata('ID_CAWU_ACTIVE'),
                 'ID_PANGGIL' => NULL,
-                'POIN_KSH > ' => $this->pengaturan->getBkPoinMinimalDipanggil(),
-            )
+                'JUMLAH_POIN > ' => $this->pengaturan->getBkPoinMinimalDipanggil(),
+            ),
         );
     }
 
@@ -77,7 +77,7 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
     public function get_datatables() {
         $this->generate->set_header_JSON();
 
-        $columns = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'POIN_KSH', 'ID_KSH');
+        $columns = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN', 'ID_KSH', 'ID_SISWA');
         $select = $columns;
         $orders = $columns;
         $order = array("ID_KSH" => 'ASC');
@@ -93,9 +93,9 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_PEG;
-            $row[] = $item->POIN_KSH;
+            $row[] = $item->JUMLAH_POIN;
 
-            $row[] = '<button type="button" class="btn btn-success btn-xs" onclick="pilih_siswa(this)" data-ksh="' . $item->ID_KSH . '" data-nis="' . $item->NIS_SISWA . '" data-nama="' . $item->NAMA_SISWA . '" data-kelas="' . $item->NAMA_KELAS . '"><i class="fa fa-check"></i></button>';
+            $row[] = '<button type="button" class="btn btn-success btn-xs" onclick="pilih_siswa(this)" data-ksh="' . $item->ID_KSH . '" data-nis="' . $item->NIS_SISWA . '" data-id="' . $item->ID_SISWA . '"data-nama="' . $item->NAMA_SISWA . '" data-kelas="' . $item->NAMA_KELAS . '"><i class="fa fa-check"></i></button>';
 
             $data[] = $row;
         }
@@ -121,15 +121,16 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
             if ($detail != NULL) {
                 $data_ksh = $this->db_handler->get_row('komdis_siswa_header', array(
                     'where' => array(
-                        'ID_KSH' => $detail['ksh']
+                        'SISWA_KSH' => $detail['id'],
+                        'TA_KSH' => $this->session->userdata('ID_TA_ACTIVE')
                     )
-                ));
+                        ), '*, SUM(POIN_KSH) AS JUMLAH_POIN');
                 $data_ks = $this->db_handler->get_rows('komdis_siswa', array(
                     'where' => array(
                         'SISWA_KS' => $data_ksh->SISWA_KSH,
                         'TA_KS' => $data_ksh->TA_KSH,
-                        'CAWU_KS' => $data_ksh->CAWU_KSH,
-                    )
+//                        'CAWU_KS' => $data_ksh->CAWU_KSH,
+                    ),
                         ), 'ID_KS');
                 $this->db_handler->insert('bk_pemanggilan', array(
                     'TA_PANGGIL' => $this->session->userdata('ID_TA_ACTIVE'),
@@ -137,7 +138,7 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
                     'SISWA_PANGGIL' => $data_ksh->SISWA_KSH,
                     'TANGGAL_PANGGIL' => $tanggal,
                     'NO_SURAT_PANGGIL' => $no_surat,
-                    'POIN_PANGGIL' => $data_ksh->POIN_KSH,
+                    'POIN_PANGGIL' => $data_ksh->JUMLAH_POIN,
                     'DATA_KOMDIS_PANGGIL' => json_encode($data_ks),
                     'USER_PANGGIL' => $this->session->userdata('ID_USER'),
                 ));
@@ -172,11 +173,9 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
         $data = array();
         foreach ($data_panggil as $detail) {
             $where = array(
-                'TA_KSH' => $detail->TA_PANGGIL,
-                'CAWU_KSH' => $detail->CAWU_PANGGIL,
                 'SISWA_KSH' => $detail->SISWA_PANGGIL
             );
-            $siswa = $this->laporan_poin->get_full_by_id($where);
+            $siswa = $this->laporan_poin->get_data_pemanggilan($where);
             $data_komdis = json_decode($detail->DATA_KOMDIS_PANGGIL, TRUE);
 
             $q = "";
@@ -187,7 +186,6 @@ ON ID_BKP_MAX=ID_PANGGIL) bkp', 'TA_KSH=TA_PANGGIL AND CAWU_KSH=CAWU_PANGGIL AND
                 $q .= " ID_KS='" . $value['ID_KS'] . "' ";
                 $start = false;
             }
-
 
             if (count($siswa) == 1) {
                 foreach ($siswa as $detail) {

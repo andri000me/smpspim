@@ -23,7 +23,7 @@ class Db_handler {
         if ($posts['length'] != -1)
             $this->CI->db->limit($posts['length'], $posts['start']);
         $query_data = $this->CI->db->get();
-//        var_dump($this->CI->db->last_query());
+//        ECHO $this->CI->db->last_query();
         // GET COUNT
         $this->get_table($table, $joins, $params, $select);
         $this->get_query($posts, $columns, $orders, $order);

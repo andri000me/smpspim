@@ -108,9 +108,40 @@ class Laporan_akademik_model extends CI_Model {
 
     public function export_data($ta, $tingkat, $kelas, $jk) {
         $this->load->dbutil();
+        $this->_get_table();
+        $this->db->join('md_hobi mhi', 'ms.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
+        $this->db->join('md_status_mutasi msmt', 'ms.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
+        $this->db->join('md_asal_santri masan', 'ms.STATUS_ASAL_SISWA=masan.MD_ASSAN', 'LEFT');
+        $this->db->join('md_asal_sekolah as', 'ms.ASAL_SEKOLAH_SISWA=as.ID_AS', 'LEFT');
+        $this->db->join('md_jenjang_sekolah mjsas', 'as.JENJANG_AS=mjsas.ID_JS', 'LEFT');
+        $this->db->join('md_kecamatan kecas', 'as.KECAMATAN_AS=kecas.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kabas', 'kecas.KABUPATEN_KEC=kabas.ID_KAB', 'LEFT');
+        $this->db->join('md_provinsi provas', 'kabas.PROVINSI_KAB=provas.ID_PROV', 'LEFT');
+        $this->db->join('md_hubungan mhb', 'ms.WALI_HUBUNGAN_SISWA=mhb.ID_HUB', 'LEFT');
+        $this->db->join('md_jenjang_pendidikan mjpw', 'ms.WALI_PENDIDIKAN_SISWA=mjpw.ID_JP', 'LEFT');
+        $this->db->join('md_pekerjaan mpkw', 'ms.WALI_PEKERJAAN_SISWA=mpkw.ID_JENPEK', 'LEFT');
+        $this->db->join('md_kecamatan keco', 'ms.ORTU_KECAMATAN_SISWA=keco.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kabo', 'keco.KABUPATEN_KEC=kabo.ID_KAB', 'LEFT');
+        $this->db->join('md_provinsi provo', 'kabo.PROVINSI_KAB=provo.ID_PROV', 'LEFT');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
+        
+        $select_nis = '';
+        if ($ta != "") {
+            $this->db->where('TA_AS', $ta);
+            $this->db->join('md_nis mnis', 'mnis.SISWA_NIS=ID_SISWA AND TA_NIS=' . $ta, 'LEFT');
+            $select_nis = ',NIS_NIS AS NIS_LAMA';
+        }
+        if ($tingkat != "")
+            $this->db->where('TINGKAT_AS', $tingkat);
+        if ($kelas != "")
+            $this->db->where('KELAS_AS', $kelas);
+        if ($jk != "")
+            $this->db->where('JK_SISWA', $jk);
+
 
         $this->db->select(''
                 . 'NIS_SISWA AS NIS'
+                . ',NIS_EMIS_SISWA AS NIS_EMIS'
                 . ',NISN_SISWA AS NISN'
                 . ',NIK_SISWA AS NIK'
                 . ',NO_UN_SISWA AS NOMOR_UN'
@@ -212,32 +243,9 @@ class Laporan_akademik_model extends CI_Model {
                 . ',mt.KETERANGAN_TINGK AS JENJANG_TINGKAT_SEKARANG'
                 . ',mp.NIP_PEG AS NIP_WALI_KELAS'
                 . ',mp.NAMA_PEG AS NAMA_WALI_KELAS'
+                . $select_nis
                 . '');
-        $this->_get_table();
-        $this->db->join('md_hobi mhi', 'ms.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
-        $this->db->join('md_status_mutasi msmt', 'ms.STATUS_MUTASI_SISWA=msmt.ID_MUTASI', 'LEFT');
-        $this->db->join('md_asal_santri masan', 'ms.STATUS_ASAL_SISWA=masan.MD_ASSAN', 'LEFT');
-        $this->db->join('md_asal_sekolah as', 'ms.ASAL_SEKOLAH_SISWA=as.ID_AS', 'LEFT');
-        $this->db->join('md_jenjang_sekolah mjsas', 'as.JENJANG_AS=mjsas.ID_JS', 'LEFT');
-        $this->db->join('md_kecamatan kecas', 'as.KECAMATAN_AS=kecas.ID_KEC', 'LEFT');
-        $this->db->join('md_kabupaten kabas', 'kecas.KABUPATEN_KEC=kabas.ID_KAB', 'LEFT');
-        $this->db->join('md_provinsi provas', 'kabas.PROVINSI_KAB=provas.ID_PROV', 'LEFT');
-        $this->db->join('md_hubungan mhb', 'ms.WALI_HUBUNGAN_SISWA=mhb.ID_HUB', 'LEFT');
-        $this->db->join('md_jenjang_pendidikan mjpw', 'ms.WALI_PENDIDIKAN_SISWA=mjpw.ID_JP', 'LEFT');
-        $this->db->join('md_pekerjaan mpkw', 'ms.WALI_PEKERJAAN_SISWA=mpkw.ID_JENPEK', 'LEFT');
-        $this->db->join('md_kecamatan keco', 'ms.ORTU_KECAMATAN_SISWA=keco.ID_KEC', 'LEFT');
-        $this->db->join('md_kabupaten kabo', 'keco.KABUPATEN_KEC=kabo.ID_KAB', 'LEFT');
-        $this->db->join('md_provinsi provo', 'kabo.PROVINSI_KAB=provo.ID_PROV', 'LEFT');
-        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
-        if ($ta != "")
-            $this->db->where('TA_AS', $ta);
-        if ($tingkat != "")
-            $this->db->where('TINGKAT_AS', $tingkat);
-        if ($kelas != "")
-            $this->db->where('KELAS_AS', $kelas);
-        if ($jk != "")
-            $this->db->where('JK_SISWA', $jk);
-
+        
         $sql = $this->db->get();
 
         return $this->dbutil->csv_from_result($sql);

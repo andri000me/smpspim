@@ -37,9 +37,9 @@ foreach ($siswa as $data) {
 //$pdf->Ln();
 
         $pdf->Cell(20, 5, 'Nama');
-        $pdf->Cell(100, 5, ': ' . $siswa->NAMA_SISWA);
-        $pdf->Cell(20, 5, 'N I S');
-        $pdf->Cell(0, 5, ': ' . $siswa->NIS_SISWA);
+        $pdf->Cell(100, 5, ': ' . $siswa->NIS_SISWA . ' - ' . $siswa->NAMA_SISWA);
+        $pdf->Cell(20, 5, 'Telp.');
+        $pdf->Cell(0, 5, ': ' . $siswa->NOHP_SISWA);
         $pdf->Ln();
 
         $pdf->Cell(20, 5, 'Domisili');
@@ -61,7 +61,7 @@ foreach ($siswa as $data) {
         $pdf->Ln();
 
         $pdf->Cell(20, 5, 'Wali Kelas');
-        $pdf->Cell(100, 5, ': ' . $this->cetak->nama_peg_print($siswa));
+        $pdf->Cell(100, 5, ': ' . $this->cetak->nama_peg_print($siswa) . ' (' . $siswa->NOHP_PEG . ')');
         $pdf->Cell(20, 5, 'Jumlah Lari');
         $pdf->Cell(0, 5, ': ' . $siswa->JUMLAH_LARI_KSH);
         $pdf->Ln();

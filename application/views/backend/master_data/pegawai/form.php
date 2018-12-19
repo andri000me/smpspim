@@ -38,10 +38,12 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <div class="panel-body">
                         <?php $this->generate->input_text('NIP', array('name' => 'NIP_PEG', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIP_PEG : '', 'value' => $mode_edit ? $data->NIP_PEG : '', 'id' => 'NIP_PEG', 'onchange' => 'return check_data(\'NIP_PEG\');'), TRUE, 3); ?>
                         <?php $this->generate->input_text('NIK', array('name' => 'NIK_PEG', 'maxlength' => 16, 'value' => $mode_edit ? $data->NIK_PEG : '', 'value' => $mode_edit ? $data->NIK_PEG : '', 'id' => 'NIK_PEG', 'onchange' => 'return check_data(\'NIK_PEG\');'), TRUE, 4); ?>
+                        <?php $this->generate->input_text('KK', array('name' => 'KK_PEG', 'maxlength' => 16, 'value' => $mode_edit ? $data->KK_PEG : '', 'value' => $mode_edit ? $data->KK_PEG : '', 'id' => 'KK_PEG', 'onchange' => 'return check_data(\'KK_PEG\');'), TRUE, 4); ?>
                         <?php $this->generate->input_text('Nama Lengkap', array('name' => 'NAMA_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->NAMA_PEG : ''), TRUE); ?>
                         <?php $this->generate->input_text('Gelar Awal', array('name' => 'GELAR_AWAL_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->GELAR_AWAL_PEG : ''), FALSE, 2); ?>
                         <?php $this->generate->input_text('Gelar Akhir', array('name' => 'GELAR_AKHIR_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->GELAR_AKHIR_PEG : ''), FALSE, 3); ?>
                         <?php $this->generate->input_text('Panggilan', array('name' => 'PANGGILAN_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->PANGGILAN_PEG : ''), FALSE, 4); ?>
+                        <?php $this->generate->input_text('Ibu Kandung', array('name' => 'IBU_PEG', 'maxlength' => 100, 'value' => $mode_edit ? $data->IBU_PEG : ''), FALSE, 4); ?>
                         <?php
                         $this->generate->input_dropdown('Jabatan', 'GURU_PEG', array(
                             array('id' => '1', 'text' => 'GURU', 'selected' => $mode_edit ? ($data->GURU_PEG == '1' ? TRUE : FALSE) : FALSE),

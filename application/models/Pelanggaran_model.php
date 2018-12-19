@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggaran_model extends CI_Model {
 
     var $table = 'komdis_siswa';
-    var $column = array('NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS))','NAMA_KJP','POIN_KJP', 'ID_KS');
+    var $column = array('CREATED_KS','NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, ", ", NAMA_KEC, ", ", NAMA_KAB), CONCAT(NAMA_PONDOK_MPS, ", ", ALAMAT_MPS))','NAMA_KJP','POIN_KJP', 'ID_KS');
 //    var $column = array('NAMA_CAWU','TANGGAL_KS','NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','NAMA_KELAS','mpw.NAMA_PEG','mp.NAMA_PEG','CONCAT(INDUK_KJP, IF(ANAK_KJP IS NULL, "", "."),IF(ANAK_KJP IS NULL, "", ANAK_KJP))','POIN_KJP','KETERANGAN_KS', 'ID_KS');
     var $primary_key = "ID_KS";
     var $order = array("ID_KS" => 'DESC');

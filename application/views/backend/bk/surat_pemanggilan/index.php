@@ -38,6 +38,7 @@
     function pilih_siswa(t) {
         var ksh = $(t).data('ksh');
         var nis = $(t).data('nis');
+        var id = $(t).data('id');
         var nama = $(t).data('nama');
         var kelas = $(t).data('kelas');
 
@@ -45,6 +46,7 @@
             'index': indexListData,
             'ksh': ksh,
             'nis': nis,
+            'id': id,
             'nama': nama,
             'kelas': kelas
         };

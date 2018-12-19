@@ -100,6 +100,22 @@ class Pondok_siswa extends CI_Controller {
                 )
             ),
             array(
+                'label' => 'Jenis Kelamin',                                     
+                'required' => TRUE,
+                'keterangan' => 'Wajib diisi',
+                'length' => 4,
+                'data' => array(
+                    'type'  => 'dropdown',                                      
+                    'name'  => 'JK_MPS',                                    
+                    'value' => $data == NULL ? "" : $data->JK_MPS,
+                    'value_blank'  => '-- Pilih JK --',
+                    'data'  => array(
+                        array('id' => 'L', 'text' => "Laki-laki"),
+                        array('id' => 'P', 'text' => "Perempuan"),
+                    )                     
+                )
+            ),
+            array(
                 'label' => 'Alamat',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
@@ -176,6 +192,12 @@ class Pondok_siswa extends CI_Controller {
         else $data = array();
         
         $data['NAMA_PONDOK_MPS'] = $this->input->post('NAMA_PONDOK_MPS');
+        $data['PENGASUH_MPS'] = $this->input->post('PENGASUH_MPS');
+        $data['JK_MPS'] = $this->input->post('JK_MPS');
+        $data['ALAMAT_MPS'] = $this->input->post('ALAMAT_MPS');
+        $data['JARAK_MPS'] = $this->input->post('JARAK_MPS');
+        $data['TELP_MPS'] = $this->input->post('TELP_MPS');
+        $data['EMAIL_MPS'] = $this->input->post('EMAIL_MPS');
         
         $affected_row = $this->pondok_siswa->update($where, $data);
 

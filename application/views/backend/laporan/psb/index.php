@@ -3,28 +3,30 @@ $id = 'grafik';
 $this->generate->generate_panel_content('Laporan PSB', 'Laporan PSB');
 
 $options = array(
-    'NAMA_TA#Nama Tahun Ajaran#Jumlah (siswa)#Tahun Ajaran' => 'Tahun Ajaran',
-    'mt.KETERANGAN_TINGK#Nama Jenjang Tingkat#Jumlah (siswa)#Jenjang Tingkat' => 'Jenjang Tingkat',
+//    'NAMA_TA#Nama Tahun Ajaran#Jumlah (siswa)#Tahun Ajaran' => 'Tahun Ajaran',
+//    'mt.KETERANGAN_TINGK#Nama Jenjang Tingkat#Jumlah (siswa)#Jenjang Tingkat' => 'Jenjang Tingkat',
     'ANGKATAN_SISWA#Tahun Masuk Siswa#Jumlah (siswa)#Tahun Masuk' => 'Tahun Masuk',
-    'TANGGAL_LAHIR_SISWA#Umur#Jumlah (siswa)#Umur' => 'Umur',
-    'NAMA_SUKU#Nama Suku#Jumlah (siswa)#Suku' => 'Suku',
-    'NAMA_AGAMA#Nama Agama#Jumlah (siswa)#Agama' => 'Agama',
-    'NAMA_KONDISI#Nama Kondisi#Jumlah (siswa)#Kondisi' => 'Kondisi',
-    'NAMA_JK#Nama Jenis Kelamin#Jumlah (siswa)#Jenis Kelamin' => 'Jenis Kelamin',
-    'NAMA_WARGA#Status Kewarganegaraan#Jumlah (siswa)#Kewarganegaraan' => 'Kewarganegaraan',
-    'NAMA_DARAH#Golongan Darah#Jumlah (siswa)#Golongan Darah' => 'Golongan Darah',
-    'NAMA_KEC#Nama Kecamatan#Jumlah (siswa)#Kecamatan' => 'Kecamatan',
-    'NAMA_KAB#Nama Kabupaten#Jumlah (siswa)#Kecamatan' => 'Kabupaten',
-    'NAMA_PROV#Nama Provinsi#Jumlah (siswa)#Provinsi' => 'Provinsi',
-    'NAMA_TEMTING#Tempat Tinggal#Jumlah (siswa)#Tempat Tinggal' => 'Tempat Tinggal',
+//    'MASUK_JENJANG_SISWA#Jenjang Siswa Siswa#Jumlah (siswa)#Jenjang Siswa' => 'Jenjang Siswa',
+//    'TANGGAL_LAHIR_SISWA#Umur#Jumlah (siswa)#Umur' => 'Umur',
+//    'NAMA_SUKU#Nama Suku#Jumlah (siswa)#Suku' => 'Suku',
+//    'NAMA_AGAMA#Nama Agama#Jumlah (siswa)#Agama' => 'Agama',
+//    'NAMA_KONDISI#Nama Kondisi#Jumlah (siswa)#Kondisi' => 'Kondisi',
+//    'NAMA_JK#Nama Jenis Kelamin#Jumlah (siswa)#Jenis Kelamin' => 'Jenis Kelamin',
+//    'NAMA_WARGA#Status Kewarganegaraan#Jumlah (siswa)#Kewarganegaraan' => 'Kewarganegaraan',
+//    'NAMA_DARAH#Golongan Darah#Jumlah (siswa)#Golongan Darah' => 'Golongan Darah',
+//    'NAMA_KEC#Nama Kecamatan#Jumlah (siswa)#Kecamatan' => 'Kecamatan',
+//    'NAMA_KAB#Nama Kabupaten#Jumlah (siswa)#Kecamatan' => 'Kabupaten',
+//    'NAMA_PROV#Nama Provinsi#Jumlah (siswa)#Provinsi' => 'Provinsi',
+//    'NAMA_TEMTING#Tempat Tinggal#Jumlah (siswa)#Tempat Tinggal' => 'Tempat Tinggal',
     'mdt.KETERANGAN_TINGK#Jenjang Masuk Siswa#Jumlah (siswa)#Jenjang Masuk Siswa' => 'Jenjang Masuk Siswa',
-    'moha.NAMA_SO#Status Hidup Ayah#Jumlah (siswa)#Status Hidup Ayah' => 'Status Hidup Siswa',
-    'mjpa.NAMA_JP#Jenjang Pendidikan Ayah#Jumlah (siswa)#Jenjang Pendidikan Ayah' => 'Jenjang Pendidikan Ayah',
-    'mpka.NAMA_JENPEK#Jenis Pekerjaan Ayah#Jumlah (siswa)#Jenis Pekerjaan Ayah' => 'Jenis Pekerjaan Ayah',
-    'mohi.NAMA_SO#Status Hidup Ibu#Jumlah (siswa)#Status Hidup Ibu' => 'Status Hidup Siswa',
-    'mjpi.NAMA_JP#Jenjang Pendidikan Ibu#Jumlah (siswa)#Jenjang Pendidikan Ibu' => 'Jenjang Pendidikan Ibu',
-    'mpki.NAMA_JENPEK#Jenis Pekerjaan Ibu#Jumlah (siswa)#Jenis Pekerjaan Ibu' => 'Jenis Pekerjaan Ibu',
-    'NAMA_HASIL#Penghasilan Orang Tua#Jumlah (siswa)#Penghasilan Orang Tua' => 'Penghasilan Orang Tua',
+    'mdtt.KETERANGAN_TINGK#Jenjang Diterima Siswa#Jumlah (siswa)#Jenjang Diterima Siswa' => 'Jenjang Diterima Siswa',
+//    'moha.NAMA_SO#Status Hidup Ayah#Jumlah (siswa)#Status Hidup Ayah' => 'Status Hidup Siswa',
+//    'mjpa.NAMA_JP#Jenjang Pendidikan Ayah#Jumlah (siswa)#Jenjang Pendidikan Ayah' => 'Jenjang Pendidikan Ayah',
+//    'mpka.NAMA_JENPEK#Jenis Pekerjaan Ayah#Jumlah (siswa)#Jenis Pekerjaan Ayah' => 'Jenis Pekerjaan Ayah',
+//    'mohi.NAMA_SO#Status Hidup Ibu#Jumlah (siswa)#Status Hidup Ibu' => 'Status Hidup Siswa',
+//    'mjpi.NAMA_JP#Jenjang Pendidikan Ibu#Jumlah (siswa)#Jenjang Pendidikan Ibu' => 'Jenjang Pendidikan Ibu',
+//    'mpki.NAMA_JENPEK#Jenis Pekerjaan Ibu#Jumlah (siswa)#Jenis Pekerjaan Ibu' => 'Jenis Pekerjaan Ibu',
+//    'NAMA_HASIL#Penghasilan Orang Tua#Jumlah (siswa)#Penghasilan Orang Tua' => 'Penghasilan Orang Tua',
 );
 ?>
 
@@ -56,7 +58,7 @@ $options = array(
                         <div class="form-group filter-lanjutan">
                             <label class="col-sm-3 control-label">Tahun Ajaran</label>
                             <div class="col-sm-2">
-                                <select id="ta" class="form-control" onchange="get_kelas(this);">
+                                <select id="ta" class="form-control">
                                     <option value="">-- Pilih TA --</option>
                                     <?php
                                     foreach ($TA as $value) {
@@ -155,7 +157,7 @@ $this->generate->chart($id, 'Grafik PSB', $single);
         var kelompok = $("#kelompok").val();
         var ta = $("#ta").val();
         var tingkat = $("#tingkat").val();
-        var kelas = $("#kelas").val();
+//        var kelas = $("#kelas").val();
         var jk = $("#jk").val();
         var pie_donut = 0;
         var success = function (data) {
@@ -168,7 +170,7 @@ $this->generate->chart($id, 'Grafik PSB', $single);
             pie_donut = 1;
 
         if (kelompok !== '')
-            create_ajax(url, "kelompok=" + kelompok + "&pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + '&jk=' + jk, success);
+            create_ajax(url, "kelompok=" + kelompok + "&pie_donut=" + pie_donut + "&ta=" + ta + "&tingkat=" + tingkat  + '&jk=' + jk, success);
         else {
             $("#" + id).html(" ");
 
@@ -179,10 +181,10 @@ $this->generate->chart($id, 'Grafik PSB', $single);
     function export_data() {
         var ta = $("#ta").val();
         var tingkat = $("#tingkat").val();
-        var kelas = $("#kelas").val();
+//        var kelas = $("#kelas").val();
         var jk = $("#jk").val();
 
-        window.open("<?php echo site_url('laporan/psb/export'); ?>?ta=" + ta + "&tingkat=" + tingkat + "&kelas=" + kelas + "&jk=" + jk);
+        window.open("<?php echo site_url('laporan/psb/export'); ?>?ta=" + ta + "&tingkat=" + tingkat + "&jk=" + jk);
     }
 
     function filter_lanjutan() {

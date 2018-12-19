@@ -4,6 +4,7 @@ $subtitle = "Daftar semua pelanggaran";
 $id_datatables = 'datatable1';
 
 $columns = array(
+    'INPUT',
     'CAWU',
     'TANGGAL',
     'NO ABSEN',

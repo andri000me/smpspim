@@ -36,6 +36,9 @@ class Laporan_psb_model extends CI_Model {
             $this->db->join('md_jenjang_departemen mjd', 'mjs.ID_JS=mjd.JENJANG_MJD', 'LEFT');
             $this->db->join('md_tingkat mdt', 'mdt.NAMA_TINGK=' . 'ms.MASUK_TINGKAT_SISWA AND mdt.DEPT_TINGK=mjd.DEPT_MJD', 'LEFT');
         }
+        if ($label == NULL || $label == 'mdtt.KETERANGAN_TINGK') {
+            $this->db->join('md_tingkat mdtt', 'TINGKAT_AS=ID_TINGK', 'LEFT');
+        }
         if ($label == NULL || $label == 'NAMA_JK')
             $this->db->join('md_jenis_kelamin mjk', 'ms.JK_SISWA=mjk.ID_JK', 'LEFT');
         if ($label == NULL || $label == 'NAMA_WARGA')
@@ -82,9 +85,9 @@ class Laporan_psb_model extends CI_Model {
 
         if ($ta != "") {
             $this->db->where('TA_AS', $ta);
-            $this->db->where('KONVERSI_AS', 0);
-            $this->db->where('AKTIF_SISWA', 0);
-            $this->db->where('ALUMNI_SISWA', 0);
+//            $this->db->where('KONVERSI_AS', 0);
+//            $this->db->where('AKTIF_SISWA', 0);
+//            $this->db->where('ALUMNI_SISWA', 0);
         }
         if ($tingkat != "")
             $this->db->where('TINGKAT_AS', $tingkat);
@@ -95,7 +98,9 @@ class Laporan_psb_model extends CI_Model {
         if ($label != 'KONVERSI_AS')
             $this->db->where('KONVERSI_AS', 0);
 
-        if ($label == 'TANGGAL_LAHIR_SISWA')
+        if ($label == 'ANGKATAN_SISWA')
+            $this->db->group_by('LEFT(RIGHT(ANGKATAN_SISWA, 6), 4)');
+        elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->group_by('LEFT(' . $label . ', 4)');
         else
             $this->db->group_by($label);
@@ -103,6 +108,7 @@ class Laporan_psb_model extends CI_Model {
 
         $this->db->order_by('x_label', 'ASC');
         $result = $this->db->get();
+//        echo $this->db->last_query();
 
         return $result->result();
     }
