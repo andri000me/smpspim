@@ -76,12 +76,32 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('pu/jadwal_us/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
+        $('<a class="dt-button btn btn-sm btn-default" tabindex="0" aria-controls="datatable1" href="#" onclick="regenerate_denah()"><span>Regenerate Denah</span></a>').insertAfter('.buttons-add');
+
         $(".js-source-states-ID_KELAS").on("change", "", function () {
             var data = $(this).select2("data");
 
             ID_KELAS = data.id;
         });
     });
+
+    function regenerate_denah() {
+        var action = function (isConfirm) {
+            if (isConfirm) {
+                create_splash("Sistem sedang memperbaharui denah siswa. Ini membutuhkan beberapa waktu.")
+                
+                create_ajax('<?php echo site_url('pu/jadwal_us/regenereate_all'); ?>', "", function (data) {
+                    create_homer_success("Denah telah di perbaharui.");
+                    
+                    remove_splash();
+                });
+            }
+        };
+
+        create_swal_option('Warning', 'Apakah Anda yakin melanjutkan? Proses ini akan merubah semua denah siswa pada TA dan CAWU aktif.', action);
+        
+        return false;
+    }
 
     function action_save_<?php echo $id_datatables; ?>(id_form) {
         var status = $("#" + id_form).data("status");

@@ -129,15 +129,46 @@ class Jadwal_us extends CI_Controller {
     }
 
     private function generate_denah_siswa($tanggal_ujian) {
+//        $this->denah_handler->generate_denah_siswa($this->tipe);
+//        exit();
+
         if (!$this->denah->is_denah_exist($tanggal_ujian)) {
-            $data = array(
-                'ATURAN_DENAH' => $this->aturan_denah->get_id_us(),
-                'JADWAL_DENAH' => $tanggal_ujian,
-                'SISWA_DENAH' => json_encode($this->denah_handler->generate_denah_siswa($this->tipe)),
-            );
-            $this->denah->save($data);
+            $this->do_generate($tanggal_ujian);
         }
     }
+
+    private function do_generate($tanggal_ujian) {
+        $data = array(
+            'ATURAN_DENAH' => $this->aturan_denah->get_id_us(),
+            'JADWAL_DENAH' => $tanggal_ujian,
+            'SISWA_DENAH' => json_encode($this->denah_handler->generate_denah_siswa($this->tipe)),
+        );
+        $this->denah->save($data);
+    }
+
+    public function regenereate_all() {
+        $this->generate->set_header_JSON();
+
+        $data_aturan = $this->db_handler->get_rows('pu_aturan_denah', array(
+            'where' => array(
+                'TA_PUD' => $this->session->userdata('ID_TA_ACTIVE'),
+                'CAWU_PUD' => $this->session->userdata('ID_CAWU_ACTIVE'),
+            )
+                ), 'JADWAL_DENAH', array(
+            array('pu_denah', 'ATURAN_DENAH=ID_PUD')
+        ));
+
+        foreach ($data_aturan as $detail) {
+            $tanggal = $detail->JADWAL_DENAH;
+
+            $this->db_handler->delete('pu_denah', array('JADWAL_DENAH' => $tanggal));
+            $this->do_generate($tanggal);
+        }
+
+
+        $this->generate->output_JSON(array('status' => true));
+    }
+
 //
 //    public function cek_generate_denah_siswa() {
 //        echo json_encode($this->denah_handler->generate_denah_siswa($this->tipe));
@@ -447,7 +478,7 @@ class Jadwal_us extends CI_Controller {
                                     $id_tingkat = $data_denah['DENAH'][$ruang][$x];
                                     $id_dept = $data_denah['KODE_JENJANG'][$id_tingkat];
                                     $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
-                                    $temp_last_tingkat[$id_tingkat]++;
+                                    $temp_last_tingkat[$id_tingkat] ++;
 
 //                                    if (!isset($data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'])) {
 //                                        echo '<hr>KODE_JENJANG<br>' . json_encode($data_denah['KODE_JENJANG']);
@@ -458,24 +489,23 @@ class Jadwal_us extends CI_Controller {
 //                                        exit(0);
 //                                    }
 //                                    if (isset($data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'])) {
-                                        $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
-                                        $data_siswa[$id_siswa][$hari_ke] = array(
-                                            'TANGGAL' => $jadwal_denah,
-                                            'DEPT' => $id_dept,
-                                            'JENJANG' => $id_jenjang,
-                                            'TINGKAT' => $id_tingkat,
-                                            'RUANG' => array(
-                                                'ID' => $id_ruang,
-                                                'NAMA' => $nama_ruang,
-                                                'NOMOR' => $x + 1,
-                                            )
-                                        );
-                                        $temp_data_siswa[$jumlah] = $id_siswa;
+                                    $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
+                                    $data_siswa[$id_siswa][$hari_ke] = array(
+                                        'TANGGAL' => $jadwal_denah,
+                                        'DEPT' => $id_dept,
+                                        'JENJANG' => $id_jenjang,
+                                        'TINGKAT' => $id_tingkat,
+                                        'RUANG' => array(
+                                            'ID' => $id_ruang,
+                                            'NAMA' => $nama_ruang,
+                                            'NOMOR' => $x + 1,
+                                        )
+                                    );
+                                    $temp_data_siswa[$jumlah] = $id_siswa;
 
-                                        $temp_last_id[$id_tingkat] ++;
-                                        $jumlah++;
+                                    $temp_last_id[$id_tingkat] ++;
+                                    $jumlah++;
 //                                    }
-
 //                                    if ($id_siswa == 1626) {
 //                                        echo json_encode($a) . '<br>';
 //                                        echo $id_siswa.' >>> '.json_encode($data_siswa[$id_siswa]) . '<hr>';

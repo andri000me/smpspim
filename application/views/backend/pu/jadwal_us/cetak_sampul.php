@@ -35,7 +35,7 @@ foreach ($data as $detail) {
 
         $jumlah_peruang = $data_denah['JUMLAH_PERUANG'];
         $jumlah_perbaris = $data_denah['JUMLAH_PERBARIS'];
-
+        
         foreach ($data_denah['JENJANG'] as $dept) {
             $data_denah['KODE_JENJANG'][] = $CI->departemen->get_id_by_jenjang($dept);
         }
