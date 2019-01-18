@@ -156,7 +156,7 @@ function cetak($pdf, $data, $title) {
     else {
         $posisi_x = 70;
 
-        $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 20, 20, '', '');
+        $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y + 18, 15, 20, '', '');
     }
 
     return $pdf;
