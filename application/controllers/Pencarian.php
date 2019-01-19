@@ -16,20 +16,22 @@ class Pencarian extends CI_Controller {
             'jam_pelajaran_model' => 'jam_pelajaran',
             'alarm_model' => 'alarm',
         ));
-        $this->auth->validation();
     }
 
     public function index() {
+        $this->auth->validation();
         $this->load->view('layout/main/header');
         $this->load->view('backend/pencarian/index');
     }
 
     public function panel_siswa() {
+        $this->auth->validation();
         $this->load->view('layout/main/header');
         $this->load->view('backend/pencarian/panel_siswa');
     }
 
     public function get_data_panel() {
+        $this->auth->validation();
         $this->generate->set_header_JSON();
 
         $NIS_SISWA = $this->input->post('NIS');
@@ -39,6 +41,7 @@ class Pencarian extends CI_Controller {
     }
 
     public function cari() {
+        $this->auth->validation();
         $this->generate->set_header_JSON();
 
         $kata_kunci = $this->input->post('kata_kunci');
@@ -68,6 +71,7 @@ class Pencarian extends CI_Controller {
     // 1 = CETAK
     // 2 = GET DETAIL SISWA
     public function detail($ID_SISWA, $REQUEST = 0) {
+        $this->auth->validation();
         $data['SISWA'] = $this->pencarian->get_by_id($ID_SISWA);
         $data['NILAI_PSB'] = $this->pencarian->get_nilai_um($ID_SISWA);
         $data['AKADEMIK'] = array();
@@ -135,6 +139,7 @@ class Pencarian extends CI_Controller {
     }
 
     public function cetak_untuk_pemotretan($ID_KELAS = NULL) {
+        $this->auth->validation();
         $data['data'] = $this->pencarian->cetak_untuk_pemotretan($ID_KELAS);
 
         $this->load->view('backend/pencarian/cetak_untuk_pemotretan', $data);
