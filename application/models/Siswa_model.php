@@ -201,21 +201,23 @@ class Siswa_model extends CI_Model {
     }
 
     public function get_data_kartu($ID_SISWA, $ID_KELAS = NULL) {
-        $this->db->select('*, kec.NAMA_KEC AS NAMA_KEC_SISWA, kab.NAMA_KAB AS NAMA_KAB_SISWA, prov.NAMA_PROV AS NAMA_PROV_SISWA');
+        $this->db->select('*, kec.NAMA_KEC AS NAMA_KEC_SISWA, kab.NAMA_KAB AS NAMA_KAB_SISWA, prov.NAMA_PROV AS NAMA_PROV_SISWA, IFNULL(NIS_NIS, NIS_SISWA) AS NIS');
         $this->db->from($this->table);
         $this->db->join('md_kecamatan kec', $this->table . '.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
         $this->db->join('akad_siswa asw', $this->table . '.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ', 'LEFT');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS', 'LEFT');
-        $this->db->where('AKTIF_SISWA', 1);
+        $this->db->join('md_nis', 'SISWA_NIS=ID_SISWA AND TA_NIS=TA_AS', 'LEFT');
+        $this->db->where('(`AKTIF_SISWA` = 1 OR (AKTIF_SISWA=0 AND NIS_NIS IS NOT NULL ))');
         if ($ID_SISWA != NULL)
             $this->db->where('ID_SISWA', $ID_SISWA);
         if ($ID_KELAS != NULL)
             $this->db->where('ID_KELAS', $ID_KELAS);
         $this->db->order_by('NAMA_SISWA', 'ASC');
+        $result = $this->db->get();
 
-        return $this->db->get()->result();
+        return $result->result();
     }
 
     public function get_all_ac($where) {
