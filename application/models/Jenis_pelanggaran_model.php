@@ -96,7 +96,7 @@ class Jenis_pelanggaran_model extends CI_Model {
         $this->_get_table();
         $this->db->where($this->primary_key, $id);
 
-        return $this->db->get()->row()->POIN_KJP;
+        return (isset($this->db->get()->row()->POIN_KJP) ? $this->db->get()->row()->POIN_KJP : 0);
     }
 
     public function get_all($for_html = true) {
