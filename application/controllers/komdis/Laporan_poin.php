@@ -50,11 +50,13 @@ class Laporan_poin extends CI_Controller {
             $aksi = '';
             $row = array();
 //            $row[] = $item->NAMA_CAWU;
+
             $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
             $row[] = $item->NAMA_PEG;
+            $row[] = $item->DOMISILI;
             $row[] = $item->JUMLAH_POIN_KSH;
             $row[] = $item->JUMLAH_LARI_KSH;
             $row[] = $item->SURAT;

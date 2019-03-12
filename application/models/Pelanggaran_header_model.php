@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggaran_header_model extends CI_Model {
 
     var $table = 'komdis_siswa_header';
-    var $column = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'SURAT', 'ID_KSH', 'ID_KSH');
+    var $column = array('NO_ABSEN_AS', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PEG', 'IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV), NAMA_PONDOK_MPS)', 'JUMLAH_POIN_KSH', 'JUMLAH_LARI_KSH', 'SURAT', 'ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("ID_KSH" => 'DESC');
 
@@ -25,10 +25,15 @@ class Pelanggaran_header_model extends CI_Model {
             if ($option_jk)
                 $this->db->where('JK_KELAS', $this->session->userdata('JK_PEG'));
         }
+        $this->db->select('*, IF(NAMA_PONDOK_MPS IS NULL, CONCAT(ALAMAT_SISWA, CONCAT(", ","Kec "), NAMA_KEC, ", ", NAMA_KAB, CONCAT(", ","Prov "), NAMA_PROV), NAMA_PONDOK_MPS) AS DOMISILI');
         $this->db->from($this->table);
         $this->db->join('md_tahun_ajaran mta', 'komdis_siswa_header.TA_KSH=mta.ID_TA');
 //        $this->db->join('md_catur_wulan mcw', $this->table.'.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', 'komdis_siswa_header.SISWA_KSH=ms.ID_SISWA');
+        $this->db->join('md_kecamatan kec', 'KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
+        $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
+        $this->db->join('md_provinsi prov', 'kab.PROVINSI_KAB=prov.ID_PROV', 'LEFT');
+        $this->db->join('md_pondok_siswa mps', 'PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('akad_siswa as', 'komdis_siswa_header.SISWA_KSH=as.SISWA_AS AND komdis_siswa_header.TA_KSH=as.TA_AS');
         $this->db->join('akad_kelas ak', 'as.KELAS_AS=ak.ID_KELAS');
         $this->db->join('md_pegawai mpw', 'ak.WALI_KELAS=mpw.ID_PEG');
@@ -134,7 +139,7 @@ class Pelanggaran_header_model extends CI_Model {
         $this->db->join('md_pondok_siswa mps', 'ms.PONDOK_SISWA=mps.ID_MPS', 'LEFT');
         $this->db->join('md_kecamatan kec', 'ms.KECAMATAN_SISWA=kec.ID_KEC', 'LEFT');
         $this->db->join('md_kabupaten kab', 'kec.KABUPATEN_KEC=kab.ID_KAB', 'LEFT');
-        
+
         $this->db->where($where);
         $result = $this->db->get();
 //        echo $this->db->last_query();

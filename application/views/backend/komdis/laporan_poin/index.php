@@ -10,6 +10,7 @@ $columns = array(
     'NAMA',
     'KELAS',
     'WALI KELAS',
+    'DOMISILI',
     'POIN',
     'LARI',
     'SURAT',
@@ -65,6 +66,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 <?php } ?>
 
         $(".status-show").hide();
+        $('body').addClass('hide-sidebar');
 
         table = initialize_datatables(id_table, '<?php echo site_url('komdis/laporan_poin/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
