@@ -9,6 +9,7 @@ class Login extends CI_Controller {
         $this->load->model(array(
             'user_model' =>  'user',
             'tahun_ajaran_model' =>  'ta',
+            'kehadiran_model' =>  'kehadiran',
         ));
     }
 
@@ -76,6 +77,10 @@ class Login extends CI_Controller {
         $data['ta'] = $this->ta->get_all();
         
         $this->session->set_userdata('LIST_HAKAKSES', json_encode($data['data']));
+        
+        $data['notifikasi'] = array(
+            'validasi_absen' => $this->kehadiran->get_validasi_notifikasi()
+        );
 
         $this->load->view('layout/main/header');
         $this->load->view('backend/user/option_hakakses', $data);

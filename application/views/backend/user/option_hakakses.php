@@ -29,11 +29,11 @@
             <div class="col-md-8 col-md-offset-2 text-center">
                 <h2>Selamat Datang</h2>
                 <h3><?php echo $this->session->userdata('FULLNAME_USER'); ?></h3>
-                <h4>TAHUN AJARAN <select class="form-control" id="id-ta" style="width: 120px; display: unset;" onchange="change_ta(this)">
+                <h4>TAHUN AJARAN <select class="form-control" id="id-ta" style="width: 130px; display: unset;" onchange="change_ta(this)">
                         <?php
                         foreach ($ta as $detail) {
                             ?>
-                        <option value="<?php echo $detail->id; ?>" <?php echo $this->session->userdata('ID_TA_ACTIVE') == $detail->id ? 'selected' : ''; ?>><?php echo $detail->text; ?></option>
+                            <option value="<?php echo $detail->id; ?>" <?php echo $this->session->userdata('ID_TA_ACTIVE') == $detail->id ? 'selected' : ''; ?>><?php echo $detail->text; ?></option>
                             <?php
                         }
                         ?>
@@ -41,57 +41,68 @@
                 <div class="row" style="height: 40px;">
                     <div class="col-md-3 col-md-offset-4" onmouseover="mouse_position('cawu', true)" onmouseout="mouse_position('cawu', false)">
                         <!--<h4 class="text-center" id="text-cawu"><?php echo $this->session->userdata('NAMA_CAWU_ACTIVE'); ?></h4>-->
-                        <select class="form-control" id="id-cawu" style="width: 120px;margin-left: 100px;" onchange="change_cawu(this)"><option value="1" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 1 ? 'selected' : ''; ?>>CAWU 1</option><option value="2" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 2 ? 'selected' : ''; ?>>CAWU 2</option><option value="3" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 3 ? 'selected' : ''; ?>>CAWU 3</option></select>
+                        <select class="form-control" id="id-cawu" style="width: 110px;margin-left: 100px;" onchange="change_cawu(this)"><option value="1" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 1 ? 'selected' : ''; ?>>CAWU 1</option><option value="2" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 2 ? 'selected' : ''; ?>>CAWU 2</option><option value="3" <?php echo $this->session->userdata('ID_CAWU_ACTIVE') == 3 ? 'selected' : ''; ?>>CAWU 3</option></select>
                     </div>
                 </div>
             </div>
             <div class="col-md-2">
                 <a href="#" class="pull-right" title="Klik untuk keluar dari Aplikasi" onclick="log_out();">
-                    <i class="pe-7s-power" style="font-size: 25px;"></i>
+                    <i class="pe-7s-power" style="font-size: 20px;"></i>
                 </a>
                 <a href="#" class="pull-right" title="Klik untuk mengubah password" onclick="change_password();">
-                    <i class="pe-7s-key" style="font-size: 25px; margin-right: 20px"></i>
+                    <i class="pe-7s-key" style="font-size: 20px; margin-right: 10px"></i>
                 </a>
                 <a href="<?php echo site_url('pencarian'); ?>" class="pull-right" title="Klik untuk mencari data siswa" target="_blank">
-                    <i class="pe-7s-search" style="font-size: 25px; margin-right: 20px"></i>
+                    <i class="pe-7s-search" style="font-size: 20px; margin-right: 10px"></i>
                 </a>
                 <a href="<?php echo site_url('pencarian/bel_sekolah'); ?>" class="pull-right" title="Klik untuk membuka bel sekolah" target="_blank">
-                    <i class="pe-7s-alarm" style="font-size: 25px; margin-right: 20px"></i>
+                    <i class="pe-7s-alarm" style="font-size: 20px; margin-right: 10px"></i>
                 </a>
                 <a href="<?php echo site_url('pencarian/panel_siswa'); ?>" class="pull-right" title="Klik untuk membuka panel siswa" target="_blank">
-                    <i class="pe-7s-users" style="font-size: 25px; margin-right: 20px"></i>
+                    <i class="pe-7s-users" style="font-size: 20px; margin-right: 10px"></i>
                 </a>
             </div>
         </div>
         <hr>
-        <?php
-        $i = 0;
-        foreach ($data as $detail) {
-            if ($i == 0)
-                echo '<div class="row">';
-
-            echo '<div class="col-md-3"><div class="hpanel hbg' . $detail->COLOR_HAKAKSES . '" onclick="chooseHakAkses(\'' . $detail->ID_HAKAKSES . '\');" style="cursor: pointer">
+        <div class="row">
+            <div class="col-md-6 border-right">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <small>Silahkan klik salah satu modul untuk melanjutkan</small>
+                    </div>
+                </div>
+                <div class="row class-modul">
+                    <?php
+                    $i = 0;
+                    foreach ($data as $detail) {
+                        echo '<div class="col-md-4"><div class="hpanel hbg' . $detail->COLOR_HAKAKSES . '" onclick="chooseHakAkses(\'' . $detail->ID_HAKAKSES . '\');" style="cursor: pointer">
                     <div class="panel-body">
                         <div class="text-center">
-                            <h3>MODUL</h3>
-                            <h1>' . $detail->NAME_HAKAKSES . '</h1>
-                            <small>
-                                Klik untuk masuk
-                            </small>
+                            <h3>' . $detail->NAME_HAKAKSES . '</h3>
                         </div>
                     </div>
                 </div></div>';
-
-            if ($i == 3) {
-                $i = 0;
-                echo '</div>';
-            } else {
-                $i++;
-            }
-        }
-        if ($i != 3)
-            echo '</div>';
-        ?>
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <small>Notifikasi</small>
+                    </div>
+                </div>
+                <div class="row class-notifikasi" style="overflow-y: scroll;overflow-x: hidden;">
+                    <?php foreach ($notifikasi['validasi_absen'] as $detail) { ?>
+                        <div class="col-md-12">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>VALIDASI ABSEN !</strong>&nbsp;&nbsp;&nbsp;Absensi hari <strong><?php echo $this->date_format->get_day($detail->TANGGAL); ?>, <?php echo $this->date_format->to_print_text($detail->TANGGAL); ?></strong> belum divalidasi <strong><?php echo $detail->STATUS_BELUM_DIVALIDASI; ?></strong>
+                            </div>
+                        </div>        
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php
@@ -115,6 +126,10 @@
     <script src="<?php echo base_url(); ?>assets/vendor/ladda/dist/ladda.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url(); ?>assets/vendor/ladda/dist/ladda.jquery.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url(); ?>assets/vendor/toastr/build/toastr.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/jquery.inputmask.bundle.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-be.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendor/Inputmask-3.3.11/dist/inputmask/phone-codes/phone-ru.js"></script>
 
     <!-- App scripts -->
     <script src="<?php echo base_url(); ?>assets/scripts/homer.js"></script>
@@ -126,6 +141,8 @@
 
                     $(document).ready(function () {
 //                        $("#id-cawu").hide();
+
+                        $(".class-notifikasi").css('height', $(".class-modul").height() - 20);
                     });
 
 //                    function mouse_position(id, ontop) {

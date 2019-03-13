@@ -187,7 +187,7 @@ class Kehadiran_model extends CI_Model {
             foreach ($KELAS_VALIDASI as $DETAIL) {
                 $ID_KELAS_VALIDASI[] = $DETAIL->KELAS_AVA;
             }
-            
+
             foreach ($KELAS_AVA as $DETAIL) {
                 if (!in_array($DETAIL->ID_KELAS, $ID_KELAS_VALIDASI)) {
                     $data = array(
@@ -220,7 +220,7 @@ class Kehadiran_model extends CI_Model {
 
         $this->db->delete('akad_validasi_absen', $where);
     }
-    
+
     public function rekapitulasi_absen($where) {
         $this->db->select('*, (CASE WHEN ALASAN_AKH = "SAKIT" THEN COUNT(ALASAN_AKH) END) AS TOTAL_SAKIT, (CASE WHEN ALASAN_AKH = "IZIN" THEN COUNT(ALASAN_AKH) END) AS TOTAL_IZIN, (CASE WHEN ALASAN_AKH = "ALPHA" THEN COUNT(ALASAN_AKH) END) AS TOTAL_ALPHA');
         $this->db->from($this->table);
@@ -229,18 +229,44 @@ class Kehadiran_model extends CI_Model {
         $this->db->where('JENIS_AKH', 1);
         $this->db->group_by('SISWA_AKH, ALASAN_AKH');
         $sql = $this->db->get_compiled_select();
-        
+
         $this->db->select('*, MAX(TOTAL_SAKIT) AS JUMLAH_SAKIT, MAX(TOTAL_IZIN) AS JUMLAH_IZIN, MAX(TOTAL_ALPHA) AS JUMLAH_ALPHA');
         $this->db->from('akad_siswa as');
-        $this->db->join('('.$sql.') x', 'x.SISWA_AKH=as.SISWA_AS AND x.TA_AKH=as.TA_AS', 'LEFT');
+        $this->db->join('(' . $sql . ') x', 'x.SISWA_AKH=as.SISWA_AS AND x.TA_AKH=as.TA_AS', 'LEFT');
         $this->db->join('md_siswa ms', 'as.SISWA_AS=ms.ID_SISWA', 'LEFT');
         $this->db->where($where);
         $this->db->where('KONVERSI_AS', 0);
         $this->db->order_by('NO_ABSEN_AS', 'ASC');
         $this->db->group_by('SISWA_AS');
         $result = $this->db->get();
-        
+
         return $result->result();
+    }
+
+    public function get_validasi_notifikasi() {
+        $sql = "SELECT HARI, TANGGAL, IF(JUMLAH_KELAS_DIVALIDASI = 0, 'SEMUA', 'SEBAGIAN') AS STATUS_BELUM_DIVALIDASI, LIST_KELAS_SUDAH_DIVALIDASI, LIST_KELAS FROM
+(SELECT 
+    *,
+    (SELECT COUNT(*) FROM akad_kalender WHERE TANGGAL BETWEEN TGL_MULAI_AK AND TGL_SELESAI_AK AND LIBUR_AK=1) AS LIBUR,
+    (SELECT COUNT(*) FROM akad_validasi_absen WHERE TANGGAL_AVA=TANGGAL AND STATUS_AVA=1) AS JUMLAH_KELAS_DIVALIDASI,
+    (SELECT COUNT(*) FROM akad_kelas WHERE TA_KELAS=3) AS JUMLAH_KELAS,
+    (SELECT GROUP_CONCAT(ID_KELAS) FROM akad_validasi_absen LEFT JOIN akad_kelas ON KELAS_AVA=ID_KELAS WHERE TANGGAL_AVA=TANGGAL AND STATUS_AVA=1) AS LIST_KELAS_SUDAH_DIVALIDASI,
+    (SELECT GROUP_CONCAT(ID_KELAS) FROM akad_kelas WHERE AKTIF_KELAS=1 AND TA_KELAS = " . $this->session->userdata('ID_TA_ACTIVE') . ") AS LIST_KELAS
+FROM
+    (SELECT 
+        DAYNAME(DATE_ADD((SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE ID_TA = " . $this->session->userdata('ID_TA_ACTIVE') . "), INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS HARI,
+        DATE(DATE_ADD((SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE ID_TA = " . $this->session->userdata('ID_TA_ACTIVE') . "), INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY)) AS TANGGAL
+    FROM
+        (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS UNITS
+    CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS TENS
+    CROSS JOIN (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS HUNDREDS
+    WHERE
+        DATE_ADD((SELECT TANGGAL_MULAI_TA FROM md_tahun_ajaran WHERE ID_TA = " . $this->session->userdata('ID_TA_ACTIVE') . "), INTERVAL (UNITS.i + TENS.i * 10 + HUNDREDS.i * 100) DAY) <= NOW()) LIST_HARI
+WHERE
+    HARI <> 'Friday') LIST_HARI_AKTIF
+WHERE LIBUR = 0 AND JUMLAH_KELAS_DIVALIDASI <> JUMLAH_KELAS";
+
+        return $this->db->query($sql)->result();
     }
 
 }
