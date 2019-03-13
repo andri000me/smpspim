@@ -101,7 +101,7 @@ class AlphaPDF extends PDF_Rotate {
 }
 
 class PDF extends AlphaPDF {
-    
+
     var $req_watermark;
 
     function Header() {
@@ -110,11 +110,16 @@ class PDF extends AlphaPDF {
             $this->SetAlpha(0.5);
             $this->SetFont('Arial', 'B', 80);
             $this->SetTextColor(80, 80, 255);
-            $this->RotatedText(60, 100, 'C O P Y', 25);
+
+            if ($this->req_watermark == 1)
+                $this->RotatedText(60, 100, 'C O P Y', 25);
+            elseif ($this->req_watermark == 2)
+                $this->RotatedText(40, 120, 'KOPERASI', 25);
+            
             $this->SetAlpha(1);
         }
     }
-    
+
     function SetWatermark($req_watermark) {
         $this->req_watermark = $req_watermark;
     }
@@ -137,9 +142,9 @@ class PDF extends AlphaPDF {
 
 $pdf = new PDF();
 
-for ($i = 0; $i < 2; $i++) {
+for ($i = 0; $i < 3; $i++) {
     $pdf->SetWatermark($i);
-    
+
     $pdf->SetMargins(7, 10);
 //    $pdf->AddPage("L", "A5");
     $pdf->AddPage("L", array(215, 165));
