@@ -20,7 +20,7 @@ class Pondok_siswa extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('pondok_siswa_model', 'pondok_siswa');
-        $this->auth->validation(array(11, 3, 2, 7));
+        $this->auth->validation(array(11, 3, 2, 7, 5));
     }
 
     public function index() {
