@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Detail_tagihan_model extends CI_Model {
 
     var $table = 'keu_detail';
-    var $column = array('NAMA_TA', 'NAMA_TAG','NAMA_DT', 'NAMA_DEPT','NOMINAL_DT','ID_DT');
+    var $column = array('NAMA_TA', 'NAMA_TAG', 'NAMA_DT', 'NAMA_DEPT', 'NOMINAL_DT', 'L_DT', 'P_DT', 'ID_DT');
     var $primary_key = "ID_DT";
     var $order = array("ID_DT" => 'ASC');
 
@@ -20,25 +21,25 @@ class Detail_tagihan_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('keu_tagihan t',$this->table.'.TAGIHAN_DT=t.ID_TAG');
-        $this->db->join('md_departemen md',$this->table.'.DEPT_DT=md.ID_DEPT');
-        $this->db->join('md_tahun_ajaran ta','t.TA_TAG=ta.ID_TA');
-        
-        if($this->session->userdata('TAGIHAN') !== NULL) {
+        $this->db->join('keu_tagihan t', $this->table . '.TAGIHAN_DT=t.ID_TAG');
+        $this->db->join('md_departemen md', $this->table . '.DEPT_DT=md.ID_DEPT');
+        $this->db->join('md_tahun_ajaran ta', 't.TA_TAG=ta.ID_TA');
+
+        if ($this->session->userdata('TAGIHAN') !== NULL) {
             $keu = json_decode($this->session->userdata('TAGIHAN'));
             $i = 0;
             foreach ($keu as $detail) {
-                if($i == 0) {
+                if ($i == 0) {
                     $this->db->group_start();
-                    $this->db->where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
+                    $this->db->where('ID_TAG=' . $detail->ID_TAG . ' AND DEPT_DT="' . $detail->DEPT_DT . '"');
                 } else {
-                    $this->db->or_where('ID_TAG='.$detail->ID_TAG.' AND DEPT_DT="'.$detail->DEPT_DT.'"');
+                    $this->db->or_where('ID_TAG=' . $detail->ID_TAG . ' AND DEPT_DT="' . $detail->DEPT_DT . '"');
                 }
-                
-                if($i == (count($keu) - 1)) {
+
+                if ($i == (count($keu) - 1)) {
                     $this->db->group_end();
                 }
-                
+
                 $i++;
             }
         }
@@ -112,7 +113,8 @@ class Detail_tagihan_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_DT as value, NAMA_DT as label");
+        if ($for_html)
+            $this->db->select("ID_DT as value, NAMA_DT as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -140,14 +142,14 @@ class Detail_tagihan_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
@@ -172,25 +174,32 @@ class Detail_tagihan_model extends CI_Model {
 
         return $this->db->get()->result();
     }
-    
-    public function get_all_psb_active($JENJANG, $PENGECUALIAN_1, $PENGECUALIAN_2) {
+
+    public function get_all_psb_active($JENJANG, $PENGECUALIAN_1, $PENGECUALIAN_2, $JK) {
         $where = array(
             'ID_TA' => $this->session->userdata('ID_PSB_ACTIVE'),
             'PSB_TAG' => 1,
             'DEPT_DT' => $JENJANG,
             'NOMINAL_DT > ' => 0,
         );
-        
-        if ($PENGECUALIAN_1) $where['PENGECUALIAN_1_DT'] = 0;
-        if ($PENGECUALIAN_2) $where['PENGECUALIAN_2_DT'] = 0;
-        
+
+        if ($JK == 'L')
+            $where['L_DT'] = 1;
+        elseif ($JK == 'P')
+            $where['P_DT'] = 1;
+
+        if ($PENGECUALIAN_1)
+            $where['PENGECUALIAN_1_DT'] = 0;
+        if ($PENGECUALIAN_2)
+            $where['PENGECUALIAN_2_DT'] = 0;
+
         $this->_get_table();
         $this->db->where($where);
 
         return $this->db->get()->result();
     }
-    
-    public function get_all_active($JENJANG, $TA) {
+
+    public function get_all_active($JENJANG, $TA, $JK) {
         $this->_get_table();
         $this->db->where(array(
             'ID_TA' => $TA,
@@ -198,6 +207,11 @@ class Detail_tagihan_model extends CI_Model {
             'DEPT_DT' => $JENJANG,
             'NOMINAL_DT > ' => 0
         ));
+
+        if ($JK == 'L')
+            $where['L_DT'] = 1;
+        elseif ($JK == 'P')
+            $where['P_DT'] = 1;
 
         return $this->db->get()->result();
     }

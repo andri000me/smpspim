@@ -16,11 +16,13 @@ class Tagihan_handler {
 
     // SET TAGIHAN SISWA
     public function assign_tagihan($DEPT_TINGK, $ID_SISWA, $TA = NULL) {
-        if($this->siswa_dari_kajen($ID_SISWA))            
+        if ($this->siswa_dari_kajen($ID_SISWA))
             return 0;
+
+        if ($TA == NULL)
+            $TA = $this->CI->session->userdata('ID_TA_ACTIVE');
         
-        if($TA == NULL) $TA = $this->CI->session->userdata('ID_TA_ACTIVE');
-        $tagihan = $this->CI->detail_tagihan->get_all_active($DEPT_TINGK, $TA);
+        $tagihan = $this->CI->detail_tagihan->get_all_active($DEPT_TINGK, $TA, $this->CI->siswa->get_jk());
 
         foreach ($tagihan as $tag) {
             $data_assign = array(
@@ -34,29 +36,31 @@ class Tagihan_handler {
                 'KADALUARSA_SETUP' => 0,
             );
             $cek = $this->CI->assign_tagihan->get_rows($where);
-            if(count($cek) == 0) $this->CI->assign_tagihan->save($data_assign);
+            if (count($cek) == 0)
+                $this->CI->assign_tagihan->save($data_assign);
         }
     }
-    
+
     private function siswa_dari_kajen($ID_SISWA) {
         $data_siswa = $this->CI->siswa->get_by_id($ID_SISWA, TRUE);
-        
-        if($data_siswa->ALAMAT_SISWA == NULL) return FALSE;
-        
+
+        if ($data_siswa->ALAMAT_SISWA == NULL)
+            return FALSE;
+
         $id_kecamatan_margoyoso = 1172;
         $alamat_siswa = strtoupper($data_siswa->ALAMAT_SISWA);
-        
-        if(strpos($alamat_siswa, 'KAJEN') !== FALSE)
+
+        if (strpos($alamat_siswa, 'KAJEN') !== FALSE)
             return TRUE;
         else
             return FALSE;
     }
-    
+
     public function pengunduran_diri($ID_SISWA, $FORCE_PROCCESS) {
         $data_tagihan = $this->CI->assign_tagihan->pembayaran_pengembalian($ID_SISWA);
 
         $tagihan = "";
-        if((count($data_tagihan) == 0) || (count($data_tagihan) > 0 && $FORCE_PROCCESS)) {
+        if ((count($data_tagihan) == 0) || (count($data_tagihan) > 0 && $FORCE_PROCCESS)) {
             $data_update = array(
                 'KADALUARSA_SETUP' => 1
             );
@@ -64,20 +68,21 @@ class Tagihan_handler {
                 'SISWA_SETUP' => $ID_SISWA,
                 'STATUS_SETUP' => 0
             );
-            
+
             $this->CI->assign_tagihan->update($where_update, $data_update);
         } else {
             foreach ($data_tagihan as $detail) {
-                $tagihan .= $detail->NAMA_DT.", ";
+                $tagihan .= $detail->NAMA_DT . ", ";
             }
         }
-        
+
         return $tagihan;
     }
-    
+
     public function unsign_tagihan($ID_SETUP) {
         foreach ($ID_SETUP as $DETAIL) {
             $this->CI->assign_tagihan->delete_by_id($DETAIL);
         }
     }
+
 }

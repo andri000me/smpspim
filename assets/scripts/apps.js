@@ -1104,7 +1104,7 @@ function form_input(id_form, json_content) {
                     url_ajax = value;
                 }
                 // ================================================================================== CHECKBOX AND RADIO =============================================
-            } else if (type === 'checkbox' || type === 'radio' || type === 'checkbox_simple') {
+            } else if (type === 'radio') {
                 if (key === 'inline')
                     request_inline = value;
 
@@ -1128,6 +1128,11 @@ function form_input(id_form, json_content) {
                         else if (value.text !== "undefined")
                             req_label = value.text;
 
+                        if (value.checked !== "undefined")
+                            req_checked = false;
+                        else
+                            req_checked = value.checked;
+
                         if (type === 'checkbox_simple') {
                             tag_html += '<label><input type="checkbox" name="' + tag_name + '" value="' + req_value + '" id="' + type + req_value + tag_name + '" class="checkbox_simple" ';
                             if (tag_value === req_value)
@@ -1135,8 +1140,60 @@ function form_input(id_form, json_content) {
                             tag_html += '>&nbsp;&nbsp;' + req_label + '</label><br>';
                         } else {
                             tag_html += '<div class="' + type + ' ' + tag_class + ' ' + type + '-primary"><input type="' + type + '" name="' + tag_name + '" value="' + req_value + '" id="' + type + req_value + tag_name + '" ';
+
                             if (tag_value === req_value)
                                 tag_html += ' checked';
+                            if (req_checked)
+                                tag_html += ' checked';
+
+                            tag_html += '>&nbsp;&nbsp;<label for="' + type + req_value + '">' + req_label + '</label></div>';
+                        }
+
+                    });
+                }
+                // ================================================================================== CHECKBOX AND RADIO =============================================
+            } else if (type === 'checkbox' || type === 'checkbox_simple') {
+                if (key === 'inline')
+                    request_inline = value;
+
+                if (key === "data") {
+                    $.each(value, function (key, value) {
+                        if (request_inline)
+                            tag_class = type + '-inline';
+                        else
+                            tag_class = "";
+
+                        var req_value = null;
+                        var req_label = null;
+
+                        if (value.value !== "undefined")
+                            req_value = value.value;
+                        else if (value.id !== "undefined")
+                            req_value = value.id;
+
+                        if (value.label !== "undefined")
+                            req_label = value.label;
+                        else if (value.text !== "undefined")
+                            req_label = value.text;
+
+                        if (value.checked !== "undefined")
+                            req_checked = false;
+                        else
+                            req_checked = value.checked;
+
+                        if (type === 'checkbox_simple') {
+                            tag_html += '<label><input type="checkbox" name="' + tag_name + '" value="' + req_value + '" id="' + type + req_value + tag_name + '" class="checkbox_simple" ';
+                            if (tag_value === req_value)
+                                tag_html += ' checked';
+                            tag_html += '>&nbsp;&nbsp;' + req_label + '</label><br>';
+                        } else {
+                            tag_html += '<div class="' + type + ' ' + tag_class + ' ' + type + '-primary"><input type="' + type + '" name="' + tag_name + req_value + '" value="' + req_value + '" id="' + type + req_value + tag_name + '" ';
+
+                            if (tag_value === req_value)
+                                tag_html += ' checked';
+                            if (req_checked)
+                                tag_html += ' checked';
+
                             tag_html += '>&nbsp;&nbsp;<label for="' + type + req_value + '">' + req_label + '</label></div>';
                         }
 

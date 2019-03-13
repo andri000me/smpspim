@@ -9,6 +9,8 @@ $columns = array(
     'NAMA DETAIL',
     'JENJANG',
     'NOMINAL',
+    'BANIN',
+    'BANAT',
     'AKSI',
 );
 

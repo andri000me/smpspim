@@ -156,11 +156,11 @@ class Pengunduran_diri extends CI_Controller {
         return $data;
     }
     
-    private function set_tagihan_siswa($ID_SISWA, $JENJANG, $TINGKAT) {
+    private function set_tagihan_siswa($ID_SISWA, $JENJANG, $TINGKAT, $JK) {
         $data_relasi = $this->jenjang_sekolah->relasi_jenjang_sekolah($JENJANG);
         $status_pengecualian_1 = $this->pengaturan->isPengecualianTagihan(1, $data_relasi->DEPT_MJD, $TINGKAT);
         $status_pengecualian_2 = $this->pengaturan->isPengecualianTagihan(2, $data_relasi->DEPT_MJD, $TINGKAT);
-        $tagihan = $this->detail_tagihan->get_all_psb_active($data_relasi->DEPT_MJD, $status_pengecualian_1, $status_pengecualian_2);
+        $tagihan = $this->detail_tagihan->get_all_psb_active($data_relasi->DEPT_MJD, $status_pengecualian_1, $status_pengecualian_2, $JK);
 
         foreach ($tagihan as $tag) {
             $data_assign = array(
@@ -187,7 +187,7 @@ class Pengunduran_diri extends CI_Controller {
         // MENGECEK TAGIHAN PSB 
         // MEMASUKAN CALON SISWA KE TAGIHAN PSB
         if ($insert > 0) {
-            $this->set_tagihan_siswa($data['ID_SISWA'], $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA']);
+            $this->set_tagihan_siswa($data['ID_SISWA'], $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA'], $data['JK_SISWA']);
         }
         
         $this->generate->output_JSON(array("status" => $insert));

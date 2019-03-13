@@ -134,13 +134,13 @@ class Calon_siswa extends CI_Controller {
             $data['TANGGAL_IJASAH_SISWA'] = date('Y-m-d');
 
         if (isset($data['NIK_SISWA']))
-            $data['NIK_SISWA'] = (int) filter_var($data['NIK_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+            $data['NIK_SISWA'] = preg_replace('/[^0-9]/', '', $data['NIK_SISWA']);
         if (isset($data['KK_SISWA']))
-            $data['KK_SISWA'] = (int) filter_var($data['KK_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+            $data['KK_SISWA'] = preg_replace('/[^0-9]/', '', $data['KK_SISWA']);
         if (isset($data['NISN_SISWA']))
-            $data['NISN_SISWA'] = (int) filter_var($data['NISN_SISWA'], FILTER_SANITIZE_NUMBER_INT);
+            $data['NISN_SISWA'] = preg_replace('/[^0-9]/', '', $data['NISN_SISWA']);
         if (isset($data['NOHP_SISWA']))
-            $data['NOHP_SISWA'] = str_replace(" ", "", trim(filter_var($data['NOHP_SISWA'], FILTER_SANITIZE_NUMBER_INT)));
+            $data['NOHP_SISWA'] = preg_replace('/[^0-9]/', '', $data['NOHP_SISWA']);
 
         $data['TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['TANGGAL_LAHIR_SISWA']);
         $data['AYAH_TANGGAL_LAHIR_SISWA'] = $this->date_format->to_store_db($data['AYAH_TANGGAL_LAHIR_SISWA']);
@@ -203,7 +203,7 @@ class Calon_siswa extends CI_Controller {
         // MENGECEK TAGIHAN PSB 
         // MEMASUKAN CALON SISWA KE TAGIHAN PSB
         if ($insert > 0) {
-            $this->set_tagihan_siswa($insert, $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA']);
+            $this->set_tagihan_siswa($insert, $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA'], $data['JK_SISWA']);
 
             if (isset($data_image)) {
                 $this->save_photobooth($insert, $data_image);
@@ -214,11 +214,11 @@ class Calon_siswa extends CI_Controller {
         $this->generate->output_JSON(array("status" => $insert, "msg" => $msg));
     }
 
-    private function set_tagihan_siswa($ID_SISWA, $JENJANG, $TINGKAT) {
+    private function set_tagihan_siswa($ID_SISWA, $JENJANG, $TINGKAT, $JK) {
         $data_relasi = $this->jenjang_sekolah->relasi_jenjang_sekolah($JENJANG);
         $status_pengecualian_1 = $this->pengaturan->isPengecualianTagihan(1, $data_relasi->DEPT_MJD, $TINGKAT);
         $status_pengecualian_2 = $this->pengaturan->isPengecualianTagihan(2, $data_relasi->DEPT_MJD, $TINGKAT);
-        $tagihan = $this->detail_tagihan->get_all_psb_active($data_relasi->DEPT_MJD, $status_pengecualian_1, $status_pengecualian_2);
+        $tagihan = $this->detail_tagihan->get_all_psb_active($data_relasi->DEPT_MJD, $status_pengecualian_1, $status_pengecualian_2, $JK);
 
         foreach ($tagihan as $tag) {
             $data_assign = array(
