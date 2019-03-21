@@ -182,7 +182,7 @@ for ($i = 0; $i < 3; $i++) {
     $pdf->Cell(22, 5, 'NAMA', 0, 0, 'L');
     $pdf->Cell(90, 5, ': ' . $SISWA->NAMA_SISWA, 0, 0, 'L');
     $pdf->Cell(22, 5, $SISWA->KETERANGAN_TINGK_NOW == NULL ? '' : 'TINGKAT', 0, 0, 'L');
-    $pdf->Cell(0, 5, ($SISWA->KETERANGAN_TINGK_NOW == NULL ? 'Kec. ' . $SISWA->NAMA_KEC_SISWA . ', ' . (str_replace("Kabupaten", "Kab.", $SISWA->NAMA_KAB_SISWA)) : ': ' . $SISWA->KETERANGAN_TINGK_NOW), 0, 0, 'L');
+    $pdf->Cell(0, 5, ($SISWA->KETERANGAN_TINGK_NOW == NULL ? '  Kec. ' . $SISWA->NAMA_KEC_SISWA . ', ' . (str_replace("Kabupaten", "Kab.", $SISWA->NAMA_KAB_SISWA)) : ': ' . $SISWA->KETERANGAN_TINGK_NOW), 0, 0, 'L');
     $pdf->Ln();
     $pdf->Cell(22, 5, $SISWA->NAMA_PEG == NULL ? 'TTL' : 'WALI KELAS', 0, 0, 'L');
     $pdf->Cell(90, 5, ': ' . ($SISWA->NAMA_PEG == NULL ? $SISWA->TEMPAT_LAHIR_SISWA . ', ' . $this->date_format->to_print_text($SISWA->TANGGAL_LAHIR_SISWA) : $this->cetak->nama_peg_print($SISWA)), 0, 0, 'L');
