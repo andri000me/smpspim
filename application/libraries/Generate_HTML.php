@@ -68,16 +68,16 @@ class Generate_HTML {
 
     public function output_JSON($data) {
         $this->CI->db->trans_complete();
-        
+
         if (is_array($data)) {
             if (isset($data['status']) && $data['status'] > 0)
                 $this->CI->session->unset_userdata('TOKEN');
         }
 
         echo json_encode($data, JSON_PRETTY_PRINT);
-        
+
         $this->CI->database_logging->logQueries();
-        
+
         exit();
     }
 
@@ -130,7 +130,7 @@ class Generate_HTML {
         } else {
             $status_check = 'edit';
         }
-        
+
         if ($no_auth || (!$no_auth && $this->CI->auth->crud_validation($status_check))) {
             $return = array(
                 'STATUS' => TRUE,
@@ -210,7 +210,7 @@ class Generate_HTML {
                 'MESSAGE' => 'Anda tidak memiliki hak akses.'
             );
         }
-        
+
         $this->output_JSON($return);
     }
 
@@ -288,37 +288,37 @@ class Generate_HTML {
     }
 
     // ========================================= CONTENT - CHART ===============================================================================================
-    
+
     public function chart($id_chart, $title, $single) {
         $this->content_chart($id_chart, $title, $single);
     }
-    
+
     private function content_chart($id_chart, $title, $single = FALSE) {
-        echo '<div class="content animate-panel panel-'.$id_chart.'" style="margin-top: -60px;">
+        echo '<div class="content animate-panel panel-' . $id_chart . '" style="margin-top: -60px;">
             <div class="row">
                 <div class="col-md-12">
                     <div class="hpanel hblue">
                         <div class="panel-heading hbuilt">
                             <div class="pull-right">
                                 <div class="btn-group">
-                                    <!--<button onclick="reload_chart_'.$id_chart.'(chart_'.$id_chart.');" class="btn btn-success btn-xs">Reload</button>-->
+                                    <!--<button onclick="reload_chart_' . $id_chart . '(chart_' . $id_chart . ');" class="btn btn-success btn-xs">Reload</button>-->
                                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">Rubah grafik ke <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'spline\')' : 'chart_transform_spline(chart_'.$id_chart.')').';">Grafik Spline</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'line\')' : 'chart_transform_line(chart_'.$id_chart.')').';">Grafik Line</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'area\')' : 'chart_transform_area(chart_'.$id_chart.')').';">Grafik Area</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'area-spline\')' : 'chart_transform_area_spline(chart_'.$id_chart.')').';">Grafik Area Spline</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'bar\')' : 'chart_transform_bar(chart_'.$id_chart.')').';">Grafik Bar</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'pie\')' : 'chart_transform_pie(chart_'.$id_chart.')').';">Grafik Pie</a></li>
-                                        <li><a onclick="'.($single ? 'request_chart_'.$id_chart.'(\'donut\')' : 'chart_transform_donut(chart_'.$id_chart.')').';">Grafik Donut</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'spline\')' : 'chart_transform_spline(chart_' . $id_chart . ')') . ';">Grafik Spline</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'line\')' : 'chart_transform_line(chart_' . $id_chart . ')') . ';">Grafik Line</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'area\')' : 'chart_transform_area(chart_' . $id_chart . ')') . ';">Grafik Area</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'area-spline\')' : 'chart_transform_area_spline(chart_' . $id_chart . ')') . ';">Grafik Area Spline</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'bar\')' : 'chart_transform_bar(chart_' . $id_chart . ')') . ';">Grafik Bar</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'pie\')' : 'chart_transform_pie(chart_' . $id_chart . ')') . ';">Grafik Pie</a></li>
+                                        <li><a onclick="' . ($single ? 'request_chart_' . $id_chart . '(\'donut\')' : 'chart_transform_donut(chart_' . $id_chart . ')') . ';">Grafik Donut</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            '.$title.'
+                            ' . $title . '
                         </div>
                         <div class="panel-body">
                                 <div>
-                                    <div id="'.$id_chart.'"></div>
+                                    <div id="' . $id_chart . '"></div>
                                 </div>
                         </div>
                     </div>
@@ -326,7 +326,7 @@ class Generate_HTML {
             </div>
         </div>';
     }
-    
+
     // ========================================= CONTENT - DATATABLES ===============================================================================================
 
     public function datatables($id_datatables, $title, $columns) {
@@ -363,7 +363,7 @@ class Generate_HTML {
     }
 
     private function table_start($title, $id_datatables) {
-        echo '<div class="content animate-panel table-'.$id_datatables.'">
+        echo '<div class="content animate-panel table-' . $id_datatables . '">
     <div class="row">
         <div class="col-lg-12">
             <div class="hpanel">
@@ -495,7 +495,7 @@ class Generate_HTML {
     public function input_date($label, $data, $required = FALSE, $length = 7, $code_extra = '') {
         $value_set = FALSE;
         $id = $data["name"];
-        $html = $this->open_input($label." (YYYY-MM-DD)", $length, $required);
+        $html = $this->open_input($label . " (YYYY-MM-DD)", $length, $required);
         $html .= '<input data-date-format="yyyy-mm-dd" class="form-control ';
         if ($required)
             $html .= 'required';
@@ -507,7 +507,7 @@ class Generate_HTML {
 //                    $value = date("d/m/Y", strtotime($value));
                     $value_set = TRUE;
                 }
-                if($key == 'id') {
+                if ($key == 'id') {
                     $id = $value;
                     continue;
                 }
@@ -519,7 +519,7 @@ class Generate_HTML {
 
         $html .= ' id="' . $id . '" />' . $this->close_input($required, $code_extra);
 
-        $html .= '<script type="text/javascript">$("#' . $id . '").datepicker()'.($value_set ? '' : '.datepicker("setDate", new Date())').';</script>';
+        $html .= '<script type="text/javascript">$("#' . $id . '").datepicker()' . ($value_set ? '' : '.datepicker("setDate", new Date())') . ';</script>';
 
         echo $html;
     }
@@ -536,7 +536,7 @@ class Generate_HTML {
             foreach ($data as $key => $value) {
                 if ($key == 'value')
                     $value = date("H:i:s", strtotime($value));
-                if($key == 'id') {
+                if ($key == 'id') {
                     $id = $value;
                     continue;
                 }
@@ -558,13 +558,14 @@ class Generate_HTML {
         $html .= '<select class="form-control ';
         if ($required)
             $html .= 'required';
-        $html .= '" name="'.$name.'" id="'.$name.'">';
+        $html .= '" name="' . $name . '" id="' . $name . '">';
 
         if (is_array($data)) {
             foreach ($data as $value) {
-                $html .= '<option value="'.$value['id'].'" ';
-                if (isset($value['selected']) && $value['selected']) $html .= ' selected ';
-                $html .= '>'.$value['text'].'</option>';
+                $html .= '<option value="' . $value['id'] . '" ';
+                if (isset($value['selected']) && $value['selected'])
+                    $html .= ' selected ';
+                $html .= '>' . $value['text'] . '</option>';
             }
         }
 
@@ -572,7 +573,7 @@ class Generate_HTML {
 
         echo $html;
     }
-    
+
     public function input_checkbok($label, $data, $required = FALSE, $length = 7, $code_extra = '') {
         $html = $this->open_input($label, $length, $required);
 
@@ -593,13 +594,26 @@ class Generate_HTML {
     public function input_radio($label, $data, $required = FALSE, $length = 7, $code_extra = '') {
         $html = $this->open_input($label, $length, $required);
 
-        foreach ($data['value'] as $value) {
-            $html .= '<div class="radio radio-info"><input name="' . $data['name'] . '" value="' . $value['value'] . '" type="radio"';
-            if ($required)
-                $html .= ' class="required"';
-            if ($data['checked'] == $value['value'])
-                $html .= ' checked';
-            $html .= '><label>' . $value['label'] . '</label></div>';
+        if (isset($data['inline'])) {
+            $html .= '<div class="radio radio-info">';
+            foreach ($data['value'] as $value) {
+                $html .= '<input name="' . $data['name'] . '" value="' . $value['value'] . '" type="radio"';
+                if ($required)
+                    $html .= ' class="required"';
+                if ($data['checked'] == $value['value'])
+                    $html .= ' checked';
+                $html .= '><label>' . $value['label'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+            $html .= '</div>';
+        } else {
+            foreach ($data['value'] as $value) {
+                $html .= '<div class="radio radio-info"><input name="' . $data['name'] . '" value="' . $value['value'] . '" type="radio"';
+                if ($required)
+                    $html .= ' class="required"';
+                if ($data['checked'] == $value['value'])
+                    $html .= ' checked';
+                $html .= '><label>' . $value['label'] . '</label></div>';
+            }
         }
 
         $html .= $this->close_input($required, $code_extra);
@@ -609,10 +623,12 @@ class Generate_HTML {
 
     public function input_select2($label, $data, $required = FALSE, $length = 7, $show_all = FALSE, $value = NULL, $code_extra = '') {
         $html = $this->open_input($label, $length, $required);
-        
-        if (isset($data['id'])) $id = $data['id'];
-        else $id = $data['name'];
-        
+
+        if (isset($data['id']))
+            $id = $data['id'];
+        else
+            $id = $data['name'];
+
         $html .= '<input class="form-control js-source-multi js-source-states-' . $id;
         if ($required)
             $html .= ' required';
@@ -665,9 +681,9 @@ class Generate_HTML {
         echo '<div class="form-group">
             <label class="col-sm-3 control-label"> Upload Foto</label>
               <input type="hidden" name="from_upload" id="from_upload" value="2" />
-              <input type="hidden" name="TAKE_'.$name.'" id="data_image" />
+              <input type="hidden" name="TAKE_' . $name . '" id="data_image" />
               <div class="col-sm-5" id="photo">
-                  <input type="file" name="UPLOAD_'.$name.'" id="UPLOAD_'.$name.'" class="form-control" onchange="set_status_upload();"/>
+                  <input type="file" name="UPLOAD_' . $name . '" id="UPLOAD_' . $name . '" class="form-control" onchange="set_status_upload();"/>
                     <span class="help-block m-b-none text-left">File ext. harus png dengan ukuran maksimal 2400x2400 pixel dan ukuran maksimal 2MB</span>
             </div>
             <div class="col-sm-1">
@@ -764,4 +780,5 @@ class Generate_HTML {
 
         </script>';
     }
+
 }
