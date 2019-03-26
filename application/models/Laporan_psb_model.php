@@ -95,8 +95,12 @@ class Laporan_psb_model extends CI_Model {
             $this->db->where('KELAS_AS', $kelas);
         if ($jk != "")
             $this->db->where('JK_SISWA', $jk);
-        if ($label != 'KONVERSI_AS')
+        if ($label != 'KONVERSI_AS') {
+            $this->db->group_start();
             $this->db->where('KONVERSI_AS', 0);
+            $this->db->or_where('KONVERSI_AS', null);
+            $this->db->group_end();
+        }
 
         if ($label == 'ANGKATAN_SISWA')
             $this->db->group_by('LEFT(RIGHT(ANGKATAN_SISWA, 6), 4)');
