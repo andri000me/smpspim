@@ -205,6 +205,7 @@ class Timetables_hanlder {
 //        echo json_encode($jam_pelajaran_db);
         // MENGAMBIL GURU - PELAJARAN
         $data_lesson = array();
+        $data_kelas = array();
         foreach ($xml->lessons as $lesson) {
             foreach ($lesson as $element) {
                 $id_lesson = (string) $element->attributes()['id'];
@@ -214,6 +215,7 @@ class Timetables_hanlder {
                 if ($kelas == NULL || $mapel == NULL || $guru == NULL)
                     $this->CI->generate->output_JSON(array("status" => FALSE, 'msg' => 'File tidak lengkap. Silahkan import file yang lain.'));
 
+                $data_kelas[] = $kelas;
                 $data_lesson[$id_lesson] = array(
                     'KELAS' => $kelas,
                     'MAPEL' => $mapel,
@@ -249,7 +251,12 @@ class Timetables_hanlder {
 
 //        exit();
         // IMPORT DATA KE DATABASE
-        $this->CI->guru_mapel->delete_by_where(array('TA_AGM' => $this->CI->session->userdata("ID_TA_ACTIVE")));
+        foreach ($data_kelas as $kelas) {
+            $this->CI->guru_mapel->delete_by_where(array(
+                'TA_AGM' => $this->CI->session->userdata("ID_TA_ACTIVE"),
+                'KELAS_AGM' => $kelas
+            ));
+        }
 
         $id_db_lesson = array();
         foreach ($data_lesson as $index => $detail_lesson) {

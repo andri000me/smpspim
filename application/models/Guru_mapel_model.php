@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -18,10 +19,10 @@ class Guru_mapel_model extends CI_Model {
 
     private function _get_table() {
         $this->db->from($this->table);
-        $this->db->join('md_tahun_ajaran mta',$this->table.'.TA_AGM=mta.ID_TA');
-        $this->db->join('akad_kelas ak',$this->table.'.KELAS_AGM=ak.ID_KELAS');
-        $this->db->join('md_mapel mm',$this->table.'.MAPEL_AGM=mm.ID_MAPEL');
-        $this->db->join('md_pegawai mp',$this->table.'.GURU_AGM=mp.ID_PEG');
+        $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AGM=mta.ID_TA');
+        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AGM=ak.ID_KELAS');
+        $this->db->join('md_mapel mm', $this->table . '.MAPEL_AGM=mm.ID_MAPEL');
+        $this->db->join('md_pegawai mp', $this->table . '.GURU_AGM=mp.ID_PEG');
     }
 
     public function get_by_id($id) {
@@ -53,7 +54,8 @@ class Guru_mapel_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AGM as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AGM as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -67,28 +69,35 @@ class Guru_mapel_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_where($where) {
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
-    
+
     public function get_list_jadwal_group() {
         $this->_get_table();
         $this->db->group_by('TA_AGM');
 
         return $this->db->get()->result();
+    }
+
+    public function delete_before_import($ta, $jenjang) {
+        $this->db->query("DELETE akad_guru_mapel FROM akad_guru_mapel
+            INNER JOIN akad_kelas ON KELAS_AGM=ID_KELAS
+            INNER JOIN md_tingkat ON TINGKAT_KELAS=ID_TINGK
+            WHERE DEPT_TINGK='$jenjang' AND TA_AGM='$ta'");
     }
 
 }
