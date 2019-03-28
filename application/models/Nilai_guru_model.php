@@ -11,7 +11,7 @@ class Nilai_guru_model extends CI_Model {
 
     var $table = 'akad_guru_mapel';
     var $table_crud = 'akad_nilai';
-    var $column = array('NIS_SISWA','NAMA_SISWA','(IF(NILAI_AN IS NULL, 0, NILAI_AN))', 'ID_AGM');
+    var $column = array('NO_ABSEN_AS','NIS_SISWA','NAMA_SISWA','(IF(NILAI_AN IS NULL, 0, NILAI_AN))', 'ID_AGM');
     var $primary_key = "ID_AGM";
     var $order = array("ID_AGM" => 'ASC');
 

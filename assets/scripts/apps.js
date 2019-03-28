@@ -132,7 +132,7 @@ function create_nav_notication() {
             '<a class="dropdown-toggle" href="#" data-toggle="dropdown">' +
             '<i class="pe-7s-speaker"></i>' +
             '</a>' +
-            '<ul class="dropdown-menu hdropdown notification animated flipInX">' +
+            '<ul class="dropdown-menu hdropdown bigmenu animated flipInX">' +
             '<li>' +
             '<a>' +
             '<span class="label label-success">NEW</span> It is a long established.' +
@@ -179,13 +179,25 @@ function change_hakakses_header(ID_HAKAKSES) {
 
 function create_nav_change_hakakses() {
     var tag_html = "";
+    var jumlahKolom = Math.round(list_hakakses.length / 3);
+    var no = 0;
+
+//    tag_html += '<table><tbody><tr>';
+
     $.each(list_hakakses, function (index, item) {
         tag_html += '<li style="padding: 5px">' +
                 '<a href="#" onclick="change_hakakses_header(' + item.ID_HAKAKSES + ')">' +
                 '<h5 class="font-extra-bold text-primary">' + item.NAME_HAKAKSES + '</h5>' +
                 '</a>' +
                 '</li>';
+//        if ((no/jumlahKolom))
+//            tag_html += '</tr><tr>';
+//        
+//        tag_html += '<td><a href="#"><h4>' + item.NAME_HAKAKSES + '</h4></a></td>';
+//        no++;
     });
+
+//    tag_html += '</tr></tbody></table>';
 
     return '<li class="dropdown">' +
             '<a class="dropdown-toggle" href="#" data-toggle="dropdown">' +

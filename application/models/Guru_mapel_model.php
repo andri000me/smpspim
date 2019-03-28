@@ -46,6 +46,14 @@ class Guru_mapel_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function list_mapel_guru($where) {
+        $this->_get_table();
+        $this->db->where($where);
+        $this->db->group_by('MAPEL_AGM');
+
+        return $this->db->get()->result();
+    }
+
     public function get_rows_array($where) {
         $this->_get_table();
         $this->db->where($where);

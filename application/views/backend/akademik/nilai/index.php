@@ -42,6 +42,7 @@ $title = 'Siswa';
 $id_datatables = 'datatable1';
 
 $columns = array(
+    'ABS',
     'NIS',
     'NAMA',
     'NILAI',
@@ -139,10 +140,9 @@ else echo $this->session->userdata('ID_USER'); ?>;
 
             table = initialize_datatables(id_table, '<?php echo site_url('akademik/nilai/ajax_list'); ?>/' + MAPEL_FILTER + '/' + ID_PEG + '/' + KELAS_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
-            remove_splash();
-
+            $("#datatable1_length").find('select').val('-1').change();
             $(".buttons-add").remove();
-
+            remove_splash();
             $(".table-datatable1").slideDown();
         }
     }

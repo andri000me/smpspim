@@ -44,6 +44,7 @@ class Nilai extends CI_Controller {
         foreach ($list as $item) {
             $no++;
             $row = array();
+            $row[] = $item->NO_ABSEN_AS;
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = '<input type="number" class="form-control input-sm" onchange="simpan_nilai(this)" data-gurumapel="'.$item->ID_AGM.'" data-siswa="'.$item->ID_AS.'" data-nilai="'.$item->ID_NILAI.'" value="'.$item->NILAI_SISWA.'" style="width: 70px;" '.($item->NAIK_AS == NULL ? '' : 'disabled').' '.($item->LULUS_AS == NULL ? '' : 'disabled').' />';
@@ -69,7 +70,7 @@ class Nilai extends CI_Controller {
             'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_USER'),
         );
         
-        $data = $this->guru_mapel->get_rows($where);
+        $data = $this->guru_mapel->list_mapel_guru($where);
         
         $this->generate->output_JSON($data);
     }
