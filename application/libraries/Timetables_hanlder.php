@@ -215,7 +215,7 @@ class Timetables_hanlder {
                 if ($kelas == NULL || $mapel == NULL || $guru == NULL)
                     $this->CI->generate->output_JSON(array("status" => FALSE, 'msg' => 'File tidak lengkap. Silahkan import file yang lain.'));
 
-                $data_kelas[] = $kelas;
+                $data_kelas[$kelas] = true;
                 $data_lesson[$id_lesson] = array(
                     'KELAS' => $kelas,
                     'MAPEL' => $mapel,
@@ -251,7 +251,7 @@ class Timetables_hanlder {
 
 //        exit();
         // IMPORT DATA KE DATABASE
-        foreach ($data_kelas as $kelas) {
+        foreach ($data_kelas as $kelas => $temp) {
             $this->CI->guru_mapel->delete_by_where(array(
                 'TA_AGM' => $this->CI->session->userdata("ID_TA_ACTIVE"),
                 'KELAS_AGM' => $kelas
