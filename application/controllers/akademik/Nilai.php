@@ -35,7 +35,7 @@ class Nilai extends CI_Controller {
         $this->generate->set_header_JSON();
 
         if ($this->session->userdata('ID_HAKAKSES') != 2) 
-            $guru = $this->session->userdata('ID_USER');
+            $guru = $this->session->userdata('ID_PEG');
         
         $id_datatables = 'datatable1';
         $list = $this->nilai->get_datatables($mapel, $guru, $kelas);
@@ -67,7 +67,7 @@ class Nilai extends CI_Controller {
         
         $where = array(
             'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
-            'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_USER'),
+            'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_PEG'),
         );
         
         $data = $this->guru_mapel->list_mapel_guru($where);
@@ -80,7 +80,7 @@ class Nilai extends CI_Controller {
         
         $where = array(
             'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
-            'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_USER'),
+            'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_PEG'),
             'MAPEL_AGM' => $this->input->post('ID_MAPEL'),
         );
         

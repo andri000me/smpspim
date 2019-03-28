@@ -91,6 +91,10 @@ else echo $this->session->userdata('ID_USER'); ?>;
         $("#MAPEL_FILTER").change(function () {
             get_list(STATUS_KELAS, ID_PEG);
         });
+        
+        $("#KELAS_FILTER").change(function(){
+            $(".table-datatable1").slideUp();
+        });
     });
 
     function get_list(status, guru) {
