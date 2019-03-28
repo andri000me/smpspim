@@ -50,9 +50,9 @@ class Laporan_pengembalian_model extends CI_Model {
             if ($search_value || $search_columns) {
                 if ($i === 0) {
                     $this->db->group_start();
-                    $this->db->like($item, $search_value);
+                    $this->db->like('IFNULL(' . $item . ', "")', $search_value);
                 } else {
-                    $this->db->or_like($item, $search_value);
+                    $this->db->or_like('IFNULL(' . $item . ', "")', $search_value);
                 }
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
@@ -67,7 +67,7 @@ class Laporan_pengembalian_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like('IFNULL(' . $item . ', "")', $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;

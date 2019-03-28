@@ -28,7 +28,7 @@ class Laporan_keuangan_model extends CI_Model {
         $this->db->join('keu_tagihan t', 'dt.TAGIHAN_DT=t.ID_TAG');
         $this->db->join('md_tahun_ajaran ta', 't.TA_TAG=ta.ID_TA');
         $this->db->join('md_siswa ms', 'ds.SISWA_SETUP=ms.ID_SISWA');
-        $this->db->join('akad_siswa as', 'TA_AS='.$this->session->userdata('ID_TA_ACTIVE').' AND SISWA_AS=ID_SISWA', 'LEFT');
+        $this->db->join('akad_siswa as', 'TA_AS=' . $this->session->userdata('ID_TA_ACTIVE') . ' AND SISWA_AS=ID_SISWA', 'LEFT');
         $this->db->join('akad_kelas ak', 'KELAS_AS=ID_KELAS', 'LEFT');
         $this->db->join('md_user mu', $this->table . '.USER_BAYAR=mu.ID_USER');
         $this->db->join('md_pegawai mp', 'mu.PEGAWAI_USER=mp.ID_PEG');
@@ -39,7 +39,7 @@ class Laporan_keuangan_model extends CI_Model {
         }
 
         if ($tanggal_mulai != NULL && $tanggal_akhir != NULL) {
-            $this->db->where('CREATED_BAYAR >="' . $tanggal_mulai . '" AND CREATED_BAYAR<="' . $tanggal_akhir.'"');
+            $this->db->where('CREATED_BAYAR >="' . $tanggal_mulai . '" AND CREATED_BAYAR<="' . $tanggal_akhir . '"');
         }
     }
 
@@ -52,9 +52,9 @@ class Laporan_keuangan_model extends CI_Model {
             if ($search_value || $search_columns) {
                 if ($i === 0) {
                     $this->db->group_start();
-                    $this->db->like($item, $search_value);
+                    $this->db->like('IFNULL(' . $item . ', "")', $search_value);
                 } else {
-                    $this->db->or_like($item, $search_value);
+                    $this->db->or_like('IFNULL(' . $item . ', "")', $search_value);
                 }
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
@@ -69,7 +69,7 @@ class Laporan_keuangan_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like('IFNULL(' . $item . ', "")', $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
