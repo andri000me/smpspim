@@ -400,15 +400,17 @@ class User extends CI_Controller {
         $JENJANG_JK = $this->input->post('JENJANG');
 
         $this->tagihan->delete_user($ID_USER);
-        foreach ($JENJANG_JK as $value) {
-            $JENJANG_JK_EXP = explode('#', $value);
+        if ($JENJANG_JK != null) {
+            foreach ($JENJANG_JK as $value) {
+                $JENJANG_JK_EXP = explode('#', $value);
 
-            $this->tagihan->add_user(array(
-                'USER_MUK' => $ID_USER,
-                'TAGIHAN_MUK' => $TAGIHAN,
-                'DEPT_MUK' => $JENJANG_JK_EXP[0],
-                'JK_MUK' => $JENJANG_JK_EXP[1],
-            ));
+                $this->tagihan->add_user(array(
+                    'USER_MUK' => $ID_USER,
+                    'TAGIHAN_MUK' => $TAGIHAN,
+                    'DEPT_MUK' => $JENJANG_JK_EXP[0],
+                    'JK_MUK' => $JENJANG_JK_EXP[1],
+                ));
+            }
         }
 
         $status = TRUE;
