@@ -150,7 +150,7 @@ function cetak($pdf, $data, $title) {
     $posisi_y = 3;
 
     if (file_exists('files/siswa/' . $data['AKAD_SISWA']['NIS_SISWA'] . '.jpg'))
-        $pdf->Image(base_url('files/siswa/' . $data['AKAD_SISWA']['NIS_SISWA'] . '.jpg'), $posisi_x, $posisi_y + 15, 15, 20, '', '');
+        $pdf->Image(base_url('files/siswa/' . $data['AKAD_SISWA']['NIS_SISWA'] . '.jpg'), $posisi_x, $posisi_y + 18, 15, 20, '', '');
     elseif (file_exists('files/siswa/' . $data['AKAD_SISWA']['ID_SISWA'] . '.png'))
         $pdf->Image(base_url('files/siswa/' . $data['AKAD_SISWA']['ID_SISWA'] . '.png'), $posisi_x, $posisi_y + 18, 15, 20, '', '');
     else {
