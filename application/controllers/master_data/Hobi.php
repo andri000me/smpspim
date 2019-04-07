@@ -20,7 +20,7 @@ class Hobi extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('hobi_model', 'hobi');
-        $this->auth->validation(array(11, 2));
+        $this->auth->validation(array(11, 2, 3));
     }
 
     public function index() {

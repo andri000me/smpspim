@@ -121,7 +121,7 @@ class Calon_siswa extends CI_Controller {
             $data['data'] = NULL;
             $name_view = 'form_add';
         }
-
+        
         $data['mode_view'] = $view;
 
         $this->generate->backend_view('psb/calon_siswa/' . $name_view, $data);
