@@ -25,6 +25,8 @@ class Calon_siswa_model extends CI_Model {
         $this->db->join('md_status_kk skk', $this->table.'.STATUS_KK_SISWA=skk.ID_SKK', 'LEFT');
         $this->db->join('md_suku msk', $this->table.'.SUKU_SISWA=msk.ID_SUKU', 'LEFT');
         $this->db->join('md_agama mag', $this->table.'.AGAMA_SISWA=mag.ID_AGAMA', 'LEFT');
+        $this->db->join('md_hobi mhi', $this->table . '.HOBI_SISWA=mhi.ID_HOBI', 'LEFT');
+        $this->db->join('md_cita mct', $this->table . '.CITA_SISWA=mct.ID_CITA', 'LEFT');
         $this->db->join('md_kondisi mkd', $this->table.'.KONDISI_SISWA=mkd.ID_KONDISI', 'LEFT');
         $this->db->join('md_jenjang_sekolah mjs', $this->table.'.MASUK_JENJANG_SISWA=mjs.ID_JS', 'LEFT');
         $this->db->join('md_jenjang_departemen mjd', 'mjs.ID_JS=mjd.JENJANG_MJD', 'LEFT');
