@@ -183,6 +183,8 @@ class Pengunduran_diri extends CI_Controller {
         $data['ANGKATAN_SISWA'] = $this->pengaturan->getTahunPSBAwal();
         $where['ID_SISWA'] = $data['ID_SISWA'];
         $insert = $this->siswa->update($where, $data);
+        
+        $data = (array) $this->siswa->get_by_id($data['ID_SISWA'], true);
 
         // MENGECEK TAGIHAN PSB 
         // MEMASUKAN CALON SISWA KE TAGIHAN PSB
