@@ -18,13 +18,14 @@ $this->generate->generate_panel_content($title, $subtitle);
             <div class="hpanel">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#tab-1"> Data Pribadi</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-11"> Data Tambahan</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-11"> Tambahan</a></li>
                     <li class=""><a data-toggle="tab" href="#tab-2"> Asal Sekolah</a></li>
                     <li class=""><a data-toggle="tab" href="#tab-3"> Kontak</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-4"> Data Ayah</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-5"> Data Ibu</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-6"> Data Wali</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-7"> Data Orangtua</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-4"> Ayah</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-5"> Ibu</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-6"> Wali</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-7"> Orangtua</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-8"> Prestasi</a></li>
                     <li class=""><a href="#" style="padding: unset;padding-top: 5px"> <button type="submit" class="btn w-xs btn-primary btn-sm" id="simpan">Simpan</button></a></li>
                 </ul>
                 <div class="tab-content">
@@ -118,6 +119,33 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <?php $this->generate->input_text('Email', array('name' => 'ORTU_EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->ORTU_EMAIL_SISWA : ''), FALSE, 4); ?>
                         </div>
                     </div>
+                    <div id="tab-8" class="tab-pane ">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12" id="form-prestasi">
+                                    <?php
+                                    foreach ($prestasi as $detail) {
+                                        $this->generate->input_text('Nama Prestasi', array('name' => 'NAMA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->NAMA_PRESTASI : ''), FALSE, 8);
+                                        $this->generate->input_text('Juara', array('name' => 'JUARA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->JUARA_PRESTASI : ''), FALSE, 4);
+                                        $this->generate->input_text('Penyelenggara', array('name' => 'PENYELENGGARA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->PENYELENGGARA_PRESTASI : ''), FALSE, 9);
+                                        $this->generate->input_text('Tahun', array('name' => 'TAHUN_PRESTASI[]', 'maxlength' => 4, 'value' => $mode_edit ? $detail->TAHUN_PRESTASI : ''), FALSE, 2);
+                                        echo '<hr>';
+                                    }
+
+                                    $this->generate->input_text('Nama Prestasi', array('name' => 'NAMA_PRESTASI[]', 'maxlength' => 200), FALSE, 8);
+                                    $this->generate->input_text('Juara', array('name' => 'JUARA_PRESTASI[]', 'maxlength' => 200), FALSE, 4);
+                                    $this->generate->input_text('Penyelenggara', array('name' => 'PENYELENGGARA_PRESTASI[]', 'maxlength' => 200), FALSE, 9);
+                                    $this->generate->input_text('Tahun', array('name' => 'TAHUN_PRESTASI[]', 'maxlength' => 4), FALSE, 2);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-right">
+                                    <button type="button" class="btn btn-info" onclick="addPrestasi()">Tambah Form Prestasi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -204,6 +232,10 @@ $this->generate->generate_panel_content($title, $subtitle);
                     };
 
                     create_ajax('<?php echo site_url('akademik/siswa/check_data'); ?>', 'name=' + name + '&value=' + val_data, success);
+                }
+                
+                function addPrestasi() {
+                    $("#form-prestasi").append('<hr><div class="form-group"><label class="col-sm-2 control-label">Nama Prestasi</label><div class="col-sm-8"><input class="form-control " type="text" name="NAMA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Juara</label><div class="col-sm-4"><input class="form-control " type="text" name="JUARA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Penyelenggara</label><div class="col-sm-9"><input class="form-control " type="text" name="PENYELENGGARA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Tahun</label><div class="col-sm-2"><input class="form-control " type="text" name="TAHUN_PRESTASI[]" maxlength="4"></div></div>');
                 }
     </script>
 

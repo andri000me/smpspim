@@ -1,5 +1,69 @@
-INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('00509001000', 'PERPONDOK', 'ph/laporan_perpondok', 'index', '1', '2', '0');
-UPDATE `simapes`.`md_menu` SET `CONTROLLER_MENU` = '#', `FUNCTION_MENU` = null, `HAVE_CHILD` = '1' WHERE (`ID_MENU` = '00509000000');
-INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('00509002000', 'GRAFIK', 'laporan/hafalan', 'index', '1', '2', '0');
-INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('00509002000', '5');
-INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('00509001000', '5');
+
+START TRANSACTION;
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `simapes`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `siswa_pretasi`
+--
+
+CREATE TABLE `siswa_pretasi` (
+  `ID_PRESTASI` int(10) NOT NULL,
+  `SISWA_PRESTASI` int(10) NOT NULL,
+  `TAHUN_PRESTASI` year(4) NOT NULL,
+  `PENYELENGGARA_PRESTASI` varchar(200) NOT NULL,
+  `JUARA_PRESTASI` varchar(100) NOT NULL,
+  `NAMA_PRESTASI` varchar(250) NOT NULL,
+  `USER_PRESTASI` int(10) NOT NULL,
+  `CREATED_PRESTASI` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `siswa_pretasi`
+--
+ALTER TABLE `siswa_pretasi`
+  ADD PRIMARY KEY (`ID_PRESTASI`),
+  ADD KEY `USER_PRESTASI` (`USER_PRESTASI`),
+  ADD KEY `SISWA_PRESTASI` (`SISWA_PRESTASI`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `siswa_pretasi`
+--
+ALTER TABLE `siswa_pretasi`
+  MODIFY `ID_PRESTASI` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `siswa_pretasi`
+--
+ALTER TABLE `siswa_pretasi`
+  ADD CONSTRAINT `siswa_pretasi_ibfk_1` FOREIGN KEY (`USER_PRESTASI`) REFERENCES `md_user` (`ID_USER`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `siswa_pretasi_ibfk_2` FOREIGN KEY (`SISWA_PRESTASI`) REFERENCES `md_siswa` (`ID_SISWA`) ON UPDATE CASCADE;
+COMMIT;
+
+ALTER TABLE `simapes`.`siswa_pretasi` 
+CHANGE COLUMN `TAHUN_PRESTASI` `TAHUN_PRESTASI` YEAR(4) NULL DEFAULT NULL ,
+CHANGE COLUMN `PENYELENGGARA_PRESTASI` `PENYELENGGARA_PRESTASI` VARCHAR(200) NULL DEFAULT NULL ,
+CHANGE COLUMN `JUARA_PRESTASI` `JUARA_PRESTASI` VARCHAR(100) NULL DEFAULT NULL ,
+CHANGE COLUMN `NAMA_PRESTASI` `NAMA_PRESTASI` VARCHAR(250) NULL DEFAULT NULL ;

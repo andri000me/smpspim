@@ -199,6 +199,7 @@ class Siswa extends CI_Controller {
 
     public function form($ID_SISWA, $POP_UP = 0) {
         $data['data'] = $this->siswa->get_by_id($ID_SISWA);
+        $data['prestasi'] = $this->siswa->get_prestasi($ID_SISWA);
         $data['pop_up'] = $POP_UP;
 
         $this->generate->backend_view('akademik/siswa/form', $data);
@@ -247,6 +248,26 @@ class Siswa extends CI_Controller {
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );
+
+        $this->siswa->hapus_prestasi($data['ID_SISWA']);
+        foreach ($data['NAMA_PRESTASI'] as $index => $NAMA_PRESTASI) {
+            if ($NAMA_PRESTASI == null || $NAMA_PRESTASI == '')
+                continue;
+
+            $this->siswa->save_prestasi([
+                'SISWA_PRESTASI' => $data['ID_SISWA'],
+                'TAHUN_PRESTASI' => $data['TAHUN_PRESTASI'][$index],
+                'PENYELENGGARA_PRESTASI' => $data['PENYELENGGARA_PRESTASI'][$index],
+                'JUARA_PRESTASI' => $data['JUARA_PRESTASI'][$index],
+                'NAMA_PRESTASI' => $NAMA_PRESTASI,
+                'USER_PRESTASI' => $this->session->userdata('ID_USER')
+            ]);
+        }
+
+        unset($data['NAMA_PRESTASI']);
+        unset($data['TAHUN_PRESTASI']);
+        unset($data['PENYELENGGARA_PRESTASI']);
+        unset($data['JUARA_PRESTASI']);
         unset($data['ID_SISWA']);
 
         $affected_row = $this->siswa->update($where, $data);
