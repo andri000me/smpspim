@@ -109,6 +109,7 @@ class Calon_siswa extends CI_Controller {
 
         if ($ID_SISWA !== NULL) {
             $data['data'] = $this->calon_siswa->get_by_id($ID_SISWA);
+            $data['prestasi'] = $this->siswa->get_prestasi($ID_SISWA);
 
             if (file_exists('files/siswa/' . $data['data']->NIS_SISWA . '.jpg')) {
                 $data['data']->FOTO_SISWA = $data['data']->NIS_SISWA . '.jpg';
@@ -121,7 +122,7 @@ class Calon_siswa extends CI_Controller {
             $data['data'] = NULL;
             $name_view = 'form_add';
         }
-        
+
         $data['mode_view'] = $view;
 
         $this->generate->backend_view('psb/calon_siswa/' . $name_view, $data);
@@ -200,6 +201,26 @@ class Calon_siswa extends CI_Controller {
         $data['ANGKATAN_SISWA'] = $this->pengaturan->getTahunPSBAwal();
         $insert = $this->siswa->save($data);
 
+        $this->siswa->hapus_prestasi($insert);
+        foreach ($data['NAMA_PRESTASI'] as $index => $NAMA_PRESTASI) {
+            if ($NAMA_PRESTASI == null || $NAMA_PRESTASI == '')
+                continue;
+
+            $this->siswa->save_prestasi([
+                'SISWA_PRESTASI' => $insert,
+                'TAHUN_PRESTASI' => $data['TAHUN_PRESTASI'][$index],
+                'PENYELENGGARA_PRESTASI' => $data['PENYELENGGARA_PRESTASI'][$index],
+                'JUARA_PRESTASI' => $data['JUARA_PRESTASI'][$index],
+                'NAMA_PRESTASI' => $NAMA_PRESTASI,
+                'USER_PRESTASI' => $this->session->userdata('ID_USER')
+            ]);
+        }
+
+        unset($data['NAMA_PRESTASI']);
+        unset($data['TAHUN_PRESTASI']);
+        unset($data['PENYELENGGARA_PRESTASI']);
+        unset($data['JUARA_PRESTASI']);
+
         // MENGECEK TAGIHAN PSB 
         // MEMASUKAN CALON SISWA KE TAGIHAN PSB
         if ($insert > 0) {
@@ -249,6 +270,27 @@ class Calon_siswa extends CI_Controller {
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );
+
+        $this->siswa->hapus_prestasi($data['ID_SISWA']);
+        foreach ($data['NAMA_PRESTASI'] as $index => $NAMA_PRESTASI) {
+            if ($NAMA_PRESTASI == null || $NAMA_PRESTASI == '')
+                continue;
+
+            $this->siswa->save_prestasi([
+                'SISWA_PRESTASI' => $data['ID_SISWA'],
+                'TAHUN_PRESTASI' => $data['TAHUN_PRESTASI'][$index],
+                'PENYELENGGARA_PRESTASI' => $data['PENYELENGGARA_PRESTASI'][$index],
+                'JUARA_PRESTASI' => $data['JUARA_PRESTASI'][$index],
+                'NAMA_PRESTASI' => $NAMA_PRESTASI,
+                'USER_PRESTASI' => $this->session->userdata('ID_USER')
+            ]);
+        }
+
+        unset($data['NAMA_PRESTASI']);
+        unset($data['TAHUN_PRESTASI']);
+        unset($data['PENYELENGGARA_PRESTASI']);
+        unset($data['JUARA_PRESTASI']);
+        
         unset($data['ID_SISWA']);
         unset($data['TEMP_MASUK_JENJANG_SISWA']);
         unset($data['TEMP_MASUK_TINGKAT_SISWA']);

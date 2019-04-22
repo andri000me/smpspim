@@ -23,7 +23,7 @@ $this->generate->generate_panel_content($title, $subtitle);
     if ($mode_edit)
         $this->generate->input_hidden('ID_SISWA', $data->ID_SISWA);
     ?>
-<?php //if (!$mode_edit && !$mode_view && $STATUS_PSB) {  ?>
+    <?php //if (!$mode_edit && !$mode_view && $STATUS_PSB) {  ?>
     <!--        <div class="row">
                 <div class="col-md-12">
                     <div class="hpanel hbggreen">
@@ -33,7 +33,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     </div>
                 </div>
             </div>-->
-<?php //} else {  ?>
+    <?php //} else {  ?>
     <div class="row">
         <div class="col-md-12">
             <div class="hpanel hblue">
@@ -67,7 +67,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_select2('Golongan Darah', array('name' => 'GOL_DARAH_SISWA', 'url' => site_url('psb/calon_siswa/ac_darah')), FALSE, 2, FALSE, $mode_edit ? array('id' => $data->GOL_DARAH_SISWA, 'text' => $data->NAMA_DARAH) : NULL); ?>
                     <?php $this->generate->input_text('Riwayat Kesehatan', array('name' => 'RIWAYAT_KESEHATAN_SISWA', 'maxlength' => 500, 'value' => $mode_edit ? $data->RIWAYAT_KESEHATAN_SISWA : ''), FALSE, 9); ?>
                     <?php $this->generate->input_text('Anak ke-', array('name' => 'ANAK_KE_SISWA', 'maxlength' => 1, 'value' => $mode_edit ? $data->ANAK_KE_SISWA : ''), FALSE, 1); ?>
-<?php $this->generate->input_text('Jumlah Saudara', array('name' => 'JUMLAH_SDR_SISWA', 'maxlength' => 1, 'value' => $mode_edit ? $data->JUMLAH_SDR_SISWA : ''), FALSE, 1); ?>
+                    <?php $this->generate->input_text('Jumlah Saudara', array('name' => 'JUMLAH_SDR_SISWA', 'maxlength' => 1, 'value' => $mode_edit ? $data->JUMLAH_SDR_SISWA : ''), FALSE, 1); ?>
+                    <?php $this->generate->input_text('Nomor KIP', array('name' => 'KIP_SISWA', 'maxlength' => 6, 'value' => $mode_edit ? $data->KIP_SISWA : ''), FALSE, 2); ?>
                 </div>
             </div>
         </div>
@@ -126,7 +127,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             ), TRUE, 4);
                     ?>
                     <?php $this->generate->input_text('No. Ijasah', array('name' => 'NO_IJASAH_SISWA', 'maxlength' => 40, 'value' => $mode_edit ? $data->NO_IJASAH_SISWA : ''), FALSE, 3); ?>
-<?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
+                    <?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
                 </div>
             </div>
         </div>
@@ -146,7 +147,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_select2('Kecamatan', array('name' => 'KECAMATAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_kecamatan')), TRUE, 6, TRUE, $mode_edit ? array('id' => $data->KECAMATAN_SISWA, 'text' => $data->NAMA_KEC_SISWA . ', ' . $data->NAMA_KAB_SISWA . ', ' . $data->NAMA_PROV_SISWA) : NULL); ?>
                     <?php $this->generate->input_text('Kode Pos', array('name' => 'KODE_POS_SISWA', 'maxlength' => 5, 'value' => $mode_edit ? $data->KODE_POS_SISWA : ''), FALSE, 2); ?>
                     <?php $this->generate->input_text('No. HP', array('name' => 'NOHP_SISWA', 'maxlength' => 12, 'value' => $mode_edit ? $data->NOHP_SISWA : ''), FALSE, 4); ?>
-<?php $this->generate->input_text('Email', array('name' => 'EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->EMAIL_SISWA : ''), FALSE, 4); ?>
+                    <?php $this->generate->input_text('Email', array('name' => 'EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->EMAIL_SISWA : ''), FALSE, 4); ?>
                 </div>
             </div>
         </div>
@@ -168,7 +169,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_text('No. HP (1)', array('name' => 'ORTU_NOHP1_SISWA', 'maxlength' => 12, 'value' => $mode_edit ? $data->ORTU_NOHP1_SISWA : ''), FALSE, 4); ?>
                     <?php $this->generate->input_text('No. HP (2)', array('name' => 'ORTU_NOHP2_SISWA', 'maxlength' => 12, 'value' => $mode_edit ? $data->ORTU_NOHP2_SISWA : ''), FALSE, 4); ?>
                     <?php $this->generate->input_text('No. HP (3)', array('name' => 'ORTU_NOHP3_SISWA', 'maxlength' => 12, 'value' => $mode_edit ? $data->ORTU_NOHP3_SISWA : ''), FALSE, 4); ?>
-<?php $this->generate->input_text('Email', array('name' => 'ORTU_EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->ORTU_EMAIL_SISWA : ''), FALSE, 4); ?>
+                    <?php $this->generate->input_text('Email', array('name' => 'ORTU_EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->ORTU_EMAIL_SISWA : ''), FALSE, 4); ?>
                 </div>
             </div>
         </div>
@@ -190,7 +191,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_text('Tempat Lahir', array('name' => 'AYAH_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->AYAH_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
                     <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'AYAH_TANGGAL_LAHIR_SISWA', 'id' => 'AYAH_TANGGAL_LAHIR_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->AYAH_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
                     <?php $this->generate->input_select2('Pendidikan', array('name' => 'AYAH_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AYAH_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_AYAH) : NULL); ?>
-<?php $this->generate->input_select2('Pekerjaan', array('name' => 'AYAH_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->AYAH_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_AYAH) : NULL); ?>
+                    <?php $this->generate->input_select2('Pekerjaan', array('name' => 'AYAH_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->AYAH_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_AYAH) : NULL); ?>
                 </div>
             </div>
         </div>
@@ -212,7 +213,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_text('Tempat Lahir', array('name' => 'IBU_TEMPAT_LAHIR_SISWA', 'maxlength' => 150, 'value' => $mode_edit ? $data->IBU_TEMPAT_LAHIR_SISWA : ''), FALSE, 4); ?>
                     <?php $this->generate->input_date('Tanggal Lahir', array('name' => 'IBU_TANGGAL_LAHIR_SISWA', 'id' => 'IBU_TANGGAL_LAHIR_SISWA', 'data-inputmask' => "'mask': '9999-99-99'", 'value' => $mode_edit ? $this->date_format->to_view($data->IBU_TANGGAL_LAHIR_SISWA) : ''), FALSE, 2); ?>
                     <?php $this->generate->input_select2('Pendidikan', array('name' => 'IBU_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->IBU_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_IBU) : NULL); ?>
-<?php $this->generate->input_select2('Pekerjaan', array('name' => 'IBU_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->IBU_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_IBU) : NULL); ?>
+                    <?php $this->generate->input_select2('Pekerjaan', array('name' => 'IBU_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->IBU_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_IBU) : NULL); ?>
                 </div>
             </div>
         </div>
@@ -232,12 +233,50 @@ $this->generate->generate_panel_content($title, $subtitle);
                     <?php $this->generate->input_text('Nama', array('name' => 'WALI_NAMA_SISWA', 'maxlength' => 200, 'value' => $mode_edit ? $data->WALI_NAMA_SISWA : ''), FALSE); ?>
                     <?php $this->generate->input_select2('Hubungan', array('name' => 'WALI_HUBUNGAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_wali_hubungan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_HUBUNGAN_SISWA, 'text' => $data->NAMA_HUB) : NULL); ?>
                     <?php $this->generate->input_select2('Pendidikan', array('name' => 'WALI_PENDIDIKAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_WALI) : NULL); ?>
-<?php $this->generate->input_select2('Pekerjaan', array('name' => 'WALI_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->WALI_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_WALI) : NULL); ?>
+                    <?php $this->generate->input_select2('Pekerjaan', array('name' => 'WALI_PEKERJAAN_SISWA', 'url' => site_url('psb/calon_siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->WALI_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_WALI) : NULL); ?>
                 </div>
             </div>
         </div>
     </div>
-<?php if (!$mode_view) { ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="hpanel hred">
+                <div class="panel-heading hbuilt">
+                    <div class="panel-tools">
+                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                        <a class="closebox"><i class="fa fa-times"></i></a>
+                    </div>
+                    DATA PRESTASI
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12" id="form-prestasi">
+                            <?php
+                            foreach ($prestasi as $detail) {
+                                $this->generate->input_text('Nama Prestasi', array('name' => 'NAMA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->NAMA_PRESTASI : ''), FALSE, 8);
+                                $this->generate->input_text('Juara', array('name' => 'JUARA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->JUARA_PRESTASI : ''), FALSE, 4);
+                                $this->generate->input_text('Penyelenggara', array('name' => 'PENYELENGGARA_PRESTASI[]', 'maxlength' => 200, 'value' => $mode_edit ? $detail->PENYELENGGARA_PRESTASI : ''), FALSE, 9);
+                                $this->generate->input_text('Tahun', array('name' => 'TAHUN_PRESTASI[]', 'maxlength' => 4, 'value' => $mode_edit ? $detail->TAHUN_PRESTASI : ''), FALSE, 2);
+                                echo '<hr>';
+                            }
+
+                            $this->generate->input_text('Nama Prestasi', array('name' => 'NAMA_PRESTASI[]', 'maxlength' => 200), FALSE, 8);
+                            $this->generate->input_text('Juara', array('name' => 'JUARA_PRESTASI[]', 'maxlength' => 200), FALSE, 4);
+                            $this->generate->input_text('Penyelenggara', array('name' => 'PENYELENGGARA_PRESTASI[]', 'maxlength' => 200), FALSE, 9);
+                            $this->generate->input_text('Tahun', array('name' => 'TAHUN_PRESTASI[]', 'maxlength' => 4), FALSE, 2);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <button type="button" class="btn btn-info" onclick="addPrestasi()">Tambah Form Prestasi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if (!$mode_view) { ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="hpanel hbgblue">
@@ -258,7 +297,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                 </div>
             </div>
         </div>
-<?php } ?>
+    <?php } ?>
 
 
 
@@ -284,12 +323,13 @@ if ($mode_view) {
     <?php if ($mode_edit) { ?>
                 $(".js-source-states-MASUK_JENJANG_SISWA").select2("enable", false);
                 $("#MASUK_TINGKAT_SISWA").prop('disabled', true);
-        //        $(".js-source-states-MASUK_JENJANG_SISWA, #MASUK_TINGKAT_SISWA").click(function(){
-        //            create_homer_error('PSB telah ditutup. Anda tidak diperbolehkan merubah data Masuk kejenjang dan Masuk ketingkat.');
-        //        });
+                //        $(".js-source-states-MASUK_JENJANG_SISWA, #MASUK_TINGKAT_SISWA").click(function(){
+                //            create_homer_error('PSB telah ditutup. Anda tidak diperbolehkan merubah data Masuk kejenjang dan Masuk ketingkat.');
+                //        });
 
-        //        create_homer_error('PSB telah ditutup. Anda tidak diperbolehkan merubah data Masuk kejenjang dan Masuk ketingkat.');
+                //        create_homer_error('PSB telah ditutup. Anda tidak diperbolehkan merubah data Masuk kejenjang dan Masuk ketingkat.');
     <?php } ?>
+
 
             $("#MASUK_TINGKAT_SISWA").prop("disabled", true);
             $(".js-source-states-MASUK_JENJANG_SISWA").on("change", "", function(){
@@ -387,8 +427,14 @@ if ($mode_view) {
             create_ajax('<?php echo site_url('psb/calon_siswa/check_data'); ?>', 'name=' + name + '&value=' + val_data, success);
             }
 <?php } ?>
+
+
+
+            function addPrestasi() {
+            $("#form-prestasi").append('<hr><div class="form-group"><label class="col-sm-2 control-label">Nama Prestasi</label><div class="col-sm-8"><input class="form-control " type="text" name="NAMA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Juara</label><div class="col-sm-4"><input class="form-control " type="text" name="JUARA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Penyelenggara</label><div class="col-sm-9"><input class="form-control " type="text" name="PENYELENGGARA_PRESTASI[]" maxlength="200"></div></div><div class="form-group"><label class="col-sm-2 control-label">Tahun</label><div class="col-sm-2"><input class="form-control " type="text" name="TAHUN_PRESTASI[]" maxlength="4"></div></div>');
+            }
     </script>
 
-<?php //}  ?>
+    <?php //}  ?>
 </form>
 </div>

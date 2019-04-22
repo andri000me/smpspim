@@ -59,6 +59,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <?php $this->generate->input_text('Riwayat Kesehatan', array('name' => 'RIWAYAT_KESEHATAN_SISWA', 'maxlength' => 500, 'value' => $mode_edit ? $data->RIWAYAT_KESEHATAN_SISWA : ''), FALSE, 9); ?>
                             <?php $this->generate->input_text('Anak ke-', array('name' => 'ANAK_KE_SISWA', 'maxlength' => 1, 'value' => $mode_edit ? $data->ANAK_KE_SISWA : ''), FALSE, 1); ?>
                             <?php $this->generate->input_text('Jumlah Saudara', array('name' => 'JUMLAH_SDR_SISWA', 'maxlength' => 1, 'value' => $mode_edit ? $data->JUMLAH_SDR_SISWA : ''), FALSE, 1); ?>
+                    <?php $this->generate->input_text('Nomor KIP', array('name' => 'KIP_SISWA', 'maxlength' => 6, 'value' => $mode_edit ? $data->KIP_SISWA : ''), FALSE, 2); ?>
                         </div>
                     </div>
                     <div id="tab-2" class="tab-pane ">
