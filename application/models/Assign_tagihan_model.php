@@ -278,6 +278,25 @@ class Assign_tagihan_model extends CI_Model {
         return $result->result();
     }
     
+    public function get_tagihan_siswa_mutasi($ID_SISWA) {
+        $this->db->from($this->table);
+        $this->db->join('keu_detail dt',$this->table.'.DETAIL_SETUP=dt.ID_DT');
+        $this->db->join('keu_tagihan t','dt.TAGIHAN_DT=t.ID_TAG');
+        $this->db->join('md_tahun_ajaran ta','t.TA_TAG=ta.ID_TA');
+        $this->db->where(array(
+            'SISWA_SETUP' => $ID_SISWA,
+            'STATUS_SETUP' => 0,
+            'KADALUARSA_SETUP' => 0,
+        ));
+        
+        $this->db->order_by('NAMA_TA', 'ASC');
+        $this->db->order_by('PSB_TAG', 'DESC');
+        $this->db->order_by('ID_DT', 'ASC');
+        $result = $this->db->get();
+        
+        return $result->result();
+    }
+    
     public function is_psb_lunas($ID_SISWA) {
         $this->_get_table();
         $this->db->where(array(

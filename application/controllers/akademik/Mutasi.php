@@ -17,6 +17,7 @@ class Mutasi extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(array(
+            'assign_tagihan_model' => 'assign_tagihan',
             'mutasi_model' => 'mutasi',
             'siswa_model' => 'siswa',
             'kelas_model' => 'kelas',
@@ -108,6 +109,14 @@ class Mutasi extends CI_Controller {
             'siswa' => $data_siswa,
             'tingkat' => $this->tingkat->get_all_except_id($data_siswa->TINGKAT_AS)
         );
+        
+        $this->generate->output_JSON($data);
+    }
+    
+    public function get_data_tagihan() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->assign_tagihan->get_tagihan_siswa_mutasi($this->input->post('ID_SISWA'));
         
         $this->generate->output_JSON($data);
     }
