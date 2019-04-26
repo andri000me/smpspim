@@ -25,7 +25,7 @@
 
     <!-- Main Wrapper -->
     <div class="content animate-panel">
-        <div class="row">
+        <div class="row header-option">
             <div class="col-md-8 col-md-offset-2 text-center">
                 <h2>Selamat Datang</h2>
                 <h3><?php echo $this->session->userdata('FULLNAME_USER'); ?></h3>
@@ -142,7 +142,14 @@
                     $(document).ready(function () {
 //                        $("#id-cawu").hide();
 
-                        $(".class-notifikasi").css('height', $(".class-modul").height() - 20);
+                        var heightCanvas = $(".class-modul").height() - 20;
+                        var offset = $(window).height() - $(".header-option").height() - 130;
+                        if (heightCanvas < offset) {
+                            $(".class-notifikasi").css('height', offset);
+                            $(".class-modul").height(offset);
+                        } else {
+                            $(".class-notifikasi").css('height', heightCanvas);
+                        }
                     });
 
 //                    function mouse_position(id, ontop) {
