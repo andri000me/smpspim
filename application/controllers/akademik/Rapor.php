@@ -130,4 +130,8 @@ class Rapor extends CI_Controller {
         
         $this->load->view('backend/akademik/rapor/cetak', $data);
     }
+    
+    public function downloadLegger($ID_KELAS) {
+        $this->load->view('backend/akademik/rapor/legger');
+    }
 }

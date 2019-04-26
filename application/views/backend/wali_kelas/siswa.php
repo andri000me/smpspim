@@ -63,7 +63,7 @@ $this->generate->datatables($id_datatables, $title, $columns);
         
     };
     var ID_PEG = <?php if ($this->session->userdata('ID_HAKAKSES') == 2) echo 'null';
-else echo $this->session->userdata('ID_USER'); ?>;
+else echo $this->session->userdata('ID_PEG'); ?>;
 
     $(function () {
         get_list(ID_PEG);
