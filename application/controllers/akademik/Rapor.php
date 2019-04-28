@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Rapor extends CI_Controller {
-    
+
     var $edit_id = FALSE;
     var $primary_key = "ID_AGM";
 
@@ -34,12 +35,12 @@ class Rapor extends CI_Controller {
 
     public function ajax_list($kelas) {
         $this->generate->set_header_JSON();
-        
+
         $id_datatables = 'datatable1';
         $data_mapel = $this->rapor->get_mapel($kelas);
         $jumlah_mapel = count($data_mapel);
         $kkm = $this->pengaturan->getKKM();
-        
+
         $list = $this->rapor->get_datatables($jumlah_mapel, $kelas);
         $data = array();
         $no = $_POST['start'];
@@ -49,15 +50,15 @@ class Rapor extends CI_Controller {
             $row = array();
             $row[] = $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
-            
+
             foreach ($data_mapel as $detail) {
                 $nilai = $this->rapor->get_nilai($detail->ID_AGM, $item->ID_AS);
-                $row[] = ($nilai < $kkm ? '<strong>' : '').$nilai.($nilai < $kkm ? '</strong>' : '');
+                $row[] = ($nilai < $kkm ? '<strong>' : '') . $nilai . ($nilai < $kkm ? '</strong>' : '');
                 $nilai_total += $nilai;
             }
-            
+
             $row[] = $nilai_total;
-            $row[] = number_format($nilai_total/$jumlah_mapel, 2, ',', '.');
+            $row[] = number_format($nilai_total / $jumlah_mapel, 2, ',', '.');
             $row[] = $this->rapor->get_absensi($item->ID_SISWA, 'SAKIT');
             $row[] = $this->rapor->get_absensi($item->ID_SISWA, 'IZIN');
             $row[] = $this->rapor->get_absensi($item->ID_SISWA, 'ALPHA');
@@ -77,25 +78,25 @@ class Rapor extends CI_Controller {
 
     public function list_wali_kelas() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->kelas->get_wali_kelas($this->input->post('q'));
-        
+
         $this->generate->output_JSON($data);
     }
 
     public function list_kelas() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->kelas->get_kelas($this->input->post('ID_PEG'));
-        
+
         $this->generate->output_JSON($data);
     }
 
     public function list_mapel() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->rapor->get_mapel($this->input->post('ID_KELAS'));
-        
+
         $this->generate->output_JSON($data);
     }
 
@@ -103,12 +104,12 @@ class Rapor extends CI_Controller {
         $data = array();
         $data['CAWU'] = $this->session->userdata('NAMA_CAWU_ACTIVE');
         $data['TA'] = $this->session->userdata('NAMA_TA_ACTIVE');
-        
+
         $where = array(
             'KELAS_AS' => $ID_KELAS,
         );
         $data_siswa = $this->rapor->get_rows($where);
-        
+
         foreach ($data_siswa as $detail_siswa) {
             $where_nilai = array(
                 'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
@@ -116,7 +117,7 @@ class Rapor extends CI_Controller {
                 'SISWA_AS' => $detail_siswa->ID_SISWA,
             );
             $data_nilai = $this->nilai->get_rows($where_nilai);
-            
+
             $data['DATA'][] = array(
                 'SISWA' => $detail_siswa,
                 'NILAI' => $data_nilai,
@@ -127,11 +128,56 @@ class Rapor extends CI_Controller {
                 )
             );
         }
-        
+
         $this->load->view('backend/akademik/rapor/cetak', $data);
     }
-    
-    public function downloadLegger($ID_KELAS) {
-        $this->load->view('backend/akademik/rapor/legger');
+
+    private function isWaliKelas($ID_KELAS) {
+        $ID_PEG = $this->session->userdata('ID_PEG');
+
+        $result = $this->db_handler->is_available('akad_kelas', array(
+            'ID_KELAS' => $ID_KELAS,
+            'WALI_KELAS' => $ID_PEG
+        ));
+
+        if ($result) {
+            echo '<h1>ANDA TIDAK TERDAFTAR DI KELAS INI</h1>';
+            exit();
+        }
     }
+
+    public function downloadLegger($ID_KELAS) {
+        if ($this->session->userdata('ID_HAKAKSES') != 2) {
+            $this->isWaliKelas($ID_KELAS);
+        }
+
+        $data = array();
+        $data['KELAS'] = $this->db_handler->get_row('akad_kelas', ['ID_KELAS' => $ID_KELAS], '*', [['md_pegawai', 'WALI_KELAS=ID_PEG']]);
+        $data['CAWU'] = $this->session->userdata('NAMA_CAWU_ACTIVE');
+        $data['TA'] = $this->session->userdata('NAMA_TA_ACTIVE');
+        $data['MAPEL'] = $this->rapor->get_mapel_guru($ID_KELAS);
+
+        $data_siswa = $this->rapor->get_rows(['KELAS_AS' => $ID_KELAS]);
+        foreach ($data_siswa as $detail_siswa) {
+            $where_nilai = array(
+                'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
+                'KELAS_AGM' => $ID_KELAS,
+                'SISWA_AS' => $detail_siswa->ID_SISWA,
+            );
+            $data_nilai = $this->nilai->get_rows($where_nilai);
+
+            $data['DATA'][] = array(
+                'SISWA' => $detail_siswa,
+                'NILAI' => $data_nilai,
+                'ABSEN' => array(
+                    'SAKIT' => $this->rapor->get_absensi($detail_siswa->ID_SISWA, 'SAKIT'),
+                    'IZIN' => $this->rapor->get_absensi($detail_siswa->ID_SISWA, 'IZIN'),
+                    'ALPHA' => $this->rapor->get_absensi($detail_siswa->ID_SISWA, 'ALPHA'),
+                )
+            );
+        }
+
+        $this->load->view('backend/akademik/rapor/legger', $data);
+    }
+
 }

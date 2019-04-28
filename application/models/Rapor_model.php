@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -11,7 +12,7 @@ class Rapor_model extends CI_Model {
 
     var $table = 'akad_siswa';
     var $table_crud = 'akad_nilai';
-    var $column = array('NIS_SISWA','NAMA_SISWA', 'NAMA_SISWA');
+    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'NAMA_SISWA');
     var $primary_key = "NAMA_SISWA";
     var $order = array("NAMA_SISWA" => 'ASC');
 
@@ -21,10 +22,10 @@ class Rapor_model extends CI_Model {
 
     private function _get_table($kelas = NULL) {
         $this->db->from($this->table);
-        $this->db->join('md_siswa ms',$this->table.'.SISWA_AS=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
-        $this->db->join('akad_kelas ak',$this->table.'.KELAS_AS=ak.ID_KELAS');
-        $this->db->join('md_pegawai mp','ak.WALI_KELAS=mp.ID_PEG');
-        if($kelas != NULL)
+        $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
+        $this->db->join('akad_kelas ak', $this->table . '.KELAS_AS=ak.ID_KELAS');
+        $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG');
+        if ($kelas != NULL)
             $this->db->where(array(
                 'KELAS_AS' => $kelas,
             ));
@@ -96,9 +97,9 @@ class Rapor_model extends CI_Model {
 
         return $query->num_rows();
     }
-    
+
     private function set_columns($jumlah_mapel) {
-        $column_start = array('NIS_SISWA','NAMA_SISWA');
+        $column_start = array('NIS_SISWA', 'NAMA_SISWA');
         $column = array_fill(2, $jumlah_mapel + 5, 'NAMA_SISWA');
         $this->column = array_merge($column_start, $column);
     }
@@ -117,7 +118,8 @@ class Rapor_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AGM as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AGM as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -139,7 +141,7 @@ class Rapor_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table_crud, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
@@ -153,20 +155,32 @@ class Rapor_model extends CI_Model {
     public function get_rows($where) {
         $this->_get_table();
         $this->db->where($where);
-        $this->db->order_by('NAMA_SISWA', 'ASC');
+        $this->db->order_by('NO_ABSEN_AS', 'ASC');
 
         return $this->db->get()->result();
     }
 
     public function get_mapel($ID_KELAS) {
         $this->db->from('akad_kelas ak');
-        $this->db->join('akad_guru_mapel agm', 'ak.ID_KELAS=agm.KELAS_AGM AND agm.TA_AGM='.$this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->join('akad_guru_mapel agm', 'ak.ID_KELAS=agm.KELAS_AGM AND agm.TA_AGM=' . $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->join('md_mapel mm', 'agm.MAPEL_AGM=mm.ID_MAPEL');
         $this->db->where('ID_KELAS', $ID_KELAS);
 
         return $this->db->get()->result();
     }
-    
+
+    public function get_mapel_guru($ID_KELAS) {
+        $this->db->from('akad_guru_mapel agm');
+        $this->db->join('md_mapel mm', 'agm.MAPEL_AGM=mm.ID_MAPEL');
+        $this->db->join('md_pegawai mp', 'agm.GURU_AGM=mp.ID_PEG');
+        $this->db->where('KELAS_AGM', $ID_KELAS);
+        $this->db->where('TA_AGM', $this->session->userdata('ID_TA_ACTIVE'));
+        $this->db->order_by('TIPE_MAPEL', 'DESC');
+        $this->db->order_by('NAMA_MAPEL', 'ASC');
+
+        return $this->db->get()->result();
+    }
+
     public function get_nilai($guru_mapel, $siswa) {
         $this->db->from('akad_nilai');
         $this->db->where(array(
@@ -175,13 +189,15 @@ class Rapor_model extends CI_Model {
             'GURU_MAPEL_AN' => $guru_mapel,
             'SISWA_AN' => $siswa,
         ));
-        
+
         $result = $this->db->get()->row();
-        
-        if ($result == NULL) return 0;
-        else return $result->NILAI_AN;
+
+        if ($result == NULL)
+            return 0;
+        else
+            return $result->NILAI_AN;
     }
-    
+
     public function get_absensi($siswa, $status) {
         $this->db->select('COUNT(ID_AKH) AS JUMLAH');
         $this->db->from('akad_kehadiran');
@@ -192,7 +208,7 @@ class Rapor_model extends CI_Model {
             'ALASAN_AKH' => $status,
             'JENIS_AKH' => 1,
         ));
-        
+
         return $this->db->get()->row()->JUMLAH;
     }
 
