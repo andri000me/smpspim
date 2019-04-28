@@ -48,7 +48,7 @@ class Rapor extends CI_Controller {
             $no++;
             $nilai_total = 0;
             $row = array();
-            $row[] = $item->NIS_SISWA;
+            $row[] = $item->AKTIF_SISWA ? $item->NIS_SISWA : '<b>KELUAR</b>';
             $row[] = $item->NAMA_SISWA;
 
             foreach ($data_mapel as $detail) {

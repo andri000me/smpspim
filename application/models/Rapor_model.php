@@ -12,7 +12,7 @@ class Rapor_model extends CI_Model {
 
     var $table = 'akad_siswa';
     var $table_crud = 'akad_nilai';
-    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'NAMA_SISWA');
+    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'NAMA_SISWA', 'AKTIF_SISWA');
     var $primary_key = "NAMA_SISWA";
     var $order = array("NAMA_SISWA" => 'ASC');
 
@@ -44,9 +44,9 @@ class Rapor_model extends CI_Model {
             if ($search_value || $search_columns) {
                 if ($i === 0) {
                     $this->db->group_start();
-                    $this->db->like($item, $search_value);
+                    $this->db->like('IFNULL(' . $item . ', "")', $search_value);
                 } else {
-                    $this->db->or_like($item, $search_value);
+                    $this->db->or_like('IFNULL(' . $item . ', "")', $search_value);
                 }
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
@@ -61,7 +61,7 @@ class Rapor_model extends CI_Model {
             if ($search_columns) {
                 if ($i === 0)
                     $this->db->group_start();
-                $this->db->like($item, $search_columns[$i]['search']['value']);
+                $this->db->like('IFNULL(' . $item . ', "")', $search_columns[$i]['search']['value']);
                 if (count($search_columns) - 1 == $i) {
                     $this->db->group_end();
                     break;
@@ -86,7 +86,6 @@ class Rapor_model extends CI_Model {
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
 
-//        var_dump($this->db->last_query());
         return $query->result();
     }
 
@@ -100,7 +99,7 @@ class Rapor_model extends CI_Model {
 
     private function set_columns($jumlah_mapel) {
         $column_start = array('NIS_SISWA', 'NAMA_SISWA');
-        $column = array_fill(2, $jumlah_mapel + 5, 'NAMA_SISWA');
+        $column = array_fill(2, $jumlah_mapel + 5, 'AKTIF_SISWA');
         $this->column = array_merge($column_start, $column);
     }
 

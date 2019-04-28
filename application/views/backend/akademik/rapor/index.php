@@ -170,7 +170,7 @@ else
     function list_nilai(KELAS_FILTER) {
         $(".table-datatable1").attr('style', 'margin-top: -60px;');
 
-//        table = initialize_datatables(id_table, '<?php echo site_url('akademik/rapor/ajax_list'); ?>/' + KELAS_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+        table = initialize_datatables(id_table, '<?php echo site_url('akademik/rapor/ajax_list'); ?>/' + KELAS_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
 
         remove_splash();
         $(".buttons-copy").remove();
