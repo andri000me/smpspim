@@ -197,7 +197,37 @@ $spreadsheet->getActiveSheet()->setTitle('DAFTAR GURU MAPEL');
 $sheet = $spreadsheet->getActiveSheet();
 $sheet->getProtection()->setSheet(true);
 
+$row = 1;
+$sheet->setCellValue("A$row", "DAFTAR GURU MATA PELAJARAN");
+$sheet->getStyle("A$row")->getFont()->setSize(14);
+$sheet->getStyle("A$row")->getFont()->setBold(true);
 
+$row = 3;
+$sheet->setCellValue("A$row", "No");
+$sheet->getColumnDimension('A')->setWidth(4);
+$sheet->setCellValue("B$row", "Nama Mapel");
+$sheet->getColumnDimension('B')->setWidth(20);
+$sheet->setCellValue("C$row", "Nama Guru");
+$sheet->getColumnDimension('C')->setWidth(35);
+$sheet->setCellValue("D$row", "No HP");
+$sheet->getColumnDimension('D')->setWidth(15);
+$sheet->getStyle("A$row:D$row")->getFont()->setBold(true);
+
+$no = 1;
+$row = 3;
+foreach ($MAPEL as $detail) {
+    $row++;
+    $sheet->setCellValue("A$row", $no++);
+    $sheet->getColumnDimension('A')->setWidth(4);
+    $sheet->setCellValue("B$row", $detail->NAMA_MAPEL);
+    $sheet->getColumnDimension('B')->setWidth(20);
+    $sheet->setCellValue("C$row", $this->cetak->nama_peg_print((array) $detail));
+    $sheet->getColumnDimension('C')->setWidth(35);
+    $sheet->setCellValue("D$row", $detail->NOHP_PEG);
+    $sheet->getColumnDimension('D')->setWidth(15);
+}
+
+$sheet->getStyle("A3:D$row")->applyFromArray($styleArrayBorder);
 
 $spreadsheet->setActiveSheetIndex(0);
 
