@@ -189,6 +189,21 @@ class Siswa_model extends CI_Model {
         return $this->db->get()->row()->JK_SISWA;
     }
 
+    public function get_id_by_nis($nis) {
+        $this->db->from($this->table);
+        $this->db->where('NIS_SISWA', $nis);
+
+        return $this->db->get()->row()->ID_SISWA;
+    }
+
+    public function get_id_as_by_nis($nis) {
+        $this->db->from($this->table);
+        $this->db->join('akad_siswa asw', $this->table . '.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
+        $this->db->where('NIS_SISWA', $nis);
+
+        return $this->db->get()->row()->ID_AS;
+    }
+
     public function get_by_id_mutasi($id) {
         $this->db->from($this->table);
         $this->db->join('akad_siswa asw', $this->table . '.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0', 'LEFT');
@@ -249,7 +264,7 @@ class Siswa_model extends CI_Model {
 
         return $this->db->affected_rows();
     }
-    
+
     public function save_prestasi($data) {
         $this->db->insert('siswa_pretasi', $data);
 

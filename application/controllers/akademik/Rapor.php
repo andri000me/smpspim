@@ -24,6 +24,7 @@ class Rapor extends CI_Controller {
             'rapor_model' => 'rapor',
             'nilai_siswa_model' => 'nilai',
             'kelas_model' => 'kelas',
+            'siswa_model' => 'siswa',
             'matapelajaran_model' => 'mapel'
         ));
         $this->auth->validation(array(2, 10));
@@ -152,7 +153,7 @@ class Rapor extends CI_Controller {
         }
 
         $data = array();
-        $data['KELAS'] = $this->db_handler->get_row('akad_kelas', ['ID_KELAS' => $ID_KELAS], '*', [['md_pegawai', 'WALI_KELAS=ID_PEG']]);
+        $data['KELAS'] = $this->db_handler->get_row('akad_kelas', ['where' => ['ID_KELAS' => $ID_KELAS]], '*', [['md_pegawai', 'WALI_KELAS=ID_PEG']]);
         $data['CAWU'] = $this->session->userdata('NAMA_CAWU_ACTIVE');
         $data['TA'] = $this->session->userdata('NAMA_TA_ACTIVE');
         $data['MAPEL'] = $this->rapor->get_mapel_guru($ID_KELAS);
@@ -178,6 +179,96 @@ class Rapor extends CI_Controller {
         }
 
         $this->load->view('backend/akademik/rapor/legger', $data);
+    }
+
+    public function uploadLegger() {
+        header('Content-Type: application/json');
+        
+        $ID_KELAS = $this->input->post('ID_KELAS');
+
+        if ($this->session->userdata('ID_HAKAKSES') != 2) {
+            $ID_PEG = $this->session->userdata('ID_PEG');
+
+            $result = $this->db_handler->is_available('akad_kelas', array(
+                'ID_KELAS' => $ID_KELAS,
+                'WALI_KELAS' => $ID_PEG
+            ));
+
+            if ($result) {
+                $this->generate->output_JSON(array(
+                    'status' => false,
+                    'msg' => 'Anda tidak menjadi wali kelas ini'
+                ));
+            }
+        }
+
+        $file_mimes = array('application/octet-stream', 'application/vnd.ms-excel', 'application/excel', 'application/vnd.msexcel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        if (isset($_FILES['file-legger']['name']) && in_array($_FILES['file-legger']['type'], $file_mimes)) {
+
+            $arr_legger = explode('.', $_FILES['file-legger']['name']);
+            $extension = end($arr_legger);
+
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+
+            $spreadsheet = $reader->load($_FILES['file-legger']['tmp_name']);
+
+            $spreadsheet->setActiveSheetIndex(0);
+            $dataNilai = $spreadsheet->getActiveSheet()->toArray();
+
+            $spreadsheet->setActiveSheetIndex(1);
+            $dataMapel = $spreadsheet->getActiveSheet()->toArray();
+
+            $ID_KELAS_FILE = $dataNilai[5][count($dataNilai[5]) - 1];
+
+            if ($ID_KELAS_FILE != $ID_KELAS) {
+                $this->generate->output_JSON(array(
+                    'status' => false,
+                    'msg' => 'ID Kelas di file tidak cocok dengan browser'
+                ));
+            }
+
+            $token = array();
+            for ($row = 3; $row < count($dataMapel); $row++) {
+                $token[] = $dataMapel[$row][1];
+            }
+
+            for ($row = 9; $row < count($dataNilai); $row++) {
+                $detail = $dataNilai[$row];
+
+                if ($detail[1] == "KELUAR")
+                    continue;
+
+                $startNilai = 3;
+                for ($column = $startNilai; $column < (count($token) + $startNilai); $column++) {
+                    if ($detail[$column] == null)
+                        continue;
+
+                    $nilaiSiswa = [
+                        'TA_AN' => $this->session->userdata('ID_TA_ACTIVE'),
+                        'CAWU_AN' => $this->session->userdata('ID_CAWU_ACTIVE'),
+                        'USER_AN' => $this->session->userdata('ID_USER'),
+                        'SISWA_AN' => $this->siswa->get_id_as_by_nis($detail[1]),
+                        'GURU_MAPEL_AN' => $token[$column - $startNilai],
+                        'NILAI_AN' => $detail[$column],
+                    ];
+
+                    $this->rapor->simpan_nilai($nilaiSiswa);
+                }
+            }
+
+            $output = array(
+                'status' => true,
+                'msg' => 'Nilai berhasil diimport'
+            );
+        } else {
+            $output = array(
+                'status' => false,
+                'msg' => 'Nilai gagal diimport'
+            );
+        }
+
+        $this->generate->output_JSON($output);
     }
 
 }

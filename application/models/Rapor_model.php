@@ -211,4 +211,16 @@ class Rapor_model extends CI_Model {
         return $this->db->get()->row()->JUMLAH;
     }
 
+    public function simpan_nilai($data) {
+        $this->db->delete('akad_nilai', [
+            'TA_AN' => $data['TA_AN'],
+            'CAWU_AN' => $data['CAWU_AN'],
+            'SISWA_AN' => $data['SISWA_AN'],
+            'GURU_MAPEL_AN' => $data['GURU_MAPEL_AN'],
+        ]);
+        $this->db->insert('akad_nilai', $data);
+
+        return $this->db->insert_id();
+    }
+
 }
