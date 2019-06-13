@@ -581,6 +581,7 @@ class Calon_siswa extends CI_Controller {
         $data['ANGKATAN_SISWA'] = $this->pengaturan->getTahunPSBAwal();
 
         // RESET PARAMETER
+        $data['STATUS_ASAL_SISWA'] = 5;
         $data['ALUMNI_SISWA'] = 0;
         $data['STATUS_MUTASI_SISWA'] = NULL;
         $data['TANGGAL_MUTASI_SISWA'] = NULL;
