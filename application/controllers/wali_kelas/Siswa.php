@@ -43,7 +43,7 @@ class Siswa extends CI_Controller {
             $nilai_total = 0;
             $row = array();
             $row[] = $item->NO_ABSEN_AS;
-            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NIS_SISWA == null ? '<b>KELUAR</b>' : $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
             $row[] = '<a href="'. site_url('pencarian/detail/'.$item->ID_SISWA).'" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> Detail</a>';
 

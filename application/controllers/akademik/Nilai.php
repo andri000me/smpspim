@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Nilai extends CI_Controller {
-    
+
     var $edit_id = FALSE;
     var $primary_key = "ID_AGM";
 
@@ -34,9 +35,9 @@ class Nilai extends CI_Controller {
     public function ajax_list($mapel, $guru, $kelas) {
         $this->generate->set_header_JSON();
 
-        if ($this->session->userdata('ID_HAKAKSES') != 2) 
+        if ($this->session->userdata('ID_HAKAKSES') != 2)
             $guru = $this->session->userdata('ID_PEG');
-        
+
         $id_datatables = 'datatable1';
         $list = $this->nilai->get_datatables($mapel, $guru, $kelas);
         $data = array();
@@ -45,9 +46,9 @@ class Nilai extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->NO_ABSEN_AS;
-            $row[] = $item->NIS_SISWA;
+            $row[] = $item->NIS_SISWA == null ? '<b>KELUAR</b>' : $item->NIS_SISWA;
             $row[] = $item->NAMA_SISWA;
-            $row[] = '<input type="number" class="form-control input-sm" onchange="simpan_nilai(this)" data-gurumapel="'.$item->ID_AGM.'" data-siswa="'.$item->ID_AS.'" data-nilai="'.$item->ID_NILAI.'" value="'.$item->NILAI_SISWA.'" style="width: 70px;" '.($item->NAIK_AS == NULL ? '' : 'disabled').' '.($item->LULUS_AS == NULL ? '' : 'disabled').' />';
+            $row[] = '<input type="number" class="form-control input-sm" onchange="simpan_nilai(this)" data-gurumapel="' . $item->ID_AGM . '" data-siswa="' . $item->ID_AS . '" data-nilai="' . $item->ID_NILAI . '" value="' . $item->NILAI_SISWA . '" style="width: 70px;" ' . ($item->NAIK_AS == NULL ? '' : 'disabled') . ' ' . ($item->LULUS_AS == NULL ? '' : 'disabled') . ' />';
 
             $data[] = $row;
         }
@@ -64,36 +65,36 @@ class Nilai extends CI_Controller {
 
     public function list_mapel_guru() {
         $this->generate->set_header_JSON();
-        
+
         $where = array(
             'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
             'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_PEG'),
         );
-        
+
         $data = $this->guru_mapel->list_mapel_guru($where);
-        
+
         $this->generate->output_JSON($data);
     }
 
     public function list_kelas_mapel() {
         $this->generate->set_header_JSON();
-        
+
         $where = array(
             'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE'),
             'GURU_AGM' => $this->session->userdata('ID_HAKAKSES') == 2 ? $this->input->post('ID_PEG') : $this->session->userdata('ID_PEG'),
             'MAPEL_AGM' => $this->input->post('ID_MAPEL'),
         );
-        
+
         $data = $this->guru_mapel->get_rows($where);
-        
+
         $this->generate->output_JSON($data);
     }
 
     public function simpan_nilai() {
         $this->generate->set_header_JSON();
-        
+
         $ID_AN = $this->input->post('ID_NILAI');
-        
+
         $data_insert = array(
             'TA_AN' => $this->session->userdata('ID_TA_ACTIVE'),
             'CAWU_AN' => $this->session->userdata('ID_CAWU_ACTIVE'),
@@ -109,10 +110,12 @@ class Nilai extends CI_Controller {
         $where_update = array(
             'ID_AN' => $ID_AN
         );
-        
-        if($ID_AN == 'NONE') $status = $this->nilai->save($data_insert);
-        else $status = $this->nilai->update($where_update, $data_update);
-        
+
+        if ($ID_AN == 'NONE')
+            $status = $this->nilai->save($data_insert);
+        else
+            $status = $this->nilai->update($where_update, $data_update);
+
         $this->generate->output_JSON(array('status' => $status));
     }
 

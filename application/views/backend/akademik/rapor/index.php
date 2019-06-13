@@ -43,14 +43,14 @@ $this->generate->generate_panel_content("Rapor", "Daftar nilai matapelajaran sis
                         <div class="form-group">
                             <label class="col-md-2 control-label">Pilih File</label>
                             <div class="col-md-6">
-                                <input type="file" id="legger" class="form-control" />
+                                <input type="file" id="file-legger" name="file-legger" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">&nbsp;</label>
                             <div class="col-md-7">
-                                <button type="button" class="btn btn-save btn-success" onclick="uploadLegger();"><i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Legger</button>
-                                <button type="button" class="btn btn-save btn-info" onclick="downloadLegger();"><i class="fa fa-download"></i>&nbsp;&nbsp;Download Legger</button>
+                                <button type="button" class="btn btn-success" onclick="uploadLegger();"><i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Legger</button>
+                                <button type="button" class="btn btn-info" onclick="downloadLegger();"><i class="fa fa-download"></i>&nbsp;&nbsp;Download Legger</button>
                             </div>
                         </div>
                     </form>
@@ -89,7 +89,8 @@ $this->generate->datatables($id_datatables, $title, $columns);
         if (!(KELAS_FILTER === null))
             window.open('<?php echo site_url('akademik/rapor/cetak'); ?>/' + KELAS_FILTER_GLOBAL, '_blank');
     };
-    var ID_PEG = <?php if ($this->session->userdata('ID_HAKAKSES') == 2)
+    var ID_PEG = <?php
+if ($this->session->userdata('ID_HAKAKSES') == 2)
     echo 'null';
 else
     echo $this->session->userdata('ID_PEG');
@@ -170,16 +171,29 @@ else
     function list_nilai(KELAS_FILTER) {
         $(".table-datatable1").attr('style', 'margin-top: -60px;');
 
-//        table = initialize_datatables(id_table, '<?php echo site_url('akademik/rapor/ajax_list'); ?>/' + KELAS_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+        table = initialize_datatables(id_table, '<?php echo site_url('akademik/rapor/ajax_list'); ?>/' + KELAS_FILTER, columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport, true);
 
         remove_splash();
         $(".buttons-copy").remove();
         $(".buttons-add").html('Cetak Rapor');
         $(".table-datatable1, .legger").slideDown();
     }
-    
+
     function downloadLegger() {
         window.open('<?php echo site_url('akademik/rapor/downloadLegger'); ?>/' + KELAS_FILTER_GLOBAL, '_blank');
+    }
+
+    function uploadLegger() {
+        create_splash('Sedang mengimport nilai. Ini membutuhkan waktu beberapa saat.')
+        create_ajax_file("<?php echo site_url('akademik/rapor/uploadLegger'); ?>", "file-legger", {ID_KELAS: KELAS_FILTER_GLOBAL}, function () {
+            remove_splash();
+            if (data.status) {
+                create_homer_success(data.msg);
+                reload_datatables(table);
+            } else {
+                create_homer_error(data.msg);
+            }
+        });
     }
 
 </script>

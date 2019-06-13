@@ -20,6 +20,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $spreadsheet = new Spreadsheet();
 
+$password = $this->crypt->randomString();
+
 $styleArrayBorder = array(
     'borders' => array(
         'allBorders' => array(
@@ -37,7 +39,11 @@ $spreadsheet->setActiveSheetIndex(0);
 $spreadsheet->getActiveSheet()->setTitle('DAFTAR NILAI');
 
 $sheet = $spreadsheet->getActiveSheet();
+$sheet->getProtection()->setPassword($password);
 $sheet->getProtection()->setSheet(true);
+$sheet->getProtection()->setSort(true);
+$sheet->getProtection()->setInsertRows(true);
+$sheet->getProtection()->setFormatCells(true);
 
 $row = 1;
 $sheet->setCellValue("A$row", "PESANTREN ISLAM MATHALIUL FALAH - KAJEN");
@@ -110,6 +116,9 @@ $sheet->getColumnDimension($lastColumn)->setWidth(10);
 $sheet->getStyle("$lastColumn$row")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 $endColumnNilai = $lastColumn;
 
+$sheet->setCellValue("$lastColumn" . ($row - 3), "ID Kelas");
+$sheet->getStyle("$lastColumn" . ($row - 3))->getFont()->setBold(true);
+
 $lastColumn = next_char($lastColumn, 1);
 $startColumnKeterangan = $lastColumn;
 $columnSakit = $lastColumn;
@@ -130,6 +139,9 @@ $sheet->setCellValue("$lastColumn$row", "LARI");
 $sheet->getColumnDimension($lastColumn)->setWidth(4);
 $sheet->getStyle("$lastColumn$row")->getAlignment()->setTextRotation(90);
 $sheet->mergeCells("$startColumnKeterangan" . ($row - 1) . ":$lastColumn" . ($row - 1));
+
+$sheet->setCellValue("$lastColumn" . ($row - 3), $KELAS->ID_KELAS);
+$sheet->getStyle("$lastColumn" . ($row - 3))->getFont()->setBold(true);
 
 $sheet->getRowDimension($row)->setRowHeight(100);
 $sheet->getStyle("A$startRowTable:$lastColumn$row")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -195,7 +207,11 @@ $spreadsheet->setActiveSheetIndex(1);
 $spreadsheet->getActiveSheet()->setTitle('DAFTAR GURU MAPEL');
 
 $sheet = $spreadsheet->getActiveSheet();
+$sheet->getProtection()->setPassword($password);
 $sheet->getProtection()->setSheet(true);
+$sheet->getProtection()->setSort(true);
+$sheet->getProtection()->setInsertRows(true);
+$sheet->getProtection()->setFormatCells(true);
 
 $row = 1;
 $sheet->setCellValue("A$row", "DAFTAR GURU MATA PELAJARAN");
@@ -205,13 +221,17 @@ $sheet->getStyle("A$row")->getFont()->setBold(true);
 $row = 3;
 $sheet->setCellValue("A$row", "No");
 $sheet->getColumnDimension('A')->setWidth(4);
-$sheet->setCellValue("B$row", "Nama Mapel");
-$sheet->getColumnDimension('B')->setWidth(20);
-$sheet->setCellValue("C$row", "Nama Guru");
-$sheet->getColumnDimension('C')->setWidth(35);
-$sheet->setCellValue("D$row", "No HP");
-$sheet->getColumnDimension('D')->setWidth(15);
-$sheet->getStyle("A$row:D$row")->getFont()->setBold(true);
+$sheet->setCellValue("B$row", "Token");
+$sheet->getColumnDimension('B')->setWidth(7);
+$sheet->setCellValue("C$row", "ID Mapel");
+$sheet->getColumnDimension('C')->setWidth(10);
+$sheet->setCellValue("D$row", "Nama Mapel");
+$sheet->getColumnDimension('D')->setWidth(20);
+$sheet->setCellValue("E$row", "Nama Guru");
+$sheet->getColumnDimension('E')->setWidth(35);
+$sheet->setCellValue("F$row", "No HP");
+$sheet->getColumnDimension('F')->setWidth(15);
+$sheet->getStyle("A$row:E$row")->getFont()->setBold(true);
 
 $no = 1;
 $row = 3;
@@ -219,21 +239,25 @@ foreach ($MAPEL as $detail) {
     $row++;
     $sheet->setCellValue("A$row", $no++);
     $sheet->getColumnDimension('A')->setWidth(4);
-    $sheet->setCellValue("B$row", $detail->NAMA_MAPEL);
-    $sheet->getColumnDimension('B')->setWidth(20);
-    $sheet->setCellValue("C$row", $this->cetak->nama_peg_print((array) $detail));
-    $sheet->getColumnDimension('C')->setWidth(35);
-    $sheet->setCellValue("D$row", $detail->NOHP_PEG);
-    $sheet->getColumnDimension('D')->setWidth(15);
+    $sheet->setCellValue("B$row", $detail->ID_AGM);
+    $sheet->getColumnDimension('B')->setWidth(7);
+    $sheet->setCellValue("C$row", $detail->ID_MAPEL);
+    $sheet->getColumnDimension('C')->setWidth(10);
+    $sheet->setCellValue("D$row", $detail->NAMA_MAPEL);
+    $sheet->getColumnDimension('D')->setWidth(20);
+    $sheet->setCellValue("E$row", $this->cetak->nama_peg_print((array) $detail));
+    $sheet->getColumnDimension('E')->setWidth(35);
+    $sheet->setCellValue("F$row", $detail->NOHP_PEG);
+    $sheet->getColumnDimension('F')->setWidth(15);
 }
 
-$sheet->getStyle("A3:D$row")->applyFromArray($styleArrayBorder);
+$sheet->getStyle("A3:F$row")->applyFromArray($styleArrayBorder);
 
 $spreadsheet->setActiveSheetIndex(0);
 
 $writer = new Xlsx($spreadsheet);
 
-$filename = 'legger_nilai_' . date('Y_m_d_H_i_s');
+$filename = 'legger_nilai_' . str_replace(" ", "_", strtoupper($KELAS->NAMA_KELAS)) . '_' . date('Y_m_d_H_i_s');
 
 header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');

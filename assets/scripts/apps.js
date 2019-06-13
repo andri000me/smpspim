@@ -902,7 +902,7 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
     table.columns().every(function () {
         var that = this;
         var temp_timeout = null;
-        $('input', this.footer()).on('keyup change', function () {
+        $('input.datatables-search', this.footer()).on('keyup change', function () {
             var thot = this;
             if (temp_timeout !== null)
                 clearTimeout(temp_timeout);
