@@ -57,17 +57,19 @@ class Generate_HTML {
 
     // ========================================= SETTING JSON ======================================================================================================
 
-    public function set_header_JSON() {
+    public function set_header_JSON($reqTrans = true) {
         if (!$this->CI->input->is_ajax_request()) {
             show_error("Your request is not valid", "403", "ERROR");
         } else {
             header('Content-Type: application/json');
-            $this->CI->db->trans_start();
+            if ($reqTrans)
+                $this->CI->db->trans_start();
         }
     }
 
-    public function output_JSON($data) {
-        $this->CI->db->trans_complete();
+    public function output_JSON($data, $reqTrans = true) {
+        if ($reqTrans)
+            $this->CI->db->trans_complete();
 
         if (is_array($data)) {
             if (isset($data['status']) && $data['status'] > 0)

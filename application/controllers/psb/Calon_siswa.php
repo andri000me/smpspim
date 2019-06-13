@@ -569,7 +569,7 @@ class Calon_siswa extends CI_Controller {
     }
 
     public function from_alumni() {
-        $this->generate->set_header_JSON();
+        $this->generate->set_header_JSON(false);
 
         $ID_SISWA = $this->input->post('ID_SISWA');
         $data = (array) $this->alumni->get_by_id_simple($ID_SISWA);
@@ -590,6 +590,8 @@ class Calon_siswa extends CI_Controller {
         $where = array(
             'ID_SISWA' => $data['ID_SISWA']
         );
+        unset($data['ID_SISWA']);
+        unset($data['CREATED_SISWA']);
         $insert = $this->siswa->update($where, $data);
 
         // MENGECEK TAGIHAN PSB 
@@ -598,7 +600,7 @@ class Calon_siswa extends CI_Controller {
             $this->set_tagihan_siswa($insert, $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA'], $data['JK_SISWA']);
         }
 
-        $this->generate->output_JSON(array('status' => $insert));
+        $this->generate->output_JSON(array('status' => $insert), false);
     }
 
 }
