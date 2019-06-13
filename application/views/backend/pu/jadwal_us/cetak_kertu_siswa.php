@@ -146,7 +146,7 @@ function cetak($pdf, $data, $title) {
     $pdf->SetFont('Arial', 'I', $font - 2);
     $pdf->Cell(0, 3, 'Kartu ini harus dibawa setiap mengikuti ujian', 0, 0, 'C');
 
-    $posisi_x = 73;
+    $posisi_x = 73; 
     $posisi_y = 3;
 
     if (file_exists('files/siswa/' . $data['AKAD_SISWA']['NIS_SISWA'] . '.jpg'))
