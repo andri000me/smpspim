@@ -595,7 +595,7 @@ class Calon_siswa extends CI_Controller {
         // MENGECEK TAGIHAN PSB 
         // MEMASUKAN CALON SISWA KE TAGIHAN PSB
         if ($insert > 0) {
-            $this->set_tagihan_siswa($insert, $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA']);
+            $this->set_tagihan_siswa($insert, $data['MASUK_JENJANG_SISWA'], $data['MASUK_TINGKAT_SISWA'], $data['JK_SISWA']);
         }
 
         $this->generate->output_JSON(array('status' => $insert));
