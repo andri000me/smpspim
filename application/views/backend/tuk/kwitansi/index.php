@@ -14,7 +14,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                     </div>
                     <div class="panel-body">
                         <?php $this->generate->input_hidden('NOMINAL', ''); ?>
-                        <?php $this->generate->input_select2('Kelas', array('name' => 'KELAS', 'url' => site_url('akademik/kelas/auto_complete')), TRUE, 7, FALSE, NULL); ?>
+                        <?php $this->generate->input_select2('Kelas', array('name' => 'KELAS', 'url' => site_url('akademik/kelas/auto_complete')), FALSE, 7, FALSE, NULL); ?>
+                        <?php $this->generate->input_select2('Siswa', array('name' => 'SISWA', 'url' => site_url('akademik/siswa/auto_complete')), FALSE, 7, FALSE, NULL); ?>
                         <?php $this->generate->input_text('Nominal', array('name' => 'TEMP_NOMINAL', 'onblur' => 'display_nominal(this);', 'onclick' => 'show_nominal(this);'), TRUE, 3); ?>
                         <?php $this->generate->input_text('Untuk pembayaran', array('name' => 'KETERANGAN'), TRUE, 9); ?>
                         <?php $this->generate->input_select2('Penerima', array('name' => 'PENERIMA', 'url' => site_url('master_data/pegawai/auto_complete')), TRUE, 5, FALSE, NULL); ?>

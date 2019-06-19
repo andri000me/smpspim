@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -27,13 +28,20 @@ class Cetak_kwitansi extends CI_Controller {
     public function index() {
         $this->generate->backend_view('tuk/kwitansi/index');
     }
-    
+
     public function cetak() {
         $post = $this->input->post();
+
+        if ($post['KELAS'] == "") {
+            $where_siswa = array(
+                'SISWA_AS' => $post['SISWA']
+            );
+        } else {
+            $where_siswa = array(
+                'KELAS_AS' => $post['KELAS']
+            );
+        }
         
-        $where_siswa = array(
-            'KELAS_AS' => $post['KELAS']
-        );
         $data = array(
             'DATA' => $post,
             'SISWA' => $this->siswa->get_rows($where_siswa, TRUE),
@@ -42,10 +50,11 @@ class Cetak_kwitansi extends CI_Controller {
         
         $this->load->view('backend/tuk/kwitansi/cetak', $data);
     }
-    
+
     public function cetak_individu($id) {
         $data = $this->jurnal->get_by_id($id);
-        
+
         $this->load->view('backend/tuk/kwitansi/cetak_individu', $data);
     }
+
 }

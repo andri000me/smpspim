@@ -42,7 +42,7 @@ class Siswa extends CI_Controller {
             'jenjang_sekolah_model' => 'jenjang_sekolah',
         ));
         $this->load->library('denah_handler');
-        $this->auth->validation(array(2, 5, 7, 14));
+        $this->auth->validation(array(2, 5, 7, 14, 13));
     }
 
     public function index() {
