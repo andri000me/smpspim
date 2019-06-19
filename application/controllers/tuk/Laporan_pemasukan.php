@@ -54,6 +54,7 @@ class Laporan_pemasukan extends CI_Controller {
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_TJ . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a></li>
+                        <li><a href="' . site_url('tuk/cetak_kwitansi/cetak_individu/' . $item->ID_TJ) . '" title="Cetak" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak</a></li>
                     </ul>
                 </div>';
 
