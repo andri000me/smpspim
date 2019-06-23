@@ -77,8 +77,8 @@ foreach ($data as $detail) {
 
             $posisi_y = 0;
             for ($i = 0; $i < $jumlah_peruang; $i++) {
-                $pdf->Cell(5);
-                $pdf->Cell(29, 25, $i + 1, 'RLT', 0, 'C');
+//                $pdf->Cell(5);
+//                $pdf->Cell(29, 25, "", 'RLT', 0, 'C');
 
                 $posisi_x = 0;
                 if ((($i + 1) % $jumlah_perbaris) == 0) {
@@ -112,38 +112,52 @@ foreach ($data as $detail) {
                             $pdf->Cell(5);
 //                            $pdf->Cell(29, 4, $posisi_x.', '.$posisi_y, 'RL', 0, 'C');
                             $pdf->SetFont('Arial', '', $size_font - 4);
-                            $pdf->Cell(29, 4, $data_siswa[$x]->NAMA_SISWA, 'RL', 0, 'C');
+                            $pdf->Cell(29, 4, $data_siswa[$x]->NAMA_SISWA, 'RTL', 0, 'C');
                             $pdf->SetFont('Arial', '', $size_font - 2);
 
-                            if (file_exists('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'))
-                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
-                            elseif (file_exists('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'))
-                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
-                            else
-                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
+//                            if (file_exists('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'))
+//                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->NIS_SISWA . '.jpg'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
+//                            elseif (file_exists('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'))
+//                                $pdf->Image(base_url('files/siswa/' . $data_siswa[$x]->ID_SISWA . '.png'), $posisi_x, $posisi_y, $width_photo - 7,75, $height_photo, '', '');
+//                            else
+//                                $pdf->Image(base_url('files/no_image.jpg'), $posisi_x, $posisi_y, $width_photo, $height_photo, '', '');
                         } else {
                             $pdf->Cell(5);
                             $pdf->Cell(29, 4, '', 'RL', 0, 'C');
                         }
                     }
+//
+//                    $pdf->Ln();
+//
+//                    for ($x = ($i + 1 - $jumlah_perbaris); $x <= $i; $x++) {
+//                        if (isset($data_denah['DENAH'][$ruang][$x])) {
+//                            $id_tingkat = $data_denah['DENAH'][$ruang][$x];
+//
+//                            $pdf->Cell(5);
+//                            $pdf->Cell(29, 4, $data_denah['KODE_JENJANG'][$id_tingkat] . ' KELAS: ' . $data_siswa[$x]->MASUK_TINGKAT_SISWA, 'RL', 0, 'C');
+//                        } else {
+//                            $pdf->Cell(5);
+//                            $pdf->Cell(29, 4, '', 'RL', 0, 'C');
+//                        }
+//                    }
 
                     $pdf->Ln();
 
                     for ($x = ($i + 1 - $jumlah_perbaris); $x <= $i; $x++) {
                         if (isset($data_denah['DENAH'][$ruang][$x])) {
-                            $id_tingkat = $data_denah['DENAH'][$ruang][$x];
-
                             $pdf->Cell(5);
-                            $pdf->Cell(29, 4, $data_denah['KODE_JENJANG'][$id_tingkat] . ' KELAS: ' . $data_siswa[$x]->MASUK_TINGKAT_SISWA, 'RLB', 0, 'C');
+                            $pdf->Cell(29, 15, $this->pengaturan->getKodeUM($data_siswa[$x]), 'RLB', 0, 'C');
                         } else {
                             $pdf->Cell(5);
-                            $pdf->Cell(29, 4, '', 'RLB', 0, 'C');
+                            $pdf->Cell(29, 15, '', 'RLB', 0, 'C');
                         }
                     }
 
                     $pdf->Ln(6);
                 }
             }
+
+            $pdf->Ln(10);
 
             $pdf->SetFont('Arial', '', $size_font);
             $pdf->Cell(180);
@@ -158,8 +172,12 @@ foreach ($data as $detail) {
             $pdf->SetFont('Arial', '', $size_font);
             $pdf->Cell(180);
             $pdf->Cell(0, 5, 'NIP. ' . $ketua->NIP_PEG, 0, 0, 'C');
+            break;
         }
+
+        break;
     }
+    break;
 }
 
 $pdf->Output();
