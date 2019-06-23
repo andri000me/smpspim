@@ -85,7 +85,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     }
     
     function cetak_blangko_nilai_<?php echo $id_datatables; ?>(id) {
-        window.open('<?php echo site_url('pu/nilai_um/cetak_daftar_nilai'); ?>/' + id, '_blank');
+        window.open('<?php echo site_url('pu/jadwal_um/cetak_daftar_nilai'); ?>/' + id, '_blank');
     }
     
     function cetak_absen_peserta_<?php echo $id_datatables; ?>(id) {

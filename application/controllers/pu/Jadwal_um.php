@@ -310,6 +310,17 @@ class Jadwal_um extends CI_Controller {
         $this->load->view('backend/pu/jadwal_um/cetak_absen_peserta', $data);
     }
 
+    public function cetak_daftar_nilai($id) {
+        $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
+        $data['ID'] = $id;
+        $data['data'][0]['TANGGAL'] = $data_jadwal->TANGGAL_PUJ;
+        $data['data'][0]['JAM_MULAI'] = $data_jadwal->JAM_MULAI_PUJ;
+        $data['data'][0]['JAM_SELESAI'] = $data_jadwal->JAM_SELESAI_PUJ;
+        $data['data'][0]['DENAH'] = $this->denah->get_denah_by_tanggal($data_jadwal->TANGGAL_PUJ);
+
+        $this->load->view('backend/pu/jadwal_um/cetak_daftar_nilai', $data);
+    }
+
     public function cetak_siswa_ruang($id) {
         $data_jadwal = $this->jadwal->get_by_id($this->tipe, $id);
         $data['ID'] = $id;
