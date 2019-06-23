@@ -853,6 +853,7 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
                 "type": "POST",
                 "pages": 5
             },
+            "searchDelay": 1000,
             "search": {
                 "regex": true
             },
@@ -883,6 +884,7 @@ function initialize_datatables(id_table, site, columns, orders, functionInitComp
                 "type": "POST",
                 "pages": 5
             },
+            "searchDelay": 1000,
             "search": {
                 "regex": true
             },

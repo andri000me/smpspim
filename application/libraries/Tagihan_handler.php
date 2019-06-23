@@ -22,7 +22,7 @@ class Tagihan_handler {
         if ($TA == NULL)
             $TA = $this->CI->session->userdata('ID_TA_ACTIVE');
         
-        $tagihan = $this->CI->detail_tagihan->get_all_active($DEPT_TINGK, $TA, $this->CI->siswa->get_jk());
+        $tagihan = $this->CI->detail_tagihan->get_all_active($DEPT_TINGK, $TA, $this->CI->siswa->get_jk($ID_SISWA));
 
         foreach ($tagihan as $tag) {
             $data_assign = array(
