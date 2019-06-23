@@ -110,7 +110,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                             <a class="closebox"><i class="fa fa-times"></i></a>
                         </div>
-                        JADWAL PENGAWAS LAKI-LAKI
+                        JADWAL PENGAWAS LAKI-LAKI (OPSIONAL)
                     </div>
                     <div class="panel-body">
                         <?php 
@@ -126,7 +126,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             </div>
                             <label class="col-sm-1 control-label">PENGAWAS</label>
                             <div class="col-sm-6">
-                                <input class="form-control js-source-multi js-source-states-pengawas required pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $i; ?>">
+                                <input class="form-control js-source-multi js-source-states-pengawas  pegawas-lk" name="PEGAWAI_PENG_LK[]" style="width: 100%" multiple="multiple" id="pegawas-lk-<?php echo $i; ?>">
                                 <span class="help-block m-b-none text-left">Wajib diisi</span>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                             <a class="closebox"><i class="fa fa-times"></i></a>
                         </div>
-                        JADWAL PENGAWAS PEREMPUAN
+                        JADWAL PENGAWAS PEREMPUAN (OPSIONAL)
                     </div>
                     <div class="panel-body">
                         <?php 
@@ -161,7 +161,7 @@ $this->generate->generate_panel_content($title, $subtitle);
                             </div>
                             <label class="col-sm-1 control-label">PENGAWAS</label>
                             <div class="col-sm-6">
-                                <input class="form-control js-source-multi js-source-states-pengawas required pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $i; ?>">
+                                <input class="form-control js-source-multi js-source-states-pengawas  pegawas-pr" name="PEGAWAI_PENG_PR[]" style="width: 100%" multiple="multiple" id="pegawas-pr-<?php echo $i; ?>">
                                 <span class="help-block m-b-none text-left">Wajib diisi</span>
                             </div>
                         </div>
