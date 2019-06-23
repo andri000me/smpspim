@@ -330,6 +330,14 @@ class Matapelajaran extends CI_Controller {
         $this->generate->output_JSON(array("status" => $affected_row));
     }
 
+    public function psb_auto_complete() {
+        $this->generate->set_header_JSON();
+
+        $data = $this->matapelajaran->get_all_ac_psb($this->input->post('q'));
+
+        $this->generate->output_JSON($data);
+    }
+
     public function auto_complete() {
         $this->generate->set_header_JSON();
 

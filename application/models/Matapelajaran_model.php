@@ -122,6 +122,17 @@ class Matapelajaran_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_all_ac_psb($where) {
+        $this->db->select("ID_MAPEL as id, CONCAT(NAMA_DEPT,' - ',NAMA_MAPEL) as text");
+        $this->_get_table();
+        $this->db->like('NAMA_MAPEL', $where);
+        $this->db->where('PMB_MAPEL', 1);
+        $this->db->order_by('URUT_DEPT', 'ASC');
+        $this->db->order_by('NAMA_MAPEL', 'ASC');
+
+        return $this->db->get()->result();
+    }
+
     public function get_all_ac($where) {
         $this->db->select("ID_MAPEL as id, CONCAT(NAMA_DEPT,' - ',NAMA_MAPEL) as text");
         $this->_get_table();

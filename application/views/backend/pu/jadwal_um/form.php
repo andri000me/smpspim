@@ -264,7 +264,7 @@ $this->generate->generate_panel_content($title, $subtitle);
     });
     $(".js-source-states-mapel").select2({escapeMarkup: function (markup) { return markup; },
         ajax: {
-            url: "<?php echo site_url('master_data/matapelajaran/auto_complete'); ?>",
+            url: "<?php echo site_url('master_data/matapelajaran/psb_auto_complete'); ?>",
             dataType: "json",
             type: "POST",
             delay: 100,
