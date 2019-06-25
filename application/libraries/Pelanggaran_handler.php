@@ -133,7 +133,7 @@ class Pelanggaran_handler {
 
     public function proses_poin_tahun_lalu($ID_SISWA, $TA) {
         $poin = $this->CI->pelanggaran_header->get_total_poin_siswa($this->CI->session->userdata('ID_TA_ACTIVE'), $ID_SISWA);
- 
+        
         for ($cawu = 1; $cawu <= 3; $cawu++) {
             $data_pelanggaran = array(
                 'TA_KSH' => $TA,
@@ -141,7 +141,7 @@ class Pelanggaran_handler {
                 'SISWA_KSH' => $ID_SISWA,
                 'POIN_TAHUN_LALU_KSH' => ($poin == NULL ? 0 : $poin),
                 'USER_KSH' => $this->CI->session->userdata('ID_USER')
-            );
+            );var_dump($data_pelanggaran);exit();
             $this->CI->pelanggaran_header->save_lanjut_jenjang($data_pelanggaran);
         }
     }
