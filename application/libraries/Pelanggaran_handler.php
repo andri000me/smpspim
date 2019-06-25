@@ -141,7 +141,7 @@ class Pelanggaran_handler {
                 'SISWA_KSH' => $ID_SISWA,
                 'POIN_TAHUN_LALU_KSH' => ($poin == NULL ? 0 : $poin),
                 'USER_KSH' => $this->CI->session->userdata('ID_USER')
-            );var_dump($data_pelanggaran);exit();
+            );
             $this->CI->pelanggaran_header->save_lanjut_jenjang($data_pelanggaran);
         }
     }
