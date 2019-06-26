@@ -137,8 +137,8 @@ class Nilai_um extends CI_Controller {
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->nilai_um->count_all($temp_id, $JK_SISWA),
-            "recordsFiltered" => $this->nilai_um->count_filtered($temp_id, $JK_SISWA),
+            "recordsTotal" => $this->nilai_um->count_all($ID_TINGK, $JK_SISWA),
+            "recordsFiltered" => $this->nilai_um->count_filtered($ID_TINGK, $JK_SISWA),
             "data" => $data,
         );
 
