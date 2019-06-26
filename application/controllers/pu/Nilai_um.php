@@ -152,9 +152,7 @@ class Nilai_um extends CI_Controller {
         unset($temp_lulus['LISAN']);
         $i = 0;
         $log = '';
-        if($temp_lulus == null)
-            return $temp_id;
-            
+        
         foreach ($temp_lulus as $temp_detail) {
             if(!isset($temp_detail['MAX'])) {
                 $temp_id = $temp_detail['TINGK'];
