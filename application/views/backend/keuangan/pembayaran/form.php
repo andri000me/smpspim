@@ -19,131 +19,157 @@ $name_function = 'tagihan';
 </div>
 <div class="content animate-panel">
     <?php echo $this->generate->form_open($id_form, $name_function); ?>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="hpanel">
-                    <div class="panel-heading hbuilt">
-                        <div class="panel-tools">
-                            <a class="fullscreen"><i class="fa fa-expand"></i></a>
-                        </div>
-                        FORM PEMBAYARAN
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-heading hbuilt">
+                    <div class="panel-tools">
+                        <a class="fullscreen"><i class="fa fa-expand"></i></a>
                     </div>
-                    <div class="panel-body">
-                        <div class="row form-input">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">NIS/NAMA</label>
-                                    <div class="col-md-7">
-                                        <input class="form-control js-source-states-input" type="text" multiple="multiple">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed form-detail"></div>
-                        <div class="row form-detail">
-                            <div class="col-md-6 border-right" style="">
-                                <div class="row">
-                                    <div class="col-md-12 text-center" id="foto_siswa">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <small class="stats-label">NIS</small>
-                                        <h4 id="data_nis"></h4>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <small class="stats-label">NIK</small>
-                                        <h4 id="data_nik"></h4>
-                                    </div>
-                                    <div class="col-md-11">
-                                        <small class="stats-label">Nama</small>
-                                        <h4 id="data_nama"></h4>
-                                    </div>
-                                    <div class="col-md-1 text-right">
-                                        <small class="stats-label">JK</small>
-                                        <h4 id="data_jk"></h4>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="stats-label">Angkatan</small>
-                                        <h4 id="data_angkatan"></h4>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <small class="stats-label">Kelas</small>
-                                        <h4 id="data_kelas"></h4>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="stats-label">Jenjang</small>
-                                        <h4 id="data_jenjang"></h4>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <small class="stats-label">Tingkat</small>
-                                        <h4 id="data_tingkat"></h4>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <small class="stats-label">Tempat Lahir</small>
-                                        <h4 id="data_tempat_lahir"></h4>
-                                    </div>
-                                    <div class="col-md-4 text-right">
-                                        <small class="stats-label">Tanggal Lahir</small>
-                                        <h4 id="data_tanggal_lahir"></h4>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="stats-label">Nama Ayah</small>
-                                        <h4 id="data_nama_ayah"></h4>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <small class="stats-label">Nama Ibu</small>
-                                        <h4 id="data_nama_ibu"></h4>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <small class="stats-label">Alamat</small>
-                                        <h4 id="data_alamat"></h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6" style="">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <small class="stats-label">Tagihan</small>
-                                    </div>
-                                </div>
-                                <div id="data_tagihan">
+                    FORM PEMBAYARAN
+                </div>
+                <div class="panel-body">
+                    <div class="row form-input">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">NIS/NAMA</label>
+                                <div class="col-md-7">
+                                    <input class="form-control js-source-states-input" type="text" multiple="multiple">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <h4>PEMBAYARAN</h4>
+                    <div class="hr-line-dashed form-detail"></div>
+                    <div class="row form-detail">
+                        <div class="col-md-6 border-right" style="">
+                            <div class="row">
+                                <div class="col-md-12 text-center" id="foto_siswa">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="stats-label">NIS</small>
+                                    <h4 id="data_nis"></h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <small class="stats-label">NIK</small>
+                                    <h4 id="data_nik"></h4>
+                                </div>
+                                <div class="col-md-11">
+                                    <small class="stats-label">Nama</small>
+                                    <h4 id="data_nama"></h4>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <small class="stats-label">JK</small>
+                                    <h4 id="data_jk"></h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="stats-label">Angkatan</small>
+                                    <h4 id="data_angkatan"></h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <small class="stats-label">Kelas</small>
+                                    <h4 id="data_kelas"></h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="stats-label">Jenjang</small>
+                                    <h4 id="data_jenjang"></h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <small class="stats-label">Tingkat</small>
+                                    <h4 id="data_tingkat"></h4>
+                                </div>
+                                <div class="col-md-8">
+                                    <small class="stats-label">Tempat Lahir</small>
+                                    <h4 id="data_tempat_lahir"></h4>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <small class="stats-label">Tanggal Lahir</small>
+                                    <h4 id="data_tanggal_lahir"></h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="stats-label">Nama Ayah</small>
+                                    <h4 id="data_nama_ayah"></h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <small class="stats-label">Nama Ibu</small>
+                                    <h4 id="data_nama_ibu"></h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <small class="stats-label">Alamat</small>
+                                    <h4 id="data_alamat"></h4>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-4 text-center">
-                                <input class="form-control" type="text" id="nominal" onkeydown="temp_nominal(this);" onkeyup="input_format(this);">
+                        <div class="col-md-6" style="">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <small class="stats-label">Tagihan</small>
+                                </div>
+                            </div>
+                            <div id="data_tagihan">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-4 text-center">
-                                <h3 id="input_nominal"></h3>
-                            </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h4>PEMBAYARAN</h4>
                         </div>
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2 text-center">
-                                <input type="hidden" name="ID_SISWA" id="ID_SISWA">
-                                <input class="form-control" type="text" name="KETERANGAN" id="keterangan" placeholder="Keterangan pembayaran">
-                            </div>
-                        </div><br>
-                        <div class="row">
-                            <div class="col-md-2 col-md-offset-5 text-center">
-                                <button class="btn btn-success btn-block" type="button" id="btn_bayar" onclick="simpan_pembayaran();">BAYAR</button>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4 text-center">
+                            <input class="form-control" type="text" id="nominal" onkeydown="temp_nominal(this);" onkeyup="input_format(this);">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4 text-center">
+                            <h3 id="input_nominal"></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 text-center">
+                            <input type="hidden" name="ID_SISWA" id="ID_SISWA">
+                            <input class="form-control" type="text" name="KETERANGAN" id="keterangan" placeholder="Keterangan pembayaran">
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-5 text-center">
+                            <button class="btn btn-success btn-block" type="button" id="btn_bayar" onclick="simpan_pembayaran();">BAYAR</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
+<div class="row panel-history">
+    <div class="col-lg-12">
+        <div class="hpanel">
+            <div class="panel-heading hbuilt">
+                <div class="panel-tools">
+                    <a class="fullscreen"><i class="fa fa-expand"></i></a>
+                </div>
+                HISTORY PEMBAYARAN
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tanggal Pembayaran</th>
+                            <th>Kode Pembayaran</th>
+                            <th>Cetak</th>
+                        </tr>
+                    </thead>
+                    <tbody class="list-history">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <script type="text/javascript">
     var ID_SISWA = null;
@@ -152,7 +178,7 @@ $name_function = 'tagihan';
     var NOMINAL = 0;
 
     $(document).ready(function () {
-        $(".panel-footer, .form-detail, #nominal").hide();
+        $(".panel-footer, .form-detail, #nominal, .panel-history").hide();
         reset_nominal();
     });
 
@@ -192,13 +218,14 @@ $name_function = 'tagihan';
     }).on("change", function (e) {
         var data = $(".js-source-states-input").select2('data');
         ID_SISWA = data.id;
-        
+
         $("#ID_SISWA").val(ID_SISWA);
 
         create_splash('Sistem sedang mengambil data');
 
         reset_nominal();
         get_data_siswa();
+        get_data_nota();
         get_data_tagihan();
     });
 
@@ -240,6 +267,18 @@ $name_function = 'tagihan';
         }
 
         create_ajax('<?php echo site_url('keuangan/pembayaran/get_data_siswa'); ?>', 'ID_SISWA=' + ID_SISWA, success_siswa);
+    }
+
+    function get_data_nota() {
+        var success_siswa = function (data) {
+            $(".list-history").html("");
+            $.each(data, function(index, item){
+                $(".list-history").append('<tr><td>'+item.TANGGAL+'</td><td>'+item.KODE_BAYAR+'</td><td><a href="<?php echo site_url('keuangan/pembayaran/ajax_cetak') ?>/'+item.KODE_BAYAR+'" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-print"></i></a></td></tr>');
+            });
+            $(".panel-history").slideDown();
+        }
+
+        create_ajax('<?php echo site_url('keuangan/pembayaran/get_data_nota'); ?>', 'ID_SISWA=' + ID_SISWA, success_siswa);
     }
 
     function get_data_tagihan() {
@@ -303,20 +342,20 @@ $name_function = 'tagihan';
 
         remove_splash();
     }
-    
+
     function check_tagihan() {
         var nominal = 0;
-        
-        $(".status_tagihan").each(function( index ) {
-            if($(this).is(':checked')) {
+
+        $(".status_tagihan").each(function (index) {
+            if ($(this).is(':checked')) {
                 nominal += parseInt($(this).data("nominal"));
             }
         });
-        
+
         NOMINAL = nominal;
         $("#nominal").val(nominal);
         $("#input_nominal").html(formattedIDR(nominal));
-        
+
         if (nominal == 0)
             $('#btn_bayar').prop('disabled', true);
         else
