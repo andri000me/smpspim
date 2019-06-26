@@ -103,7 +103,7 @@ class Lanjut_jenjang extends CI_Controller {
         $ID_TINGK = $kelas->TINGKAT_KELAS;
 
         $result = $this->kenaikan_handler->proses($ID_AS, $ID_TA, $STATUS_KENAIKAN, $ID_TINGK);
-var_dump($check);exit();
+
         if ($result) {
             $msg = 'Berhasil memasukan ke tingkat';
             $ID_AS = $result;

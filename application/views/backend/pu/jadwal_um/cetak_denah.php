@@ -172,12 +172,8 @@ foreach ($data as $detail) {
             $pdf->SetFont('Arial', '', $size_font);
             $pdf->Cell(180);
             $pdf->Cell(0, 5, 'NIP. ' . $ketua->NIP_PEG, 0, 0, 'C');
-            break;
         }
-
-        break;
     }
-    break;
 }
 
 $pdf->Output();
