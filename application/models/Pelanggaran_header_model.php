@@ -203,7 +203,7 @@ class Pelanggaran_header_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function save_lanjut_jenjang($data) {
+    public function create_row($data) {
         $check = array(
             'TA_KSH' => $data['TA_KSH'],
             'CAWU_KSH' => $data['CAWU_KSH'],
