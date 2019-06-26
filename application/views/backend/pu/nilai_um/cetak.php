@@ -111,7 +111,7 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Image(base_url('files/aplikasi/ttd_gus_nadhif.png'), 80, 124, 45);
 
     $pdf->SetFont('Arial', 'I', 9);
-    $pdf->MultiCell(0, 5, 'Surat ini diserahkan kepada Wali Kelas '.$DETAIL->NAMA_TINGK_NOW.' '.str_replace("MADRASAH", "", $DETAIL->NAMA_DEPT_NOW).' selambat-lambatnya pada tanggal '.$this->date_format->to_print_text($MILADIYAH).' / '.$HIJRIYAH.' bersama dengan kwitansi pembayaran pendaftaran, uang kegiatan dan shodaqoh.');
+    $pdf->MultiCell(0, 5, 'Surat ini diserahkan kepada Wali Kelas '.$DETAIL->NAMA_TINGK_NOW.' '.str_replace("MADRASAH", "", $DETAIL->NAMA_DEPT_NOW).' selambat-lambatnya pada tanggal '.$this->date_format->to_print_text($MILADIYAH).' / '.$HIJRIYAH.' bersama dengan kwitansi berstempel LUNAS.');
     $pdf->Ln();
 
     // break;

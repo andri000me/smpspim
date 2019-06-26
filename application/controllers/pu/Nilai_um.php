@@ -81,6 +81,7 @@ class Nilai_um extends CI_Controller {
         $data_mapel = $this->jadwal_pu->get_mapel_by_tingkat($this->tipe, $ID_TINGK);
         $data_tingkat = $this->tingkat->get_all_urut();
         $nilai_lulus_psb = json_decode($this->pengaturan->getNilaiLulusPSB(), TRUE);
+        
 
         $id_datatables = 'datatable1';
         $list = $this->nilai_um->get_datatables($ID_TINGK, $JK_SISWA);
