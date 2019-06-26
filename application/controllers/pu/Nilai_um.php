@@ -159,7 +159,7 @@ class Nilai_um extends CI_Controller {
                 break;
             }
 
-            if (($rata_tulis > $temp_detail['MAX']) || (($rata_tulis <= $temp_detail['MAX']) && ($rata_tulis > $temp_detail['MIN']) && ($rata_lisan >= $temp_lisan))) {
+            if (($rata_tulis > $temp_detail['MAX']) || (($rata_tulis <= $temp_detail['MAX']) && ($rata_tulis >= $temp_detail['MIN']) && ($rata_lisan >= $temp_lisan))) {
                 $temp_id = $temp_detail['TINGK'];
                 break;
             } elseif(($rata_tulis <= $temp_detail['MAX']) && ($rata_tulis > $temp_detail['MIN']) && ($rata_lisan < $temp_lisan)) {

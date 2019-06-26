@@ -23,6 +23,7 @@ class Pembayaran extends CI_Controller {
             'siswa_model' => 'siswa',
             'kode_nota_model' => 'kode_nota',
             'nota_model' => 'nota',
+            'laporan_keuangan_model' => 'laporan',
         ));
         $this->auth->validation(4);
     }
@@ -290,6 +291,14 @@ class Pembayaran extends CI_Controller {
     }
     
     public function get_data_tagihan() {
+        $this->generate->set_header_JSON();
+        
+        $data = $this->assign_tagihan->get_tagihan_siswa($this->input->post('ID_SISWA'));
+        
+        $this->generate->output_JSON($data);
+    }
+    
+    public function get_data_nota() {
         $this->generate->set_header_JSON();
         
         $data = $this->assign_tagihan->get_tagihan_siswa($this->input->post('ID_SISWA'));
