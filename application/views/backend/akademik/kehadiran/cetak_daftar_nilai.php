@@ -95,7 +95,7 @@ foreach ($DATA as $DETAIL) {
     $y = $pdf->GetY();
     $pdf->StartTransform();
     $pdf->Rotate(90);
-    $pdf->Cell(22, $widthNilai, 'Leger', 1, 0, 'C');
+    $pdf->Cell(22, $widthNilai, 'Nilai Cawu', 1, 0, 'C');
     $pdf->StopTransform();
     $pdf->SetXY($x + $widthNilai, $y - 22);
     $pdf->Ln(22);
@@ -117,7 +117,7 @@ foreach ($DATA as $DETAIL) {
     }
     $pdf->Ln();
     $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->Cell(22, 4, 'NILAI LEGER =');
+    $pdf->Cell(22, 4, 'NILAI CAWU =');
     $pdf->Ln();
     $pdf->SetFont('helvetica', 'BU', 10);
     $pdf->Cell(25, 6, '');
