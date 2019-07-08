@@ -85,8 +85,9 @@ class Assign_tagihan extends CI_Controller {
             $data['siswa'][] = array(
                 'siswa' => $detail,
                 'tagihan' => $this->assign_tagihan->get_tagihan_siswa_kartu($detail->ID_SISWA),
-            );
-        }
+            ); 
+        }  
+        var_dump(json_decode(json_encode($data), true)['siswa'][0]['tagihan']);exit();  
 
         $this->load->view('backend/keuangan/assign_tagihan/cetak_kartu', $data);
     }
