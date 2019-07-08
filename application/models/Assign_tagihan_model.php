@@ -221,6 +221,7 @@ class Assign_tagihan_model extends CI_Model {
         $this->db->where(array(
             'SISWA_SETUP' => $ID_SISWA,
             'KADALUARSA_SETUP' => 0,
+            'PSB_TAG' => 0,
             'TA_TAG' => $this->session->userdata('ID_TA_ACTIVE')
         ));
         $result = $this->db->get();
