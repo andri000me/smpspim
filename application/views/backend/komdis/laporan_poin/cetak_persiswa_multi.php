@@ -39,7 +39,7 @@ foreach ($siswa as $data) {
         $pdf->Cell(20, 5, 'Nama');
         $pdf->Cell(100, 5, ': ' . $siswa->NIS_SISWA . ' - ' . $siswa->NAMA_SISWA);
         $pdf->Cell(20, 5, 'Telp.');
-        $pdf->Cell(0, 5, ': ' . $siswa->NOHP_SISWA);
+        $pdf->Cell(0, 5, ': ' . $siswa->ORTU_NOHP1_SISWA);
         $pdf->Ln();
 
         $pdf->Cell(20, 5, 'Domisili');
