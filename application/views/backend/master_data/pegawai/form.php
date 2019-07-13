@@ -57,8 +57,8 @@ $this->generate->generate_panel_content($title, $subtitle);
                         <?php $this->generate->input_select2('Agama', array('name' => 'AGAMA_PEG', 'url' => site_url('master_data/agama/auto_complete')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->AGAMA_PEG, 'text' => $data->NAMA_AGAMA) : NULL); ?>
                         <?php
                         $this->generate->input_dropdown('Status Menikah', 'MENIKAH_PEG', array(
-                            array('id' => 'SUDAH', 'text' => 'BELUM MENIKAH', 'selected' => $mode_edit ? ($data->MENIKAH_PEG == 'SUDAH' ? TRUE : FALSE) : FALSE),
-                            array('id' => 'BELUM', 'text' => 'SUDAH MENIKAH', 'selected' => $mode_edit ? ($data->MENIKAH_PEG == 'BELUM' ? TRUE : FALSE) : FALSE),
+                            array('id' => 'BELUM', 'text' => 'BELUM MENIKAH', 'selected' => $mode_edit ? ($data->MENIKAH_PEG == 'SUDAH' ? TRUE : FALSE) : FALSE),
+                            array('id' => 'SUDAH', 'text' => 'SUDAH MENIKAH', 'selected' => $mode_edit ? ($data->MENIKAH_PEG == 'BELUM' ? TRUE : FALSE) : FALSE),
                                 ), FALSE, 3);
                         ?>
                     </div>
