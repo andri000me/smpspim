@@ -43,13 +43,15 @@ function cetak($pdf, $data, $title) {
     $pdf->AddPage("L", array($length + 3, 53));
     $pdf->SetAutoPageBreak(true, 0);
 
+    $pdf->Image(base_url($CI->pengaturan->getLogo()), $posisi_x, $posisi_y, 13, 13, '', '');
+        
     $pdf->SetLineWidth(0.05);
     $pdf->Line(1, 1, $length + 2, 1);
     $pdf->Line(1, 52, $length + 2, 52);
     $pdf->Line(1, 1, 1, 52);
     $pdf->Line($length + 2, 1, $length + 2, 52);
 
-    $pdf->Image(base_url($CI->pengaturan->getLogo()), $posisi_x, $posisi_y, 13, 13, '', '');
+
 
     $pdf->SetFont('Arial', 'B', $font + 1);
     $pdf->Cell($margin_title);
