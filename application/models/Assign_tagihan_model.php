@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Assign_tagihan_model extends CI_Model {
 
     var $table = 'keu_setup';
-    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'ANGKATAN_SISWA','JK_SISWA','AYAH_NAMA_SISWA','NAMA_KELAS', 'NAMA_PEG', 'ID_SISWA');
+    var $column = array('NIS_SISWA', 'NAMA_SISWA', 'ANGKATAN_SISWA','JK_SISWA','AYAH_NAMA_SISWA','IBU_NAMA_SISWA','NAMA_KELAS', 'ALAMAT_SISWA', 'ID_SISWA');
     var $primary_key = "ID_SETUP";
     var $order = array("ID_SETUP" => 'ASC');
 

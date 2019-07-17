@@ -8,9 +8,10 @@ $columns = array(
     'NAMA',
     'ANGKATAN',
     'JK',
-    'ORANG TUA',
+    'NAMA AYAH',
+    'NAMA IBU',
     'KELAS',
-    'WALI KELAS',
+    'ALAMAT',
     'AKSI',
 );
 
