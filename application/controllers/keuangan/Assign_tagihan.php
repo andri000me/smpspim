@@ -52,7 +52,7 @@ class Assign_tagihan extends CI_Controller {
             $row[] = $item->NAMA_SISWA;
             $row[] = $item->ANGKATAN_SISWA;
             $row[] = $item->JK_SISWA;
-            $row[] = $item->KETERANGAN_TINGK;
+            $row[] = $item->AYAH_NAMA_SISWA;
             $row[] = $item->NAMA_KELAS;
 
             $row[] = $item->NAMA_PEG;
