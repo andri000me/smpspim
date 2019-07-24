@@ -26,19 +26,19 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Cell(0, 5, 'PANITIA PELAKSANAAN DAN PENYEMAAN HAFALAN TA ' . $this->session->userdata("NAMA_TA_ACTIVE"), 0, 0, 'L');
     $pdf->Ln();
 
-    $pdf->SetFont('dejavusans', 'B', 14);
+    $pdf->SetFont('dejavusans', '', 14);
     $pdf->Cell(0, 5, strtoupper($this->pengaturan->getNamaLembaga()), 0, 0, 'L');
     $pdf->Ln(8);
 
 //    $pdf->SetFont('dejavusans', '', 10);
 //    $pdf->Cell(0, 5, strtoupper($this->pengaturan->getDesa() . ' - ' . $this->pengaturan->getKecamatan() . ' - ' . $this->pengaturan->getKabupaten() . ' ' . $this->pengaturan->getKodepos()) . ' TELP. ' . $this->pengaturan->getTelp() . ' FAX. ' . $this->pengaturan->getFax(), 0, 0, 'L');
 
-    $pdf->SetLineWidth(0.50);
+    $pdf->SetLineWidth(0.30);
     $pdf->Line(6, 17, 204, 17);
     $pdf->SetLineWidth(0.30);
     $pdf->Line(6, 18, 204, 18);
 
-    $pdf->SetFont('dejavusans', 'B', 12);
+    $pdf->SetFont('dejavusans', '', 12);
     $pdf->Cell(0, 5, 'BUKTI PENYEMAAN HAFALAN', 0, 0, 'C');
     $pdf->Ln(8);
 
