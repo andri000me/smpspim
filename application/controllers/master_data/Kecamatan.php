@@ -20,7 +20,7 @@ class Kecamatan extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('kecamatan_model', 'kecamatan');
-        $this->auth->validation(array(3,4,11));
+        $this->auth->validation(array(3,4,11,2));
     }
 
     public function index() {
