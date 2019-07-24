@@ -101,10 +101,6 @@ $this->generate->input_hidden('ID_SISWA', $data->ID_SISWA);
                     <?php $this->generate->input_date('Tanggal Ijasah', array('name' => 'TANGGAL_IJASAH_SISWA', 'value' => $mode_edit ? $this->date_format->to_view($data->TANGGAL_IJASAH_SISWA) : ''), FALSE, 2); ?>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
             <div class="hpanel collapsed-panel hblue">
                 <div class="panel-heading hbuilt">
                     <div class="panel-tools">
@@ -118,6 +114,30 @@ $this->generate->input_hidden('ID_SISWA', $data->ID_SISWA);
                     <?php $this->generate->input_text('Kode Pos', array('name' => 'KODE_POS_SISWA', 'maxlength' => 5, 'value' => $mode_edit ? $data->KODE_POS_SISWA : ''), FALSE, 2); ?>
                     <?php $this->generate->input_text('No. HP', array('name' => 'NOHP_SISWA', 'id' => 'NOHP_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->NOHP_SISWA : ''), FALSE, 4); ?>
                     <?php $this->generate->input_text('Email', array('name' => 'EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->EMAIL_SISWA : ''), FALSE, 4); ?>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hpanel collapsed-panel hblue">
+                <div class="panel-heading hbuilt">
+                    <div class="panel-tools">
+                        <a  class="showhide" onclick="togglePanel(this);"><i class="fa fa-chevron-up"></i></a>
+                    </div>
+                    Orangtua
+                </div>
+                <div class="panel-body">
+                    <?php $this->generate->input_text('Alamat', array('name' => 'ORTU_ALAMAT_SISWA', 'maxlength' => 250, 'value' => $mode_edit ? $data->ORTU_ALAMAT_SISWA : ''), TRUE, 9); ?>
+                    <?php $this->generate->input_select2('Kecamatan', array('name' => 'ORTU_KECAMATAN_SISWA', 'url' => site_url('akademik/siswa/ac_kecamatan')), TRUE, 6, TRUE, $mode_edit ? array('id' => $data->ORTU_KECAMATAN_SISWA, 'text' => $data->NAMA_KEC_ORTU . ', ' . $data->NAMA_KAB_ORTU . ', ' . $data->NAMA_PROV_ORTU) : NULL); ?>
+                    <?php $this->generate->input_select2('Penghasilan', array('name' => 'ORTU_PENGHASILAN_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_penghasilan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->ORTU_PENGHASILAN_SISWA, 'text' => $data->NAMA_HASIL) : NULL); ?>
+                    <?php $this->generate->input_text('No. HP (1)', array('name' => 'ORTU_NOHP1_SISWA', 'id' => 'ORTU_NOHP1_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP1_SISWA : ''), FALSE, 4); ?>
+                    <?php $this->generate->input_text('No. HP (2)', array('name' => 'ORTU_NOHP2_SISWA', 'id' => 'ORTU_NOHP2_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP2_SISWA : ''), FALSE, 4); ?>
+                    <?php $this->generate->input_text('No. HP (3)', array('name' => 'ORTU_NOHP3_SISWA', 'id' => 'ORTU_NOHP3_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP3_SISWA : ''), FALSE, 4); ?>
+                    <?php $this->generate->input_text('Email', array('name' => 'ORTU_EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->ORTU_EMAIL_SISWA : ''), FALSE, 4); ?>
                 </div>
             </div>
         </div>
@@ -175,25 +195,6 @@ $this->generate->input_hidden('ID_SISWA', $data->ID_SISWA);
                     <?php $this->generate->input_select2('Hubungan', array('name' => 'WALI_HUBUNGAN_SISWA', 'url' => site_url('akademik/siswa/ac_wali_hubungan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_HUBUNGAN_SISWA, 'text' => $data->NAMA_HUB) : NULL); ?>
                     <?php $this->generate->input_select2('Pendidikan', array('name' => 'WALI_PENDIDIKAN_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_pendidikan')), FALSE, 3, FALSE, $mode_edit ? array('id' => $data->WALI_PENDIDIKAN_SISWA, 'text' => $data->NAMA_JP_WALI) : NULL); ?>
                     <?php $this->generate->input_select2('Pekerjaan', array('name' => 'WALI_PEKERJAAN_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_pekerjaan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->WALI_PEKERJAAN_SISWA, 'text' => $data->NAMA_JENPEK_WALI) : NULL); ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="hpanel collapsed-panel hblue">
-                <div class="panel-heading hbuilt">
-                    <div class="panel-tools">
-                        <a  class="showhide" onclick="togglePanel(this);"><i class="fa fa-chevron-up"></i></a>
-                    </div>
-                    Orangtua
-                </div>
-                <div class="panel-body">
-                    <?php $this->generate->input_text('Alamat', array('name' => 'ORTU_ALAMAT_SISWA', 'maxlength' => 250, 'value' => $mode_edit ? $data->ORTU_ALAMAT_SISWA : ''), TRUE, 9); ?>
-                    <?php $this->generate->input_select2('Kecamatan', array('name' => 'ORTU_KECAMATAN_SISWA', 'url' => site_url('akademik/siswa/ac_kecamatan')), TRUE, 6, TRUE, $mode_edit ? array('id' => $data->ORTU_KECAMATAN_SISWA, 'text' => $data->NAMA_KEC_ORTU . ', ' . $data->NAMA_KAB_ORTU . ', ' . $data->NAMA_PROV_ORTU) : NULL); ?>
-                    <?php $this->generate->input_select2('Penghasilan', array('name' => 'ORTU_PENGHASILAN_SISWA', 'url' => site_url('akademik/siswa/ac_ortu_penghasilan')), FALSE, 4, FALSE, $mode_edit ? array('id' => $data->ORTU_PENGHASILAN_SISWA, 'text' => $data->NAMA_HASIL) : NULL); ?>
-                    <?php $this->generate->input_text('No. HP (1)', array('name' => 'ORTU_NOHP1_SISWA', 'id' => 'ORTU_NOHP1_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP1_SISWA : ''), FALSE, 4); ?>
-                    <?php $this->generate->input_text('No. HP (2)', array('name' => 'ORTU_NOHP2_SISWA', 'id' => 'ORTU_NOHP2_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP2_SISWA : ''), FALSE, 4); ?>
-                    <?php $this->generate->input_text('No. HP (3)', array('name' => 'ORTU_NOHP3_SISWA', 'id' => 'ORTU_NOHP3_SISWA', 'maxlength' => 16, 'value' => $mode_edit ? $data->ORTU_NOHP3_SISWA : ''), FALSE, 4); ?>
-                    <?php $this->generate->input_text('Email', array('name' => 'ORTU_EMAIL_SISWA', 'maxlength' => 100, 'value' => $mode_edit ? $data->ORTU_EMAIL_SISWA : ''), FALSE, 4); ?>
                 </div>
             </div>
         </div>
