@@ -180,6 +180,15 @@ class Siswa extends CI_Controller {
         $this->load->view('backend/akademik/siswa/cetak_kartu', $data);
     }
 
+    public function cetak_kartu_perpustakaan($ID_KELAS) {
+        if ($ID_KELAS == 0)
+            $ID_KELAS = NULL;
+        $data['siswa'] = $this->siswa->get_data_kartu(NULL, $ID_KELAS);
+        $data['title'] = 'KARTU PERPUSTAKAAN';
+
+        $this->load->view('backend/akademik/siswa/cetak_kartu_perpustakaan', $data);
+    }
+
     public function cetak_kartu_jamaah($ID_KELAS) {
         if ($ID_KELAS == 0)
             $ID_KELAS = NULL;
