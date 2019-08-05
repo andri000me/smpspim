@@ -145,7 +145,7 @@ class Jadwal extends CI_Controller {
             'jadwal' => array(),
         );
 
-        foreach ($kelas as $detail_kelas) {
+        foreach ($kelas as $index => $detail_kelas) {
             foreach ($hari as $detail_hari) {
                 $data_jp = array(
                     'DEPT_MJP' => $detail_kelas->ID_DEPT,
@@ -153,14 +153,13 @@ class Jadwal extends CI_Controller {
                 );
                 $data['jam_pelajaran'][$detail_kelas->ID_KELAS][$detail_hari->ID_HARI] = $this->jp->get_rows($data_jp);
                 foreach ($data['jam_pelajaran'][$detail_kelas->ID_KELAS][$detail_hari->ID_HARI] as $detail_jp) {
-                    $result = $this->jadwal->get_jadwal_kelas($detail_kelas->ID_KELAS, $detail_hari->ID_HARI, $detail_jp->ID_MJP);
+                    $result = $this->jadwal->get_jadwal_kelas($detail_kelas->ID_KELAS, $detail_hari->ID_HARI, $detail_jp->URUTAN_MJP);
                     if (count($result) > 0)
-                        $data['jadwal'][$detail_kelas->ID_KELAS][$detail_hari->ID_HARI][$detail_jp->ID_MJP] = $result;
+                        $data['jadwal'][$detail_kelas->ID_KELAS][$detail_hari->ID_HARI][$detail_jp->URUTAN_MJP] = $result;
                 }
             }
-            
-            break;
         }
+        
         
         $this->load->view('backend/akademik/jadwal/cetak_jadwal_kelas', $data);
     }
