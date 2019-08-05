@@ -112,30 +112,30 @@ foreach ($data as $siswa) {
         $cpdf->AddPage("L", "A4");
         $cpdf->SetAutoPageBreak(true, 0);
 
-        $cpdf->SetFont('helvetica', '', 10);
-        $cpdf->Cell(25, 7, 'Nomor');
+        $cpdf->SetFont('calibri', '', 13);
+        $cpdf->Cell(30, 7, 'Nomor');
         $cpdf->Cell(0, 7, ': ' . $siswa->NOMOR_IJASAH_NIS);
         $cpdf->Ln();
 
-        $cpdf->Cell(25, 7, 'Tahun Ajaran');
+        $cpdf->Cell(30, 7, 'Tahun Ajaran');
         $cpdf->Cell(0, 7, ': ' . $siswa->NAMA_TA);
         $cpdf->Ln();
 
         $cpdf->SetY($offset_y);
 
-        $cpdf->SetFont('helvetica', 'B', 14);
+        $cpdf->SetFont('calibri', 'B', 16);
         $cpdf->Cell(0, 7, $siswa->NAMA_DEPT, 0, 0, 'C');
         $cpdf->Ln(10);
 
-        $cpdf->SetFont('helvetica', '', 12);
+        $cpdf->SetFont('calibri', '', 13);
         $cpdf->Cell(0, 7, 'Diberikan kepada:', 0, 0, 'C');
         $cpdf->Ln(10);
 
-        $cpdf->SetFont('courier', 'B', 20);
+        $cpdf->SetFont('franklin', 'B', 18);
         $cpdf->Cell(0, 7, strtoupper($siswa->NAMA_SISWA), 0, 0, 'C');
         $cpdf->Ln(8);
 
-        $cpdf->SetFont('helvetica', '', 12);
+        $cpdf->SetFont('calibri', '', 13);
 
         $cpdf->Cell(100);
         $cpdf->Cell(30, 7, 'Lahir di');
@@ -174,10 +174,10 @@ foreach ($data as $siswa) {
 
         $cpdf->Cell(150 + 10);
         $cpdf->Cell(15, 10, 'Kajen, ');
-        $cpdf->SetFont('helvetica', 'U', 12);
+        $cpdf->SetFont('calibri', 'U', 13);
         $cpdf->Cell(0, 5, $post['TANGGAL_HIJRIYAH'] . ' H.');
         $cpdf->Ln();
-        $cpdf->SetFont('helvetica', '', 12);
+        $cpdf->SetFont('calibri', '', 13);
         $cpdf->Cell(150 + 15 + 10);
         $cpdf->Cell(0, 5, $post['TANGGAL_MASEHI'] . ' M.');
         $cpdf->Ln(8);
