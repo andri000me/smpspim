@@ -22,8 +22,51 @@ class Laporan_akademik_model extends CI_Model {
         if ($label == NULL || $label == 'NAMA_TA' || $label == 'TA_AKTIF')
             $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
         if ($label == NULL || $label == 'CAWU_AKTIF') {
-            $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
-            $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
+            $query1 = "(SELECT 
+                            ID_AS,
+                            yy.ID_SISWA AS PURE_ID_SISWA,
+                            yy.NAMA_SISWA AS PURE_NAMA_SISWA,
+                            ta.NAMA_TA AS PURE_NAMA_TA,
+                            cw.NAMA_CAWU AS PURE_NAMA_CAWU,
+                            ta.ID_TA AS PURE_ID_TA,
+                            cw.ID_CAWU AS PURE_ID_CAWU,
+                            CONCAT(ta.NAMA_TA, ' - ', cw.NAMA_CAWU) AS TA_CAWU,
+                            xx.*
+                        FROM
+                            simapes.akad_siswa
+                                JOIN
+                            md_siswa yy ON SISWA_AS = yy.ID_SISWA
+                                JOIN
+                            md_tahun_ajaran ta ON ta.ID_TA = TA_AS
+                                JOIN
+                            md_tanggal_cawu tc ON tc.TA_TC = TA_AS
+                                JOIN
+                            md_catur_wulan cw ON cw.ID_CAWU = tc.CAWU_TC
+                                LEFT JOIN
+                            (SELECT 
+                                ID_SISWA,
+                                    NAMA_SISWA,
+                                    STATUS_MUTASI_SISWA,
+                                    TANGGAL_MUTASI_SISWA,
+                                    NAMA_TA,
+                                    NAMA_CAWU,
+                                    AWAL_TC,
+                                    AKHIR_TC,
+                                    ID_TA,
+                                    ID_CAWU
+                            FROM
+                                simapes.md_siswa
+                            LEFT JOIN (SELECT 
+                                NAMA_TA, NAMA_CAWU, AWAL_TC, AKHIR_TC, ID_TA, ID_CAWU
+                            FROM
+                                md_tanggal_cawu
+                            JOIN md_tahun_ajaran ON ID_TA = TA_TC
+                            JOIN md_catur_wulan ON ID_CAWU = CAWU_TC) tc ON TANGGAL_MUTASI_SISWA >= AWAL_TC
+                                AND TANGGAL_MUTASI_SISWA <= AKHIR_TC) xx ON SISWA_AS = xx.ID_SISWA AND xx.ID_TA = TA_AS AND xx.ID_CAWU = cw.ID_CAWU
+                        WHERE
+                            KONVERSI_AS = 0
+                            ORDER BY ta.ID_TA ASC, cw.ID_CAWU ASC)";
+            $this->db->join($query1 . ' zz', $this->table . '.ID_AS=zz.ID_AS');
         }
         if ($label == NULL || $label == 'mt.KETERANGAN_TINGK')
             $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
@@ -84,15 +127,17 @@ class Laporan_akademik_model extends CI_Model {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
         } elseif ($label == 'TA_AKTIF') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(NAMA_TA IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), NAMA_TA) AS x_label');
+        } elseif ($label == 'CAWU_AKTIF') {
+            $this->db->select('COUNT(' . $this->table . '.ID_AS) AS data, IF(TA_CAWU IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), TA_CAWU) AS x_label');
         } else {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
         }
 
         $this->_get_table($label);
 
+        $this->db->where('KONVERSI_AS', 0);
         if ($ta != "") {
             $this->db->where('TA_AS', $ta);
-            $this->db->where('KONVERSI_AS', 0);
             $this->db->where('AKTIF_AS', 1);
         }
         if ($tingkat != "")
@@ -109,6 +154,9 @@ class Laporan_akademik_model extends CI_Model {
         } elseif ($label == 'TA_AKTIF') {
             $this->db->where('AKTIF_AS', 1);
             $this->db->group_by('NAMA_TA');
+        } elseif ($label == 'CAWU_AKTIF') {
+            $this->db->where('zz.ID_SISWA', NULL);
+            $this->db->group_by('TA_CAWU');
         } else {
             $this->db->group_by($label);
         }

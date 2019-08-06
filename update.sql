@@ -36,3 +36,4 @@ INSERT INTO `simapes`.`md_tanggal_cawu` (`TA_TC`, `CAWU_TC`, `AWAL_TC`, `AKHIR_T
 INSERT INTO `simapes`.`md_tanggal_cawu` (`TA_TC`, `CAWU_TC`, `AWAL_TC`, `AKHIR_TC`, `USER_TC`) VALUES ('4', '1', '2019-06-24', '2019-10-24', '1');
 INSERT INTO `simapes`.`md_tanggal_cawu` (`TA_TC`, `CAWU_TC`, `AWAL_TC`, `AKHIR_TC`, `USER_TC`) VALUES ('4', '2', '2019-10-24', '2019-01-24', '1');
 INSERT INTO `simapes`.`md_tanggal_cawu` (`TA_TC`, `CAWU_TC`, `AWAL_TC`, `AKHIR_TC`, `USER_TC`) VALUES ('4', '3', '2019-01-24', '2020-06-24', '1');
+ALTER TABLE `md_tanggal_cawu` ADD FOREIGN KEY (`TA_TC`) REFERENCES `md_tahun_ajaran`(`ID_TA`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `md_tanggal_cawu` ADD FOREIGN KEY (`CAWU_TC`) REFERENCES `md_catur_wulan`(`ID_CAWU`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `md_tanggal_cawu` ADD FOREIGN KEY (`USER_TC`) REFERENCES `md_user`(`ID_USER`) ON DELETE RESTRICT ON UPDATE CASCADE;
