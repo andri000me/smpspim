@@ -3,7 +3,9 @@ $id = 'grafik';
 $this->generate->generate_panel_content('Laporan Akademik', 'Laporan master data akademik');
 
 $options = array(
-    'NAMA_TA#Nama Tahun Ajaran#Jumlah (siswa)#Tahun Ajaran' => 'Tahun Ajaran',
+    'NAMA_TA#Nama Tahun Ajaran#Jumlah (siswa)#Tahun Ajaran' => 'Jumlah Siswa setiap Tahun Ajaran',
+    'TA_AKTIF#Nama Tahun Ajaran#Jumlah (siswa aktif)#Tahun Ajaran' => 'Jumlah Siswa Aktif setiap Tahun Ajaran',
+    'CAWU_AKTIF#Nama Cawu#Jumlah (siswa aktif)#Cawu' => 'Jumlah Siswa Aktif setiap Cawu',
     'mt.KETERANGAN_TINGK#Nama Jenjang Tingkat#Jumlah (siswa)#Jenjang Tingkat' => 'Jenjang Tingkat',
     'NAMA_KELAS#Nama Kelas#Jumlah (siswa)#Kelas' => 'Kelas',
     'KONVERSI_AS#Status Konversi Siswa#Jumlah (siswa)#Konversi' => 'Status Konversi',
@@ -44,7 +46,7 @@ $options = array(
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Kelompokan berdasarkan</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <select id="kelompok" class="form-control">
                                     <option value="">-- Pilih Kelompok --</option>
                                     <?php

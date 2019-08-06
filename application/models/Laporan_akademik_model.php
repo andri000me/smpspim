@@ -19,8 +19,12 @@ class Laporan_akademik_model extends CI_Model {
     private function _get_table($label = NULL) {
         $this->db->from($this->table);
         $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
-        if ($label == NULL || $label == 'NAMA_TA')
+        if ($label == NULL || $label == 'NAMA_TA' || $label == 'TA_AKTIF')
             $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
+        if ($label == NULL || $label == 'CAWU_AKTIF') {
+            $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
+            $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
+        }
         if ($label == NULL || $label == 'mt.KETERANGAN_TINGK')
             $this->db->join('md_tingkat mt', $this->table . '.TINGKAT_AS=mt.ID_TINGK');
         if ($label == NULL || $label == 'NAMA_KELAS')
@@ -70,14 +74,20 @@ class Laporan_akademik_model extends CI_Model {
     }
 
     public function get_data($label, $ta, $tingkat, $kelas, $jk) {
-        if ($label == NULL || $label == 'AKTIF_AS')
+        if ($label == NULL || $label == 'AKTIF_AS') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "AKTIF", CONCAT("TIDAK", " ", "AKTIF")) ) AS x_label');
-        if ($label == 'KONVERSI_AS')
+        }
+
+        if ($label == 'KONVERSI_AS') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "KONVERSI", CONCAT("TIDAK", " ", "KONVERSI")) ) AS x_label');
-        elseif ($label == 'TANGGAL_LAHIR_SISWA')
+        } elseif ($label == 'TANGGAL_LAHIR_SISWA') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
-        else
+        } elseif ($label == 'TA_AKTIF') {
+            $this->db->select('COUNT(ID_SISWA) AS data, IF(NAMA_TA IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), NAMA_TA) AS x_label');
+        } else {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
+        }
+
         $this->_get_table($label);
 
         if ($ta != "") {
@@ -94,10 +104,14 @@ class Laporan_akademik_model extends CI_Model {
         if ($label != 'KONVERSI_AS')
             $this->db->where('KONVERSI_AS', 0);
 
-        if ($label == 'TANGGAL_LAHIR_SISWA')
+        if ($label == 'TANGGAL_LAHIR_SISWA') {
             $this->db->group_by('LEFT(' . $label . ', 4)');
-        else
+        } elseif ($label == 'TA_AKTIF') {
+            $this->db->where('AKTIF_AS', 1);
+            $this->db->group_by('NAMA_TA');
+        } else {
             $this->db->group_by($label);
+        }
 
 
         $this->db->order_by('x_label', 'ASC');
@@ -124,7 +138,7 @@ class Laporan_akademik_model extends CI_Model {
         $this->db->join('md_kabupaten kabo', 'keco.KABUPATEN_KEC=kabo.ID_KAB', 'LEFT');
         $this->db->join('md_provinsi provo', 'kabo.PROVINSI_KAB=provo.ID_PROV', 'LEFT');
         $this->db->join('md_pegawai mp', 'ak.WALI_KELAS=mp.ID_PEG', 'LEFT');
-        
+
         $select_nis = '';
         if ($ta != "") {
             $this->db->where('TA_AS', $ta);
@@ -245,7 +259,7 @@ class Laporan_akademik_model extends CI_Model {
                 . ',mp.NAMA_PEG AS NAMA_WALI_KELAS'
                 . $select_nis
                 . '');
-        
+
         $sql = $this->db->get();
 
         return $this->dbutil->csv_from_result($sql);

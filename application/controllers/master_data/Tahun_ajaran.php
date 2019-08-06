@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Tahun_ajaran extends CI_Controller {
-    
+
     var $edit_id = TRUE;
     var $primary_key = "ID_TA";
 
@@ -41,15 +42,19 @@ class Tahun_ajaran extends CI_Controller {
             $row[] = $item->NAMA_TA;
             $row[] = $item->TANGGAL_MULAI_TA;
             $row[] = $item->TANGGAL_AKHIR_TA;
-            
-            if ($item->AKTIF_TA) $row[] = '<i class="fa fa-check"></i>';
-            else $row[] = '<i class="fa fa-close" style="cursor: pointer;" onclick="return change_active(1, \''.$item->ID_TA.'\');"></i>';
-            
-            if ($item->PSB_TA) $row[] = '<i class="fa fa-check"></i>';
-            else $row[] = '<i class="fa fa-close" style="cursor: pointer;" onclick="return change_active(0, \''.$item->ID_TA.'\');"></i>';
+
+            if ($item->AKTIF_TA)
+                $row[] = '<i class="fa fa-check"></i>';
+            else
+                $row[] = '<i class="fa fa-close" style="cursor: pointer;" onclick="return change_active(1, \'' . $item->ID_TA . '\');"></i>';
+
+            if ($item->PSB_TA)
+                $row[] = '<i class="fa fa-check"></i>';
+            else
+                $row[] = '<i class="fa fa-close" style="cursor: pointer;" onclick="return change_active(0, \'' . $item->ID_TA . '\');"></i>';
 
             $row[] = $item->KETERANGAN_TA;
-            
+
             $row[] = '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
@@ -74,15 +79,15 @@ class Tahun_ajaran extends CI_Controller {
 
     public function request_form() {
         $data = $this->generate->set_header_form_JSON($this->tahun_ajaran);
-        
+
         $input_id = FALSE;
         $show_id = TRUE;
-        
+
         $data_ta = array();
         for ($tahun = (date('Y') - 2); $tahun < (date('Y') + 4); $tahun++) {
             $data_tahun = array();
-            $data_tahun['id'] = $tahun.'/'.($tahun+1);
-            $data_tahun['text'] = $tahun.'/'.($tahun+1);
+            $data_tahun['id'] = $tahun . '/' . ($tahun + 1);
+            $data_tahun['text'] = $tahun . '/' . ($tahun + 1);
             array_push($data_ta, $data_tahun);
         }
 
@@ -99,11 +104,11 @@ class Tahun_ajaran extends CI_Controller {
 //                    'value' => $data == NULL ? "" : $data->NAMA_TA
 //                )
                 'data' => array(
-                    'type'  => 'dropdown',                                      // WAJIB
-                    'name'  => 'NAMA_TA',                                    // WAJIB
+                    'type' => 'dropdown', // WAJIB
+                    'name' => 'NAMA_TA', // WAJIB
                     'value' => $data == NULL ? "" : $data->NAMA_TA,
 //                    'value_blank'  => '-- Pilih Kelompok --',
-                    'data'  => $data_ta
+                    'data' => $data_ta
                 )
             ),
             array(
@@ -143,14 +148,14 @@ class Tahun_ajaran extends CI_Controller {
                 )
             ),
         );
-        
+
         $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
     }
-    
+
     private function selection_form($data) {
         $data['TANGGAL_AKHIR_TA'] = date("Y-m-d", strtotime($data['TANGGAL_AKHIR_TA']));
         $data['TANGGAL_MULAI_TA'] = date("Y-m-d", strtotime($data['TANGGAL_MULAI_TA']));
-        
+
         return $data;
     }
 
@@ -162,6 +167,19 @@ class Tahun_ajaran extends CI_Controller {
         unset($data['TOKEN']);
         $insert = $this->tahun_ajaran->save($data);
 
+        if ($insert) {
+            $data_cawu = $this->db_handler->get_rows('md_catur_wulan');
+            foreach ($data_cawu as $detail) {
+                $this->db_handler->insert('md_tanggal_cawu', [
+                    'TA_TC' => $insert,
+                    'CAWU_TC' => $detail->ID_CAWU,
+                    'AWAL_TC' => $data['TANGGAL_MULAI_TA'],
+                    'AKHIR_TC' => $data['TANGGAL_AKHIR_TA'],
+                    'USER_TC' => $this->session->userdata('ID_USER')
+                ]);
+            }
+        }
+
         $this->generate->output_JSON(array("status" => 1));
     }
 
@@ -172,10 +190,11 @@ class Tahun_ajaran extends CI_Controller {
         $post = $this->selection_form($this->input->post());
         $data = $this->generate->filter_data_post($this->edit_id, $this->primary_key, $post);
         $cek = $this->generate->cek_update_id($this->edit_id, $this->primary_key, $post);
-        
+
         $where = $cek['where'];
-        if (isset($cek['data'])) $data[$this->primary_key] = $cek['data'][$this->primary_key];
-        
+        if (isset($cek['data']))
+            $data[$this->primary_key] = $cek['data'][$this->primary_key];
+
         $affected_row = $this->tahun_ajaran->update($where, $data);
 
         $this->generate->output_JSON(array("status" => $affected_row));
@@ -190,29 +209,29 @@ class Tahun_ajaran extends CI_Controller {
 
         $this->generate->output_JSON(array("status" => $affected_row));
     }
-    
+
     public function auto_complete() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->tahun_ajaran->get_all_ac($this->input->post('q'));
-        
+
         $this->generate->output_JSON($data);
     }
-    
+
     public function auto_complete_no_active() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->tahun_ajaran->get_all_ac_no_active($this->input->post('q'));
-        
+
         $this->generate->output_JSON($data);
     }
-    
+
     function change_active() {
         $this->generate->set_header_JSON();
-        
+
         $req_active_ta = $this->input->post('TA');
         $where['ID_TA'] = $this->input->post('ID');
-        
+
         if ($req_active_ta) {
             $this->tahun_ajaran->set_ta_deactive();
 
@@ -230,7 +249,7 @@ class Tahun_ajaran extends CI_Controller {
                 $data['message'] = 'PSB pada tahun ajaran tersebut gagal diaktifkan';
             }
         }
-        
+
         $this->generate->output_JSON($data);
     }
 
