@@ -10,6 +10,7 @@ $options = array(
     'TA_MUTASI#Nama Tahun Ajaran#Jumlah (siswa mutasi)#Tahun Ajaran' => 'Jumlah Siswa Mutasi setiap Tahun Ajaran',
     'CAWU_MUTASI#Nama Cawu#Jumlah (siswa mutasi)#Cawu' => 'Jumlah Siswa Mutasi setiap Cawu',
     'BULAN_MUTASI#Nama Bulan#Jumlah (siswa mutasi)#Bulan' => 'Jumlah Siswa Mutasi setiap Bulan',
+    'BULAN_ABSENSI_GURU#Nama Bulan#Jumlah (Guru)#Bulan' => 'Jumlah Absensi Guru setiap Bulan',
     'mt.KETERANGAN_TINGK#Nama Jenjang Tingkat#Jumlah (siswa)#Jenjang Tingkat' => 'Jenjang Tingkat',
     'NAMA_KELAS#Nama Kelas#Jumlah (siswa)#Kelas' => 'Kelas',
     'KONVERSI_AS#Status Konversi Siswa#Jumlah (siswa)#Konversi' => 'Status Konversi',

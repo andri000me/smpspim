@@ -210,20 +210,20 @@ class Laporan_akademik_model extends CI_Model {
         if ($label == 'TANGGAL_LAHIR_SISWA') {
             $this->db->group_by('LEFT(' . $label . ', 4)');
         } elseif ($label == 'TA_AKTIF') {
-            $this->db->where('TANGGAL_MUTASI_SISWA', null);
+            $this->db->where('(STATUS_MUTASI_SISWA IS NULL OR STATUS_MUTASI_SISWA = 99)', null, FALSE);
             $this->db->group_by('NAMA_TA');
         } elseif ($label == 'TA_MUTASI') {
             $this->db->where('TANGGAL_MUTASI_SISWA IS NOT NULL', null, false);
             $this->db->where('STATUS_MUTASI_SISWA <> 99', null, false);
             $this->db->group_by('NAMA_TA');
         } elseif ($label == 'BULAN_AKTIF') {
-            $this->db->where('BULAN_MUTASI', null);
+            $this->db->where('(zz.BULAN_MUTASI IS NULL OR STATUS_MUTASI_SISWA = 99)', null, FALSE);
             $this->db->group_by('BULAN');
         } elseif ($label == 'BULAN_MUTASI') {
             $this->db->where('BULAN_MUTASI IS NOT NULL', null, FALSE);
             $this->db->group_by('BULAN');
         } elseif ($label == 'CAWU_AKTIF') {
-            $this->db->where('zz.ID_SISWA', NULL);
+            $this->db->where('(zz.ID_SISWA IS NULL OR zz.STATUS_MUTASI_SISWA = 99)', null, FALSE);
             $this->db->group_by('TA_CAWU');
         } elseif ($label == 'CAWU_MUTASI') {
             $this->db->where('zz.ID_SISWA IS NOT NULL', NULL, FALSE);
