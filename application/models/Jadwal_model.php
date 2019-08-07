@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -10,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Jadwal_model extends CI_Model {
 
     var $table = 'akad_jadwal';
-    var $column = array('NAMA_KELAS','NAMA_MAPEL','NIP_PEG', 'NAMA_PEG','NAMA_HARI','CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIB")', 'ID_AJ');
+    var $column = array('NAMA_KELAS', 'NAMA_MAPEL', 'NIP_PEG', 'NAMA_PEG', 'NAMA_HARI', 'CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIB")', 'ID_AJ');
     var $primary_key = "ID_AJ";
     var $order = array("ID_AJ" => 'DESC');
 
@@ -19,15 +20,16 @@ class Jadwal_model extends CI_Model {
     }
 
     private function _get_table() {
-        $this->db->select('*, CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIS") AS JAM_PELAJARAN');
+        $this->db->select('*, CONCAT(MULAI_MJP,"-",AKHIR_MJP, " WIS") AS JAM_PELAJARAN, CONCAT(DATE_FORMAT(MULAI_MJP, "%H:%i"),"-",DATE_FORMAT(AKHIR_MJP, "%H:%i")) AS JAM_PELAJARAN_HM');
         $this->db->from($this->table);
-        $this->db->join('akad_guru_mapel agm',$this->table.'.GURU_MAPEL_AJ=agm.ID_AGM');
-        $this->db->join('md_tahun_ajaran mta','agm.TA_AGM=mta.ID_TA');
-        $this->db->join('akad_kelas ak','agm.KELAS_AGM=ak.ID_KELAS');
-        $this->db->join('md_mapel mm','agm.MAPEL_AGM=mm.ID_MAPEL');
-        $this->db->join('md_pegawai mp','agm.GURU_AGM=mp.ID_PEG');
-        $this->db->join('md_hari mh',$this->table.'.HARI_AJ=mh.ID_HARI');
-        $this->db->join('md_jam_pelajaran mjp',$this->table.'.JAM_AJ=mjp.ID_MJP');
+        $this->db->join('akad_guru_mapel agm', $this->table . '.GURU_MAPEL_AJ=agm.ID_AGM');
+        $this->db->join('md_tahun_ajaran mta', 'agm.TA_AGM=mta.ID_TA');
+        $this->db->join('akad_kelas ak', 'agm.KELAS_AGM=ak.ID_KELAS');
+        $this->db->join('md_tingkat mt', 'mt.ID_TINGK=ak.TINGKAT_KELAS');
+        $this->db->join('md_mapel mm', 'agm.MAPEL_AGM=mm.ID_MAPEL');
+        $this->db->join('md_pegawai mp', 'agm.GURU_AGM=mp.ID_PEG');
+        $this->db->join('md_hari mh', $this->table . '.HARI_AJ=mh.ID_HARI');
+        $this->db->join('md_jam_pelajaran mjp', $this->table . '.JAM_AJ=mjp.URUTAN_MJP AND DEPT_TINGK=DEPT_MJP AND JK_MJP=JK_KELAS');
         $this->db->where('ID_TA', $this->session->userdata('ID_TA_ACTIVE'));
     }
 
@@ -112,11 +114,23 @@ class Jadwal_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_absensi($ID_PEG, $ID_HARI, $URUTAN_MJP) {
+        $this->_get_table();
+        $this->db->order_by('URUTAN_MJP', 'ASC');
+        $this->db->where([
+            'ID_PEG' => $ID_PEG,
+            'HARI_AJ' => $ID_HARI,
+            'URUTAN_MJP' => $URUTAN_MJP,
+        ]);
+
+        return $this->db->get()->result();
+    }
+
     public function get_jadwal_kelas($kelas, $hari, $jam) {
         $this->db->from($this->table);
-        $this->db->join('akad_guru_mapel agm',$this->table.'.GURU_MAPEL_AJ=agm.ID_AGM');
-        $this->db->join('md_pegawai mp','agm.GURU_AGM=mp.ID_PEG');
-        $this->db->join('md_mapel mm','agm.MAPEL_AGM=mm.ID_MAPEL');
+        $this->db->join('akad_guru_mapel agm', $this->table . '.GURU_MAPEL_AJ=agm.ID_AGM');
+        $this->db->join('md_pegawai mp', 'agm.GURU_AGM=mp.ID_PEG');
+        $this->db->join('md_mapel mm', 'agm.MAPEL_AGM=mm.ID_MAPEL');
         $this->db->where('TA_AGM', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where(array(
             'KELAS_AGM' => $kelas,
@@ -129,7 +143,7 @@ class Jadwal_model extends CI_Model {
 
     public function _jadwal_guru($guru) {
         $this->db->from($this->table);
-        $this->db->join('akad_guru_mapel agm',$this->table.'.GURU_MAPEL_AJ=agm.ID_AGM');
+        $this->db->join('akad_guru_mapel agm', $this->table . '.GURU_MAPEL_AJ=agm.ID_AGM');
         $this->db->where('TA_AGM', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where(array(
             'GURU_AGM' => $guru,
@@ -138,24 +152,25 @@ class Jadwal_model extends CI_Model {
 
     public function get_jadwal_guru($guru, $where = NULL) {
         $this->_jadwal_guru($guru);
-        $this->db->join('akad_kelas ak','agm.KELAS_AGM=ak.ID_KELAS');
-        $this->db->join('md_mapel mm','agm.MAPEL_AGM=mm.ID_MAPEL');
-        $this->db->join('md_hari mh',$this->table.'.HARI_AJ=mh.ID_HARI');
-        $this->db->join('md_jam_pelajaran mjp',$this->table.'.JAM_AJ=mjp.ID_MJP');
+        $this->db->join('akad_kelas ak', 'agm.KELAS_AGM=ak.ID_KELAS');
+        $this->db->join('md_mapel mm', 'agm.MAPEL_AGM=mm.ID_MAPEL');
+        $this->db->join('md_hari mh', $this->table . '.HARI_AJ=mh.ID_HARI');
+        $this->db->join('md_jam_pelajaran mjp', $this->table . '.JAM_AJ=mjp.ID_MJP');
         $this->db->order_by('ID_HARI', 'ASC');
         $this->db->order_by('ID_MJP', 'ASC');
         $this->db->order_by('ID_KELAS', 'ASC');
         $this->db->order_by('ID_MAPEL', 'ASC');
-        
-        if (is_array($where)) $this->db->where($where);
+
+        if (is_array($where))
+            $this->db->where($where);
 
         return $this->db->get()->result();
     }
 
     public function get_kehadiran_guru($where) {
         $this->db->from($this->table);
-        $this->db->join('akad_guru_mapel agm',$this->table.'.GURU_MAPEL_AJ=agm.ID_AGM');
-        $this->db->join('akad_kelas ak','agm.KELAS_AGM=ak.ID_KELAS');
+        $this->db->join('akad_guru_mapel agm', $this->table . '.GURU_MAPEL_AJ=agm.ID_AGM');
+        $this->db->join('akad_kelas ak', 'agm.KELAS_AGM=ak.ID_KELAS');
         $this->db->where('TA_AGM', $this->session->userdata('ID_TA_ACTIVE'));
         $this->db->where($where);
 
@@ -184,7 +199,8 @@ class Jadwal_model extends CI_Model {
     }
 
     public function get_all($for_html = true) {
-        if ($for_html) $this->db->select("ID_AJ as value, NAMA_AGAMA as label");
+        if ($for_html)
+            $this->db->select("ID_AJ as value, NAMA_AGAMA as label");
         $this->_get_table();
 
         return $this->db->get()->result();
@@ -212,20 +228,20 @@ class Jadwal_model extends CI_Model {
 
     public function update($where, $data) {
         $this->db->update($this->table, $data, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {
         $where = array($this->primary_key => $id);
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 
     public function delete_by_where($where) {
         $this->db->delete($this->table, $where);
-        
+
         return $this->db->affected_rows();
     }
 

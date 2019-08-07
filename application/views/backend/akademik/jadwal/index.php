@@ -152,10 +152,14 @@ $this->generate->datatables($id_datatables, $title, $columns);
         table = initialize_datatables(id_table, '<?php echo site_url('akademik/jadwal/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
         $(".buttons-copy, .buttons-pdf, .buttons-add").remove();
-        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_jadwal_kelas();">Jadwal Kelas</a></li><li><a href="#" onclick="cetak_jurnal_kelas();">Jurnal Kelas</a></li><li><a href="#" onclick="cetak_jadwal_guru();">Jadwal Guru</a></li><li><a href="#" onclick="cetak_kelas_guru();">Jumlah Kelas Guru</a></li><li><a href="#" onclick="cetak_mapel_guru();">Jumlah Mapel Guru</a></li></ul></div>').insertAfter('.buttons-reload');
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">Cetak <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="cetak_kehadiran_guru();">Cetak Absensi</a></li><li><a href="#" onclick="cetak_jadwal_kelas();">Jadwal Kelas</a></li><li><a href="#" onclick="cetak_jurnal_kelas();">Jurnal Kelas</a></li><li><a href="#" onclick="cetak_jadwal_guru();">Jadwal Guru</a></li><li><a href="#" onclick="cetak_kelas_guru();">Jumlah Kelas Guru</a></li><li><a href="#" onclick="cetak_mapel_guru();">Jumlah Mapel Guru</a></li></ul></div>').insertAfter('.buttons-reload');
         
         create_homer_info("Untuk dapat mencetak, silahkan matikan download manager terlebih dahulu.");
     });
+    
+    function cetak_absensi() {
+        window.open('<?php echo site_url('akademik/jadwal/cetak_absensi'); ?>', '_blank');
+    }
     
     function cetak_jurnal_kelas() {
         window.open('<?php echo site_url('akademik/jadwal/cetak_jurnal_kelas'); ?>', '_blank');

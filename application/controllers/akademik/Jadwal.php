@@ -56,9 +56,9 @@ class Jadwal extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->NAMA_KELAS;
-            
+
             $row[] = $item->NAMA_MAPEL;
-            
+
             $row[] = $item->NIP_PEG;
             $row[] = $item->NAMA_PEG;
             $row[] = $item->NAMA_HARI;
@@ -160,54 +160,43 @@ class Jadwal extends CI_Controller {
                 }
             }
         }
-        
+
         $this->load->view('backend/akademik/jadwal/cetak_jadwal_kelas', $data);
     }
 
     public function cetak_kehadiran_guru() {
-        $jk = $this->jk->get_all(FALSE);
-        $hari = $this->hari->get_rows(array('LIBUR_HARI' => 0));
-        $guru = $this->guru->get_all(FALSE);
+        $data_guru = $this->db_handler->get_rows('akad_guru_mapel', [
+            'where' => [
+                'TA_AGM' => $this->session->userdata('ID_TA_ACTIVE')
+            ],
+            'group_by' => [
+                'ID_PEG'
+            ],
+            'order_by' => [
+                'NAMA_PEG' => 'ASC'
+            ]
+                ], '*', [
+            ['md_pegawai', 'ID_PEG=GURU_AGM']
+        ]);
+        $data_hari = $this->db_handler->get_rows('md_hari', [
+            'where' => [
+                'LIBUR_HARI' => 0
+            ],
+            'order_by' => [
+                'ID_HARI' => 'ASC'
+            ]
+        ]);
 
-        $data = array(
-            'jk' => $jk,
-            'hari' => $hari,
-            'guru' => array(),
-            'jam_pelajaran' => array(),
-            'jadwal' => array(),
-        );
-
-        foreach ($jk as $detail_jk) {
-            foreach ($hari as $detail_hari) {
-                $data_jp = array(
-                    'JK_MJP' => $detail_jk->ID_JK,
-                );
-                $jam_pelajaran = $this->jp->get_rows($data_jp);
-                $data['jam_pelajaran'][$detail_hari->ID_HARI][$detail_jk->ID_JK] = 0;
-                foreach ($guru as $detail_guru) {
-                    $jumlah_jadwal_guru = 0;
-                    $data['guru'][$detail_hari->ID_HARI][$detail_jk->ID_JK][$detail_guru->ID_PEG] = $detail_guru;
-                    foreach ($jam_pelajaran as $detail_jp) {
-                        $data_jadwal = array(
-                            'HARI_AJ' => $detail_hari->ID_HARI,
-                            'JAM_AJ' => $detail_jp->ID_MJP,
-                            'GURU_AGM' => $detail_guru->ID_PEG,
-                        );
-                        $result = $this->jadwal->get_kehadiran_guru($data_jadwal);
-
-                        if (count($result) > 0) {
-                            if ($data['jam_pelajaran'][$detail_hari->ID_HARI][$detail_jk->ID_JK] < $detail_jp->URUTAN_MJP)
-                                $data['jam_pelajaran'][$detail_hari->ID_HARI][$detail_jk->ID_JK] = $detail_jp->URUTAN_MJP;
-
-                            $data['jadwal'][$detail_hari->ID_HARI][$detail_jk->ID_JK][$detail_guru->ID_PEG][$detail_jp->URUTAN_MJP] = $result;
-                            $jumlah_jadwal_guru++;
-                        }
-                    }
-                    if ($jumlah_jadwal_guru == 0)
-                        unset($data['guru'][$detail_hari->ID_HARI][$detail_jk->ID_JK][$detail_guru->ID_PEG]);
+        $data = [];
+        foreach ($data_hari as $detail_hari) {
+            foreach ($data_guru as $detail_guru) {
+                for ($urutan = 1; $urutan < 9; $urutan++) {
+                    $data['jadwal'][$detail_hari->ID_HARI][$detail_guru->ID_PEG][$urutan] = $this->jadwal->get_absensi($detail_guru->ID_PEG, $detail_hari->ID_HARI, $urutan);
                 }
             }
         }
+        $data['hari'] = $data_hari;
+        $data['guru'] = $data_guru;
 
         $this->load->view('backend/akademik/jadwal/cetak_kehadiran_guru', $data);
     }
@@ -234,9 +223,7 @@ class Jadwal extends CI_Controller {
             'guru' => $guru,
         );
         foreach ($guru as $detail_guru) {
-            $result = $this->jadwal->get_jumlah_kelas_guru($detail_guru->ID_PEG);
-            if (count($result) > 0)
-                $data['jadwal'][$detail_guru->ID_PEG] = $result;
+            $data['jadwal'][$detail_guru->ID_PEG] = $this->jadwal->get_jumlah_kelas_guru($detail_guru->ID_PEG);
         }
 
         $this->load->view('backend/akademik/jadwal/cetak_kelas_guru', $data);
@@ -249,17 +236,15 @@ class Jadwal extends CI_Controller {
             'guru' => $guru,
         );
         foreach ($guru as $detail_guru) {
-            $result = $this->jadwal->get_jumlah_mapel_guru($detail_guru->ID_PEG);
-            if (count($result) > 0)
-                $data['jadwal'][$detail_guru->ID_PEG] = $result;
+            $data['jadwal'][$detail_guru->ID_PEG] = $this->jadwal->get_jumlah_mapel_guru($detail_guru->ID_PEG);
         }
 
         $this->load->view('backend/akademik/jadwal/cetak_mapel_guru', $data);
     }
-    
+
     public function cetak_jurnal_kelas() {
         $data['hari'] = $this->hari->get_rows(array('LIBUR_HARI' => 0));
-        
+
         $this->load->view('backend/akademik/jadwal/cetak_jurnal_kelas', $data);
     }
 
