@@ -16,12 +16,57 @@ class Laporan_akademik_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($label = NULL) {
+    private function _get_table($label = NULL, $data_ta = NULL) {
         $this->db->from($this->table);
         $this->db->join('md_siswa ms', $this->table . '.SISWA_AS=ms.ID_SISWA');
-        if ($label == NULL || $label == 'NAMA_TA' || $label == 'TA_AKTIF')
+        if ($label == NULL || $label == 'NAMA_TA' || $label == 'TA_AKTIF' || $label == 'TA_MUTASI')
             $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_AS=mta.ID_TA');
-        if ($label == NULL || $label == 'CAWU_AKTIF') {
+        if ($label == 'BULAN_AKTIF' || $label == 'BULAN_MUTASI') {
+            $query1 = "(SELECT 
+                            ID_AS, BULAN, IF(BULAN=TANGGAL_MUTASI,BULAN,NULL) AS BULAN_MUTASI
+                        FROM
+                            (SELECT 
+                                CONCAT(" . $data_ta->ID_TA . ") AS TA_FALSE, DATE_FORMAT(m1, '%Y-%m') AS BULAN
+                            FROM
+                                (SELECT 
+                                ('" . $data_ta->TANGGAL_MULAI_TA . "' - INTERVAL DAYOFMONTH('" . $data_ta->TANGGAL_MULAI_TA . "') - 1 DAY) + INTERVAL m MONTH AS m1
+                            FROM
+                                (SELECT 
+                                @rownum:=@rownum + 1 AS m
+                            FROM
+                                (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4) t1, (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4) t2, (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4) t3, (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4) t4, (SELECT @rownum:=- 1) t0) d1) d2
+                            WHERE
+                                m1 <= '" . $data_ta->TANGGAL_AKHIR_TA . "'
+                            ORDER BY m1) aa
+                                JOIN
+                            (SELECT 
+                                ID_SISWA,
+                                    NAMA_SISWA,
+                                    STATUS_MUTASI_SISWA,
+                                    TANGGAL_MUTASI_SISWA,
+                                    DATE_FORMAT(TANGGAL_MUTASI_SISWA, '%Y-%m') AS TANGGAL_MUTASI,
+                                    NAMA_TA,
+                                    NAMA_CAWU,
+                                    AWAL_TC,
+                                    AKHIR_TC,
+                                    ID_TA,
+                                    ID_CAWU,
+                                    ID_AS,
+                                    TA_AS
+                            FROM
+                                simapes.md_siswa
+                            JOIN akad_siswa ON ID_SISWA = SISWA_AS
+                            LEFT JOIN (SELECT 
+                                NAMA_TA, NAMA_CAWU, AWAL_TC, AKHIR_TC, ID_TA, ID_CAWU
+                            FROM
+                                md_tanggal_cawu
+                            JOIN md_tahun_ajaran ON ID_TA = TA_TC
+                            JOIN md_catur_wulan ON ID_CAWU = CAWU_TC) tc ON TANGGAL_MUTASI_SISWA >= AWAL_TC
+                                AND TANGGAL_MUTASI_SISWA <= AKHIR_TC
+                                AND TA_AS = ID_TA) bb ON TA_AS = TA_FALSE)";
+            $this->db->join($query1 . ' zz', $this->table . '.ID_AS=zz.ID_AS');
+        }
+        if ($label == 'CAWU_AKTIF' || $label == 'CAWU_MUTASI') {
             $query1 = "(SELECT 
                             ID_AS,
                             yy.ID_SISWA AS PURE_ID_SISWA,
@@ -117,6 +162,17 @@ class Laporan_akademik_model extends CI_Model {
     }
 
     public function get_data($label, $ta, $tingkat, $kelas, $jk) {
+        if ($ta == null)
+            $id_ta = $this->session->userdata('ID_TA_ACTIVE');
+        else
+            $id_ta = $ta;
+
+        $data_ta = $this->db_handler->get_row('md_tahun_ajaran', [
+            'where' => [
+                'ID_TA' => $id_ta
+            ]
+        ]);
+
         if ($label == NULL || $label == 'AKTIF_AS') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "AKTIF", CONCAT("TIDAK", " ", "AKTIF")) ) AS x_label');
         }
@@ -125,15 +181,17 @@ class Laporan_akademik_model extends CI_Model {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "KONVERSI", CONCAT("TIDAK", " ", "KONVERSI")) ) AS x_label');
         } elseif ($label == 'TANGGAL_LAHIR_SISWA') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
-        } elseif ($label == 'TA_AKTIF') {
+        } elseif ($label == 'TA_AKTIF' || $label == 'TA_MUTASI') {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(NAMA_TA IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), NAMA_TA) AS x_label');
-        } elseif ($label == 'CAWU_AKTIF') {
+        } elseif ($label == 'CAWU_AKTIF' || $label == 'CAWU_MUTASI') {
             $this->db->select('COUNT(' . $this->table . '.ID_AS) AS data, IF(TA_CAWU IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), TA_CAWU) AS x_label');
+        } elseif ($label == 'BULAN_AKTIF' || $label == 'BULAN_MUTASI') {
+            $this->db->select('COUNT(ID_SISWA) AS data, IF(BULAN IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), BULAN) AS x_label');
         } else {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
         }
 
-        $this->_get_table($label);
+        $this->_get_table($label, $data_ta);
 
         $this->db->where('KONVERSI_AS', 0);
         if ($ta != "") {
@@ -152,10 +210,23 @@ class Laporan_akademik_model extends CI_Model {
         if ($label == 'TANGGAL_LAHIR_SISWA') {
             $this->db->group_by('LEFT(' . $label . ', 4)');
         } elseif ($label == 'TA_AKTIF') {
-            $this->db->where('AKTIF_AS', 1);
+            $this->db->where('TANGGAL_MUTASI_SISWA', null);
             $this->db->group_by('NAMA_TA');
+        } elseif ($label == 'TA_MUTASI') {
+            $this->db->where('TANGGAL_MUTASI_SISWA IS NOT NULL', null, false);
+            $this->db->where('STATUS_MUTASI_SISWA <> 99', null, false);
+            $this->db->group_by('NAMA_TA');
+        } elseif ($label == 'BULAN_AKTIF') {
+            $this->db->where('BULAN_MUTASI', null);
+            $this->db->group_by('BULAN');
+        } elseif ($label == 'BULAN_MUTASI') {
+            $this->db->where('BULAN_MUTASI IS NOT NULL', null, FALSE);
+            $this->db->group_by('BULAN');
         } elseif ($label == 'CAWU_AKTIF') {
             $this->db->where('zz.ID_SISWA', NULL);
+            $this->db->group_by('TA_CAWU');
+        } elseif ($label == 'CAWU_MUTASI') {
+            $this->db->where('zz.ID_SISWA IS NOT NULL', NULL, FALSE);
             $this->db->group_by('TA_CAWU');
         } else {
             $this->db->group_by($label);
