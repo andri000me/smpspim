@@ -81,22 +81,27 @@ class Laporan extends CI_Controller {
         $end = $this->input->get('end');
 
         $data = [
-            'pembayaran' => $this->db_handler->get_rows('keu_pembayaran', [
-                'where' => [
-                    'USER_BAYAR' => $this->session->userdata('ID_USER'),
-                    'LEFT(CREATED_BAYAR, 10) >' => date('Y-m-d', strtotime($start . "-1 days")),
-                    'LEFT(CREATED_BAYAR, 10) <' => date('Y-m-d', strtotime($end . "+1 days")),
-                ],
-                'group_by' => [
-                    "LEFT(CREATED_BAYAR, 10)"
-                ],
-                'order_by' => [
-                    'CREATED_BAYAR' => 'DESC'
-                ]
-                    ], '*, SUM(NOMINAL_BAYAR) AS NOMINAL'),
             'start' => $start,
             'end' => $end
         ];
+
+        $pembayaran = $this->db_handler->get_rows('keu_pembayaran', [
+            'where' => [
+                'USER_BAYAR' => $this->session->userdata('ID_USER'),
+                'LEFT(CREATED_BAYAR, 10) >' => date('Y-m-d', strtotime($start . "-1 days")),
+                'LEFT(CREATED_BAYAR, 10) <' => date('Y-m-d', strtotime($end . "+1 days")),
+            ],
+            'group_by' => [
+                "LEFT(CREATED_BAYAR, 10)"
+            ],
+            'order_by' => [
+                'CREATED_BAYAR' => 'DESC'
+            ]
+                ], 'LEFT(CREATED_BAYAR, 10) AS TANGGAL, SUM(NOMINAL_BAYAR) AS NOMINAL');
+
+        foreach ($pembayaran as $detail) {
+            $data['pembayaran'][$detail->TANGGAL] = $detail->NOMINAL;
+        }
 
         $this->load->view('backend/keuangan/laporan/cetak', $data);
     }

@@ -24,11 +24,16 @@ $pdf->Ln();
 
 $pdf->SetFont('Arial', '', 10);
 $no = 1;
-foreach ($pembayaran as $detail) {
+while (true) {
     $pdf->Cell(10, 6, $no++, 1, 0, 'C');
-    $pdf->Cell(30, 6, date('d-m-Y', strtotime($detail->CREATED_BAYAR)), 1, 0, 'C');
-    $pdf->Cell(50, 6, $this->money->format($detail->NOMINAL), 1, 0, 'R');
+    $pdf->Cell(30, 6, date('d-m-Y', strtotime($end)), 1, 0, 'C');
+    $pdf->Cell(50, 6, isset($pembayaran[$end]) ? $this->money->format($pembayaran[$end]) : "-", 1, 0, 'R');
     $pdf->Ln();
+
+    if ($start == $end)
+        break;
+
+    $end = date('Y-m-d', strtotime($end . "-1 days"));
 }
 
 $pdf->Output();
