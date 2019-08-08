@@ -115,7 +115,7 @@ class PDF extends AlphaPDF {
                 $this->RotatedText(60, 100, 'C O P Y', 25);
             elseif ($this->req_watermark == 2)
                 $this->RotatedText(40, 120, 'KOPERASI', 25);
-            
+
             $this->SetAlpha(1);
         }
     }
@@ -222,9 +222,19 @@ for ($i = 0; $i < 3; $i++) {
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(160, 5, 'TOTAL', 0, 0, 'R');
     $pdf->Cell(37, 5, $this->money->format($total), 0, 0, 'R');
-    $pdf->Ln(8);
+    $pdf->Ln();
 
-    $pdf->Line(7, 120, 208, 120);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(160, 5, 'BAYAR', 0, 0, 'R');
+    $pdf->Cell(37, 5, $this->money->format(isset($UANG_BAYAR) ? $UANG_BAYAR : $total), 0, 0, 'R');
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(160, 5, 'KEMBALI', 0, 0, 'R');
+    $pdf->Cell(37, 5, $this->money->format(isset($UANG_BAYAR) ? ($UANG_BAYAR - $total) : 0), 0, 0, 'R');
+    $pdf->Ln(6);
+
+    $pdf->Line(7, 130, 208, 130);
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(140, 5, 'KETERANGAN:', 0, 0, 'L');
@@ -240,7 +250,7 @@ for ($i = 0; $i < 3; $i++) {
         $pdf->Ln();
     }
 
-    $pdf->SetY(140);
+    $pdf->SetY(145);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(140, 5, $STATUS_PSB ? 'PEMBAYARAN PSB: ' . ($STATUS_LUNAS ? 'LUNAS' : 'BELUM LUNAS') : '', 0, 0, 'L');
     $pdf->SetFont('Arial', '', 10);

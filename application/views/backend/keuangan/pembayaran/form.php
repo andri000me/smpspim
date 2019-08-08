@@ -119,21 +119,47 @@ $name_function = 'tagihan';
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Nominal</label>
+                                <div class="col-sm-8">
+                                    <h4 id="input_nominal"></h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Kembali</label>
+                                <div class="col-sm-8">
+                                    <h4 id="uang_kembali"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bayar</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="text" id="trigger_bayar" onblur="change_nominal(this);" onfocus="nominal_numeric(this)" data-target="uang_bayar" onkeydown="validate(event)">
+                                    <input class="form-control" type="hidden" name="uang_bayar" id="uang_bayar" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Keterangan</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" name="KETERANGAN" id="keterangan" placeholder="Keterangan pembayaran">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 col-md-offset-4 text-center">
                             <input class="form-control" type="text" id="nominal" onkeydown="temp_nominal(this);" onkeyup="input_format(this);">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4 text-center">
-                            <h3 id="input_nominal"></h3>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-8 col-md-offset-2 text-center">
                             <input type="hidden" name="ID_SISWA" id="ID_SISWA">
-                            <input class="form-control" type="text" name="KETERANGAN" id="keterangan" placeholder="Keterangan pembayaran">
                         </div>
-                    </div><br>
+                    </div>
+                    <br>
                     <div class="row">
                         <div class="col-md-2 col-md-offset-5 text-center">
                             <button class="btn btn-success btn-block" type="button" id="btn_bayar" onclick="simpan_pembayaran();">BAYAR</button>
@@ -163,7 +189,7 @@ $name_function = 'tagihan';
                         </tr>
                     </thead>
                     <tbody class="list-history">
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -229,6 +255,24 @@ $name_function = 'tagihan';
         get_data_tagihan();
     });
 
+    function change_nominal(t) {
+        var target = $(t).data('target');
+        var nominal = $(t).val();
+        console.log("nominal => " + nominal);
+
+        if (!isNaN(parseFloat(nominal)) && isFinite(nominal)) {
+            $(t).val(formattedIDR(nominal));
+            $("#" + target).val(nominal);
+            $("#uang_kembali").html(formattedIDR(nominal - NOMINAL));
+        }
+    }
+
+    function nominal_numeric(t) {
+//        var target = $(t).data('target');
+//        var nominal = $("#" + target).val();
+        $(t).val("0");
+    }
+
     function temp_nominal(t) {
         TEMP_NOMINAL = $(t).val();
     }
@@ -272,8 +316,8 @@ $name_function = 'tagihan';
     function get_data_nota() {
         var success_siswa = function (data) {
             $(".list-history").html("");
-            $.each(data, function(index, item){
-                $(".list-history").append('<tr><td>'+item.TANGGAL+'</td><td>'+item.KODE_BAYAR+'</td><td><a href="<?php echo site_url('keuangan/pembayaran/ajax_cetak') ?>/'+item.KODE_BAYAR+'" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-print"></i></a></td></tr>');
+            $.each(data, function (index, item) {
+                $(".list-history").append('<tr><td>' + item.TANGGAL + '</td><td>' + item.KODE_BAYAR + '</td><td><a href="<?php echo site_url('keuangan/pembayaran/ajax_cetak') ?>/' + item.KODE_BAYAR + '" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-print"></i></a></td></tr>');
             });
             $(".panel-history").slideDown();
         }
@@ -354,6 +398,8 @@ $name_function = 'tagihan';
 
         NOMINAL = nominal;
         $("#nominal").val(nominal);
+        $("#trigger_bayar").val(nominal);
+        $("#trigger_bayar").trigger('blur');
         $("#input_nominal").html(formattedIDR(nominal));
 
         if (nominal == 0)

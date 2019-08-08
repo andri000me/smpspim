@@ -134,6 +134,7 @@ class Pembayaran extends CI_Controller {
         $ID_SISWA = $this->input->post('ID_SISWA');
         $KETERANGAN = $this->input->post('KETERANGAN');
         $PEMBAYARAN = $this->input->post('PEMBAYARAN');
+        $UANG_BAYAR = $this->input->post('uang_bayar');
 
         foreach ($PEMBAYARAN as $ID_SETUP) {
             $NOMINAL_BAYAR = $this->assign_tagihan->get_nominal_detail($ID_SETUP);
@@ -193,6 +194,7 @@ class Pembayaran extends CI_Controller {
             $data_pemb = array(
                 'ID_SISWA' => $ID_SISWA,
                 'ID_PEMBAYARAN' => $pembayaran_nota,
+                'UANG_BAYAR' => $UANG_BAYAR,
                 'KETERANGAN' => $KETERANGAN
             );
 
@@ -250,6 +252,10 @@ class Pembayaran extends CI_Controller {
             'STATUS_LUNAS' => $status_lunas,
             'KETERANGAN' => $data_pembayaran->KETERANGAN
         );
+
+        if (isset($data_pembayaran->UANG_BAYAR)) {
+            $data['UANG_BAYAR'] = $data_pembayaran->UANG_BAYAR;
+        }
 
         $this->load->view('backend/keuangan/pembayaran/cetak', $data);
     }
