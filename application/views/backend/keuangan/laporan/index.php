@@ -109,6 +109,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" onclick="laporan_harian(this)" data-modal="hide">Cetak</button>
             </div>
         </div>
