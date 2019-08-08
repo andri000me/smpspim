@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Laporan extends CI_Controller {
-    
+
     var $edit_id = FALSE;
     var $primary_key = "ID_DT";
 
@@ -48,16 +49,16 @@ class Laporan extends CI_Controller {
             $row[] = $item->NAMA_SISWA;
             $row[] = $this->money->format($item->NOMINAL_DT);
             $row[] = $item->KETERANGAN_BAYAR;
-            
+
             $row[] = $item->NAMA_PEG;
-            
+
             $row[] = $item->CREATED_BAYAR;
 
             $row[] = '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li><a href="'. site_url('keuangan/pembayaran/ajax_cetak/'.$item->KODE_BAYAR).'" title="Cetak" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Kwitansi</a></li>
+                        <li><a href="' . site_url('keuangan/pembayaran/ajax_cetak/' . $item->KODE_BAYAR) . '" title="Cetak" target="_blank"><i class="fa fa-print"></i>&nbsp;&nbsp;Cetak Kwitansi</a></li>
                     </ul>
                 </div>';
 
@@ -74,4 +75,30 @@ class Laporan extends CI_Controller {
 
         $this->generate->output_JSON($output);
     }
+
+    public function harian() {
+        $start = $this->input->get('start');
+        $end = $this->input->get('end');
+
+        $data = [
+            'pembayaran' => $this->db_handler->get_rows('keu_pembayaran', [
+                'where' => [
+                    'USER_BAYAR' => $this->session->userdata('ID_USER'),
+                    'LEFT(CREATED_BAYAR, 10) >' => date('Y-m-d', strtotime($start . "-1 days")),
+                    'LEFT(CREATED_BAYAR, 10) <' => date('Y-m-d', strtotime($end . "+1 days")),
+                ],
+                'group_by' => [
+                    "LEFT(CREATED_BAYAR, 10)"
+                ],
+                'order_by' => [
+                    'CREATED_BAYAR' => 'DESC'
+                ]
+                    ], '*, SUM(NOMINAL_BAYAR) AS NOMINAL'),
+            'start' => $start,
+            'end' => $end
+        ];
+
+        $this->load->view('backend/keuangan/laporan/cetak', $data);
+    }
+
 }
