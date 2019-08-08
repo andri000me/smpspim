@@ -1,6 +1,6 @@
 <?php
 $id = 'grafik';
-$this->generate->generate_panel_content('Laporan Keuangan', 'Laporan Keuangan Siswa');
+$this->generate->generate_panel_content('Laporan Pembayaran', 'Laporan Pembayaran Siswa');
 
 $options = array(
     'PELANGGARAN_KS#Kode Pelanggaran#Jumlah (siswa)#Kode Pelanggaran' => 'Kode Pelanggaran',

@@ -46,3 +46,14 @@ SET
     KADALUARSA_SETUP = 1
 WHERE
     TA_TAG = 2 AND STATUS_SETUP = 0
+INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('01205000001', 'PEMBAYARAN', 'laporan/keuangan', 'index', '1', '2', '0');
+UPDATE `simapes`.`md_menu` SET `CONTROLLER_MENU` = '#', `HAVE_CHILD` = '1' WHERE (`ID_MENU` = '01205000000');
+INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('01205000002', 'TAGIHAN', 'laporan/tagihan', 'index', '1', '2', '0');
+INSERT INTO `simapes`.`md_menu` (`ID_MENU`, `NAME_MENU`, `CONTROLLER_MENU`, `FUNCTION_MENU`, `SHOW_MENU`, `LEVEL_CHILD`, `HAVE_CHILD`) VALUES ('01205000003', 'TUNGGAKAN', 'laporan/tunggakan', 'index', '1', '2', '0');
+INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('01205000001', '12');
+INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('01205000002', '12');
+INSERT INTO `simapes`.`md_levelmenu` (`MENU_LEVELMENU`, `HAKAKSES_LEVELMENU`) VALUES ('01205000003', '12');
+UPDATE `simapes`.`md_menu` SET `CONTROLLER_MENU` = 'laporan/keuangan', `HAVE_CHILD` = '0' WHERE (`ID_MENU` = '01205000000');
+DELETE FROM `simapes`.`md_menu` WHERE (`ID_MENU` = '01205000001');
+DELETE FROM `simapes`.`md_menu` WHERE (`ID_MENU` = '01205000002');
+DELETE FROM `simapes`.`md_menu` WHERE (`ID_MENU` = '01205000003');
