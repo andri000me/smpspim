@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class User_model extends CI_Model {
 
     var $table = 'md_user';
-    var $column = array('ID_USER', 'NAME_USER', 'NAMA_PEG','STATUS_USER','LASTLOGIN_USER','ID_USER');
+    var $column = array('ID_USER', 'NAME_USER', 'NAMA_PEG', 'NAME_USER','STATUS_USER','LASTLOGIN_USER','ID_USER');
     var $primary_key = "ID_USER";
     var $order = array("ID_USER" => 'ASC');
 

@@ -43,11 +43,20 @@ class User extends CI_Controller {
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $item) {
+            $data_level = $this->db_handler->get_row('md_hakakses_user', [
+                'where' => [
+                    'USER_HU' => $item->ID_USER
+                ]
+                    ], 'GROUP_CONCAT(NAME_HAKAKSES) AS LEVEL', [
+                ['md_hakakses', 'HAKAKSES_HU=ID_HAKAKSES']
+            ]);
+
             $no++;
             $row = array();
             $row[] = $item->ID_USER;
             $row[] = $item->NAME_USER;
             $row[] = $item->NAMA_PEG;
+            $row[] = $data_level->LEVEL;
             $row[] = $item->STATUS_USER;
             $row[] = $item->LASTLOGIN_USER;
 

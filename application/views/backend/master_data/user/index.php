@@ -7,6 +7,7 @@ $columns = array(
     'ID',
     'USERNAME',
     'NAMA',
+    'LEVEL',
     'STATUS',
     'LOGIN TERAKHIR',
     'AKSI',
@@ -47,6 +48,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
 
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('master_data/user/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
+        $(".datatables-search-LEVEL").html('LEVEL');
     });
     
     function save_form(id_form) {
