@@ -53,7 +53,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
     $(document).ready(function () {
         table = initialize_datatables(id_table, '<?php echo site_url('keuangan/laporan_tunggakan/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
-        $('<a class="dt-button btn btn-sm btn-default buttons-reload" tabindex="0" aria-controls="datatable1" href="<?php echo site_url('keuangan/laporan_tunggakan/laporan_tagihan'); ?>" target="_blank"><span>Laporan Tagihan</span></a>').insertAfter(".buttons-add");
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" aria-expanded="false">Laporan <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="<?php echo site_url('keuangan/laporan_tunggakan/laporan_tagihan'); ?>" target="_blank">Laporan Tagihan</a></li><li><a href="<?php echo site_url('keuangan/laporan_tunggakan/laporan_tunggakan'); ?>" target="_blank">Laporan Tunggakan</a></li></ul></div>').insertAfter(".buttons-add");
         $(".buttons-add").remove();
     });
     

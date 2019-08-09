@@ -77,7 +77,7 @@ class Laporan_tunggakan extends CI_Controller {
                     ], 'ID_DEPT IS NOT NULL'),
         ];
 
-        $this->load->view('backend/keuangan/laporan_tunggakan/cetak', $data);
+        $this->load->view('backend/keuangan/laporan_tunggakan/cetak_laporan_tagihan', $data);
     }
 
     private function get_laporan_tagihan($where, $inline = null) {
@@ -104,7 +104,7 @@ class Laporan_tunggakan extends CI_Controller {
             ['md_departemen', 'DEPT_TINGK=ID_DEPT', 'left'],
             ['keu_tagihan', 'TA_TAG=ID_TA', 'left'],
             ['keu_detail', 'TAGIHAN_DT=ID_TAG AND DEPT_DT=ID_DEPT', 'left'],
-            ['keu_setup', 'DETAIL_SETUP=ID_DT AND SISWA_SETUP=ID_SISWA', 'left']
+            ['keu_setup', 'DETAIL_SETUP=ID_DT AND SISWA_SETUP=SISWA_AS', 'left']
         ]);
 
         $return = array();
@@ -113,6 +113,45 @@ class Laporan_tunggakan extends CI_Controller {
         }
 
         return $return;
+    }
+
+    public function laporan_tunggakan() {
+        $database = $this->db_handler->get_rows('akad_siswa', [
+            'where' => [
+                'STATUS_SETUP' => 0,
+                'KADALUARSA_SETUP' => 0,
+                'PSB_TAG' => 0
+            ],
+            'inline' => 'ID_SETUP IS NOT NULL',
+            'group_by' => [
+                'ID_TA',
+                'ID_TAG',
+                'ID_DT',
+                'ID_KELAS',
+            ],
+            'order_by' => [
+                'NAMA_TAG' => 'DESC',
+                'NAMA_KELAS' => 'ASC',
+                'NAMA_DT' => 'ASC',
+            ]
+                ], 'ID_TA, NAMA_TA, ID_DEPT, NAMA_DEPT, ID_TINGK, NAMA_TINGK, ID_KELAS, NAMA_KELAS, ID_TAG, NAMA_TAG, ID_DT, NAMA_DT, COUNT(DISTINCT(SISWA_AS)) AS JUMLAH_SISWA, SUM(NOMINAL_DT) AS JUMLAH_NOMINAL, md_pegawai.*', [
+            ['md_tahun_ajaran', 'TA_AS=ID_TA'],
+            ['akad_kelas', 'KELAS_AS=ID_KELAS'],
+            ['md_pegawai', 'WALI_KELAS=ID_PEG'],
+            ['md_tingkat', 'TINGKAT_KELAS=ID_TINGK'],
+            ['md_departemen', 'DEPT_TINGK=ID_DEPT'],
+            ['keu_tagihan', 'TA_TAG=ID_TA'],
+            ['keu_detail', 'TAGIHAN_DT=ID_TAG AND DEPT_DT=ID_DEPT'],
+            ['keu_setup', 'DETAIL_SETUP=ID_DT AND SISWA_SETUP=SISWA_AS']
+        ]);
+
+        $data = array();
+        foreach ($database as $detail) {
+            $data['tag'][$detail->ID_TAG] = $detail;
+            $data['data'][$detail->ID_TAG][$detail->ID_KELAS][$detail->ID_DT] = $detail;
+        }
+
+        $this->load->view('backend/keuangan/laporan_tunggakan/cetak_laporan_tunggakan', $data);
     }
 
 }
