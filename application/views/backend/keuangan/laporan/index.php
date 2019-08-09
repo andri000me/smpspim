@@ -1,4 +1,5 @@
 <?php
+var_dump($this->session->userdata('ADMINISTRATOR'));exit();
 $title = 'Laporan Pembayaran Tagihan';
 $subtitle = "Daftar semua laporan pembayaran tagihan keuangan";
 $id_datatables = 'datatable1';
@@ -58,7 +59,7 @@ $this->generate->form_modal($id_modal, $title_form, $id_form, $id_datatables);
         table = initialize_datatables(id_table, '<?php echo site_url('keuangan/laporan/ajax_list'); ?>', columns, orders, functionInitComplete, functionDrawCallback, functionAddData, requestExport);
         
         $("body").addClass('hide-sidebar');
-        $('<a class="dt-button btn btn-sm btn-default buttons-reload" tabindex="0" aria-controls="datatable1" href="#" onclick="laporan_harian(this)" data-modal="show"><span>Laporan Harian</span></a>').insertAfter(".buttons-add");
+        $('<div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" aria-expanded="false">Laporan <span class="caret"></span></button><ul class="dropdown-menu"><li><a href=#" onclick="laporan_harian(this)">Laporan Harian</a></li><li><a href="<?php echo site_url('keuangan/laporan/laporan_tagihan'); ?>" target="_blank">Laporan Tagihan</a></li></ul></div>').insertAfter(".buttons-add");
         $(".buttons-add").remove();
     });
     

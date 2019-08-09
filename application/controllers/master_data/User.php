@@ -244,7 +244,7 @@ class User extends CI_Controller {
                 'data' => array(
                     'type' => 'checkbox_simple', // WAJIB, ex checkbox, radio
                     'name' => 'HAKAKSES_HU[]', // WAJIB
-                    'data' => $this->hakakses->get_all()                       // WAJIB
+                    'data' => $this->hakakses->get_all_with_administrator()                       // WAJIB
                 )
             ),
         );

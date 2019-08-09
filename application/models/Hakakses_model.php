@@ -106,6 +106,13 @@ class Hakakses_model extends CI_Model{
         return $this->db->get()->result_array();
     }
     
+    public function get_all_with_administrator() {
+        $this->db->select('ID_HAKAKSES as value, NAME_HAKAKSES as label');
+        $this->db->from('md_hakakses');
+        
+        return $this->db->get()->result_array();
+    }
+    
     public function get_levelmenu() {
         $this->db->from('levelmenu');
         return $this->db->get()->result();
