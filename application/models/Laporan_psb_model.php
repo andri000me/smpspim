@@ -19,6 +19,39 @@ class Laporan_psb_model extends CI_Model {
     private function _get_table($label = NULL) {
         $this->db->from($this->table);
         $this->db->join('akad_siswa assw', 'assw.SISWA_AS=ms.ID_SISWA', 'LEFT');
+        if ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT') {
+            if ($label == 'PENDAFTAR_BANIN')
+                $where = "JK_SISWA = 'L'";
+            elseif ($label == 'PENDAFTAR_BANAT')
+                $where = "JK_SISWA = 'P'";
+            elseif ($label == 'DITERIMA_BANIN')
+                $where = "JK_SISWA = 'L' AND NIS_SISWA IS NOT NULL";
+            elseif ($label == 'DITERIMA_BANAT')
+                $where = "JK_SISWA = 'P' AND NIS_SISWA IS NOT NULL";
+
+            $query = "(SELECT 
+                        ID_SISWA AS XX_ID_SISWA,
+                        NIS_SISWA,
+                        NAMA_SISWA,
+                        MASUK_JENJANG_SISWA,
+                        MASUK_TINGKAT_SISWA,
+                        STATUS_PSB_SISWA,
+                        STATUS_ASAL_SISWA,
+                        KETERANGAN_TINGK AS TINGKAT,
+                        ID_TINGK AS XX_ID_TINGK,
+                        DATE_FORMAT(CREATED_SISWA, '%Y') AS XX_TAHUN_DAFTAR
+                    FROM
+                        simapes.md_siswa
+                        JOIN md_jenjang_sekolah ON ID_JS= MASUK_JENJANG_SISWA
+                        JOIN md_jenjang_departemen ON ID_JS= JENJANG_MJD
+                        JOIN md_tingkat ON DEPT_MJD= DEPT_TINGK AND MASUK_TINGKAT_SISWA=NAMA_TINGK
+                    WHERE
+                        STATUS_ASAL_SISWA = 5
+                        AND " . $where . "
+                    ORDER BY 
+                    ID_TINGK DESC)";
+            $this->db->join($query . ' aa', 'ID_SISWA=XX_ID_SISWA');
+        }
         if ($label == NULL || $label == 'NAMA_TA')
             $this->db->join('md_tahun_ajaran mta', 'assw.TA_AS=mta.ID_TA', 'LEFT');
         if ($label == NULL || $label == 'mt.KETERANGAN_TINGK')
@@ -79,6 +112,8 @@ class Laporan_psb_model extends CI_Model {
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "KONVERSI", CONCAT("TIDAK", " ", "KONVERSI")) ) AS x_label');
         elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
+        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT')
+            $this->db->select('COUNT(ID_SISWA) AS data, IF(XX_ID_TINGK IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), TINGKAT) AS x_label');
         else
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
         $this->_get_table($label);
@@ -106,6 +141,8 @@ class Laporan_psb_model extends CI_Model {
             $this->db->group_by('LEFT(RIGHT(ANGKATAN_SISWA, 6), 4)');
         elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->group_by('LEFT(' . $label . ', 4)');
+        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT')
+            $this->db->group_by('XX_ID_TINGK');
         else
             $this->db->group_by($label);
 

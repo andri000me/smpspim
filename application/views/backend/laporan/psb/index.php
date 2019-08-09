@@ -27,6 +27,12 @@ $options = array(
 //    'mjpi.NAMA_JP#Jenjang Pendidikan Ibu#Jumlah (siswa)#Jenjang Pendidikan Ibu' => 'Jenjang Pendidikan Ibu',
 //    'mpki.NAMA_JENPEK#Jenis Pekerjaan Ibu#Jumlah (siswa)#Jenis Pekerjaan Ibu' => 'Jenis Pekerjaan Ibu',
 //    'NAMA_HASIL#Penghasilan Orang Tua#Jumlah (siswa)#Penghasilan Orang Tua' => 'Penghasilan Orang Tua',
+    'PENDAFTAR_BANIN#Tingkat#Jumlah (siswa)#Jumlah Pendaftar Banin' => 'Jumlah Pendaftar Banin',
+    'PENDAFTAR_BANAT#Tingkat#Jumlah (siswa)#Jumlah Pendaftar Banat' => 'Jumlah Pendaftar Banat',
+    'DITERIMA_BANIN#Tingkat#Jumlah (siswa)#Jumlah Diterima Banin' => 'Jumlah Diterima Banin',
+    'DITERIMA_BANAT#Tingkat#Jumlah (siswa)#Jumlah Diterima Banat' => 'Jumlah Diterima Banat',
+    'AKTIF_BANIN#Tingkat#Jumlah (siswa)#Jumlah Diterima Aktif Banin' => 'Jumlah Diterima Aktif Banin',
+    'AKTIF_BANAT#Tingkat#Jumlah (siswa)#Jumlah Diterima Aktif Banat' => 'Jumlah Diterima Aktif Banat',
 );
 ?>
 
