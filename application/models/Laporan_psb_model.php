@@ -16,18 +16,26 @@ class Laporan_psb_model extends CI_Model {
         parent::__construct();
     }
 
-    private function _get_table($label = NULL) {
+    private function _get_table($label = NULL, $data_ta = NULL) {
         $this->db->from($this->table);
         $this->db->join('akad_siswa assw', 'assw.SISWA_AS=ms.ID_SISWA', 'LEFT');
-        if ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT') {
-            if ($label == 'PENDAFTAR_BANIN')
+        if ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT' || $label == 'AKTIF_BANIN' || $label == 'AKTIF_BANAT') {
+            $join = "";
+            if ($label == 'PENDAFTAR_BANIN') {
                 $where = "JK_SISWA = 'L'";
-            elseif ($label == 'PENDAFTAR_BANAT')
+            } elseif ($label == 'PENDAFTAR_BANAT') {
                 $where = "JK_SISWA = 'P'";
-            elseif ($label == 'DITERIMA_BANIN')
+            } elseif ($label == 'DITERIMA_BANIN') {
                 $where = "JK_SISWA = 'L' AND NIS_SISWA IS NOT NULL";
-            elseif ($label == 'DITERIMA_BANAT')
+            } elseif ($label == 'DITERIMA_BANAT') {
                 $where = "JK_SISWA = 'P' AND NIS_SISWA IS NOT NULL";
+            } elseif ($label == 'AKTIF_BANIN') {
+                $join = "JOIN akad_siswa ON SISWA_AS=ID_SISWA AND TA_AS=" . $data_ta->ID_TA;
+                $where = "JK_SISWA = 'L' AND NIS_SISWA IS NOT NULL AND AKTIF_AS=1 AND (KONVERSI_AS=0 OR KONVERSI_AS IS NULL)";
+            } elseif ($label == 'AKTIF_BANAT') {
+                $join = "JOIN akad_siswa ON SISWA_AS=ID_SISWA AND TA_AS=" . $data_ta->ID_TA;
+                $where = "JK_SISWA = 'P' AND NIS_SISWA IS NOT NULL AND AKTIF_AS=1 AND (KONVERSI_AS=0 OR KONVERSI_AS IS NULL)";
+            }
 
             $query = "(SELECT 
                         ID_SISWA AS XX_ID_SISWA,
@@ -42,6 +50,7 @@ class Laporan_psb_model extends CI_Model {
                         DATE_FORMAT(CREATED_SISWA, '%Y') AS XX_TAHUN_DAFTAR
                     FROM
                         simapes.md_siswa
+                        " . $join . "
                         JOIN md_jenjang_sekolah ON ID_JS= MASUK_JENJANG_SISWA
                         JOIN md_jenjang_departemen ON ID_JS= JENJANG_MJD
                         JOIN md_tingkat ON DEPT_MJD= DEPT_TINGK AND MASUK_TINGKAT_SISWA=NAMA_TINGK
@@ -106,17 +115,29 @@ class Laporan_psb_model extends CI_Model {
     }
 
     public function get_data($label, $ta, $tingkat, $kelas, $jk) {
+        if ($ta == null)
+            $id_ta = $this->session->userdata('ID_TA_ACTIVE');
+        else
+            $id_ta = $ta;
+
+        $data_ta = $this->db_handler->get_row('md_tahun_ajaran', [
+            'where' => [
+                'ID_TA' => $id_ta
+            ]
+        ]);
+
         if ($label == NULL || $label == 'AKTIF_AS')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "AKTIF", CONCAT("TIDAK", " ", "AKTIF")) ) AS x_label');
         if ($label == 'KONVERSI_AS')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), IF(' . $label . ' = 1, "KONVERSI", CONCAT("TIDAK", " ", "KONVERSI")) ) AS x_label');
         elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), (YEAR(CURDATE()) - LEFT(' . $label . ', 4))) AS x_label');
-        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT')
+        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT' || $label == 'DITERIMA_BANAT' || $label == 'AKTIF_BANIN' || $label == 'AKTIF_BANAT')
             $this->db->select('COUNT(ID_SISWA) AS data, IF(XX_ID_TINGK IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), TINGKAT) AS x_label');
         else
             $this->db->select('COUNT(ID_SISWA) AS data, IF(' . $label . ' IS NULL, CONCAT("TIDAK" , " ", "ADA", " ", "DATA"), ' . $label . ') AS x_label');
-        $this->_get_table($label);
+
+        $this->_get_table($label, $data_ta);
 
         if ($ta != "") {
             $this->db->where('TA_AS', $ta);
@@ -141,7 +162,7 @@ class Laporan_psb_model extends CI_Model {
             $this->db->group_by('LEFT(RIGHT(ANGKATAN_SISWA, 6), 4)');
         elseif ($label == 'TANGGAL_LAHIR_SISWA')
             $this->db->group_by('LEFT(' . $label . ', 4)');
-        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT')
+        elseif ($label == 'PENDAFTAR_BANIN' || $label == 'PENDAFTAR_BANAT' || $label == 'DITERIMA_BANIN' || $label == 'DITERIMA_BANAT' || $label == 'DITERIMA_BANAT' || $label == 'AKTIF_BANIN' || $label == 'AKTIF_BANAT')
             $this->db->group_by('XX_ID_TINGK');
         else
             $this->db->group_by($label);
