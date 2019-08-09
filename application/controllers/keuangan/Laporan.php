@@ -106,4 +106,60 @@ class Laporan extends CI_Controller {
         $this->load->view('backend/keuangan/laporan/cetak', $data);
     }
 
+    public function laporan_tagihan() {
+        if ($this->session->userdata('ADMINISTRATOR')) {
+            $pembayaran = $this->db_handler->get_rows('keu_tagihan', [
+                'where' => [
+                    'TA_TAG' => $this->session->userdata('ID_TA_ACTIVE'),
+                    'PSB_TAG' => 0,
+                    'JENIS_BAYAR' => 'PEMBAYARAN'
+                ],
+                'order_by' => [
+                    'NAMA_PEG' => 'ASC',
+                    'URUT_DEPT' => 'ASC',
+                    'ID_DT' => 'ASC'
+                ],
+                'group_by' => [
+                    'ID_PEG',
+                    'ID_DEPT',
+                    'ID_DT'
+                ]
+                    ], 'ID_TAG, NAMA_TAG, ID_DT, NAMA_DT, ID_DEPT, SUM(NOMINAL_BAYAR) AS NOMINAL, md_pegawai.*', [
+                ['keu_detail', 'ID_TAG=TAGIHAN_DT'],
+                ['keu_setup', 'DETAIL_SETUP=ID_DT'],
+                ['keu_pembayaran', 'SETUP_BAYAR=ID_SETUP'],
+                ['md_user', 'USER_BAYAR=ID_USER'],
+                ['md_pegawai', 'ID_PEG=PEGAWAI_USER'],
+                ['md_departemen', 'ID_DEPT=DEPT_DT']
+            ]);
+
+            $id_tag = null;
+            $data_pegawai = array();
+            $data_pembayaran = array();
+            foreach ($pembayaran as $detail) {
+                $id_tag = $detail->ID_TAG;
+                $data_pegawai[$detail->ID_PEG] = $detail;
+                $data_pembayaran[$detail->ID_PEG][$detail->ID_DEPT][$detail->ID_DT] = $detail;
+            }
+
+            $dt = $this->db_handler->get_rows('keu_detail', ['where' => ['TAGIHAN_DT' => $id_tag], 'order_by' => ['ID_DT' => 'ASC', 'URUT_DEPT' => 'ASC']], '*', [['md_departemen', 'ID_DEPT=DEPT_DT']]);
+
+            $detail_tag = array();
+            foreach ($dt as $detail_dt) {
+                $detail_tag[$detail_dt->DEPT_DT][$detail_dt->ID_DT] = $detail_dt;
+            }
+
+            $data = array(
+                'jenjang' => $this->db_handler->get_rows('md_departemen', ['order_by' => ['URUT_DEPT' => 'ASC']]),
+                'pembayaran' => $data_pembayaran,
+                'pegawai' => $data_pegawai,
+                'detail_tag' => $detail_tag
+            );
+
+            $this->load->view('backend/keuangan/laporan/laporan_tagihan', $data);
+        } else {
+            echo '<h1>MENU HANYA AKTIF PADA USER YANG MEMILIKI HAKAKSES ADMINISTRATOR</h1>';
+        }
+    }
+
 }
