@@ -14,7 +14,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Denah_um extends CI_Controller {
-
     var $mode = 'UM';
     var $title = 'Ujian Masuk';
     var $status_validasi = FALSE;
@@ -36,7 +35,7 @@ class Denah_um extends CI_Controller {
         $data['STATUS_PSB'] = $this->psb_validasi->is_psb_tutup();
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
-
+        
         $this->generate->backend_view('pu/denah_um/index', $data);
     }
 
@@ -51,20 +50,20 @@ class Denah_um extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $item->NAMA_TA;
-
+            
             $aksi = '';
             if ($item->DATA_DENAH != NULL) {
                 $aksi .= '<li><a href="javascript:void()" title="Lihat Denah" onclick="view_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-eye"></i>&nbsp;&nbsp;Lihat Denah</a></li>';
-            }
-            if (!$item->READY_DENAH) {
+            } 
+            if (!$item->READY_DENAH) { 
                 $aksi .= '<li><a href="javascript:void()" title="Ubah" onclick="update_data_' . $id_datatables . '(\'' . $item->ID_PUD . '\')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah Denah</a></li>';
             }
-
+            
             $row[] = '
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle" aria-expanded="false">AKSI&nbsp;&nbsp;<span class="caret"></span></button>
-                    <ul class="dropdown-menu">' . $aksi
-                    . '</ul>
+                    <ul class="dropdown-menu">'.$aksi
+                    .'</ul>
                 </div>';
 
             $data[] = $row;
@@ -79,146 +78,101 @@ class Denah_um extends CI_Controller {
 
         $this->generate->output_JSON($output);
     }
-
+    
     public function cek_denah() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+            
         $status = $this->aturan_denah->is_um_dibuat();
-
+        
         $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah telah dibuat. Anda tidak boleh membuat denah baru pada tahun ajaran aktif.'));
     }
-
+    
     public function buat_denah() {
-        if ($this->status_validasi)
-            redirect('pu/denah_um/show_denah');
-
+        if($this->status_validasi) redirect ('pu/denah_um/show_denah');
+        
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
-
+        
         $this->generate->backend_view('pu/denah_um/form', $data);
     }
-
+    
     public function proses_aturan() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
         $status = $this->aturan_denah->is_um_dibuat();
-
+        
         $output = $this->denah_um_handler->proses_aturan($status, $this->mode);
-
+            
         $this->generate->output_JSON($output);
     }
-
+    
     public function simpan_denah() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
         $result = $this->denah_um_handler->proses_buat_denah($this->mode);
-
+        
         $this->generate->output_JSON(array('status' => 1, 'data' => 'Berhasil membuat denah'));
     }
-
+    
     public function show_denah() {
         $this->session->set_userdata("TOKEN_DENAH_READY", $this->crypt->randomString());
-
+        
         $data['data'] = json_decode($this->aturan_denah->get_denah_psb(), TRUE);
         $data['MODE'] = $this->mode;
         $data['TITLE'] = $this->title;
         $data['TOKEN'] = $this->session->userdata("TOKEN_DENAH_READY");
         $data['STATUS_VALIDASI'] = $this->status_validasi;
-
+        
         $this->generate->backend_view('pu/denah_um/view', $data);
     }
-
-    public function change_ruangan($jk, $index) {
-        $value = $this->input->post('value');
-
-        $denah = $this->db_handler->get_row('pu_aturan_denah', ['where' => ['TA_PUD' => $this->session->userdata('ID_PSB_ACTIVE'), 'CAWU_PUD' => null]]);
-
-        if ($denah->VALIDASI_DENAH) {
-            $this->generate->output_JSON(array('status' => false, 'msg' => 'Gagal mengganti ruangan karena denah sudah divalidasi.'));
-        } elseif ($denah->READY_DENAH) {
-            $data_denah = json_decode($denah->DATA_DENAH, TRUE);
-            $aturan_denah = json_decode($denah->ATURAN_RUANG_PUD, TRUE);
-
-            $temp_old = $aturan_denah[$jk]['RUANG'][$index];
-            $temp_new = $aturan_denah[$jk]['RUANG'][$value];
-
-            $aturan_denah[$jk]['RUANG'][$index] = $temp_new;
-            $aturan_denah[$jk]['RUANG'][$value] = $temp_old;
-
-            $temp_old_denah = $data_denah[$jk]['RUANG'][$index];
-            $temp_new_denah = $data_denah[$jk]['RUANG'][$value];
-
-            $data_denah[$jk]['RUANG'][$index] = $temp_new_denah;
-            $data_denah[$jk]['RUANG'][$value] = $temp_old_denah;
-
-            $result = $this->db_handler->update('pu_aturan_denah', ['ID_PUD' => $denah->ID_PUD], [
-                'DATA_DENAH' => json_encode($data_denah),
-                'ATURAN_RUANG_PUD' => json_encode($aturan_denah),
-            ]);
-            if ($result) {
-                $this->generate->output_JSON(array('status' => true, 'msg' => 'Berhasil merubah ruang'));
-            } else {
-                $this->generate->output_JSON(array('status' => false, 'msg' => 'Gagal mengganti ruangan'));
-            }
-        } else {
-            $this->generate->output_JSON(array('status' => false, 'msg' => 'Gagal mengganti ruangan karena denah belum ready.'));
-        }
-    }
-
+    
     public function atur_ulang_denah() {
         $this->generate->set_header_JSON();
-
+        
         $result = $this->denah_um_handler->atur_ulang_denah($this->mode);
-
+        
         $this->generate->output_JSON(array('status' => $result, 'msg' => 'Gagal memproses data. Denah tidak dapat disimpan. Halaman akan dimuat ulang otomatis.'));
     }
-
+    
     public function request_denah() {
         $this->generate->set_header_JSON();
-
+        
         $result = $this->denah_um_handler->show_denah($this->mode);
-
+        
         $this->generate->output_JSON(array('status' => 1, 'data' => $result));
     }
-
+    
     public function proses_sisa() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
         $result = $this->denah_um_handler->proses_buat_denah($this->mode, TRUE);
-
+        
         $this->generate->output_JSON(array('status' => 1, 'data' => $result));
     }
-
+    
     public function denah_ready() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
-        if ($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY"))
-            $this->aturan_denah->ready_denah_psb();
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
+        if ($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY")) $this->aturan_denah->ready_denah_psb();
+        
         $this->generate->output_JSON(array('status' => 1, 'data' => ''));
     }
-
+    
     public function validasi_denah() {
         $this->generate->set_header_JSON();
-
-        if ($this->status_validasi)
-            $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
-
+        
+        if($this->status_validasi) $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'Denah telah divalidasi.'));
+        
         if (($this->input->post("TOKEN") == $this->session->userdata("TOKEN_DENAH_READY")) && $this->aturan_denah->validasi_denah_psb()) {
             $status = 1;
             $msg = 'Berhasil memvalidasi denah. Anda akan diarahkan pada menu jadwal ujian masuk';
@@ -228,7 +182,7 @@ class Denah_um extends CI_Controller {
             $msg = 'Denah gagal divalidasi';
             $link = '';
         }
-
+        
         $this->generate->output_JSON(array('status' => $status, 'msg' => $msg, 'link' => $link));
     }
 
