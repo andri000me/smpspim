@@ -68,6 +68,34 @@ class Laporan extends CI_Controller {
         $this->load->view('backend/ph/laporan/hafalan_perkelas', $data);
     }
 
+    public function tabungan_hafalan() {
+        $ta = $this->session->userdata('ID_TA_ACTIVE');
+
+        $data_kelas = $this->db_handler->get_rows('ph_tabungan', [
+            'where' => [
+                'TA_TABUNGAN' => $ta
+            ],
+            'group_by' => ['ID_KELAS'],
+            'order_by' => ['NAMA_KELAS'],
+                ], 'COUNT(SISWA_TABUNGAN) AS JUMLAH, ID_KELAS', [
+            ['md_siswa', 'SISWA_TABUNGAN=ID_SISWA'],
+            ['akad_siswa', 'TA_AS=TA_TABUNGAN AND SISWA_AS=SISWA_TABUNGAN'],
+            ['akad_kelas', 'ID_KELAS=KELAS_AS']
+        ]);
+
+        $kelas = array();
+        foreach ($data_kelas as $detail) {
+            $kelas[$detail->ID_KELAS] = $detail->JUMLAH;
+        }
+
+        $data = array(
+            'kelas' => $this->db_handler->get_rows('akad_kelas', ['where' => ['TA_KELAS' => $ta], 'order_by' => ['NAMA_KELAS' => 'ASC']]),
+            'tabungan' => $kelas
+        );
+
+        $this->load->view('backend/ph/laporan/tabungan_hafalan', $data);
+    }
+
     public function hafalan_perjenjang() {
         $ta = $this->session->userdata('ID_TA_ACTIVE');
         $tingkat = null;
