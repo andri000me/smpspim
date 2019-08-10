@@ -27,3 +27,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /files/
 index.php
+!/application/views/backend/ph/laporan/index.php
