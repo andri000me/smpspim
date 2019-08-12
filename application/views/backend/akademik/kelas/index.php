@@ -12,6 +12,7 @@ $columns = array(
     'WALI KELAS',
     
     'NAMA KELAS',
+    'JK',
     'KAPASITAS',
     'JUMLAH SISWA',
     'AKTIF',

@@ -48,6 +48,7 @@ class Kelas extends CI_Controller {
             $row[] = $item->NAMA_PEG;
             
             $row[] = $item->NAMA_KELAS;
+            $row[] = $item->JK_KELAS;
             $row[] = $item->KAPASITAS_RUANG;
             $row[] = $item->JUMLAH_SISWA_KELAS;
             $row[] = ($item->AKTIF_KELAS == 1) ? 'YA' : 'TIDAK';

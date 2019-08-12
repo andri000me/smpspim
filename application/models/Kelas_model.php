@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Kelas_model extends CI_Model {
 
     var $table = 'akad_kelas';
-    var $column = array('KETERANGAN_TINGK', 'KODE_RUANG', 'NAMA_RUANG', 'NAMA_PEG', 'NAMA_KELAS', 'KAPASITAS_RUANG', 'JUMLAH_SISWA_KELAS', 'AKTIF_KELAS', 'ID_KELAS');
+    var $column = array('KETERANGAN_TINGK', 'KODE_RUANG', 'NAMA_RUANG', 'NAMA_PEG', 'NAMA_KELAS', 'JK_KELAS', 'KAPASITAS_RUANG', 'JUMLAH_SISWA_KELAS', 'AKTIF_KELAS', 'ID_KELAS');
     var $primary_key = "ID_KELAS";
     var $order = array("ID_KELAS" => 'ASC');
 
