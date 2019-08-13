@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -13,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author rohmad
  */
 class Kehadiran_guru extends CI_Controller {
-    
+
     var $edit_id = TRUE;
     var $primary_key = "ID_AKG";
 
@@ -39,9 +40,9 @@ class Kehadiran_guru extends CI_Controller {
             $row = array();
             $row[] = $item->NAMA_CAWU;
             $row[] = $item->NIP_PEG;
-            
+
             $row[] = $item->NAMA_PEG;
-            
+
             $row[] = $item->TANGGAL_AKG;
             $row[] = $item->ALASAN_AKG;
             $row[] = $item->KETERANGAN_AKG;
@@ -69,25 +70,25 @@ class Kehadiran_guru extends CI_Controller {
 
     public function request_form() {
         $data = $this->generate->set_header_form_JSON($this->kehadiran_guru);
-        
+
         $input_id = FALSE;
         $show_id = TRUE;
 
         $data_html = array(
             array(
-                'label' => 'Guru',                                     
+                'label' => 'Guru',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 7,
                 'data' => array(
-                    'type'  => 'autocomplete',                                  
-                    'name'  => 'PEGAWAI_AKG',                                    
-                    'multiple'  => FALSE,                                       
-                    'minimum'  => 0,                                       
+                    'type' => 'autocomplete',
+                    'name' => 'PEGAWAI_AKG',
+                    'multiple' => FALSE,
+                    'minimum' => 0,
                     'value' => $data == NULL ? "" : $data->PEGAWAI_AKG,
                     'label' => $data == NULL ? "" : $data->NAMA_PEG,
-                    'data'  => NULL,                                            
-                    'url'   => base_url('master_data/pegawai/auto_complete')                      
+                    'data' => NULL,
+                    'url' => base_url('master_data/pegawai/auto_complete')
                 )
             ),
             array(
@@ -103,16 +104,16 @@ class Kehadiran_guru extends CI_Controller {
                 )
             ),
             array(
-                'label' => 'Alasan',                                     
+                'label' => 'Alasan',
                 'required' => TRUE,
                 'keterangan' => 'Wajib diisi',
                 'length' => 3,
                 'data' => array(
-                    'type'  => 'dropdown',                                      
-                    'name'  => 'ALASAN_AKG',                                    
+                    'type' => 'dropdown',
+                    'name' => 'ALASAN_AKG',
                     'value' => $data == NULL ? "" : $data->ALASAN_AKG,
-                    'value_blank'  => '-- Pilih Alasan --',
-                    'data'  => array(
+                    'value_blank' => '-- Pilih Alasan --',
+                    'data' => array(
                         array('id' => 'SAKIT', 'text' => "SAKIT"),
                         array('id' => 'IZIN', 'text' => "IZIN"),
                         array('id' => 'ALPHA', 'text' => "TANPA KETERANGAN"),
@@ -132,7 +133,7 @@ class Kehadiran_guru extends CI_Controller {
                 )
             ),
         );
-        
+
         $this->generate->output_form_JSON($data, $this->primary_key, $data_html, $input_id, $show_id, $this->edit_id);
     }
 
@@ -158,17 +159,19 @@ class Kehadiran_guru extends CI_Controller {
         $this->generate->set_header_JSON();
         $this->generate->cek_validation_form('edit');
         $cek = $this->generate->cek_update_id($this->edit_id, $this->primary_key, $this->input->post());
-        
+
         $where = $cek['where'];
-        
-        if (isset($cek['data'])) $data = $cek['data'];
-        else $data = array();
-        
+
+        if (isset($cek['data']))
+            $data = $cek['data'];
+        else
+            $data = array();
+
         $data['PEGAWAI_AKG'] = $this->input->post('PEGAWAI_AKG');
         $data['TANGGAL_AKG'] = $this->input->post('TANGGAL_AKG');
         $data['ALASAN_AKG'] = $this->input->post('ALASAN_AKG');
         $data['KETERANGAN_AKG'] = $this->input->post('KETERANGAN_AKG');
-        
+
         $affected_row = $this->kehadiran_guru->update($where, $data);
 
         $this->generate->output_JSON(array("status" => $affected_row));
@@ -186,10 +189,36 @@ class Kehadiran_guru extends CI_Controller {
 
     public function auto_complete() {
         $this->generate->set_header_JSON();
-        
+
         $data = $this->kehadiran_guru->get_all_ac($this->input->post('q'));
-        
+
         $this->generate->output_JSON($data);
+    }
+
+    public function laporan_kehadiran() {
+        $data = [
+            'data' => $this->db_handler->get_rows('akad_kehadiran_guru', [
+                'where' => [
+                    'TA_AKG' => $this->session->userdata('ID_TA_ACTIVE')
+                ],
+                'group_by' => [
+                    "ID_PEG",
+                    "DATE_FORMAT(TANGGAL_AKG, '%m-%Y')"
+                ]
+                    ], "*, "
+                    . "DATE_FORMAT(TANGGAL_AKG, '%m-%Y') AS BULAN, "
+                    . "SUM(CASE WHEN ALASAN_AKG='HADIR' THEN 1 ELSE 0 END) AS JUMLAH_HADIR, "
+                    . "SUM(CASE WHEN ALASAN_AKG='SAKIT' THEN 1 ELSE 0 END) AS JUMLAH_SAKIT, "
+                    . "SUM(CASE WHEN ALASAN_AKG='IZIN' THEN 1 ELSE 0 END) AS JUMLAH_IZIN, "
+                    . "SUM(CASE WHEN ALASAN_AKG='ALPHA' THEN 1 ELSE 0 END) AS JUMLAH_ALPHA"
+                    , [
+                ['md_pegawai', 'PEGAWAI_AKG=ID_PEG'],
+                ['md_tahun_ajaran', 'TA_AKG=ID_TA'],
+                ['md_catur_wulan', 'CAWU_AKG=ID_CAWU']
+            ])
+        ];
+
+        $this->load->view('backend/akademik/kehadiran_guru/laporan_kehadiran', $data);
     }
 
 }
