@@ -8,6 +8,7 @@ $columns = array(
     'NIS',
     'NAMA',
     'KELAS',
+    'PONDOK',
     'POIN SISWA',
     'TINDAKAN',
     'POIN MINIMAL',

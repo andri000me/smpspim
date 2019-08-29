@@ -49,6 +49,36 @@ class Laporan extends CI_Controller {
         $this->generate->backend_view('ph/laporan/index', $data);
     }
 
+    public function cetak_siswa_perpondok() {
+        $id_pondok = $this->input->get('id');
+
+        $data = array(
+            'pondok' => $this->db_handler->get_row('md_pondok_siswa', [
+                'where' => [
+                    'ID_MPS' => $id_pondok
+                ]
+            ]),
+            'siswa' => $this->db_handler->get_rows('akad_siswa', [
+                'where' => [
+                    'TA_AS' => $this->session->userdata('ID_TA_ACTIVE'),
+                    'KONVERSI_AS' => 0,
+                    'PONDOK_SISWA' => $id_pondok
+                ],
+                'order_by' => [
+                    'NAMA_SISWA' => 'ASC'
+                ]
+                    ], '*', [
+                ['md_siswa', 'SISWA_AS=ID_SISWA'],
+                ['akad_kelas', 'KELAS_AS=ID_KELAS'],
+                ['ph_nilai', 'SISWA_AS=SISWA_PHN AND TA_PHN=TA_AS'],
+                ['ph_batasan', 'BATASAN_PHN=ID_BATASAN'],
+                ['ph_kitab', 'KITAB_BATASAN=ID_KITAB'],
+                    ], FALSE)
+        );
+
+        $this->load->view('backend/ph/laporan/cetak_siswa_perpondok', $data);
+    }
+
     public function hafalan_perkelas() {
         $ta = $this->session->userdata('ID_TA_ACTIVE');
         $tingkat = null;

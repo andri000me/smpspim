@@ -107,35 +107,39 @@ foreach ($data as $siswa) {
         
     } else {
 
-        $offset_y = 45;
+        $offset_y = 65;
 
+//        $cpdf->SetMargins(55, 65);
         $cpdf->AddPage("L", "A4");
         $cpdf->SetAutoPageBreak(true, 0);
 
-        $cpdf->SetFont('helvetica', '', 13);
+        $cpdf->SetY(18);
+        $cpdf->SetX(30);
+        $cpdf->SetFont('helvetica', '', 12);
         $cpdf->Cell(30, 7, 'Nomor');
         $cpdf->Cell(0, 7, ': ' . $siswa->NOMOR_IJASAH_NIS);
         $cpdf->Ln();
 
+        $cpdf->SetX(30);
         $cpdf->Cell(30, 7, 'Tahun Ajaran');
         $cpdf->Cell(0, 7, ': ' . $siswa->NAMA_TA);
         $cpdf->Ln();
 
         $cpdf->SetY($offset_y);
 
-        $cpdf->SetFont('helvetica', 'B', 16);
+        $cpdf->SetFont('helvetica', 'B', 14);
         $cpdf->Cell(0, 7, $siswa->NAMA_DEPT, 0, 0, 'C');
         $cpdf->Ln(10);
 
-        $cpdf->SetFont('helvetica', '', 13);
+        $cpdf->SetFont('helvetica', '', 12);
         $cpdf->Cell(0, 7, 'Diberikan kepada:', 0, 0, 'C');
         $cpdf->Ln(10);
 
-        $cpdf->SetFont('franklin', 'B', 18);
+        $cpdf->SetFont('franklin', 'B', 17);
         $cpdf->Cell(0, 7, strtoupper($siswa->NAMA_SISWA), 0, 0, 'C');
         $cpdf->Ln(8);
 
-        $cpdf->SetFont('helvetica', '', 13);
+        $cpdf->SetFont('helvetica', '', 12);
 
         $cpdf->Cell(100);
         $cpdf->Cell(30, 7, 'Lahir di');
@@ -157,46 +161,51 @@ foreach ($data as $siswa) {
         $cpdf->Cell(0, 7, ': ' . $siswa->NIS_NIS);
         $cpdf->Ln(8);
 
+        $cpdf->SetFont('helvetica', 'B', 12);
         $cpdf->Cell(0, 7, 'LULUS', 0, 0, 'C');
         $cpdf->Ln(8);
 
-        $cpdf->Cell(30);
-        $cpdf->Cell(220, 5, 'Pada Ujian Akhir ' . $siswa->NAMA_DEPT . ' Perguruan Islam MATHALI\'UL FALAH Kajen, yang diselenggarakan mulai');
-        $cpdf->Ln();
+        $cpdf->SetFont('helvetica', '', 12);
+        $cpdf->SetX(55);
+        $cpdf->MultiCell(180, 5, 'Pada Ujian Akhir ' . $siswa->NAMA_DEPT . ' Perguruan Islam MATHALI\'UL FALAH Kajen, yang ');
 
-        $cpdf->Cell(30);
-        $cpdf->Cell(220, 7, 'tanggal ' . $this->date_format->to_print_text($siswa->TANGGAL_MULAI_UJIAN) . ' sampai dengan ' . $this->date_format->to_print_text($siswa->TANGGAL_SELESAI_UJIAN) . '.');
+        $cpdf->SetX(55);
+        $cpdf->Cell(220, 7, 'diselenggarakan mulai tanggal ' . $this->date_format->to_print_text($siswa->TANGGAL_MULAI_UJIAN) . ' sampai dengan ' . $this->date_format->to_print_text($siswa->TANGGAL_SELESAI_UJIAN) . '.');
         $cpdf->Ln(9);
 
-        $cpdf->Cell(30);
+        $cpdf->SetX(55);
         $cpdf->Cell(220, 7, 'Semoga ilmu yang diperoleh bermanfaat dan barokah. Amin.');
-        $cpdf->Ln(15);
+        $cpdf->Ln(10);
 
-        $cpdf->Cell(150 + 10);
-        $cpdf->Cell(15, 10, 'Kajen, ');
-        $cpdf->SetFont('helvetica', '', 13);
+        $cpdf->SetX(174);
+        $cpdf->Cell(15, 10, 'Kajen, ');        
+        
+        $cpdf->SetX(187);
+        $cpdf->SetFont('helvetica', '', 12);
         $cpdf->Cell(0, 5, $post['TANGGAL_HIJRIYAH'] . ' H.');
         $cpdf->Ln();
-        $cpdf->SetFont('helvetica', '', 13);
-        $cpdf->Cell(150 + 15 + 10);
+        
+        $cpdf->SetX(187);
+        $cpdf->SetFont('helvetica', '', 12);
         $cpdf->Cell(0, 5, $post['TANGGAL_MASEHI'] . ' M.');
         $cpdf->Ln(8);
 
-        $cpdf->Cell(170 + 10);
+        $cpdf->SetX(193);
         $cpdf->Cell(0, 5, 'Direktur,');
         $cpdf->Ln(20);
 
+        $cpdf->SetFont('helvetica', 'B', 12);
         $cpdf->Cell(148 + 10);
         $cpdf->Cell(0, 5, $post['DIREKTUR']);
 
         $cpdf->SetLineWidth(0.30);
 
-        $cpdf->Line(185, 145.5, 235, 145.5);
+        $cpdf->Line(187, 159.5, 232, 159.5);
         
-        $cpdf->Line(135, $offset_y + 105, 160, $offset_y + 105);
-        $cpdf->Line(135, $offset_y + 130, 160, $offset_y + 130);
-        $cpdf->Line(135, $offset_y + 105, 135, $offset_y + 130);
-        $cpdf->Line(160, $offset_y + 105, 160, $offset_y + 130);
+        $cpdf->Line(135, $offset_y + 95, 160, $offset_y + 95);
+        $cpdf->Line(135, $offset_y + 120, 160, $offset_y + 120);
+        $cpdf->Line(135, $offset_y + 95, 135, $offset_y + 120);
+        $cpdf->Line(160, $offset_y + 95, 160, $offset_y + 120);
     }
 }
 

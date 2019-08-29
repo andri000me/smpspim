@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_surat_segera_model extends CI_Model {
 
     var $table = 'komdis_siswa_header';
-    var $column = array('NAMA_CAWU', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'JUMLAH_POIN_KSH', 'NAMA_KJT', 'POIN_KJT', 'ID_KSH', 'ID_KSH');
+    var $column = array('NAMA_CAWU', 'NIS_SISWA', 'NAMA_SISWA', 'NAMA_KELAS', 'NAMA_PONDOK_MPS', 'JUMLAH_POIN_KSH', 'NAMA_KJT', 'POIN_KJT', 'ID_KSH', 'ID_KSH');
     var $primary_key = "ID_KSH";
     var $order = array("POIN_KSH" => 'DESC');
 
@@ -24,6 +24,7 @@ class Laporan_surat_segera_model extends CI_Model {
         $this->db->join('md_tahun_ajaran mta', $this->table . '.TA_KSH=mta.ID_TA');
         $this->db->join('md_catur_wulan mcw', $this->table . '.CAWU_KSH=mcw.ID_CAWU');
         $this->db->join('md_siswa ms', $this->table . '.SISWA_KSH=ms.ID_SISWA AND ms.AKTIF_SISWA=1');
+        $this->db->join('md_pondok_siswa mps', 'PONDOK_SISWA=ID_MPS');
         $this->db->join('akad_siswa asw', 'ms.ID_SISWA=asw.SISWA_AS AND asw.TA_AS="' . $this->session->userdata("ID_TA_ACTIVE") . '" AND asw.KONVERSI_AS=0 AND asw.AKTIF_AS=1 ');
         $this->db->join('akad_kelas ak', 'asw.KELAS_AS=ak.ID_KELAS');
         $this->db->join('komdis_jenis_tindakan kjt', $this->table . '.JUMLAH_POIN_KSH>=kjt.POIN_KJT AND ' . $this->table . '.JUMLAH_POIN_KSH<=kjt.POIN_MAKS_KJT');
