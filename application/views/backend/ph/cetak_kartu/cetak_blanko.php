@@ -21,6 +21,9 @@ foreach ($SISWA as $DETAIL) {
     $pdf->SetMargins(10, 6);
     $pdf->AddPage("L", array($width, $height));
     $pdf->SetAutoPageBreak(true, 0);
+    
+    $posisi_x = 175;
+    $posisi_y = 7;
 
     $pdf->Image(base_url($this->pengaturan->getLogo()), 15, 6, 20, 20, '', '');
 
@@ -105,6 +108,7 @@ foreach ($SISWA as $DETAIL) {
     $pdf->Line(11, 27, 207, 27);
     $pdf->SetLineWidth(0.30);
     $pdf->Line(11, 28, 207, 28);
+    $pdf->Image(base_url('files/aplikasi/p3h.png'), $posisi_x, $posisi_y, 30, 30);
 }
 
 $pdf->Output();
