@@ -88,6 +88,14 @@ class Denah_us extends CI_Controller {
 
         $this->generate->output_JSON($output);
     }
+    
+//    public function chackPengaturanUjianTingkat() {
+//        $data = $this->db_handler->get_rows('md_tingkat');
+//        foreach ($data as $detail) {
+//            echo var_dump(json_decode($detail->GEDUNG_UJIAN_TINGK, true));
+//            echo '<hr>';
+//        }
+//    }
 
     public function show_denah() {
         $this->buat_denah();
@@ -442,7 +450,7 @@ class Denah_us extends CI_Controller {
 //            echo '<hr>';
 //        }
 
-        $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah ' . ($status ? 'berhasil' : 'gagal') . ' disimpan'));
+        $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah berhasil disimpan'));
     }
 
     public function update_aturan_denah($jk) {
