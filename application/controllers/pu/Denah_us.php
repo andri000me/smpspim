@@ -88,7 +88,7 @@ class Denah_us extends CI_Controller {
 
         $this->generate->output_JSON($output);
     }
-    
+
 //    public function chackPengaturanUjianTingkat() {
 //        $data = $this->db_handler->get_rows('md_tingkat');
 //        foreach ($data as $detail) {
@@ -238,7 +238,7 @@ class Denah_us extends CI_Controller {
 //    }
 
     public function simpan_denah() {
-        $this->generate->set_header_JSON();
+//        $this->generate->set_header_JSON();
 
         if ($this->status_validasi)
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 912: Denah telah divalidasi'));
@@ -251,6 +251,12 @@ class Denah_us extends CI_Controller {
         $ruangan = explode(',', $this->input->post('ruangan'));
         $model = explode(',', $this->input->post('model'));
         $msg = 'Berhasil menyimpan denah';
+
+//        $jk = "P";
+//        $denah = explode(',', "3,5,4,6,4,3,6,5,4,6,3,5,6,5,4,3,3,5,,6,,3,6,,6,,3,,6,,,,,,,,,,,,4,6,3,4,3,4,,6,3,,5,6,5,6,3,,,6,3,,3,,,6,3,,,,,,,,,,,,,,,,14,15,16,7,14,15,8,16,16,8,14,15,8,16,14,15,14,15,16,7,14,15,7,16,16,8,14,15,8,16,14,15,14,15,16,7,14,15,7,16,16,15,14,16,16,7,14,15,14,,16,15,14,15,16,,16,15,14,,16,,14,,14,,16,8,,,16,,16,,,,16,,,,16,15,14,16,16,15,14,15,14,,16,15,14,8,16,,16,,14,,16,,14,,14,,16,,,,16,,16,,,,16,,,,16,,16,,16,,16,,,16,,16,,16,,16,16,,16,,16,,16,,,16,,,,,,,,,,,,,,,12,11,13,9,12,13,9,11,13,10,12,11,10,11,12,10,12,11,13,10,12,13,9,11,13,9,12,11,10,11,12,10,12,11,10,9,11,13,9,11,13,11,10,12,13,11,10,12,10,12,13,11,10,12,13,11,13,11,10,12,13,11,10,9,10,,13,11,10,,13,11,13,11,10,,13,,10,,10,12,13,11,10,11,12,13,13,11,10,13,12,13,10,11,10,12,13,11,10,11,12,13,13,11,10,9,,13,10,11,10,,13,,10,,,13,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,,,,,,,,,,,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,,,,,,,,,,,,,,,,,,,,,,,,,,2,2,2,2,2,2,2,2,2,2,2,2,2,2,,,,,,,,,,,,,,,,,,,,,,,,,,");
+//        $jumlah_ruang = explode(',', "4,1,31,1,1,1,24,1,1,1,1,1");
+//        $ruangan = explode(',', "D2-01-Pagi,D2-01-Sore,D2-02-Pagi,D2-02-Sore,D2-03-Pagi,D2-03-Sore,D2-04-Pagi,D2-04-Sore,D2-05-Pagi,D2-05-Sore,D2-06-Pagi,D2-06-Sore,D2-07-Pagi,D2-07-Sore,D2-08-Pagi,D2-08-Sore,D2-09-Pagi,D2-09-Sore,D2-10-Pagi,D2-10-Sore,D2-11-Pagi,D2-11-Sore,D2-12-Pagi,D2-12-Sore,D2-13-Pagi,D2-13-Sore,D3-01-Pagi,D3-01-Sore,D3-02-Pagi,D3-02-Sore,D3-03-Pagi,D3-03-Sore,D3-04-Pagi,D3-04-Sore,D3-05-Pagi,D3-05-Sore,D3-06-Pagi,D3-06-Sore,D3-07-Pagi,D3-07-Sore,D3-08-Pagi,D3-08-Sore,D3-09-Pagi,D3-09-Sore,D3-10-Pagi,D3-10-Sore,D3-11-Pagi,D3-11-Sore,D3-12-Pagi,D3-12-Sore,D3-13-Pagi,D3-13-Sore,D3-14-Pagi,D3-15-Pagi,D3-16-Pagi,D4-01-Pagi,D4-02-Pagi,D4-03-Pagi,D4-04-Pagi,D4-05-Pagi,D4-06-Pagi,D4-07-Pagi,D4-08-Pagi,D4-09-Pagi,D4-10-Pagi,D4-11-Pagi,D4-12-Pagi,D4-13-Pagi");
+//        $model = explode(',', "1,1,1,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,5,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,9,10,11,12");
 
         $temp_jumlah_ruang = 0;
         foreach ($jumlah_ruang as $jumlah_siswa) {
@@ -300,7 +306,7 @@ class Denah_us extends CI_Controller {
             $data['JUMLAH'][] = $data_form['JUMLAH_SISWA'][$jk][$index]['JUMLAH_SISWA'];
             $temp_jumlah_siswa_form += $data_form['JUMLAH_SISWA'][$jk][$index]['JUMLAH_SISWA'];
         }
-//        echo '<hr>' . json_encode($data);
+//        echo json_encode($data);
 //        exit();
         // MENATA MODEL DENAH
         $denah_model = array();
@@ -343,6 +349,7 @@ class Denah_us extends CI_Controller {
 
 
         $temp_ruang = $data_form['RUANG'][$jk];
+//        echo '<hr>' . json_encode($temp_ruang);
         $data['RUANG'] = array();
         $data['DATA'] = array();
         foreach ($jumlah_ruang as $model_ke => $jumlah) {
@@ -368,14 +375,14 @@ class Denah_us extends CI_Controller {
             }
         }
 
-//        echo '<hr>' . json_encode($data['JUMLAH']);
+//        echo '<hr>' . json_encode($data['RUANG']);
 //        echo '<hr>' . json_encode($temp_tingkat);
 //        echo '<hr>' . json_encode($denah_model);
 //        echo '<hr>' . count($denah_model);
 //        exit();
-
         ksort($data['RUANG']);
         ksort($data['DATA']);
+//        echo '<hr>' . json_encode($data['RUANG']);
 
         $data['RUANG'] = array_merge($data['RUANG'], $temp_ruang);
         $data['JUMLAH_SISA_SISWA_PERTINGKAT'] = array_fill(0, 16, 0);
@@ -431,6 +438,7 @@ class Denah_us extends CI_Controller {
 //        echo '<hr>';
 //        echo $temp_jumlah_siswa;
 //        echo '<hr>';
+        
         if ($temp_jumlah_siswa != $temp_jumlah_siswa_form) {
             $this->generate->output_JSON(array('status' => FALSE, 'msg' => 'ERROR 902: Data siswa form dengan database berbeda'));
         }
@@ -450,7 +458,7 @@ class Denah_us extends CI_Controller {
 //            echo '<hr>';
 //        }
 
-        $this->generate->output_JSON(array('status' => $status, 'msg' => 'Denah berhasil disimpan'));
+        $this->generate->output_JSON(array('status' => true, 'msg' => 'Denah berhasil disimpan'));
     }
 
     public function update_aturan_denah($jk) {
@@ -476,10 +484,10 @@ class Denah_us extends CI_Controller {
 
         $status = $this->aturan_denah->update_us_active(array('ATURAN_RUANG_PUD' => json_encode($data_db)));
     }
-    
+
     public function keep_up_session() {
         $this->generate->set_header_JSON();
-            
+
         $this->generate->output_JSON(array('status' => true, 'msg' => $this->input->post('check')));
     }
 

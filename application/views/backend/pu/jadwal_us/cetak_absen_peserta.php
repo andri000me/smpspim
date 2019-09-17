@@ -97,32 +97,38 @@ foreach ($data as $detail) {
                 $jenjang = array();
                 for ($i = 0; $i < $jumlah_peruang; $i++) {
                     if (isset($data_denah['DENAH'][$ruang][$i])) {
-                        if ($ruang_baru) {
-                            $id_tingkat = $data_denah['DENAH'][$ruang][$i];
-                            $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
+                        $id_tingkat = $data_denah['DENAH'][$ruang][$i];
+                        $id_jenjang = $data_denah['JENJANG'][$id_tingkat];
+//                        if ($ruang_baru && isset($data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'])) {
+                        if (isset($data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'])) {
                             $id_siswa = $data_denah['DATA_SISWA_RANDOM'][$id_tingkat][$temp_last_id[$id_tingkat]]['ID_SISWA'];
                             $data_siswa = $CI->siswa->get_by_id_simple($id_siswa);
                             $temp_data_denah[$i] = $data_siswa;
                             $temp_last_id[$id_tingkat] ++;
-                        } else {
-                            $data_siswa = $temp_data_denah[$i];
-                        }
-
+//                        } else {
+//                            $data_siswa = $temp_data_denah[$i];
+//                        }
 //                    if ($id_tingkat == $id_tingkat_test) {
 //                        $jumlah_siswa_test++;
 //                        echo $id_tingkat . ' - ' . $id_jenjang . '| ' . $data_denah["RUANG"][$ruang]['KODE_RUANG'] . ' - ', ($i + 1) . ' | ' . $id_siswa . ' => ' . $data_siswa->NIS_SISWA . ' - ' . $data_siswa->NAMA_SISWA . '<br>';
 //                    }
 
-                        $pdf->Cell(7, 5, $i + 1, 1, 0, 'C');
-                        $pdf->Cell(23, 5, $data_siswa->NIS_SISWA, 1, 0, 'L');
-                        $pdf->Cell(65, 5, $this->pdf_handler->cut_text($pdf, $data_siswa->NAMA_SISWA, 65), 1, 0, 'L');
-                        $pdf->Cell(40, 5, $data_siswa->NAMA_KELAS, 1, 0, 'L');
+                            $pdf->Cell(7, 5, $i + 1, 1, 0, 'C');
+                            $pdf->Cell(23, 5, $data_siswa->NIS_SISWA, 1, 0, 'L');
+                            $pdf->Cell(65, 5, $this->pdf_handler->cut_text($pdf, $data_siswa->NAMA_SISWA, 65), 1, 0, 'L');
+                            $pdf->Cell(40, 5, $data_siswa->NAMA_KELAS, 1, 0, 'L');
 
-                        $jenjang_siswa = $data_siswa->NAMA_TINGK . ' ' . $data_siswa->DEPT_TINGK;
-                        if (isset($jenjang[$jenjang_siswa]))
-                            $jenjang[$jenjang_siswa] ++;
-                        else
-                            $jenjang[$jenjang_siswa] = 1;
+                            $jenjang_siswa = $data_siswa->NAMA_TINGK . ' ' . $data_siswa->DEPT_TINGK;
+                            if (isset($jenjang[$jenjang_siswa]))
+                                $jenjang[$jenjang_siswa] ++;
+                            else
+                                $jenjang[$jenjang_siswa] = 1;
+                        } else {
+                            $pdf->Cell(7, 5, $i + 1, 1, 0, 'C');
+                            $pdf->Cell(23, 5, '-', 1, 0, 'L');
+                            $pdf->Cell(65, 5, '-', 1, 0, 'L');
+                            $pdf->Cell(40, 5, '-', 1, 0, 'L');
+                        }
                     } else {
                         $pdf->Cell(7, 5, $i + 1, 1, 0, 'C');
                         $pdf->Cell(23, 5, '-', 1, 0, 'L');

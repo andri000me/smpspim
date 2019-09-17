@@ -134,6 +134,7 @@ function cetak($pdf, $data, $title) {
             $GLOBALS['check_kartu'][$data['AKAD_SISWA']['NAMA_KELAS']][$aaa][] = $data['AKAD_SISWA']['NIS_SISWA'].' - '.$data['AKAD_SISWA']['NAMA_SISWA'];
     }
 
+    $pdf->SetFont('Arial', '', $font - 3);
     $pdf->Cell(1.5);
     $pdf->Cell(14, 4, isset($data['DENAH'][0]) ? $data['DENAH'][0]['RUANG']['NOMOR'] . ' ' . $data['DENAH'][0]['RUANG']['ID'] : '', 1, 0, 'C');
     $pdf->Cell(14, 4, isset($data['DENAH'][1]) ? $data['DENAH'][1]['RUANG']['NOMOR'] . ' ' . $data['DENAH'][1]['RUANG']['ID'] : '', 1, 0, 'C');
